@@ -263,6 +263,10 @@ export default async function Home() {
                     Born
                   </ImageModal>
                   {" "}March 22, 2026 in Stuttgart.
+                  <br />
+                  MVP June, 2026.
+                  <br />
+                  LIVE September, 2026.
                 </p>
               </div>
 
