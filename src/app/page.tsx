@@ -11,12 +11,17 @@ import {
   GitCommit,
   FlaskConical,
   Layers,
+  Code2,
+  FolderGit2,
+  CalendarDays,
 } from "lucide-react";
 import Nav from "@/components/Nav";
 import CookieBanner from "@/components/CookieBanner";
 import Logo from "@/components/Logo";
 import TrackerScript from "@/components/TrackerScript";
 import EmailObfuscator from "@/components/EmailObfuscator";
+import LiveTicker from "@/components/LiveTicker";
+import { getGitHubStats } from "@/lib/github-stats";
 
 /* ---------- constants ---------- */
 
@@ -53,8 +58,9 @@ function getDaysSinceStart(): number {
 
 /* ---------- page ---------- */
 
-export default function Home() {
+export default async function Home() {
   const devDays = getDaysSinceStart();
+  const stats = await getGitHubStats();
   return (
     <>
       <Nav />
@@ -221,7 +227,7 @@ export default function Home() {
         </section>
 
         {/* ===== OMNIXIS TEASER ===== */}
-        <section id="omnixis" className="bg-primary px-4 py-20 md:px-6 md:py-24 dark:bg-primary">
+        <section id="omnixis" className="bg-primary px-4 py-20 md:px-6 md:py-24">
           <div className="mx-auto max-w-[1200px]">
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
@@ -236,27 +242,34 @@ export default function Home() {
                   generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten.
                 </p>
                 <p className="mt-4 text-lg leading-relaxed text-text-secondary">
-                  Gebaut in {devDays} Tagen. 163 Commits. 300+ Tests. Von einem Entwickler + Claude Code.
+                  BYOLLM: Eure Daten verlassen euer Haus nicht.
+                  <br />
+                  Fail-closed: lieber schweigen als lügen.
+                </p>
+                <p className="mt-4 text-sm font-mono text-text-secondary/50">
+                  Born March 22, 2026.
                 </p>
               </div>
 
-              {/* Stats grid */}
-              <div className="grid grid-cols-2 gap-4">
+              {/* Stats grid — 6 tiles */}
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                 {[
-                  { icon: GitCommit, value: "163", label: "Commits" },
+                  { icon: CalendarDays, value: String(devDays), label: "Days in Development" },
+                  { icon: GitCommit, value: stats.commits.toLocaleString("de-DE"), label: "Commits" },
                   { icon: FlaskConical, value: "300+", label: "Automatisierte Tests" },
                   { icon: Layers, value: "46+", label: "REST Endpoints" },
-                  { icon: Cpu, value: "10", label: "Echte Extractors" },
+                  { icon: Code2, value: stats.linesOfCode > 0 ? stats.linesOfCode.toLocaleString("de-DE") : "—", label: "Zeilen Code" },
+                  { icon: FolderGit2, value: String(stats.repos), label: "Repositories" },
                 ].map((stat) => (
                   <div
                     key={stat.label}
-                    className="rounded-xl bg-surface p-6 text-center"
+                    className="rounded-xl bg-surface p-5 text-center"
                   >
-                    <stat.icon size={24} className="mx-auto text-accent" />
-                    <p className="mt-3 font-heading text-3xl font-bold text-text-primary">
+                    <stat.icon size={20} className="mx-auto text-accent" />
+                    <p className="mt-2 font-heading text-2xl font-bold text-text-primary md:text-3xl">
                       {stat.value}
                     </p>
-                    <p className="mt-1 text-sm text-text-secondary">{stat.label}</p>
+                    <p className="mt-1 text-xs text-text-secondary">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -384,7 +397,12 @@ export default function Home() {
             &copy; 2026 neckarshore.ai — German Rauhut, IT Consulting &amp; Digital Ventures
           </p>
         </div>
-        <p className="mt-4 text-center text-xs text-muted/60 dark:text-text-secondary/30">Stuttgart, Deutschland</p>
+        <div className="mt-4 flex flex-col items-center gap-1">
+          <p className="text-center text-xs text-muted/60 dark:text-text-secondary/30">Stuttgart, Deutschland</p>
+          <div className="text-muted/40 dark:text-text-secondary/20">
+            <LiveTicker fetchedAt={stats.fetchedAt} />
+          </div>
+        </div>
       </footer>
 
       <CookieBanner />
