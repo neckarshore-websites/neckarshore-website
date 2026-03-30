@@ -1,7 +1,22 @@
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
-const ORGS = ["neckarshore-ai"];
-const USERS = ["GmanFooFoo"];
+// Explicit include list — curated, not auto-discovered
+const REPOS = [
+  // GmanFooFoo (personal — OMNIXIS ecosystem + related)
+  "GmanFooFoo/MEMORY-context-for-AI",
+  "GmanFooFoo/OMNIXIS",
+  "GmanFooFoo/omnixis-AI-SW-documention",
+  "GmanFooFoo/OMNIXIS-legacy-document-importer",
+  "GmanFooFoo/OMNIXIS-planning",
+  "GmanFooFoo/OMNIXIS-test-management",
+  "GmanFooFoo/png-AI-documentation-BPMN",
+  "GmanFooFoo/promptHamster",
+  // neckarshore-ai org
+  "neckarshore-ai/hq",
+  "neckarshore-ai/neckarshore-website",
+  "neckarshore-ai/OMNIXIS-prod-or-pretend",
+  "neckarshore-ai/tools-claude-plugins",
+];
 
 interface GitHubStats {
   commits: number;
@@ -21,53 +36,14 @@ async function githubFetch(url: string) {
   return fetch(url, { headers, next: { revalidate: 3600 } });
 }
 
-async function getOrgRepos(org: string): Promise<string[]> {
-  const repos: string[] = [];
-  let page = 1;
-  while (true) {
-    const res = await githubFetch(
-      `https://api.github.com/orgs/${org}/repos?per_page=100&page=${page}`
-    );
-    if (!res.ok) break;
-    const data = await res.json();
-    if (data.length === 0) break;
-    for (const repo of data) {
-      repos.push(repo.full_name);
-    }
-    page++;
-  }
-  return repos;
-}
-
-async function getUserRepos(user: string): Promise<string[]> {
-  const repos: string[] = [];
-  let page = 1;
-  while (true) {
-    const res = await githubFetch(
-      `https://api.github.com/users/${user}/repos?per_page=100&page=${page}&type=owner`
-    );
-    if (!res.ok) break;
-    const data = await res.json();
-    if (data.length === 0) break;
-    for (const repo of data) {
-      if (!repo.fork) {
-        repos.push(repo.full_name);
-      }
-    }
-    page++;
-  }
-  return repos;
-}
-
 async function getRepoCommitCount(repo: string): Promise<number> {
-  // Use the contributors endpoint to get total commit count
   const res = await githubFetch(
-    `https://api.github.com/repos/${repo}/contributors?per_page=1&anon=true`
+    `https://api.github.com/repos/${repo}/contributors?per_page=100&anon=true`
   );
   if (!res.ok) return 0;
   const data = await res.json();
+  if (!Array.isArray(data)) return 0;
   let total = 0;
-  // This only returns first page, but for our repos it's enough
   for (const contributor of data) {
     total += contributor.contributions || 0;
   }
@@ -91,26 +67,9 @@ async function getRepoCodeStats(repo: string): Promise<number> {
 
 export async function getGitHubStats(): Promise<GitHubStats> {
   try {
-    // Collect all repos
-    const allRepos = new Set<string>();
-
-    const [orgRepoLists, userRepoLists] = await Promise.all([
-      Promise.all(ORGS.map(getOrgRepos)),
-      Promise.all(USERS.map(getUserRepos)),
-    ]);
-
-    for (const list of [...orgRepoLists, ...userRepoLists]) {
-      for (const repo of list) {
-        allRepos.add(repo);
-      }
-    }
-
-    const repoNames = Array.from(allRepos);
-
-    // Fetch stats in parallel (batch to avoid rate limits)
     const [commitCounts, codeCounts] = await Promise.all([
-      Promise.all(repoNames.map(getRepoCommitCount)),
-      Promise.all(repoNames.map(getRepoCodeStats)),
+      Promise.all(REPOS.map(getRepoCommitCount)),
+      Promise.all(REPOS.map(getRepoCodeStats)),
     ]);
 
     const commits = commitCounts.reduce((a, b) => a + b, 0);
@@ -118,16 +77,15 @@ export async function getGitHubStats(): Promise<GitHubStats> {
 
     return {
       commits,
-      repos: repoNames.length,
+      repos: REPOS.length,
       linesOfCode,
       fetchedAt: new Date().toISOString(),
     };
   } catch (error) {
     console.error("GitHub stats fetch failed:", error);
-    // Fallback values
     return {
       commits: 163,
-      repos: 5,
+      repos: 12,
       linesOfCode: 0,
       fetchedAt: new Date().toISOString(),
     };
