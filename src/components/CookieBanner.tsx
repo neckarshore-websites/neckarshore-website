@@ -19,9 +19,9 @@ export default function CookieBanner() {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 z-50 w-full border-t border-primary/10 bg-white/95 px-4 py-4 backdrop-blur-sm md:px-6">
+    <div className="fixed bottom-0 left-0 z-50 w-full border-t border-primary/10 bg-white/95 px-4 py-4 backdrop-blur-sm md:px-6 dark:border-text-secondary/10 dark:bg-deep-space/95">
       <div className="mx-auto flex max-w-[1200px] flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-muted">
+        <p className="text-sm text-muted dark:text-text-secondary">
           Diese Website verwendet ausschließlich technisch notwendige Cookies.
           Keine Tracking-Cookies, keine Drittanbieter.{" "}
           <a href="/datenschutz" className="text-accent underline hover:text-accent-hover">

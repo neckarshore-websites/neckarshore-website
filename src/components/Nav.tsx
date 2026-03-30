@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
+import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
   { href: "#services", label: "Services" },
@@ -15,7 +16,7 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 z-50 w-full border-b border-primary/5 bg-neutral-light/80 backdrop-blur-md">
+    <nav className="fixed top-0 z-50 w-full border-b border-primary/5 bg-neutral-light/80 backdrop-blur-md dark:border-text-secondary/10 dark:bg-deep-space/80">
       <div className="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-3 md:px-6">
         <a href="#" className="flex items-center gap-2" aria-label="neckarshore.ai Home">
           <Logo className="h-8 w-auto" />
@@ -27,11 +28,12 @@ export default function Nav() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-primary/70 transition-colors duration-150 hover:text-accent"
+              className="text-sm font-medium text-primary/70 transition-colors duration-150 hover:text-accent dark:text-text-secondary/70 dark:hover:text-accent"
             >
               {link.label}
             </a>
           ))}
+          <ThemeToggle />
           <a
             href="#cta"
             className="rounded-lg bg-accent px-6 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
@@ -40,25 +42,28 @@ export default function Nav() {
           </a>
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          onClick={() => setOpen(!open)}
-          className="md:hidden p-2 text-primary"
-          aria-label={open ? "Menü schließen" : "Menü öffnen"}
-        >
-          {open ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile: theme toggle + hamburger */}
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
+          <button
+            onClick={() => setOpen(!open)}
+            className="p-2 text-primary dark:text-text-primary"
+            aria-label={open ? "Menü schließen" : "Menü öffnen"}
+          >
+            {open ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile menu */}
       {open && (
-        <div className="border-t border-primary/5 bg-neutral-light px-4 pb-6 pt-4 md:hidden">
+        <div className="border-t border-primary/5 bg-neutral-light px-4 pb-6 pt-4 dark:border-text-secondary/10 dark:bg-deep-space md:hidden">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="block py-3 text-base font-medium text-primary/70 transition-colors hover:text-accent"
+              className="block py-3 text-base font-medium text-primary/70 transition-colors hover:text-accent dark:text-text-secondary/70 dark:hover:text-accent"
             >
               {link.label}
             </a>

@@ -63,14 +63,14 @@ export default function Home() {
 
       <main>
         {/* ===== HERO ===== */}
-        <section className="relative overflow-hidden bg-neutral-light px-4 pt-32 pb-20 md:px-6 md:pt-40 md:pb-24">
+        <section className="relative overflow-hidden bg-neutral-light px-4 pt-32 pb-20 md:px-6 md:pt-40 md:pb-24 dark:bg-deep-space">
           <div className="mx-auto max-w-[1200px]">
-            <h1 className="font-heading text-4xl font-bold leading-[1.1] tracking-tight text-primary md:text-[56px]">
+            <h1 className="font-heading text-4xl font-bold leading-[1.1] tracking-tight text-primary md:text-[56px] dark:text-text-primary">
               Software Development.
               <br />
               Closer to Home.
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-dark/80 md:text-xl">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-dark/80 md:text-xl dark:text-text-secondary">
               neckarshore.ai bringt KI-beschleunigte Softwareentwicklung zurück nach Stuttgart.
               Gleiche Zeitzone, gleiche Sprache, gleiche Datenschutzstandards — ohne Offshore-Risiko,
               ohne Big-4-Preise.
@@ -84,12 +84,12 @@ export default function Home() {
               </a>
               <a
                 href="#services"
-                className="inline-flex items-center justify-center rounded-lg border-2 border-primary px-8 py-3.5 text-base font-medium text-primary transition-all duration-150 hover:bg-primary hover:text-white"
+                className="inline-flex items-center justify-center rounded-lg border-2 border-primary px-8 py-3.5 text-base font-medium text-primary transition-all duration-150 hover:bg-primary hover:text-white dark:border-text-primary dark:text-text-primary dark:hover:bg-text-primary dark:hover:text-deep-space"
               >
                 Unsere Services
               </a>
             </div>
-            <div className="mt-10 flex flex-wrap gap-6 text-sm font-medium tracking-wide text-muted">
+            <div className="mt-10 flex flex-wrap gap-6 text-sm font-medium tracking-wide text-muted dark:text-text-secondary/60">
               <span className="flex items-center gap-2">
                 <Shield size={16} className="text-accent" />
                 DSGVO-by-Design
@@ -106,7 +106,7 @@ export default function Home() {
           </div>
           {/* Decorative gradient blob */}
           <div
-            className="pointer-events-none absolute -right-40 -top-40 h-[600px] w-[600px] rounded-full opacity-[0.07]"
+            className="pointer-events-none absolute -right-40 -top-40 h-[600px] w-[600px] rounded-full opacity-[0.07] dark:opacity-[0.12]"
             style={{
               background:
                 "radial-gradient(circle, #00D4FF 0%, transparent 70%)",
@@ -115,9 +115,9 @@ export default function Home() {
         </section>
 
         {/* ===== WHY NEARSHORE ===== */}
-        <section id="why-nearshore" className="bg-white px-4 py-20 md:px-6 md:py-24">
+        <section id="why-nearshore" className="bg-white px-4 py-20 md:px-6 md:py-24 dark:bg-surface">
           <div className="mx-auto max-w-[1200px]">
-            <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl">
+            <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl dark:text-text-primary">
               Warum Nearshore?
             </h2>
             <div className="mt-12 grid gap-6 md:grid-cols-3">
@@ -143,14 +143,14 @@ export default function Home() {
               ].map((item) => (
                 <div
                   key={item.title}
-                  className="group rounded-xl border-l-4 border-accent bg-neutral-light p-8 shadow-sm transition-all duration-250 hover:-translate-y-0.5 hover:shadow-md"
+                  className="group rounded-xl border-l-4 border-accent bg-neutral-light p-8 shadow-sm transition-all duration-250 hover:-translate-y-0.5 hover:shadow-md dark:bg-deep-space"
                 >
                   <item.icon size={32} className="text-secondary" />
-                  <h3 className="mt-4 font-heading text-xl font-semibold text-primary md:text-2xl">
+                  <h3 className="mt-4 font-heading text-xl font-semibold text-primary md:text-2xl dark:text-text-primary">
                     {item.title}
                   </h3>
                   <p className="mt-1 text-sm font-medium text-accent">{item.subtitle}</p>
-                  <p className="mt-3 leading-relaxed text-neutral-dark/80">{item.text}</p>
+                  <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">{item.text}</p>
                 </div>
               ))}
             </div>
@@ -158,9 +158,9 @@ export default function Home() {
         </section>
 
         {/* ===== SERVICES ===== */}
-        <section id="services" className="bg-neutral-light px-4 py-20 md:px-6 md:py-24">
+        <section id="services" className="bg-neutral-light px-4 py-20 md:px-6 md:py-24 dark:bg-deep-space">
           <div className="mx-auto max-w-[1200px]">
-            <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl">
+            <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl dark:text-text-primary">
               Unsere Services
             </h2>
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -204,14 +204,14 @@ export default function Home() {
               ].map((service) => (
                 <div
                   key={service.title}
-                  className="group rounded-xl bg-white p-8 shadow-[0_10px_30px_rgba(10,37,64,0.08)] transition-all duration-250 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(10,37,64,0.14)]"
+                  className="group rounded-xl bg-white p-8 shadow-[0_10px_30px_rgba(10,37,64,0.08)] transition-all duration-250 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(10,37,64,0.14)] dark:bg-surface dark:shadow-none dark:hover:shadow-[0_10px_30px_rgba(0,0,0,0.3)]"
                 >
                   <service.icon size={32} className="text-secondary" />
-                  <h3 className="mt-4 font-heading text-lg font-semibold text-primary md:text-xl">
+                  <h3 className="mt-4 font-heading text-lg font-semibold text-primary md:text-xl dark:text-text-primary">
                     {service.title}
                   </h3>
                   <p className="mt-1 text-sm font-medium text-accent">{service.subtitle}</p>
-                  <p className="mt-3 text-[15px] leading-relaxed text-neutral-dark/80">
+                  <p className="mt-3 text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
                     {service.text}
                   </p>
                 </div>
@@ -221,7 +221,7 @@ export default function Home() {
         </section>
 
         {/* ===== OMNIXIS TEASER ===== */}
-        <section id="omnixis" className="bg-primary px-4 py-20 md:px-6 md:py-24">
+        <section id="omnixis" className="bg-primary px-4 py-20 md:px-6 md:py-24 dark:bg-primary">
           <div className="mx-auto max-w-[1200px]">
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
@@ -265,28 +265,28 @@ export default function Home() {
         </section>
 
         {/* ===== FOUNDER ===== */}
-        <section id="founder" className="bg-white px-4 py-20 md:px-6 md:py-24">
+        <section id="founder" className="bg-white px-4 py-20 md:px-6 md:py-24 dark:bg-surface">
           <div className="mx-auto max-w-[1200px]">
             <div className="grid items-center gap-12 md:grid-cols-[280px_1fr]">
               {/* Photo placeholder */}
-              <div className="mx-auto flex h-64 w-64 items-center justify-center rounded-2xl bg-neutral-light md:mx-0 md:h-72 md:w-72">
-                <span className="text-sm text-muted">Foto folgt</span>
+              <div className="mx-auto flex h-64 w-64 items-center justify-center rounded-2xl bg-neutral-light md:mx-0 md:h-72 md:w-72 dark:bg-deep-space">
+                <span className="text-sm text-muted dark:text-text-secondary/50">Foto folgt</span>
               </div>
 
               <div>
-                <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl">
+                <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl dark:text-text-primary">
                   German Rauhut
                 </h2>
                 <p className="mt-1 text-lg font-medium text-accent">
                   Gründer, neckarshore.ai
                 </p>
-                <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-dark/80">
+                <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
                   Ehemaliger Mercedes-Benz IT — jetzt Gründer von neckarshore.ai in Stuttgart. Ich
                   baue Software mit KI-Beschleunigung und automatisiere alles, was keiner machen will.
                   Mein Flaggschiff OMNIXIS dokumentiert sich selbst — weil niemand Doku schreiben will,
                   aber alle meckern wenn keine da ist.
                 </p>
-                <p className="mt-4 max-w-2xl text-lg leading-relaxed text-neutral-dark/80">
+                <p className="mt-4 max-w-2xl text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
                   Ein Entwickler, mehrere KI-Assistenten, und die Überzeugung dass Kontext das neue
                   Öl ist.
                 </p>
@@ -296,12 +296,12 @@ export default function Home() {
         </section>
 
         {/* ===== CTA ===== */}
-        <section id="cta" className="bg-neutral-light px-4 py-20 md:px-6 md:py-24">
+        <section id="cta" className="bg-neutral-light px-4 py-20 md:px-6 md:py-24 dark:bg-deep-space">
           <div className="mx-auto max-w-[700px] text-center">
-            <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl">
+            <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl dark:text-text-primary">
               Bereit, näher zusammenzuarbeiten?
             </h2>
-            <p className="mt-6 text-lg leading-relaxed text-neutral-dark/80">
+            <p className="mt-6 text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
               15 Minuten Kennenlerntermin — wir reden über euer Projekt, nicht über unsere Folien.
             </p>
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -314,7 +314,7 @@ export default function Home() {
               >
                 Kennenlerntermin buchen
               </a>
-              <span className="text-muted">oder</span>
+              <span className="text-muted dark:text-text-secondary/50">oder</span>
               <a
                 id="email-link"
                 href="#"
@@ -327,22 +327,22 @@ export default function Home() {
         </section>
 
         {/* ===== FAQ ===== */}
-        <section id="faq" className="bg-white px-4 py-20 md:px-6 md:py-24">
+        <section id="faq" className="bg-white px-4 py-20 md:px-6 md:py-24 dark:bg-surface">
           <div className="mx-auto max-w-[800px]">
-            <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl">
+            <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl dark:text-text-primary">
               Häufige Fragen
             </h2>
             <div className="mt-12 space-y-6">
               {faqItems.map((item, i) => (
                 <details
                   key={i}
-                  className="group rounded-xl border border-primary/10 bg-neutral-light p-6 open:bg-white open:shadow-sm"
+                  className="group rounded-xl border border-primary/10 bg-neutral-light p-6 open:bg-white open:shadow-sm dark:border-text-secondary/10 dark:bg-deep-space dark:open:bg-surface"
                 >
-                  <summary className="cursor-pointer font-heading text-lg font-semibold text-primary list-none flex items-center justify-between">
+                  <summary className="cursor-pointer font-heading text-lg font-semibold text-primary list-none flex items-center justify-between dark:text-text-primary">
                     {item.q}
                     <span className="ml-4 text-accent transition-transform group-open:rotate-45">+</span>
                   </summary>
-                  <p className="mt-4 leading-relaxed text-neutral-dark/80">{item.a}</p>
+                  <p className="mt-4 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">{item.a}</p>
                 </details>
               ))}
             </div>
@@ -369,8 +369,8 @@ export default function Home() {
       </main>
 
       {/* ===== FOOTER ===== */}
-      <footer className="border-t border-primary/5 bg-white px-4 py-10 md:px-6">
-        <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-sm text-muted md:flex-row md:justify-between">
+      <footer className="border-t border-primary/5 bg-white px-4 py-10 md:px-6 dark:border-text-secondary/10 dark:bg-surface">
+        <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-sm text-muted md:flex-row md:justify-between dark:text-text-secondary/60">
           <Logo className="h-6 w-auto opacity-60" />
           <div className="flex gap-6">
             <a href="/impressum" className="transition-colors hover:text-accent">
@@ -384,7 +384,7 @@ export default function Home() {
             &copy; 2026 neckarshore.ai — German Rauhut, IT Consulting &amp; Digital Ventures
           </p>
         </div>
-        <p className="mt-4 text-center text-xs text-muted/60">Stuttgart, Deutschland</p>
+        <p className="mt-4 text-center text-xs text-muted/60 dark:text-text-secondary/30">Stuttgart, Deutschland</p>
       </footer>
 
       <CookieBanner />

@@ -9,12 +9,10 @@ export default function Logo({ className = "h-8 w-auto" }: { className?: string 
     >
       {/* N-River Icon */}
       <g>
-        {/* N letter structure */}
         <path
           d="M4 36V4h4l16 22V4h4v32h-4L8 14v22H4z"
-          fill="#0A2540"
+          className="fill-primary dark:fill-text-primary"
         />
-        {/* Subtle river wave accent */}
         <path
           d="M6 24c3-2 6-2 9 0s6 2 9 0"
           stroke="#00B8D4"
@@ -30,7 +28,7 @@ export default function Logo({ className = "h-8 w-auto" }: { className?: string 
         fontFamily="var(--font-space-grotesk), 'Space Grotesk', system-ui"
         fontSize="22"
         fontWeight="600"
-        fill="#0A2540"
+        className="fill-primary dark:fill-text-primary"
         letterSpacing="-0.02em"
       >
         neckarshore
