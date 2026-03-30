@@ -1,17 +1,30 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback } from "react";
+
+// Base64 encoded: "info@neckarshore.ai"
+const E = "aW5mb0BuZWNrYXJzaG9yZS5haQ==";
 
 export default function EmailObfuscator() {
-  useEffect(() => {
-    const el = document.getElementById("email-link");
-    if (el) {
-      const u = "info";
-      const d = "neckarshore.ai";
-      el.setAttribute("href", `mailto:${u}@${d}`);
-      el.textContent = `${u}@${d}`;
-    }
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    const decoded = atob(E);
+    window.location.href = `mailto:${decoded}`;
   }, []);
 
-  return null;
+  return (
+    <a
+      id="email-link"
+      href="#kontakt"
+      onClick={handleClick}
+      className="text-base font-medium text-accent transition-colors hover:text-accent-hover"
+    >
+      {/* Render as separate spans to confuse scrapers */}
+      <span>info</span>
+      <span>{"@"}</span>
+      <span>neckarshore</span>
+      <span>.</span>
+      <span>ai</span>
+    </a>
+  );
 }

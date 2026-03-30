@@ -35,8 +35,11 @@ export default function Nav() {
           ))}
           <ThemeToggle />
           <a
-            href="#cta"
+            href="https://calendly.com/rauhut/20min"
+            target="_blank"
+            rel="noopener noreferrer"
             className="rounded-lg bg-accent px-6 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
+            data-track="cta_click"
           >
             Kennenlerntermin
           </a>
@@ -69,9 +72,12 @@ export default function Nav() {
             </a>
           ))}
           <a
-            href="#cta"
+            href="https://calendly.com/rauhut/20min"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setOpen(false)}
             className="mt-4 block rounded-lg bg-accent py-3 text-center text-base font-medium text-white transition-all hover:bg-accent-hover"
+            data-track="cta_click"
           >
             Kennenlerntermin
           </a>
