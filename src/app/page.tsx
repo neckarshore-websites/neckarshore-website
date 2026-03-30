@@ -301,7 +301,7 @@ export default async function Home() {
         {/* ===== FOUNDER ===== */}
         <section id="founder" className="bg-white px-4 py-20 md:px-6 md:py-24 dark:bg-surface">
           <div className="mx-auto max-w-[1200px]">
-            <div className="grid items-center gap-12 md:grid-cols-[280px_1fr]">
+            <div className="grid items-start gap-12 md:grid-cols-[280px_1fr]">
               {/* Photo placeholder */}
               <div className="mx-auto flex h-64 w-64 items-center justify-center rounded-2xl bg-neutral-light md:mx-0 md:h-72 md:w-72 dark:bg-deep-space">
                 <span className="text-sm text-muted dark:text-text-secondary/50">Foto folgt</span>
@@ -327,30 +327,32 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* MASCHIN + S-Team */}
-            <div className="mt-20 grid items-center gap-12 md:grid-cols-[280px_1fr]">
-              {/* Photo placeholder */}
-              <div className="mx-auto flex h-64 w-64 items-center justify-center rounded-2xl bg-neutral-light md:mx-0 md:h-72 md:w-72 dark:bg-deep-space">
-                <span className="text-sm text-muted dark:text-text-secondary/50">Foto folgt</span>
-              </div>
+            {/* MASCHIN + S-Team — teal band */}
+            <div className="mt-20 rounded-2xl bg-secondary p-8 md:p-12">
+              <div className="grid items-start gap-12 md:grid-cols-[280px_1fr]">
+                {/* Photo placeholder */}
+                <div className="mx-auto flex h-64 w-64 items-center justify-center rounded-2xl bg-primary/10 md:mx-0 md:h-72 md:w-72">
+                  <span className="text-sm text-primary/50">Foto folgt</span>
+                </div>
 
-              <div>
-                <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl dark:text-text-primary">
-                  MASCHIN &amp; das S-Team
-                </h2>
-                <p className="mt-1 text-lg font-medium text-accent">
-                  Chief of Staff &amp; Expertenteam
-                </p>
-                <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                  MASCHIN ist unser KI-gestützter Chief of Staff — das Betriebssystem hinter neckarshore.ai.
-                  Dahinter steht ein S-Team aus spezialisierten KI-Experten: jeder mit einer klaren Rolle,
-                  einem Weltklasse-Vorbild und der Fähigkeit, autonom zu arbeiten.
-                </p>
-                <p className="mt-4 max-w-2xl text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                  Von der Architektur über Quality Engineering bis zum Marketing — das S-Team liefert
-                  Enterprise-Qualität ohne Enterprise-Headcount. Ein Mensch denkt, entscheidet und
-                  verantwortet. Die Maschinen exekutieren.
-                </p>
+                <div>
+                  <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl">
+                    MASCHIN &amp; das S-Team
+                  </h2>
+                  <p className="mt-1 text-lg font-medium text-primary/70">
+                    Chief of Staff of Staff &amp; Expertenteam
+                  </p>
+                  <p className="mt-6 max-w-2xl text-lg leading-relaxed text-primary/80">
+                    MASCHIN ist unser KI-gestützter Chief of Staff of Staff — das Betriebssystem hinter
+                    neckarshore.ai. Dahinter steht ein S-Team aus spezialisierten KI-Experten: jeder mit
+                    einer klaren Rolle, einem Weltklasse-Vorbild und der Fähigkeit, autonom zu arbeiten.
+                  </p>
+                  <p className="mt-4 max-w-2xl text-lg leading-relaxed text-primary/80">
+                    Von der Architektur über Quality Engineering bis zum Marketing — das S-Team liefert
+                    Enterprise-Qualität ohne Enterprise-Headcount. Ein Mensch denkt, entscheidet und
+                    verantwortet. Die Maschinen exekutieren.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
