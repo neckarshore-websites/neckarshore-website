@@ -21,6 +21,7 @@ import Logo from "@/components/Logo";
 import TrackerScript from "@/components/TrackerScript";
 import EmailObfuscator from "@/components/EmailObfuscator";
 import LiveTicker from "@/components/LiveTicker";
+import ImageModal from "@/components/ImageModal";
 import { getGitHubStats } from "@/lib/github-stats";
 
 /* ---------- constants ---------- */
@@ -246,30 +247,22 @@ export default async function Home() {
                   <br />
                   Fail-closed: lieber schweigen als lügen.
                 </p>
-                <div className="mt-6 flex gap-4 items-start">
-                  <a href="/images/omnixis-conceived-whiteboard-2025-01-14.png" target="_blank" rel="noopener" className="group shrink-0">
-                    <img
-                      src="/images/omnixis-conceived-whiteboard-2025-01-14.png"
-                      alt="OMNIXIS Whiteboard-Skizze, Böblingen, Januar 2025"
-                      width={120}
-                      height={260}
-                      className="rounded-lg border border-text-secondary/20 opacity-60 transition-opacity group-hover:opacity-100"
-                    />
-                  </a>
-                  <a href="/images/omnixis-born-first-session-2026-03-22.png" target="_blank" rel="noopener" className="group shrink-0">
-                    <img
-                      src="/images/omnixis-born-first-session-2026-03-22.png"
-                      alt="Erste OMNIXIS Claude Code Session, März 2026"
-                      width={160}
-                      height={130}
-                      className="rounded-lg border border-text-secondary/20 opacity-60 transition-opacity group-hover:opacity-100"
-                    />
-                  </a>
-                </div>
-                <p className="mt-3 text-sm font-mono text-text-secondary/50">
-                  Conceived January 14, 2025 in Böblingen.
+                <p className="mt-6 text-sm font-mono text-text-secondary/50">
+                  <ImageModal
+                    src="/images/omnixis-conceived-whiteboard-2025-01-14.png"
+                    alt="OMNIXIS Whiteboard-Skizze, Böblingen, Januar 2025"
+                  >
+                    Conceived
+                  </ImageModal>
+                  {" "}January 14, 2025 in Böblingen.
                   <br />
-                  Born March 22, 2026 in Stuttgart.
+                  <ImageModal
+                    src="/images/omnixis-born-first-session-2026-03-22.png"
+                    alt="Erste OMNIXIS Claude Code Session, März 2026"
+                  >
+                    Born
+                  </ImageModal>
+                  {" "}March 22, 2026 in Stuttgart.
                 </p>
               </div>
 
