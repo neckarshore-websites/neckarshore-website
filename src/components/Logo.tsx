@@ -23,7 +23,7 @@ export function NIcon({ className = "h-6 w-auto" }: { className?: string }) {
 }
 
 export default function Logo({
-  size = "text-lg",
+  size = "text-xl",
   className = "",
 }: {
   size?: string;
@@ -31,10 +31,10 @@ export default function Logo({
 }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 ${size} ${className}`}
+      className={`inline-flex items-center gap-0.5 ${size} ${className}`}
       aria-label="NECKARSHORE.AI"
     >
-      <NIcon className="h-[1.1em] w-auto shrink-0" />
+      <NIcon className="h-[1.15em] w-auto shrink-0" />
       <span className="font-heading font-semibold uppercase tracking-tight text-primary dark:text-text-primary leading-none">
         ECKARSHORE<span className="text-accent">.AI</span>
       </span>

@@ -271,7 +271,7 @@ export default function Datenschutz() {
       <footer className="border-t border-primary/5 bg-white px-4 py-10 md:px-6">
         <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-sm text-muted md:flex-row md:justify-between">
           <a href="/">
-            <Logo size="text-sm" className="opacity-60" />
+            <Logo size="text-xl" className="opacity-60" />
           </a>
           <div className="flex gap-6">
             <a href="/impressum" className="transition-colors hover:text-accent">
