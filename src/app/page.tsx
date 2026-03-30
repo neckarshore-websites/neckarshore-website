@@ -18,9 +18,43 @@ import Logo from "@/components/Logo";
 import TrackerScript from "@/components/TrackerScript";
 import EmailObfuscator from "@/components/EmailObfuscator";
 
+/* ---------- constants ---------- */
+
+const OMNIXIS_DAY_ONE = new Date("2026-03-22");
+
+const faqItems = [
+  {
+    q: "Was ist OMNIXIS?",
+    a: "OMNIXIS Documentor ist unsere KI-first Documentation Engine. Sie zieht automatisch aus Git, Jira und Confluence und generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten. Fail-closed: Wenn die Evidenz schwach ist, verweigert das System die Antwort — lieber schweigen als lügen.",
+  },
+  {
+    q: "Was bedeutet BYOLLM?",
+    a: "BYOLLM steht für Bring Your Own LLM. Bei neckarshore.ai entscheidet der Kunde, welches Sprachmodell eingesetzt wird. Eure Daten verlassen euer Haus nicht, ihr kontrolliert die Kosten und seid an keinen Anbieter gebunden.",
+  },
+  {
+    q: "Was kostet Nearshore-Entwicklung bei neckarshore.ai?",
+    a: "Wir sind 5-10x kosteneffektiver als Big-4-Consultancies bei vergleichbarer Qualität. Durch KI-Beschleunigung liefert ein kleines Team, wofür andere 3x so viele Leute brauchen. Konkrete Preise besprechen wir im 15-Minuten Kennenlerntermin.",
+  },
+  {
+    q: "Wo sitzt neckarshore.ai?",
+    a: "neckarshore.ai sitzt in Stuttgart, Deutschland. Der Name kommt vom Neckar — dem Fluss, der das industrielle Herz Baden-Württembergs verbindet. Wir arbeiten remote-first, sind aber lokal verankert: gleiche Zeitzone, gleiche Sprache, gleiche Datenschutzstandards.",
+  },
+  {
+    q: "Ist neckarshore.ai DSGVO-konform?",
+    a: "Ja, DSGVO-Konformität ist bei uns Architekturentscheidung, keine Checkliste. Hosting in Deutschland, Verschlüsselung, Tenant-Isolation, und BYOLLM — eure Daten bleiben bei euch. Diese Website setzt keine Tracking-Cookies und lädt keine externen Ressourcen.",
+  },
+];
+
+function getDaysSinceStart(): number {
+  const now = new Date();
+  const diff = now.getTime() - OMNIXIS_DAY_ONE.getTime();
+  return Math.max(1, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+}
+
 /* ---------- page ---------- */
 
 export default function Home() {
+  const devDays = getDaysSinceStart();
   return (
     <>
       <Nav />
@@ -37,8 +71,9 @@ export default function Home() {
               Closer to Home.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-dark/80 md:text-xl">
-              KI-beschleunigte Softwareentwicklung aus Stuttgart. Gleiche Zeitzone, gleiche
-              Sprache, gleiche Datenschutzstandards — ohne Offshore-Risiko, ohne Big-4-Preise.
+              neckarshore.ai bringt KI-beschleunigte Softwareentwicklung zurück nach Stuttgart.
+              Gleiche Zeitzone, gleiche Sprache, gleiche Datenschutzstandards — ohne Offshore-Risiko,
+              ohne Big-4-Preise.
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <a
@@ -91,7 +126,7 @@ export default function Home() {
                   icon: Clock,
                   title: "vs. Offshore",
                   subtitle: "All the speed, none of the risk.",
-                  text: "Gleiche Zeitzone, gleiche Sprache. DSGVO-konform by default. KI-beschleunigt. Kulturelles Alignment — wir verstehen wie deutsche Unternehmen ticken.",
+                  text: "Gleiche Zeitzone, gleiche Sprache. neckarshore.ai liefert DSGVO-konform by default, KI-beschleunigt, mit kulturellem Alignment — wir verstehen wie deutsche Unternehmen ticken.",
                 },
                 {
                   icon: TrendingUp,
@@ -201,7 +236,7 @@ export default function Home() {
                   generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten.
                 </p>
                 <p className="mt-4 text-lg leading-relaxed text-text-secondary">
-                  Gebaut in 6 Tagen. 163 Commits. 300+ Tests. Von einem Entwickler + Claude Code.
+                  Gebaut in {devDays} Tagen. 163 Commits. 300+ Tests. Von einem Entwickler + Claude Code.
                 </p>
               </div>
 
@@ -246,10 +281,10 @@ export default function Home() {
                   Gründer, neckarshore.ai
                 </p>
                 <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-dark/80">
-                  Ehemaliger Mercedes-Benz IT — jetzt Gründer in Stuttgart. Ich baue Software mit
-                  KI-Beschleunigung und automatisiere alles, was keiner machen will. Mein Flaggschiff
-                  OMNIXIS dokumentiert sich selbst — weil niemand Doku schreiben will, aber alle
-                  meckern wenn keine da ist.
+                  Ehemaliger Mercedes-Benz IT — jetzt Gründer von neckarshore.ai in Stuttgart. Ich
+                  baue Software mit KI-Beschleunigung und automatisiere alles, was keiner machen will.
+                  Mein Flaggschiff OMNIXIS dokumentiert sich selbst — weil niemand Doku schreiben will,
+                  aber alle meckern wenn keine da ist.
                 </p>
                 <p className="mt-4 max-w-2xl text-lg leading-relaxed text-neutral-dark/80">
                   Ein Entwickler, mehrere KI-Assistenten, und die Überzeugung dass Kontext das neue
@@ -271,7 +306,7 @@ export default function Home() {
             </p>
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <a
-                href="https://calendly.com/neckarshore"
+                href="https://calendly.com/rauhut/20min"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3.5 text-base font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
@@ -289,6 +324,47 @@ export default function Home() {
               </a>
             </div>
           </div>
+        </section>
+
+        {/* ===== FAQ ===== */}
+        <section id="faq" className="bg-white px-4 py-20 md:px-6 md:py-24">
+          <div className="mx-auto max-w-[800px]">
+            <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl">
+              Häufige Fragen
+            </h2>
+            <div className="mt-12 space-y-6">
+              {faqItems.map((item, i) => (
+                <details
+                  key={i}
+                  className="group rounded-xl border border-primary/10 bg-neutral-light p-6 open:bg-white open:shadow-sm"
+                >
+                  <summary className="cursor-pointer font-heading text-lg font-semibold text-primary list-none flex items-center justify-between">
+                    {item.q}
+                    <span className="ml-4 text-accent transition-transform group-open:rotate-45">+</span>
+                  </summary>
+                  <p className="mt-4 leading-relaxed text-neutral-dark/80">{item.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+          <script
+            type="application/ld+json"
+            // Safe: static FAQ data, no user input
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: faqItems.map((item) => ({
+                  "@type": "Question",
+                  name: item.q,
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: item.a,
+                  },
+                })),
+              }),
+            }}
+          />
         </section>
       </main>
 
