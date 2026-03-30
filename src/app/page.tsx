@@ -1,65 +1,317 @@
-import Image from "next/image";
+import {
+  Cpu,
+  FileText,
+  Brain,
+  Shield,
+  TestTubeDiagonal,
+  Users,
+  Clock,
+  Globe,
+  TrendingUp,
+  GitCommit,
+  FlaskConical,
+  Layers,
+} from "lucide-react";
+import Nav from "@/components/Nav";
+import CookieBanner from "@/components/CookieBanner";
+import Logo from "@/components/Logo";
+import TrackerScript from "@/components/TrackerScript";
+import EmailObfuscator from "@/components/EmailObfuscator";
+
+/* ---------- page ---------- */
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+      <Nav />
+      <EmailObfuscator />
+      <TrackerScript />
+
+      <main>
+        {/* ===== HERO ===== */}
+        <section className="relative overflow-hidden bg-neutral-light px-4 pt-32 pb-20 md:px-6 md:pt-40 md:pb-24">
+          <div className="mx-auto max-w-[1200px]">
+            <h1 className="font-heading text-4xl font-bold leading-[1.1] tracking-tight text-primary md:text-[56px]">
+              Software Development.
+              <br />
+              Closer to Home.
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-dark/80 md:text-xl">
+              KI-beschleunigte Softwareentwicklung aus Stuttgart. Gleiche Zeitzone, gleiche
+              Sprache, gleiche Datenschutzstandards — ohne Offshore-Risiko, ohne Big-4-Preise.
+            </p>
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+              <a
+                href="#cta"
+                className="inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3.5 text-base font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
+              >
+                Kennenlerntermin buchen
+              </a>
+              <a
+                href="#services"
+                className="inline-flex items-center justify-center rounded-lg border-2 border-primary px-8 py-3.5 text-base font-medium text-primary transition-all duration-150 hover:bg-primary hover:text-white"
+              >
+                Unsere Services
+              </a>
+            </div>
+            <div className="mt-10 flex flex-wrap gap-6 text-sm font-medium tracking-wide text-muted">
+              <span className="flex items-center gap-2">
+                <Shield size={16} className="text-accent" />
+                DSGVO-by-Design
+              </span>
+              <span className="flex items-center gap-2">
+                <Globe size={16} className="text-accent" />
+                Made in Germany
+              </span>
+              <span className="flex items-center gap-2">
+                <Cpu size={16} className="text-accent" />
+                AI-Powered
+              </span>
+            </div>
+          </div>
+          {/* Decorative gradient blob */}
+          <div
+            className="pointer-events-none absolute -right-40 -top-40 h-[600px] w-[600px] rounded-full opacity-[0.07]"
+            style={{
+              background:
+                "radial-gradient(circle, #00D4FF 0%, transparent 70%)",
+            }}
+          />
+        </section>
+
+        {/* ===== WHY NEARSHORE ===== */}
+        <section id="why-nearshore" className="bg-white px-4 py-20 md:px-6 md:py-24">
+          <div className="mx-auto max-w-[1200px]">
+            <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl">
+              Warum Nearshore?
+            </h2>
+            <div className="mt-12 grid gap-6 md:grid-cols-3">
+              {[
+                {
+                  icon: Clock,
+                  title: "vs. Offshore",
+                  subtitle: "All the speed, none of the risk.",
+                  text: "Gleiche Zeitzone, gleiche Sprache. DSGVO-konform by default. KI-beschleunigt. Kulturelles Alignment — wir verstehen wie deutsche Unternehmen ticken.",
+                },
+                {
+                  icon: TrendingUp,
+                  title: "vs. Big-4",
+                  subtitle: "Enterprise-Qualität ohne Enterprise-Preise.",
+                  text: "5-10x kosteneffektiver. Schnellere Delivery, weniger Overhead. Direkter Zugang zu Engineers — kein Junior-heavy Bench-Modell.",
+                },
+                {
+                  icon: Users,
+                  title: "vs. Freelancers",
+                  subtitle: "Die Verlässlichkeit einer Agentur, die Agilität eines Startups.",
+                  text: "Skalierbar, nicht einzelne Person. Strukturierte Prozesse, nicht ad-hoc. Volle Projektverantwortung mit konsistenten Qualitätsstandards.",
+                },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="group rounded-xl border-l-4 border-accent bg-neutral-light p-8 shadow-sm transition-all duration-250 hover:-translate-y-0.5 hover:shadow-md"
+                >
+                  <item.icon size={32} className="text-secondary" />
+                  <h3 className="mt-4 font-heading text-xl font-semibold text-primary md:text-2xl">
+                    {item.title}
+                  </h3>
+                  <p className="mt-1 text-sm font-medium text-accent">{item.subtitle}</p>
+                  <p className="mt-3 leading-relaxed text-neutral-dark/80">{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ===== SERVICES ===== */}
+        <section id="services" className="bg-neutral-light px-4 py-20 md:px-6 md:py-24">
+          <div className="mx-auto max-w-[1200px]">
+            <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl">
+              Unsere Services
+            </h2>
+            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                {
+                  icon: Cpu,
+                  title: "AI-Powered Development",
+                  subtitle: "Software, schneller gebaut.",
+                  text: "Wir bauen eure Software mit KI-Beschleunigung. Ein kleines Team mit modernen AI-Tools liefert, wofür andere 3x so viele Leute brauchen. NestJS, TypeScript, PostgreSQL — kein Spielzeug, sondern Production-Stack.",
+                },
+                {
+                  icon: FileText,
+                  title: "Documentation Automation",
+                  subtitle: "Doku, die sich selbst schreibt.",
+                  text: "Unser Flaggschiff-Produkt OMNIXIS generiert automatisch Compliance-Doku, technische Doku und Chatbot-Antworten aus eurem Git, Jira und Confluence. Fail-closed: lieber schweigen als lügen.",
+                },
+                {
+                  icon: Brain,
+                  title: "AI Consulting & Strategy",
+                  subtitle: "KI richtig einsetzen.",
+                  text: "Welches LLM passt? Wo lohnt sich Automatisierung? Was ist Hype, was ist real? Wir beraten DACH-Unternehmen bei KI-Strategie — aus Erfahrung, nicht aus Folien.",
+                },
+                {
+                  icon: Shield,
+                  title: "DSGVO-by-Design",
+                  subtitle: "Datenschutz als Architektur.",
+                  text: "BYOLLM: Eure Daten verlassen euer Haus nicht. Hosting in Deutschland. Verschlüsselung. Tenant-Isolation. DSGVO ist bei uns keine Checkliste, sondern Architekturentscheidung.",
+                },
+                {
+                  icon: TestTubeDiagonal,
+                  title: "Quality Engineering",
+                  subtitle: "Testen, bevor es knallt.",
+                  text: "300+ automatisierte Tests, OWASP LLM Top 10, EU AI Act Compliance, Golden Datasets. Wir testen KI-Systeme mit derselben Strenge wie klassische Software — plus AI-spezifische Dimensionen.",
+                },
+                {
+                  icon: Users,
+                  title: "Nearshore Partnership",
+                  subtitle: "Euer Team, erweitert.",
+                  text: "Gleiche Zeitzone, gleiche Sprache, gleiche Datenschutzstandards. Kein Offshore-Risiko, keine Big-4-Preise. Stuttgart-basiert, remote-first, skalierbar.",
+                },
+              ].map((service) => (
+                <div
+                  key={service.title}
+                  className="group rounded-xl bg-white p-8 shadow-[0_10px_30px_rgba(10,37,64,0.08)] transition-all duration-250 hover:-translate-y-0.5 hover:shadow-[0_10px_30px_rgba(10,37,64,0.14)]"
+                >
+                  <service.icon size={32} className="text-secondary" />
+                  <h3 className="mt-4 font-heading text-lg font-semibold text-primary md:text-xl">
+                    {service.title}
+                  </h3>
+                  <p className="mt-1 text-sm font-medium text-accent">{service.subtitle}</p>
+                  <p className="mt-3 text-[15px] leading-relaxed text-neutral-dark/80">
+                    {service.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ===== OMNIXIS TEASER ===== */}
+        <section id="omnixis" className="bg-primary px-4 py-20 md:px-6 md:py-24">
+          <div className="mx-auto max-w-[1200px]">
+            <div className="grid items-center gap-12 md:grid-cols-2">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-widest text-accent">
+                  Unser Flaggschiff
+                </p>
+                <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
+                  OMNIXIS Documentor
+                </h2>
+                <p className="mt-6 text-lg leading-relaxed text-text-secondary">
+                  KI-first Documentation Engine. Zieht automatisch aus Git, Jira und Confluence —
+                  generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten.
+                </p>
+                <p className="mt-4 text-lg leading-relaxed text-text-secondary">
+                  Gebaut in 6 Tagen. 163 Commits. 300+ Tests. Von einem Entwickler + Claude Code.
+                </p>
+              </div>
+
+              {/* Stats grid */}
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { icon: GitCommit, value: "163", label: "Commits" },
+                  { icon: FlaskConical, value: "300+", label: "Automatisierte Tests" },
+                  { icon: Layers, value: "46+", label: "REST Endpoints" },
+                  { icon: Cpu, value: "10", label: "Echte Extractors" },
+                ].map((stat) => (
+                  <div
+                    key={stat.label}
+                    className="rounded-xl bg-surface p-6 text-center"
+                  >
+                    <stat.icon size={24} className="mx-auto text-accent" />
+                    <p className="mt-3 font-heading text-3xl font-bold text-text-primary">
+                      {stat.value}
+                    </p>
+                    <p className="mt-1 text-sm text-text-secondary">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== FOUNDER ===== */}
+        <section id="founder" className="bg-white px-4 py-20 md:px-6 md:py-24">
+          <div className="mx-auto max-w-[1200px]">
+            <div className="grid items-center gap-12 md:grid-cols-[280px_1fr]">
+              {/* Photo placeholder */}
+              <div className="mx-auto flex h-64 w-64 items-center justify-center rounded-2xl bg-neutral-light md:mx-0 md:h-72 md:w-72">
+                <span className="text-sm text-muted">Foto folgt</span>
+              </div>
+
+              <div>
+                <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl">
+                  German Rauhut
+                </h2>
+                <p className="mt-1 text-lg font-medium text-accent">
+                  Gründer, neckarshore.ai
+                </p>
+                <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-dark/80">
+                  Ehemaliger Mercedes-Benz IT — jetzt Gründer in Stuttgart. Ich baue Software mit
+                  KI-Beschleunigung und automatisiere alles, was keiner machen will. Mein Flaggschiff
+                  OMNIXIS dokumentiert sich selbst — weil niemand Doku schreiben will, aber alle
+                  meckern wenn keine da ist.
+                </p>
+                <p className="mt-4 max-w-2xl text-lg leading-relaxed text-neutral-dark/80">
+                  Ein Entwickler, mehrere KI-Assistenten, und die Überzeugung dass Kontext das neue
+                  Öl ist.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== CTA ===== */}
+        <section id="cta" className="bg-neutral-light px-4 py-20 md:px-6 md:py-24">
+          <div className="mx-auto max-w-[700px] text-center">
+            <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl">
+              Bereit, näher zusammenzuarbeiten?
+            </h2>
+            <p className="mt-6 text-lg leading-relaxed text-neutral-dark/80">
+              15 Minuten Kennenlerntermin — wir reden über euer Projekt, nicht über unsere Folien.
+            </p>
+            <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+              <a
+                href="https://calendly.com/neckarshore"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3.5 text-base font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
+                data-track="cta_click"
+              >
+                Kennenlerntermin buchen
+              </a>
+              <span className="text-muted">oder</span>
+              <a
+                id="email-link"
+                href="#"
+                className="text-base font-medium text-accent transition-colors hover:text-accent-hover"
+              >
+                info@neckarshore.ai
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* ===== FOOTER ===== */}
+      <footer className="border-t border-primary/5 bg-white px-4 py-10 md:px-6">
+        <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-sm text-muted md:flex-row md:justify-between">
+          <Logo className="h-6 w-auto opacity-60" />
+          <div className="flex gap-6">
+            <a href="/impressum" className="transition-colors hover:text-accent">
+              Impressum
+            </a>
+            <a href="/datenschutz" className="transition-colors hover:text-accent">
+              Datenschutz
+            </a>
+          </div>
+          <p>
+            &copy; 2026 neckarshore.ai — German Rauhut, IT Consulting &amp; Digital Ventures
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        <p className="mt-4 text-center text-xs text-muted/60">Stuttgart, Deutschland</p>
+      </footer>
+
+      <CookieBanner />
+    </>
   );
 }
