@@ -117,7 +117,7 @@ export default function Impressum() {
       <footer className="border-t border-primary/5 bg-white px-4 py-10 md:px-6">
         <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-sm text-muted md:flex-row md:justify-between">
           <a href="/">
-            <Logo className="h-6 w-auto opacity-60" />
+            <Logo size="text-sm" className="opacity-60" />
           </a>
           <div className="flex gap-6">
             <span className="font-medium text-primary/60">Impressum</span>

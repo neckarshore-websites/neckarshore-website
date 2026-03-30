@@ -1,49 +1,43 @@
-export default function Logo({ className = "h-8 w-auto" }: { className?: string }) {
+export function NIcon({ className = "h-6 w-auto" }: { className?: string }) {
   return (
     <svg
-      viewBox="0 0 280 40"
+      viewBox="0 0 32 40"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
-      aria-label="neckarshore.ai"
+      aria-hidden="true"
     >
-      {/* N-River Icon */}
-      <g>
-        <path
-          d="M4 36V4h4l16 22V4h4v32h-4L8 14v22H4z"
-          className="fill-primary dark:fill-text-primary"
-        />
-        <path
-          d="M6 24c3-2 6-2 9 0s6 2 9 0"
-          stroke="#00B8D4"
-          strokeWidth="2"
-          strokeLinecap="round"
-          fill="none"
-        />
-      </g>
-      {/* Wordmark */}
-      <text
-        x="40"
-        y="28"
-        fontFamily="var(--font-space-grotesk), 'Space Grotesk', system-ui"
-        fontSize="22"
-        fontWeight="600"
+      <path
+        d="M4 36V4h4l16 22V4h4v32h-4L8 14v22H4z"
         className="fill-primary dark:fill-text-primary"
-        letterSpacing="-0.02em"
-      >
-        neckarshore
-      </text>
-      <text
-        x="207"
-        y="28"
-        fontFamily="var(--font-space-grotesk), 'Space Grotesk', system-ui"
-        fontSize="22"
-        fontWeight="600"
-        fill="#00B8D4"
-        letterSpacing="-0.02em"
-      >
-        .ai
-      </text>
+      />
+      <path
+        d="M6 24c3-2 6-2 9 0s6 2 9 0"
+        stroke="#00B8D4"
+        strokeWidth="2"
+        strokeLinecap="round"
+        fill="none"
+      />
     </svg>
+  );
+}
+
+export default function Logo({
+  size = "text-lg",
+  className = "",
+}: {
+  size?: string;
+  className?: string;
+}) {
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 ${size} ${className}`}
+      aria-label="NECKARSHORE.AI"
+    >
+      <NIcon className="h-[1.1em] w-auto shrink-0" />
+      <span className="font-heading font-semibold uppercase tracking-tight text-primary dark:text-text-primary leading-none">
+        ECKARSHORE<span className="text-accent">.AI</span>
+      </span>
+    </span>
   );
 }

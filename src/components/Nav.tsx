@@ -19,7 +19,7 @@ export default function Nav() {
     <nav className="fixed top-0 z-50 w-full border-b border-primary/5 bg-neutral-light/80 backdrop-blur-md dark:border-text-secondary/10 dark:bg-deep-space/80">
       <div className="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-3 md:px-6">
         <a href="#" className="flex items-center gap-2" aria-label="neckarshore.ai Home">
-          <Logo className="h-8 w-auto" />
+          <Logo size="text-lg" />
         </a>
 
         {/* Desktop */}
