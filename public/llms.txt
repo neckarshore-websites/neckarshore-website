@@ -1,0 +1,37 @@
+# neckarshore.ai
+
+> KI-beschleunigte Softwareentwicklung aus Stuttgart. Nearshore AI & Software Development — Made in Germany.
+
+## About
+
+neckarshore.ai is a nearshore AI and software development partner based in Stuttgart, Germany. We help mid-sized companies and startups in the DACH region build software faster and more reliably — combining German engineering precision with modern AI acceleration. Same timezone, same language, same data protection standards.
+
+## Founder
+
+German Rauhut — former Mercedes-Benz IT, now founder of neckarshore.ai in Stuttgart.
+
+## Flagship Product
+
+OMNIXIS Documentor — an AI-first documentation engine that automatically generates compliance docs, technical documentation, and persona-aware chatbot responses from Git, Jira, and Confluence. BYOLLM (Bring Your Own LLM), fail-closed architecture, European hosting.
+
+## Services
+
+1. AI-Powered Development — NestJS, TypeScript, PostgreSQL production stack
+2. Documentation Automation — OMNIXIS Documentor
+3. AI Consulting & Strategy — LLM selection, automation assessment
+4. DSGVO-by-Design — BYOLLM, tenant isolation, German hosting
+5. Quality Engineering — 300+ automated tests, OWASP LLM Top 10, EU AI Act
+6. Nearshore Partnership — team extension, remote-first, scalable
+
+## Key Differentiators
+
+- vs. Offshore: same timezone, same language, DSGVO-compliant by default
+- vs. Big-4: 5-10x more cost-effective, direct engineer access
+- vs. Freelancers: scalable team, structured processes, full project ownership
+
+## Contact
+
+- Website: https://neckarshore.ai
+- Email: info@neckarshore.ai
+- Location: Stuttgart, Germany
+- Booking: https://calendly.com/rauhut/20min
