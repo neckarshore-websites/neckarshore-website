@@ -12,12 +12,12 @@ export default function Impressum() {
     <>
       <Nav />
       <main className="mx-auto max-w-[800px] px-4 pt-32 pb-20 md:px-6">
-        <h1 className="font-heading text-3xl font-bold text-primary md:text-4xl">Impressum</h1>
+        <h1 className="font-heading text-3xl font-bold text-primary md:text-4xl dark:text-text-primary">Impressum</h1>
 
-        <div className="prose-neckarshore mt-10 space-y-8 text-neutral-dark/80 leading-relaxed">
+        <div className="prose-neckarshore mt-10 space-y-8 text-neutral-dark/80 leading-relaxed dark:text-text-secondary">
           <section>
-            <p className="text-sm text-muted">Angaben gemäß § 5 TMG</p>
-            <h2 className="mt-4 font-heading text-xl font-semibold text-primary">Diensteanbieter</h2>
+            <p className="text-sm text-muted dark:text-text-secondary/60">Angaben gemäß § 5 TMG</p>
+            <h2 className="mt-4 font-heading text-xl font-semibold text-primary dark:text-text-primary">Diensteanbieter</h2>
             <p>
               German Rauhut
               <br />
@@ -26,7 +26,7 @@ export default function Impressum() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">Kontakt</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">Kontakt</h2>
             <p>
               Rotebühlstraße 176
               <br />
@@ -42,7 +42,7 @@ export default function Impressum() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">Umsatzsteuer-ID</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">Umsatzsteuer-ID</h2>
             <p>
               Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz:
               <br />
@@ -51,7 +51,7 @@ export default function Impressum() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">
               Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV
             </h2>
             <p>
@@ -64,7 +64,7 @@ export default function Impressum() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">EU-Streitschlichtung</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">EU-Streitschlichtung</h2>
             <p>
               Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:{" "}
               <a
@@ -83,9 +83,9 @@ export default function Impressum() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">Haftungsausschluss</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">Haftungsausschluss</h2>
 
-            <h3 className="mt-4 font-heading text-lg font-semibold text-primary">Haftung für Inhalte</h3>
+            <h3 className="mt-4 font-heading text-lg font-semibold text-primary dark:text-text-primary">Haftung für Inhalte</h3>
             <p>
               Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit,
               Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als
@@ -95,7 +95,7 @@ export default function Impressum() {
               Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
             </p>
 
-            <h3 className="mt-4 font-heading text-lg font-semibold text-primary">Haftung für Links</h3>
+            <h3 className="mt-4 font-heading text-lg font-semibold text-primary dark:text-text-primary">Haftung für Links</h3>
             <p>
               Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss
               haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die
@@ -103,7 +103,7 @@ export default function Impressum() {
               verantwortlich.
             </p>
 
-            <h3 className="mt-4 font-heading text-lg font-semibold text-primary">Urheberrecht</h3>
+            <h3 className="mt-4 font-heading text-lg font-semibold text-primary dark:text-text-primary">Urheberrecht</h3>
             <p>
               Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem
               deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der
@@ -115,7 +115,7 @@ export default function Impressum() {
       </main>
 
       <footer className="border-t border-primary/5 bg-white px-4 py-10 md:px-6">
-        <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-sm text-muted md:flex-row md:justify-between">
+        <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-sm text-muted dark:text-text-secondary/60 md:flex-row md:justify-between">
           <a href="/">
             <Logo size="text-xl" className="opacity-60" />
           </a>

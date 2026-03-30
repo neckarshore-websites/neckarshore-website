@@ -12,12 +12,12 @@ export default function Datenschutz() {
     <>
       <Nav />
       <main className="mx-auto max-w-[800px] px-4 pt-32 pb-20 md:px-6">
-        <h1 className="font-heading text-3xl font-bold text-primary md:text-4xl">Datenschutzerklärung</h1>
-        <p className="mt-2 text-sm text-muted">Stand: März 2026</p>
+        <h1 className="font-heading text-3xl font-bold text-primary md:text-4xl dark:text-text-primary">Datenschutzerklärung</h1>
+        <p className="mt-2 text-sm text-muted dark:text-text-secondary/60">Stand: März 2026</p>
 
-        <div className="mt-10 space-y-8 text-neutral-dark/80 leading-relaxed">
+        <div className="mt-10 space-y-8 text-neutral-dark/80 leading-relaxed dark:text-text-secondary">
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">1. Verantwortlicher</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">1. Verantwortlicher</h2>
             <p className="mt-3">
               German Rauhut
               <br />
@@ -37,14 +37,14 @@ export default function Datenschutz() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">
               2. Übersicht der Verarbeitungen
             </h2>
             <p className="mt-3">
               Diese Datenschutzerklärung informiert Sie über die Verarbeitung personenbezogener Daten auf der
               Website neckarshore.ai.
             </p>
-            <h3 className="mt-4 font-heading text-lg font-semibold text-primary">Grundlage</h3>
+            <h3 className="mt-4 font-heading text-lg font-semibold text-primary dark:text-text-primary">Grundlage</h3>
             <p className="mt-2">
               Wir verarbeiten personenbezogene Daten nur, wenn eine Rechtsgrundlage dies erlaubt:
             </p>
@@ -62,7 +62,7 @@ export default function Datenschutz() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">3. Hosting</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">3. Hosting</h2>
             <p className="mt-3">Diese Website wird gehostet bei:</p>
             <p className="mt-2">
               <strong>Vercel Inc.</strong>
@@ -97,7 +97,7 @@ export default function Datenschutz() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">4. Webanalyse</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">4. Webanalyse</h2>
             <p className="mt-3">
               Wir nutzen ein eigenes, selbst entwickeltes Tracking-System auf dieser Website. Die Analyse
               erfolgt vollständig auf unserer eigenen Infrastruktur. Es werden{" "}
@@ -115,7 +115,7 @@ export default function Datenschutz() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">
               5. Schriftarten (Self-Hosted)
             </h2>
             <p className="mt-3">
@@ -127,7 +127,7 @@ export default function Datenschutz() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">
               6. Terminbuchung (Calendly)
             </h2>
             <p className="mt-3">Für die Buchung von Kennenlern-Terminen nutzen wir Calendly:</p>
@@ -165,7 +165,7 @@ export default function Datenschutz() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">
               7. Kontakt per E-Mail
             </h2>
             <p className="mt-3">
@@ -183,7 +183,7 @@ export default function Datenschutz() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">8. Cookies</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">8. Cookies</h2>
             <p className="mt-3">
               Diese Website verwendet ausschließlich <strong>technisch notwendige Cookies</strong>, die für
               den Betrieb der Website erforderlich sind. Es werden keine Tracking-Cookies oder
@@ -198,7 +198,7 @@ export default function Datenschutz() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">9. Ihre Rechte</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">9. Ihre Rechte</h2>
             <p className="mt-3">
               Sie haben folgende Rechte bezüglich Ihrer personenbezogenen Daten:
             </p>
@@ -233,7 +233,7 @@ export default function Datenschutz() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">10. Beschwerderecht</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">10. Beschwerderecht</h2>
             <p className="mt-3">
               Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren:
             </p>
@@ -258,7 +258,7 @@ export default function Datenschutz() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary">11. Änderungen</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">11. Änderungen</h2>
             <p className="mt-3">
               Wir behalten uns vor, diese Datenschutzerklärung bei Bedarf anzupassen, insbesondere bei
               Änderungen der Datenverarbeitung oder neuen gesetzlichen Vorgaben. Es gilt die jeweils auf der
@@ -269,7 +269,7 @@ export default function Datenschutz() {
       </main>
 
       <footer className="border-t border-primary/5 bg-white px-4 py-10 md:px-6">
-        <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-sm text-muted md:flex-row md:justify-between">
+        <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-sm text-muted dark:text-text-secondary/60 md:flex-row md:justify-between">
           <a href="/">
             <Logo size="text-xl" className="opacity-60" />
           </a>
