@@ -30,7 +30,7 @@ const OMNIXIS_DAY_ONE = new Date("2026-03-22");
 const faqItems = [
   {
     q: "Was ist OMNIXIS?",
-    a: "OMNIXIS Documentor ist unsere KI-first Documentation Engine. Sie zieht automatisch aus Git, Jira und Confluence und generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten. Fail-closed: Wenn die Evidenz schwach ist, verweigert das System die Antwort — lieber schweigen als lügen.",
+    a: "OMNIXIS Documenter+X ist unsere KI-first Documentation Engine. Sie zieht automatisch aus Git, Jira und Confluence und generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten. Fail-closed: Wenn die Evidenz schwach ist, verweigert das System die Antwort — lieber schweigen als lügen.",
   },
   {
     q: "Was bedeutet BYOLLM?",
@@ -235,7 +235,7 @@ export default async function Home() {
                   Unser Flaggschiff
                 </p>
                 <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
-                  OMNIXIS Documentor
+                  OMNIXIS Documenter+X
                 </h2>
                 <p className="mt-6 text-lg leading-relaxed text-text-secondary">
                   KI-first Documentation Engine. Zieht automatisch aus Git, Jira und Confluence —
@@ -246,8 +246,30 @@ export default async function Home() {
                   <br />
                   Fail-closed: lieber schweigen als lügen.
                 </p>
-                <p className="mt-4 text-sm font-mono text-text-secondary/50">
-                  Born March 22, 2026.
+                <div className="mt-6 flex gap-4 items-start">
+                  <a href="/images/omnixis-conceived-whiteboard-2025-01-14.png" target="_blank" rel="noopener" className="group shrink-0">
+                    <img
+                      src="/images/omnixis-conceived-whiteboard-2025-01-14.png"
+                      alt="OMNIXIS Whiteboard-Skizze, Böblingen, Januar 2025"
+                      width={120}
+                      height={260}
+                      className="rounded-lg border border-text-secondary/20 opacity-60 transition-opacity group-hover:opacity-100"
+                    />
+                  </a>
+                  <a href="/images/omnixis-born-first-session-2026-03-22.png" target="_blank" rel="noopener" className="group shrink-0">
+                    <img
+                      src="/images/omnixis-born-first-session-2026-03-22.png"
+                      alt="Erste OMNIXIS Claude Code Session, März 2026"
+                      width={160}
+                      height={130}
+                      className="rounded-lg border border-text-secondary/20 opacity-60 transition-opacity group-hover:opacity-100"
+                    />
+                  </a>
+                </div>
+                <p className="mt-3 text-sm font-mono text-text-secondary/50">
+                  Conceived January 14, 2025 in Böblingen.
+                  <br />
+                  Born March 22, 2026 in Stuttgart.
                 </p>
               </div>
 
