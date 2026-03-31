@@ -39,7 +39,7 @@ const faqItems = [
   },
   {
     q: "Was kostet Nearshore-Entwicklung bei neckarshore.ai?",
-    a: "Wir sind 5-10x kosteneffektiver als Big-4-Consultancies bei vergleichbarer Qualität. Durch KI-Beschleunigung liefert ein kleines Team, wofür andere 3x so viele Leute brauchen. Konkrete Preise besprechen wir im 15-Minuten Kennenlerntermin.",
+    a: "Wir sind deutlich kosteneffektiver als Big-4-Consultancies bei vergleichbarer Qualität. Durch KI-Beschleunigung liefert ein kleines Team, wofür andere deutlich mehr Leute brauchen. Konkrete Preise besprechen wir im 15-Minuten Kennenlerntermin.",
   },
   {
     q: "Wo sitzt neckarshore.ai?",
@@ -141,7 +141,7 @@ export default async function Home() {
                   icon: TrendingUp,
                   title: "vs. Big-4",
                   subtitle: "Enterprise-Qualität ohne Enterprise-Preise.",
-                  text: "5-10x kosteneffektiver. Schnellere Delivery, weniger Overhead. Direkter Zugang zu Engineers — kein Junior-heavy Bench-Modell.",
+                  text: "Deutlich kosteneffektiver bei vergleichbarer Qualität. Schnellere Delivery, weniger Overhead. Direkter Zugang zu Engineers — kein Junior-heavy Bench-Modell.",
                 },
                 {
                   icon: Users,
@@ -268,16 +268,16 @@ export default async function Home() {
                   </ImageModal>
                   {" "}March 22, 2026 in Stuttgart.
                   <br />
-                  MVP June, 2026.
+                  MVP Q2 2026.
                   <br />
-                  LIVE September, 2026.
+                  LIVE Q3 2026.
                 </p>
               </div>
 
               {/* Stats grid — 6 tiles */}
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                 {[
-                  { icon: CalendarDays, value: String(devDays), label: "Days in Development" },
+                  { icon: CalendarDays, value: String(devDays), label: "Days since First Commit" },
                   { icon: GitCommit, value: stats.commits.toLocaleString("de-DE"), label: "Commits" },
                   { icon: FlaskConical, value: "300+", label: "Automatisierte Tests" },
                   { icon: Layers, value: "46+", label: "REST Endpoints" },
@@ -343,20 +343,21 @@ export default async function Home() {
 
               <div>
                 <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl dark:text-text-primary">
-                  MASCHIN &amp; das S-Team
+                  Unser Ansatz
                 </h2>
                 <p className="mt-1 text-lg font-medium text-primary/70 dark:text-accent">
-                  Chief of Staff of Staff &amp; Expertenteam
+                  Enterprise-Qualität ohne Enterprise-Headcount
                 </p>
                 <p className="mt-6 max-w-2xl text-lg leading-relaxed text-primary/80 dark:text-text-secondary">
-                  MASCHIN ist unser KI-gestützter Chief of Staff of Staff — das Betriebssystem hinter
-                  neckarshore.ai. Dahinter steht ein S-Team aus spezialisierten KI-Experten: jeder mit
-                  einer klaren Rolle, einem Weltklasse-Vorbild und der Fähigkeit, autonom zu arbeiten.
+                  Ein Senior-Architekt mit 20 Jahren Enterprise-Erfahrung, unterstützt durch ein
+                  KI-gestütztes Expertensystem — spezialisiert auf Architektur, Quality Engineering,
+                  Dokumentation und Deployment. Jede Disziplin wird von einer dedizierten KI abgedeckt,
+                  eingebettet in einen strukturierten Engineering-Prozess.
                 </p>
                 <p className="mt-4 max-w-2xl text-lg leading-relaxed text-primary/80 dark:text-text-secondary">
-                  Von der Architektur über Quality Engineering bis zum Marketing — das S-Team liefert
-                  Enterprise-Qualität ohne Enterprise-Headcount. Ein Mensch denkt, entscheidet und
-                  verantwortet. Die Maschinen exekutieren.
+                  Das Ergebnis: Delivery-Geschwindigkeit und -Breite, die normalerweise ein ganzes Team
+                  erfordert. Ein Mensch denkt, entscheidet und verantwortet. Die KI exekutiert nach
+                  klaren Leitplanken.
                 </p>
               </div>
             </div>
