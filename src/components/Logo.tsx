@@ -13,7 +13,7 @@ export function NIcon({ className = "h-6 w-auto" }: { className?: string }) {
       />
       <path
         d="M6 24c3-2 6-2 9 0s6 2 9 0"
-        stroke="#00B8D4"
+        stroke="#0E7490"
         strokeWidth="2"
         strokeLinecap="round"
         fill="none"

@@ -7,9 +7,10 @@ interface ImageModalProps {
   src: string;
   alt: string;
   children: React.ReactNode;
+  className?: string;
 }
 
-export default function ImageModal({ src, alt, children }: ImageModalProps) {
+export default function ImageModal({ src, alt, children, className }: ImageModalProps) {
   const [open, setOpen] = useState(false);
 
   const close = useCallback(() => setOpen(false), []);
@@ -31,7 +32,7 @@ export default function ImageModal({ src, alt, children }: ImageModalProps) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="cursor-pointer text-accent underline decoration-accent/30 underline-offset-2 transition-colors hover:text-accent-hover hover:decoration-accent"
+        className={className || "cursor-pointer text-accent underline decoration-accent/30 underline-offset-2 transition-colors hover:text-accent-hover hover:decoration-accent"}
       >
         {children}
       </button>

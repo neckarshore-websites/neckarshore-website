@@ -8,7 +8,7 @@ export default function LiveTicker({ fetchedAt }: { fetchedAt: string }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setNow(new Date().toISOString());
-    }, 73); // ~14fps — fast enough for pseudo-precision, light on CPU
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 

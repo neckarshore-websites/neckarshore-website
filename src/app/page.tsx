@@ -234,7 +234,7 @@ export default async function Home() {
           <div className="mx-auto max-w-[1200px]">
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-widest text-accent">
+                <p className="text-sm font-semibold uppercase tracking-widest text-secondary">
                   Unser Flaggschiff
                 </p>
                 <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
@@ -249,10 +249,11 @@ export default async function Home() {
                   <br />
                   Fail-closed: lieber schweigen als lügen.
                 </p>
-                <p className="mt-6 text-sm font-mono text-text-secondary/50">
+                <p className="mt-6 text-sm font-mono text-text-secondary/70">
                   <ImageModal
                     src="/images/omnixis-conceived-whiteboard-2025-01-14.png"
                     alt="OMNIXIS Whiteboard-Skizze, Böblingen, Januar 2025"
+                    className="cursor-pointer text-secondary underline decoration-secondary/30 underline-offset-2 transition-colors hover:text-text-primary hover:decoration-secondary"
                   >
                     Conceived
                   </ImageModal>
@@ -261,6 +262,7 @@ export default async function Home() {
                   <ImageModal
                     src="/images/omnixis-born-first-session-2026-03-22.png"
                     alt="Erste OMNIXIS Claude Code Session, März 2026"
+                    className="cursor-pointer text-secondary underline decoration-secondary/30 underline-offset-2 transition-colors hover:text-text-primary hover:decoration-secondary"
                   >
                     Born
                   </ImageModal>
@@ -336,7 +338,7 @@ export default async function Home() {
             <div className="grid items-start gap-12 md:grid-cols-[280px_1fr]">
               {/* Photo placeholder */}
               <div className="mx-auto flex h-64 w-64 items-center justify-center rounded-2xl bg-white/40 md:mx-0 md:h-72 md:w-72 dark:bg-white/10">
-                <span className="text-sm text-primary/50 dark:text-text-secondary/50">Foto folgt</span>
+                <span className="text-sm text-primary/70 dark:text-text-secondary/70">Foto folgt</span>
               </div>
 
               <div>
@@ -431,7 +433,7 @@ export default async function Home() {
       {/* ===== FOOTER ===== */}
       <footer className="border-t border-primary/5 bg-white px-4 py-10 md:px-6 dark:border-text-secondary/10 dark:bg-surface">
         <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-sm text-muted md:flex-row md:justify-between dark:text-text-secondary/60">
-          <Logo size="text-xl" className="opacity-60" />
+          <Logo size="text-xl" />
           <div className="flex gap-6">
             <a href="/impressum" className="transition-colors hover:text-accent">
               Impressum
@@ -445,8 +447,8 @@ export default async function Home() {
           </p>
         </div>
         <div className="mt-4 flex flex-col items-center gap-1">
-          <p className="text-center text-xs text-muted/60 dark:text-text-secondary/30">Stuttgart, Deutschland</p>
-          <div className="text-muted/40 dark:text-text-secondary/20">
+          <p className="text-center text-xs text-muted dark:text-text-secondary/50">Stuttgart, Deutschland</p>
+          <div className="text-muted dark:text-text-secondary/50">
             <LiveTicker fetchedAt={stats.fetchedAt} />
           </div>
         </div>
