@@ -1,32 +1,25 @@
 import { test, expect } from "@playwright/test";
 
+const pages = [
+  { path: "/", titleContains: "neckarshore.ai" },
+  { path: "/impressum", titleContains: "Impressum" },
+  { path: "/datenschutz", titleContains: "Datenschutz" },
+];
+
 test.describe("SEO Basics", () => {
-  test("homepage has meta title and description", async ({ page }) => {
-    await page.goto("/");
-    const title = await page.title();
-    expect(title).toContain("neckarshore.ai");
+  for (const { path, titleContains } of pages) {
+    test(`${path} has meta title containing "${titleContains}"`, async ({ page }) => {
+      await page.goto(path);
+      const title = await page.title();
+      expect(title).toContain(titleContains);
+    });
 
-    const description = page.locator('meta[name="description"]');
-    await expect(description).toHaveAttribute("content", /.+/);
-  });
-
-  test("impressum has meta title and description", async ({ page }) => {
-    await page.goto("/impressum");
-    const title = await page.title();
-    expect(title).toContain("Impressum");
-
-    const description = page.locator('meta[name="description"]');
-    await expect(description).toHaveAttribute("content", /.+/);
-  });
-
-  test("datenschutz has meta title and description", async ({ page }) => {
-    await page.goto("/datenschutz");
-    const title = await page.title();
-    expect(title).toContain("Datenschutz");
-
-    const description = page.locator('meta[name="description"]');
-    await expect(description).toHaveAttribute("content", /.+/);
-  });
+    test(`${path} has meta description`, async ({ page }) => {
+      await page.goto(path);
+      const description = page.locator('meta[name="description"]');
+      await expect(description).toHaveAttribute("content", /.+/);
+    });
+  }
 
   test("homepage has JSON-LD structured data", async ({ page }) => {
     await page.goto("/");

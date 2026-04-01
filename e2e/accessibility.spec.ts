@@ -20,7 +20,6 @@ test.describe("Accessibility", () => {
         const level = parseInt(tag.replace("H", ""));
 
         if (lastLevel > 0) {
-          // Heading level can stay same, go up (smaller number), or go down by 1
           expect(
             level <= lastLevel + 1,
             `${path}: H${lastLevel} followed by H${level} (skip)`
@@ -35,31 +34,30 @@ test.describe("Accessibility", () => {
       const lang = await page.locator("html").getAttribute("lang");
       expect(lang).toBe("de");
     });
+
+    test(`${path} — all images have alt text`, async ({ page }) => {
+      await page.goto(path);
+      const images = await page.locator("img").all();
+
+      for (const img of images) {
+        const alt = await img.getAttribute("alt");
+        const src = await img.getAttribute("src");
+        expect(alt, `Image ${src} on ${path} missing alt text`).toBeTruthy();
+      }
+    });
+
+    test(`${path} — nav buttons have accessible names`, async ({ page }) => {
+      await page.goto(path);
+      const buttons = await page.locator("nav button").all();
+
+      for (const button of buttons) {
+        const ariaLabel = await button.getAttribute("aria-label");
+        const text = await button.textContent();
+        expect(
+          ariaLabel || text?.trim(),
+          `Button on ${path} without accessible name`
+        ).toBeTruthy();
+      }
+    });
   }
-
-  test("all images have alt text", async ({ page }) => {
-    await page.goto("/");
-    const images = await page.locator("img").all();
-
-    for (const img of images) {
-      const alt = await img.getAttribute("alt");
-      const src = await img.getAttribute("src");
-      expect(alt, `Image ${src} missing alt text`).toBeTruthy();
-    }
-  });
-
-  test("interactive elements have aria labels", async ({ page }) => {
-    await page.goto("/");
-
-    // Theme toggle button
-    const buttons = await page.locator("nav button").all();
-    for (const button of buttons) {
-      const ariaLabel = await button.getAttribute("aria-label");
-      const text = await button.textContent();
-      expect(
-        ariaLabel || text?.trim(),
-        "Button without accessible name"
-      ).toBeTruthy();
-    }
-  });
 });

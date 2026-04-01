@@ -11,13 +11,13 @@
 
 | Suite | File | Tests | What |
 |-------|------|-------|------|
-| Navigation | `e2e/navigation.spec.ts` | 7 | Anchor links, footer, logo, mobile menu |
-| Links | `e2e/links.spec.ts` | 6 | No 404s, external links `target="_blank"` |
+| Navigation | `e2e/navigation.spec.ts` | 10 | Anchor scroll per section, subpage nav, footer, logo, mobile menu |
+| Links | `e2e/links.spec.ts` | 9 | No 404s, `target="_blank"`, external link reachability |
 | Calendly | `e2e/calendly.spec.ts` | 3 | CTA URL correct, reachable, on all pages |
-| Theme | `e2e/theme.spec.ts` | 3 | Dark/light toggle, accent contrast, no invisible text |
+| Theme | `e2e/theme.spec.ts` | 3 | Dark/light toggle, WCAG AA contrast (accent + headings) |
 | Responsive | `e2e/responsive.spec.ts` | 12 | No overflow on 393/414/768px, nav usable |
-| SEO | `e2e/seo.spec.ts` | 6 | Meta tags, JSON-LD, robots.txt, sitemap.xml |
-| Accessibility | `e2e/accessibility.spec.ts` | 5 | H1 count, heading hierarchy, lang, alt text, aria |
+| SEO | `e2e/seo.spec.ts` | 9 | Meta title/description per page, JSON-LD, robots.txt, sitemap.xml |
+| Accessibility | `e2e/accessibility.spec.ts` | 15 | H1 count, heading hierarchy, lang, alt text, aria — all pages |
 
 ### When to Run
 

@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 const sections = ["services", "why-nearshore", "omnixis", "founder"];
+const SCROLL_TIMEOUT = 5000;
 
 test.describe("Navigation", () => {
   test("homepage loads with visible H1", async ({ page }) => {
@@ -9,35 +10,26 @@ test.describe("Navigation", () => {
     await expect(h1).toBeVisible();
   });
 
-  test("nav links on homepage scroll to sections", async ({ page }) => {
-    await page.goto("/");
-    for (const id of sections) {
+  for (const id of sections) {
+    test(`homepage nav link scrolls to #${id}`, async ({ page }) => {
+      await page.goto("/");
       const link = page.locator(`nav a[href="/#${id}"]`);
       await link.click();
-      const section = page.locator(`#${id}`);
-      await expect(section).toBeInViewport({ timeout: 3000 });
-    }
-  });
+      await expect(page.locator(`#${id}`)).toBeInViewport({ timeout: SCROLL_TIMEOUT });
+    });
+  }
 
-  test("nav links from /impressum navigate to homepage sections", async ({
-    page,
-  }) => {
-    await page.goto("/impressum");
-    const link = page.locator('nav a[href="/#services"]');
-    await link.click();
-    await expect(page).toHaveURL(/\/#services/);
-    await expect(page.locator("#services")).toBeInViewport({ timeout: 3000 });
-  });
-
-  test("nav links from /datenschutz navigate to homepage sections", async ({
-    page,
-  }) => {
-    await page.goto("/datenschutz");
-    const link = page.locator('nav a[href="/#services"]');
-    await link.click();
-    await expect(page).toHaveURL(/\/#services/);
-    await expect(page.locator("#services")).toBeInViewport({ timeout: 5000 });
-  });
+  for (const subpage of ["/impressum", "/datenschutz"]) {
+    test(`nav link from ${subpage} navigates to homepage #services`, async ({
+      page,
+    }) => {
+      await page.goto(subpage);
+      const link = page.locator('nav a[href="/#services"]');
+      await link.click();
+      await expect(page).toHaveURL(/\/#services/);
+      await expect(page.locator("#services")).toBeInViewport({ timeout: SCROLL_TIMEOUT });
+    });
+  }
 
   test("footer links work", async ({ page }) => {
     await page.goto("/");
@@ -61,7 +53,6 @@ test.describe("Navigation", () => {
     const menuButton = page.locator('nav button[aria-label="Menü öffnen"]');
     await menuButton.click();
 
-    // Mobile menu links have text-base class (desktop has text-sm)
     const mobileNav = page.locator("nav a.block").filter({ hasText: "Services" });
     await expect(mobileNav).toBeVisible();
 

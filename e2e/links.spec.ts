@@ -38,5 +38,23 @@ test.describe("Links", () => {
         expect(rel, `${href} missing rel="noopener"`).toContain("noopener");
       }
     });
+
+    test(`external links on ${path} are reachable`, async ({ page, request }) => {
+      await page.goto(path);
+      const externalLinks = await page
+        .locator('a[href^="https://"]')
+        .all();
+      const hrefs = new Set<string>();
+
+      for (const link of externalLinks) {
+        const href = await link.getAttribute("href");
+        if (href) hrefs.add(href);
+      }
+
+      for (const href of hrefs) {
+        const response = await request.get(href);
+        expect(response.status(), `${href} not reachable`).toBeLessThan(400);
+      }
+    });
   }
 });
