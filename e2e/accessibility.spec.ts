@@ -1,69 +1,56 @@
 import { test, expect } from "@playwright/test";
+import { PAGES } from "./helpers";
 
-const pages = ["/", "/impressum", "/datenschutz"];
-
-let tcNum = 1;
+// Hardcoded stable IDs — 5 tests per page
+const IDS: Record<string, [string, string, string, string, string]> = {
+  "/":            ["TC-A11Y-001", "TC-A11Y-002", "TC-A11Y-003", "TC-A11Y-004", "TC-A11Y-005"],
+  "/impressum":   ["TC-A11Y-006", "TC-A11Y-007", "TC-A11Y-008", "TC-A11Y-009", "TC-A11Y-010"],
+  "/datenschutz": ["TC-A11Y-011", "TC-A11Y-012", "TC-A11Y-013", "TC-A11Y-014", "TC-A11Y-015"],
+};
 
 test.describe("Accessibility", () => {
-  for (const path of pages) {
-    const id1 = String(tcNum++).padStart(3, "0");
-    test(`TC-A11Y-${id1}: ${path} has exactly one H1`, async ({ page }) => {
+  for (const path of PAGES) {
+    const [idH1, idSkip, idLang, idAlt, idAria] = IDS[path];
+
+    test(`${idH1}: ${path} has exactly one H1`, async ({ page }) => {
       await page.goto(path);
-      const h1Count = await page.locator("h1").count();
-      expect(h1Count, `${path} should have exactly 1 H1`).toBe(1);
+      expect(await page.locator("h1").count(), `${path} should have exactly 1 H1`).toBe(1);
     });
 
-    const id2 = String(tcNum++).padStart(3, "0");
-    test(`TC-A11Y-${id2}: ${path} has no heading level skips`, async ({ page }) => {
+    test(`${idSkip}: ${path} has no heading level skips`, async ({ page }) => {
       await page.goto(path);
       const headings = await page.locator("h1, h2, h3, h4, h5, h6").all();
-
       let lastLevel = 0;
-      for (const heading of headings) {
-        const tag = await heading.evaluate((el) => el.tagName);
-        const level = parseInt(tag.replace("H", ""));
 
+      for (const heading of headings) {
+        const level = parseInt((await heading.evaluate((el) => el.tagName)).replace("H", ""));
         if (lastLevel > 0) {
-          expect(
-            level <= lastLevel + 1,
-            `${path}: H${lastLevel} followed by H${level} (skip)`
-          ).toBe(true);
+          expect(level <= lastLevel + 1, `${path}: H${lastLevel} → H${level} (skip)`).toBe(true);
         }
         lastLevel = level;
       }
     });
 
-    const id3 = String(tcNum++).padStart(3, "0");
-    test(`TC-A11Y-${id3}: ${path} has lang attribute on html`, async ({ page }) => {
+    test(`${idLang}: ${path} has lang attribute on html`, async ({ page }) => {
       await page.goto(path);
-      const lang = await page.locator("html").getAttribute("lang");
-      expect(lang).toBe("de");
+      expect(await page.locator("html").getAttribute("lang")).toBe("de");
     });
 
-    const id4 = String(tcNum++).padStart(3, "0");
-    test(`TC-A11Y-${id4}: ${path} — all images have alt text`, async ({ page }) => {
+    test(`${idAlt}: ${path} — all images have alt text`, async ({ page }) => {
       await page.goto(path);
       const images = await page.locator("img").all();
-
       for (const img of images) {
-        const alt = await img.getAttribute("alt");
         const src = await img.getAttribute("src");
-        expect(alt, `Image ${src} on ${path} missing alt text`).toBeTruthy();
+        expect(await img.getAttribute("alt"), `Image ${src} on ${path} missing alt`).toBeTruthy();
       }
     });
 
-    const id5 = String(tcNum++).padStart(3, "0");
-    test(`TC-A11Y-${id5}: ${path} — nav buttons have accessible names`, async ({ page }) => {
+    test(`${idAria}: ${path} — nav buttons have accessible names`, async ({ page }) => {
       await page.goto(path);
       const buttons = await page.locator("nav button").all();
-
       for (const button of buttons) {
-        const ariaLabel = await button.getAttribute("aria-label");
-        const text = await button.textContent();
-        expect(
-          ariaLabel || text?.trim(),
-          `Button on ${path} without accessible name`
-        ).toBeTruthy();
+        const name = (await button.getAttribute("aria-label")) || (await button.textContent())?.trim();
+        expect(name, `Button on ${path} without accessible name`).toBeTruthy();
       }
     });
   }

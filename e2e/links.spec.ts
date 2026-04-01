@@ -1,10 +1,18 @@
 import { test, expect } from "@playwright/test";
+import { PAGES } from "./helpers";
 
-const pages = ["/", "/impressum", "/datenschutz"];
+// Hardcoded stable IDs — 3 tests per page
+const IDS: Record<string, [string, string, string]> = {
+  "/":            ["TC-LNK-001", "TC-LNK-002", "TC-LNK-003"],
+  "/impressum":   ["TC-LNK-004", "TC-LNK-005", "TC-LNK-006"],
+  "/datenschutz": ["TC-LNK-007", "TC-LNK-008", "TC-LNK-009"],
+};
 
 test.describe("Links", () => {
-  for (const [i, path] of pages.entries()) {
-    test(`TC-LNK-${String(i * 3 + 1).padStart(3, "0")}: all links on ${path} are valid (no 404)`, async ({ page }) => {
+  for (const path of PAGES) {
+    const [idValid, idTab, idReach] = IDS[path];
+
+    test(`${idValid}: all links on ${path} are valid (no 404)`, async ({ page }) => {
       await page.goto(path);
       const links = await page.locator("a[href]").all();
       const hrefs = new Set<string>();
@@ -24,26 +32,20 @@ test.describe("Links", () => {
       }
     });
 
-    test(`TC-LNK-${String(i * 3 + 2).padStart(3, "0")}: external links on ${path} open in new tab`, async ({ page }) => {
+    test(`${idTab}: external links on ${path} open in new tab`, async ({ page }) => {
       await page.goto(path);
-      const externalLinks = await page
-        .locator('a[href^="https://"]')
-        .all();
+      const externalLinks = await page.locator('a[href^="https://"]').all();
 
       for (const link of externalLinks) {
-        const target = await link.getAttribute("target");
-        const rel = await link.getAttribute("rel");
         const href = await link.getAttribute("href");
-        expect(target, `${href} missing target="_blank"`).toBe("_blank");
-        expect(rel, `${href} missing rel="noopener"`).toContain("noopener");
+        expect(await link.getAttribute("target"), `${href} missing target="_blank"`).toBe("_blank");
+        expect(await link.getAttribute("rel"), `${href} missing rel="noopener"`).toContain("noopener");
       }
     });
 
-    test(`TC-LNK-${String(i * 3 + 3).padStart(3, "0")}: external links on ${path} are reachable`, async ({ page, request }) => {
+    test(`${idReach}: external links on ${path} are reachable`, async ({ page, request }) => {
       await page.goto(path);
-      const externalLinks = await page
-        .locator('a[href^="https://"]')
-        .all();
+      const externalLinks = await page.locator('a[href^="https://"]').all();
       const hrefs = new Set<string>();
 
       for (const link of externalLinks) {

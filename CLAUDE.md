@@ -4,7 +4,7 @@
 
 ### Commands
 
-- `npm run test:e2e` — run all tests (headless, ~27s)
+- `npm run test:e2e` — run all tests (headless, ~25s)
 - `npm run test:e2e:ui` — run with Playwright UI (interactive debugging)
 
 ### Test Suites
