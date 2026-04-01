@@ -6,10 +6,10 @@ import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
-  { href: "#services", label: "Services" },
-  { href: "#why-nearshore", label: "Warum Nearshore" },
-  { href: "#omnixis", label: "OMNIXIS" },
-  { href: "#founder", label: "Über uns" },
+  { href: "/#services", label: "Services" },
+  { href: "/#why-nearshore", label: "Warum Nearshore" },
+  { href: "/#omnixis", label: "OMNIXIS" },
+  { href: "/#founder", label: "Über uns" },
 ];
 
 export default function Nav() {
