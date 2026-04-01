@@ -29,7 +29,7 @@ function contrastRatio(fg: string, bg: string): number {
 }
 
 test.describe("Theme / Dark Mode", () => {
-  test("theme toggle switches between light and dark", async ({ page }) => {
+  test("TC-THM-001: theme toggle switches between light and dark", async ({ page }) => {
     await page.goto("/");
     const html = page.locator("html");
 
@@ -53,7 +53,7 @@ test.describe("Theme / Dark Mode", () => {
     expect(lightBg).not.toBe("rgb(15, 23, 42)");
   });
 
-  test("accent text has WCAG AA contrast on light background", async ({
+  test("TC-THM-002: accent text has WCAG AA contrast on light background", async ({
     page,
   }) => {
     await page.goto("/");
@@ -104,7 +104,7 @@ test.describe("Theme / Dark Mode", () => {
     ).toBeGreaterThanOrEqual(WCAG_AA_RATIO);
   });
 
-  test("headings have WCAG AA contrast on each page in light mode", async ({
+  test("TC-THM-003: headings have WCAG AA contrast on each page in light mode", async ({
     page,
   }) => {
     for (const path of ["/", "/impressum", "/datenschutz"]) {

@@ -4,14 +4,14 @@ const sections = ["services", "why-nearshore", "omnixis", "founder"];
 const SCROLL_TIMEOUT = 5000;
 
 test.describe("Navigation", () => {
-  test("homepage loads with visible H1", async ({ page }) => {
+  test("TC-NAV-001: homepage loads with visible H1", async ({ page }) => {
     await page.goto("/");
     const h1 = page.locator("h1").first();
     await expect(h1).toBeVisible();
   });
 
-  for (const id of sections) {
-    test(`homepage nav link scrolls to #${id}`, async ({ page }) => {
+  for (const [i, id] of sections.entries()) {
+    test(`TC-NAV-${String(i + 2).padStart(3, "0")}: homepage nav link scrolls to #${id}`, async ({ page }) => {
       await page.goto("/");
       const link = page.locator(`nav a[href="/#${id}"]`);
       await link.click();
@@ -19,19 +19,27 @@ test.describe("Navigation", () => {
     });
   }
 
-  for (const subpage of ["/impressum", "/datenschutz"]) {
-    test(`nav link from ${subpage} navigates to homepage #services`, async ({
-      page,
-    }) => {
-      await page.goto(subpage);
-      const link = page.locator('nav a[href="/#services"]');
-      await link.click();
-      await expect(page).toHaveURL(/\/#services/);
-      await expect(page.locator("#services")).toBeInViewport({ timeout: SCROLL_TIMEOUT });
-    });
-  }
+  test("TC-NAV-006: nav link from /impressum navigates to homepage #services", async ({
+    page,
+  }) => {
+    await page.goto("/impressum");
+    const link = page.locator('nav a[href="/#services"]');
+    await link.click();
+    await expect(page).toHaveURL(/\/#services/);
+    await expect(page.locator("#services")).toBeInViewport({ timeout: SCROLL_TIMEOUT });
+  });
 
-  test("footer links work", async ({ page }) => {
+  test("TC-NAV-007: nav link from /datenschutz navigates to homepage #services", async ({
+    page,
+  }) => {
+    await page.goto("/datenschutz");
+    const link = page.locator('nav a[href="/#services"]');
+    await link.click();
+    await expect(page).toHaveURL(/\/#services/);
+    await expect(page.locator("#services")).toBeInViewport({ timeout: SCROLL_TIMEOUT });
+  });
+
+  test("TC-NAV-008: footer links work", async ({ page }) => {
     await page.goto("/");
     await page.locator('footer a[href="/impressum"]').click();
     await expect(page).toHaveURL("/impressum");
@@ -40,13 +48,13 @@ test.describe("Navigation", () => {
     await expect(page).toHaveURL("/datenschutz");
   });
 
-  test("logo links to homepage from subpages", async ({ page }) => {
+  test("TC-NAV-009: logo links to homepage from subpages", async ({ page }) => {
     await page.goto("/impressum");
     await page.locator('nav a[aria-label="neckarshore.ai Home"]').click();
     await expect(page).toHaveURL("/");
   });
 
-  test("mobile menu opens and closes", async ({ page }) => {
+  test("TC-NAV-010: mobile menu opens and closes", async ({ page }) => {
     await page.setViewportSize({ width: 393, height: 852 });
     await page.goto("/");
 

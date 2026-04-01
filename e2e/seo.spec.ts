@@ -6,22 +6,26 @@ const pages = [
   { path: "/datenschutz", titleContains: "Datenschutz" },
 ];
 
+let tcNum = 1;
+
 test.describe("SEO Basics", () => {
   for (const { path, titleContains } of pages) {
-    test(`${path} has meta title containing "${titleContains}"`, async ({ page }) => {
+    const id1 = String(tcNum++).padStart(3, "0");
+    test(`TC-SEO-${id1}: ${path} has meta title containing "${titleContains}"`, async ({ page }) => {
       await page.goto(path);
       const title = await page.title();
       expect(title).toContain(titleContains);
     });
 
-    test(`${path} has meta description`, async ({ page }) => {
+    const id2 = String(tcNum++).padStart(3, "0");
+    test(`TC-SEO-${id2}: ${path} has meta description`, async ({ page }) => {
       await page.goto(path);
       const description = page.locator('meta[name="description"]');
       await expect(description).toHaveAttribute("content", /.+/);
     });
   }
 
-  test("homepage has JSON-LD structured data", async ({ page }) => {
+  test("TC-SEO-007: homepage has JSON-LD structured data", async ({ page }) => {
     await page.goto("/");
     const jsonLd = page.locator('script[type="application/ld+json"]');
     const count = await jsonLd.count();
@@ -32,14 +36,14 @@ test.describe("SEO Basics", () => {
     expect(data["@context"]).toBe("https://schema.org");
   });
 
-  test("robots.txt is accessible", async ({ request }) => {
+  test("TC-SEO-008: robots.txt is accessible", async ({ request }) => {
     const response = await request.get("/robots.txt");
     expect(response.status()).toBe(200);
     const text = await response.text();
     expect(text).toContain("User-agent");
   });
 
-  test("sitemap.xml is accessible", async ({ request }) => {
+  test("TC-SEO-009: sitemap.xml is accessible", async ({ request }) => {
     const response = await request.get("/sitemap.xml");
     expect(response.status()).toBe(200);
     const text = await response.text();

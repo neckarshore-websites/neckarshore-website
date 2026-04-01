@@ -21,12 +21,30 @@
 
 ### When to Run
 
-- **Session start:** verify baseline is green before making changes
-- **Session end:** verify nothing broke during the session
-- Log results in `docs/test-log.md` after each run
+- **Session start:** `npm run test:e2e`, log as `session-start`
+- **Session end:** `npm run test:e2e`, log as `session-end`
+- **After significant changes:** log as `ad-hoc`
+
+### Logging Results
+
+Log every run in `docs/test-log.md` — one row per run (compact format):
+
+```
+| # | Date | Time | Trigger | Commit | Total | Passed | Failed | Duration | Failures |
+```
+
+- **Trigger:** `session-start`, `session-end`, or `ad-hoc`
+- **Failures:** test ID + short description, or `—` if all green
+- **Cleanup:** delete rows older than 14 days
+
+### Test IDs
+
+Every test has a stable ID: `TC-[SUITE]-[NNN]`. Suites: `NAV`, `LNK`, `CAL`, `THM`, `RES`, `SEO`, `A11Y`.
+Use test IDs when referencing tests in logs, reports, and issues.
 
 ### Adding Tests
 
 - One spec file per concern, in `e2e/`
+- Assign the next available TC-ID in the suite
 - Viewports: 393px (iPhone 15 Pro), 414px (iPhone 14 Plus), 768px (iPad Mini)
 - Chromium only (Firefox/WebKit added when needed)

@@ -3,8 +3,8 @@ import { test, expect } from "@playwright/test";
 const pages = ["/", "/impressum", "/datenschutz"];
 
 test.describe("Links", () => {
-  for (const path of pages) {
-    test(`all links on ${path} are valid (no 404)`, async ({ page }) => {
+  for (const [i, path] of pages.entries()) {
+    test(`TC-LNK-${String(i * 3 + 1).padStart(3, "0")}: all links on ${path} are valid (no 404)`, async ({ page }) => {
       await page.goto(path);
       const links = await page.locator("a[href]").all();
       const hrefs = new Set<string>();
@@ -24,7 +24,7 @@ test.describe("Links", () => {
       }
     });
 
-    test(`external links on ${path} open in new tab`, async ({ page }) => {
+    test(`TC-LNK-${String(i * 3 + 2).padStart(3, "0")}: external links on ${path} open in new tab`, async ({ page }) => {
       await page.goto(path);
       const externalLinks = await page
         .locator('a[href^="https://"]')
@@ -39,7 +39,7 @@ test.describe("Links", () => {
       }
     });
 
-    test(`external links on ${path} are reachable`, async ({ page, request }) => {
+    test(`TC-LNK-${String(i * 3 + 3).padStart(3, "0")}: external links on ${path} are reachable`, async ({ page, request }) => {
       await page.goto(path);
       const externalLinks = await page
         .locator('a[href^="https://"]')

@@ -2,15 +2,19 @@ import { test, expect } from "@playwright/test";
 
 const pages = ["/", "/impressum", "/datenschutz"];
 
+let tcNum = 1;
+
 test.describe("Accessibility", () => {
   for (const path of pages) {
-    test(`${path} has exactly one H1`, async ({ page }) => {
+    const id1 = String(tcNum++).padStart(3, "0");
+    test(`TC-A11Y-${id1}: ${path} has exactly one H1`, async ({ page }) => {
       await page.goto(path);
       const h1Count = await page.locator("h1").count();
       expect(h1Count, `${path} should have exactly 1 H1`).toBe(1);
     });
 
-    test(`${path} has no heading level skips`, async ({ page }) => {
+    const id2 = String(tcNum++).padStart(3, "0");
+    test(`TC-A11Y-${id2}: ${path} has no heading level skips`, async ({ page }) => {
       await page.goto(path);
       const headings = await page.locator("h1, h2, h3, h4, h5, h6").all();
 
@@ -29,13 +33,15 @@ test.describe("Accessibility", () => {
       }
     });
 
-    test(`${path} has lang attribute on html`, async ({ page }) => {
+    const id3 = String(tcNum++).padStart(3, "0");
+    test(`TC-A11Y-${id3}: ${path} has lang attribute on html`, async ({ page }) => {
       await page.goto(path);
       const lang = await page.locator("html").getAttribute("lang");
       expect(lang).toBe("de");
     });
 
-    test(`${path} — all images have alt text`, async ({ page }) => {
+    const id4 = String(tcNum++).padStart(3, "0");
+    test(`TC-A11Y-${id4}: ${path} — all images have alt text`, async ({ page }) => {
       await page.goto(path);
       const images = await page.locator("img").all();
 
@@ -46,7 +52,8 @@ test.describe("Accessibility", () => {
       }
     });
 
-    test(`${path} — nav buttons have accessible names`, async ({ page }) => {
+    const id5 = String(tcNum++).padStart(3, "0");
+    test(`TC-A11Y-${id5}: ${path} — nav buttons have accessible names`, async ({ page }) => {
       await page.goto(path);
       const buttons = await page.locator("nav button").all();
 
