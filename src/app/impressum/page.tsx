@@ -12,7 +12,7 @@ export default function Impressum() {
     <>
       <Nav />
       <main className="mx-auto max-w-[800px] px-4 pt-32 pb-20 md:px-6">
-        <h1 className="font-heading text-3xl font-bold text-primary md:text-4xl dark:text-text-primary">Impressum</h1>
+        <h1 className="font-heading text-4xl font-bold text-accent md:text-5xl">Impressum</h1>
 
         <div className="prose-neckarshore mt-10 space-y-8 text-neutral-dark/80 leading-relaxed dark:text-text-secondary">
           <section>
@@ -114,7 +114,7 @@ export default function Impressum() {
         </div>
       </main>
 
-      <footer className="border-t border-primary/5 bg-white px-4 py-10 md:px-6">
+      <footer className="border-t border-primary/5 bg-white px-4 py-10 md:px-6 dark:border-text-secondary/10 dark:bg-surface">
         <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-sm text-muted dark:text-text-secondary/60 md:flex-row md:justify-between">
           <a href="/">
             <Logo size="text-xl" className="opacity-60" />
