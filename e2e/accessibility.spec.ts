@@ -1,0 +1,65 @@
+import { test, expect } from "@playwright/test";
+
+const pages = ["/", "/impressum", "/datenschutz"];
+
+test.describe("Accessibility", () => {
+  for (const path of pages) {
+    test(`${path} has exactly one H1`, async ({ page }) => {
+      await page.goto(path);
+      const h1Count = await page.locator("h1").count();
+      expect(h1Count, `${path} should have exactly 1 H1`).toBe(1);
+    });
+
+    test(`${path} has no heading level skips`, async ({ page }) => {
+      await page.goto(path);
+      const headings = await page.locator("h1, h2, h3, h4, h5, h6").all();
+
+      let lastLevel = 0;
+      for (const heading of headings) {
+        const tag = await heading.evaluate((el) => el.tagName);
+        const level = parseInt(tag.replace("H", ""));
+
+        if (lastLevel > 0) {
+          // Heading level can stay same, go up (smaller number), or go down by 1
+          expect(
+            level <= lastLevel + 1,
+            `${path}: H${lastLevel} followed by H${level} (skip)`
+          ).toBe(true);
+        }
+        lastLevel = level;
+      }
+    });
+
+    test(`${path} has lang attribute on html`, async ({ page }) => {
+      await page.goto(path);
+      const lang = await page.locator("html").getAttribute("lang");
+      expect(lang).toBe("de");
+    });
+  }
+
+  test("all images have alt text", async ({ page }) => {
+    await page.goto("/");
+    const images = await page.locator("img").all();
+
+    for (const img of images) {
+      const alt = await img.getAttribute("alt");
+      const src = await img.getAttribute("src");
+      expect(alt, `Image ${src} missing alt text`).toBeTruthy();
+    }
+  });
+
+  test("interactive elements have aria labels", async ({ page }) => {
+    await page.goto("/");
+
+    // Theme toggle button
+    const buttons = await page.locator("nav button").all();
+    for (const button of buttons) {
+      const ariaLabel = await button.getAttribute("aria-label");
+      const text = await button.textContent();
+      expect(
+        ariaLabel || text?.trim(),
+        "Button without accessible name"
+      ).toBeTruthy();
+    }
+  });
+});

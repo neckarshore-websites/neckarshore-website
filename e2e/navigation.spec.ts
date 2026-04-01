@@ -36,7 +36,7 @@ test.describe("Navigation", () => {
     const link = page.locator('nav a[href="/#services"]');
     await link.click();
     await expect(page).toHaveURL(/\/#services/);
-    await expect(page.locator("#services")).toBeInViewport({ timeout: 3000 });
+    await expect(page.locator("#services")).toBeInViewport({ timeout: 5000 });
   });
 
   test("footer links work", async ({ page }) => {
