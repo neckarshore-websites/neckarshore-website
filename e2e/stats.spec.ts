@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("GitHub Stats", () => {
+test.describe("GitHub Stats @smoke", () => {
   async function getStatValue(page: import("@playwright/test").Page, label: string): Promise<string> {
     const tile = page.locator(`text=${label}`).locator("..");
     return (await tile.locator("p.font-heading").textContent())?.trim() || "";
