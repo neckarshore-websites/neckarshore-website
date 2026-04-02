@@ -15,6 +15,7 @@ import {
   FolderGit2,
   CalendarDays,
 } from "lucide-react";
+import Image from "next/image";
 import Nav from "@/components/Nav";
 import CookieBanner from "@/components/CookieBanner";
 import Logo from "@/components/Logo";
@@ -301,10 +302,14 @@ export default async function Home() {
         <section id="founder" className="bg-white px-4 py-20 md:px-6 md:py-24 dark:bg-surface">
           <div className="mx-auto max-w-[1200px]">
             <div className="grid items-start gap-12 md:grid-cols-[280px_1fr]">
-              {/* Photo placeholder */}
-              <div className="mx-auto flex h-64 w-64 items-center justify-center rounded-2xl bg-neutral-light md:mx-0 md:h-72 md:w-72 dark:bg-deep-space">
-                <span className="text-sm text-muted dark:text-text-secondary/50">Foto folgt</span>
-              </div>
+              <Image
+                src="/images/german-rauhut-founder-neckarshore.jpg"
+                alt="German Rauhut — Gründer von neckarshore.ai, Software-Entwickler und KI-Berater aus Stuttgart"
+                width={288}
+                height={288}
+                className="mx-auto rounded-2xl object-cover md:mx-0"
+                priority
+              />
 
               <div>
                 <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl dark:text-text-primary">
