@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
       depth: body.depth || null,
       action: body.action || null,
       timestamp: body.timestamp || new Date().toISOString(),
+      source: body.source === "playwright" ? "playwright" : "browser",
     };
 
     const day = event.timestamp.slice(0, 10);
@@ -35,6 +36,7 @@ export async function GET(req: NextRequest) {
   const day = searchParams.get("day") || new Date().toISOString().slice(0, 10);
   const days = parseInt(searchParams.get("days") || "1", 10);
 
+  const includeTest = searchParams.get("include_test") === "true";
   const results: Record<string, unknown[]> = {};
 
   for (let i = 0; i < days; i++) {
@@ -43,8 +45,11 @@ export async function GET(req: NextRequest) {
     const key = d.toISOString().slice(0, 10);
     const raw = await store.list(`events:${key}`);
     const events = raw.map((r) => JSON.parse(r));
-    if (events.length > 0) {
-      results[key] = events;
+    const filtered = includeTest
+      ? events
+      : events.filter((e: Record<string, unknown>) => e.source !== "playwright");
+    if (filtered.length > 0) {
+      results[key] = filtered;
     }
   }
 

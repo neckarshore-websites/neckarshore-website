@@ -4,6 +4,9 @@ import { useEffect, useRef } from "react";
 
 function track(event: string, data?: Record<string, unknown>) {
   try {
+    const source = (navigator as Navigator & { webdriver?: boolean }).webdriver
+      ? "playwright"
+      : "browser";
     navigator.sendBeacon(
       "/api/track",
       JSON.stringify({
@@ -12,6 +15,7 @@ function track(event: string, data?: Record<string, unknown>) {
         referrer: document.referrer || null,
         device: window.innerWidth < 768 ? "mobile" : "desktop",
         timestamp: new Date().toISOString(),
+        source,
         ...data,
       })
     );
