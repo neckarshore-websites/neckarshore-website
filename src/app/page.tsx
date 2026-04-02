@@ -18,7 +18,6 @@ import {
 import Nav from "@/components/Nav";
 import CookieBanner from "@/components/CookieBanner";
 import Logo from "@/components/Logo";
-import TrackerScript from "@/components/TrackerScript";
 import EmailObfuscator from "@/components/EmailObfuscator";
 import LiveTicker from "@/components/LiveTicker";
 import ImageModal from "@/components/ImageModal";
@@ -65,8 +64,6 @@ export default async function Home() {
   return (
     <>
       <Nav />
-      <TrackerScript />
-
       <main>
         {/* ===== HERO ===== */}
         <section className="relative overflow-hidden bg-neutral-light px-4 pt-32 pb-20 md:px-6 md:pt-40 md:pb-24 dark:bg-deep-space">

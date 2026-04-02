@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import TrackerScript from "@/components/TrackerScript";
 import "./globals.css";
 
 const spaceGrotesk = localFont({
@@ -140,6 +141,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-neutral-light text-primary dark:bg-deep-space dark:text-text-primary">
         {children}
+        <TrackerScript />
       </body>
     </html>
   );
