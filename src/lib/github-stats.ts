@@ -25,7 +25,10 @@ interface GitHubStats {
   fetchedAt: string;
 }
 
-async function githubFetch(url: string) {
+// Last known good values — updated when we get a successful fetch
+let cachedStats: GitHubStats | null = null;
+
+async function githubFetch(url: string, revalidate = 3600) {
   const headers: Record<string, string> = {
     Accept: "application/vnd.github.v3+json",
     "User-Agent": "neckarshore-website",
@@ -33,7 +36,7 @@ async function githubFetch(url: string) {
   if (GITHUB_TOKEN) {
     headers.Authorization = `Bearer ${GITHUB_TOKEN}`;
   }
-  return fetch(url, { headers, next: { revalidate: 3600 } });
+  return fetch(url, { headers, next: { revalidate } });
 }
 
 async function getRepoCommitCount(repo: string): Promise<number> {
@@ -51,18 +54,27 @@ async function getRepoCommitCount(repo: string): Promise<number> {
 }
 
 async function getRepoCodeStats(repo: string): Promise<number> {
-  // code_frequency returns weekly [timestamp, additions, deletions]
-  const res = await githubFetch(
-    `https://api.github.com/repos/${repo}/stats/code_frequency`
-  );
-  if (!res.ok) return 0;
-  const data = await res.json();
-  if (!Array.isArray(data)) return 0;
-  let lines = 0;
-  for (const week of data) {
-    lines += (week[1] || 0) + (week[2] || 0); // additions + deletions (deletions are negative)
+  // GitHub stats API returns 202 + empty body on first request while computing.
+  // Retry up to 3 times with increasing delay.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const res = await githubFetch(
+      `https://api.github.com/repos/${repo}/stats/code_frequency`,
+      attempt === 0 ? 3600 : 0 // skip cache on retries
+    );
+    if (res.status === 202) {
+      await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
+      continue;
+    }
+    if (!res.ok) return 0;
+    const data = await res.json();
+    if (!Array.isArray(data) || data.length === 0) continue;
+    let lines = 0;
+    for (const week of data) {
+      lines += (week[1] || 0) + (week[2] || 0);
+    }
+    return Math.max(0, lines);
   }
-  return Math.max(0, lines);
+  return 0;
 }
 
 export async function getGitHubStats(): Promise<GitHubStats> {
@@ -75,18 +87,31 @@ export async function getGitHubStats(): Promise<GitHubStats> {
     const commits = commitCounts.reduce((a, b) => a + b, 0);
     const linesOfCode = codeCounts.reduce((a, b) => a + b, 0);
 
-    return {
+    const stats: GitHubStats = {
       commits,
       repos: REPOS.length,
       linesOfCode,
       fetchedAt: new Date().toISOString(),
     };
+
+    // Only cache if we got meaningful data
+    if (linesOfCode > 0) {
+      cachedStats = stats;
+    }
+
+    // If lines came back as 0 (API not ready), use last known good value
+    if (linesOfCode === 0 && cachedStats) {
+      return { ...cachedStats, commits, repos: REPOS.length, fetchedAt: stats.fetchedAt };
+    }
+
+    return stats;
   } catch (error) {
     console.error("GitHub stats fetch failed:", error);
+    if (cachedStats) return { ...cachedStats, fetchedAt: new Date().toISOString() };
     return {
-      commits: 163,
-      repos: 12,
-      linesOfCode: 0,
+      commits: 604,
+      repos: REPOS.length,
+      linesOfCode: 134494,
       fetchedAt: new Date().toISOString(),
     };
   }
