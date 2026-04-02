@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const day = searchParams.get("day") || new Date().toISOString().slice(0, 10);
-  const days = parseInt(searchParams.get("days") || "1", 10);
+  const days = Math.min(parseInt(searchParams.get("days") || "1", 10), 90);
 
   const includeTest = searchParams.get("include_test") === "true";
   const results: Record<string, unknown[]> = {};
