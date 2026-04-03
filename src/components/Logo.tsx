@@ -9,7 +9,7 @@ export function NIcon({ className = "h-6 w-auto" }: { className?: string }) {
     >
       <path
         d="M4 36V4h4l16 22V4h4v32h-4L8 14v22H4z"
-        className="fill-primary dark:fill-text-primary"
+        fill="currentColor"
       />
       <path
         d="M6 24c3-2 6-2 9 0s6 2 9 0"
@@ -35,7 +35,7 @@ export default function Logo({
       aria-label="NECKARSHORE.AI"
     >
       <NIcon className="h-[1.15em] w-auto shrink-0" />
-      <span className="font-heading font-semibold uppercase tracking-tight text-primary dark:text-text-primary leading-none">
+      <span className="font-heading font-semibold uppercase tracking-tight leading-none text-inherit">
         ECKARSHORE<span className="text-accent">.AI</span>
       </span>
     </span>

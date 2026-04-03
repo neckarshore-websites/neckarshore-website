@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 import { X } from "lucide-react";
 
 interface ImageModalProps {
@@ -52,10 +53,13 @@ export default function ImageModal({ src, alt, children, className }: ImageModal
             >
               <X size={20} />
             </button>
-            <img
+            <Image
               src={src}
               alt={alt}
+              width={1200}
+              height={800}
               className="max-h-[85vh] max-w-full rounded-xl object-contain"
+              quality={80}
             />
           </div>
         </div>

@@ -15,14 +15,17 @@ import {
   FolderGit2,
   CalendarDays,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Nav from "@/components/Nav";
-import CookieBanner from "@/components/CookieBanner";
 import Logo from "@/components/Logo";
 import EmailObfuscator from "@/components/EmailObfuscator";
-import LiveTicker from "@/components/LiveTicker";
-import ImageModal from "@/components/ImageModal";
 import { getGitHubStats } from "@/lib/github-stats";
+
+/* Code-split client components — separate chunks, not in main bundle */
+const CookieBanner = dynamic(() => import("@/components/CookieBanner"));
+const LiveTicker = dynamic(() => import("@/components/LiveTicker"));
+const ImageModal = dynamic(() => import("@/components/ImageModal"));
 
 /* ---------- constants ---------- */
 
@@ -308,7 +311,7 @@ export default async function Home() {
                 width={288}
                 height={288}
                 className="mx-auto rounded-2xl object-cover md:mx-0"
-                priority
+                loading="lazy"
               />
 
               <div>
@@ -436,7 +439,7 @@ export default async function Home() {
       {/* ===== FOOTER ===== */}
       <footer className="border-t border-primary/5 bg-white px-4 py-10 md:px-6 dark:border-text-secondary/10 dark:bg-surface">
         <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-sm text-muted md:flex-row md:justify-between dark:text-text-secondary/60">
-          <Logo size="text-xl" className="opacity-60" />
+          <Logo size="text-xl" className="text-primary/70 dark:text-text-secondary" />
           <div className="flex gap-6">
             <a href="/impressum" className="transition-colors hover:text-accent">
               Impressum
