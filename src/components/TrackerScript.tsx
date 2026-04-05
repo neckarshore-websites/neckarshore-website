@@ -54,21 +54,53 @@ export default function TrackerScript() {
 
     window.addEventListener("scroll", onScroll, { passive: true });
 
-    // CTA clicks
+    // Click tracking — differentiate nav clicks from CTA clicks
     const onClick = (e: MouseEvent) => {
       const target = (e.target as HTMLElement).closest("[data-track]");
       if (target) {
-        track("cta_click", {
-          action: target.getAttribute("data-track"),
-        });
+        const action = target.getAttribute("data-track") || "";
+        if (action.startsWith("nav_")) {
+          track("nav_click", { action });
+        } else {
+          track("cta_click", { action });
+        }
       }
     };
 
     document.addEventListener("click", onClick);
 
+    // Section visibility — fire once per section when 40% visible
+    const sectionIds = [
+      "services",
+      "why-nearshore",
+      "omnixis",
+      "founder",
+      "cta",
+      "faq",
+    ];
+    const seenSections = new Set<string>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && !seenSections.has(entry.target.id)) {
+            seenSections.add(entry.target.id);
+            track("section_view", { section: entry.target.id });
+          }
+        }
+      },
+      { threshold: 0.4 }
+    );
+
+    for (const id of sectionIds) {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    }
+
     return () => {
       window.removeEventListener("scroll", onScroll);
       document.removeEventListener("click", onClick);
+      observer.disconnect();
     };
   }, []);
 

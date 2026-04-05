@@ -6,10 +6,10 @@ import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
-  { href: "/#services", label: "Services" },
-  { href: "/#why-nearshore", label: "Warum Nearshore" },
-  { href: "/#omnixis", label: "OMNIXIS" },
-  { href: "/#founder", label: "Über uns" },
+  { href: "/#services", label: "Services", track: "nav_services" },
+  { href: "/#why-nearshore", label: "Warum Nearshore", track: "nav_why-nearshore" },
+  { href: "/#omnixis", label: "OMNIXIS", track: "nav_omnixis" },
+  { href: "/#founder", label: "Über uns", track: "nav_founder" },
 ];
 
 export default function Nav() {
@@ -28,6 +28,7 @@ export default function Nav() {
             <a
               key={link.href}
               href={link.href}
+              data-track={link.track}
               className="text-sm font-medium text-primary/70 transition-colors duration-150 hover:text-accent dark:text-text-secondary/70 dark:hover:text-accent"
             >
               {link.label}
@@ -65,6 +66,7 @@ export default function Nav() {
             <a
               key={link.href}
               href={link.href}
+              data-track={link.track}
               onClick={() => setOpen(false)}
               className="block py-3 text-base font-medium text-primary/70 transition-colors hover:text-accent dark:text-text-secondary/70 dark:hover:text-accent"
             >

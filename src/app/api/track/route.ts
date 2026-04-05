@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { store } from "@/lib/analytics-store";
 
-const VALID_EVENTS = new Set(["page_view", "cta_click", "scroll_depth"]);
+const VALID_EVENTS = new Set([
+  "page_view",
+  "cta_click",
+  "scroll_depth",
+  "nav_click",
+  "section_view",
+]);
 
 export async function POST(req: NextRequest) {
   try {
@@ -18,6 +24,7 @@ export async function POST(req: NextRequest) {
       device: body.device || "unknown",
       depth: body.depth || null,
       action: body.action || null,
+      section: body.section || null,
       timestamp: body.timestamp || new Date().toISOString(),
       source: body.source === "playwright" ? "playwright" : "browser",
     };
