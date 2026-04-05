@@ -252,13 +252,13 @@ export default async function Home() {
                 </p>
                 <p className="mt-6 text-sm font-mono text-text-secondary/70">
                   <ImageModal
-                    src="/images/omnixis-conceived-whiteboard-2025-01-14.png"
-                    alt="OMNIXIS Whiteboard-Skizze, Böblingen, Januar 2025"
+                    src="/images/omnixis-conceived-whiteboard-2024-12-11.jpg"
+                    alt="OMNIXIS Whiteboard-Skizze, Sindelfingen, Dezember 2024"
                     className="cursor-pointer text-secondary underline decoration-secondary/30 underline-offset-2 transition-colors hover:text-text-primary hover:decoration-secondary"
                   >
                     Conceived
                   </ImageModal>
-                  {" "}January 14, 2025 in Böblingen.
+                  {" "}December 11, 2024 in Sindelfingen.
                   <br />
                   <ImageModal
                     src="/images/omnixis-born-first-session-2026-03-22.png"
