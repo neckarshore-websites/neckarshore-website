@@ -28,7 +28,7 @@ const OMNIXIS_DAY_ONE = new Date("2026-03-22");
 const faqItems = [
   {
     q: "Was ist OMNIXIS?",
-    a: "OMNIXIS Documenter+X ist unsere KI-first Documentation Engine. Sie zieht automatisch aus Git, Jira und Confluence und generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten. Fail-closed: Wenn die Evidenz schwach ist, verweigert das System die Antwort — lieber schweigen als lügen.",
+    a: "OMNIXIS Documentor+X ist unsere KI-first Documentation Engine. Sie zieht automatisch aus Git, Jira und Confluence und generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten. Fail-closed: Wenn die Evidenz schwach ist, verweigert das System die Antwort — lieber schweigen als lügen.",
   },
   {
     q: "Was bedeutet BYOLLM?",
@@ -232,7 +232,7 @@ export default function Home() {
                   Unser Flaggschiff
                 </p>
                 <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
-                  OMNIXIS Documenter+X
+                  OMNIXIS Documentor+X
                 </h2>
                 <p className="mt-6 text-lg leading-relaxed text-text-secondary">
                   KI-first Documentation Engine. Zieht automatisch aus Git, Jira und Confluence —
