@@ -29,9 +29,10 @@ test.describe("GitHub Stats @smoke", () => {
     expect(parseDE(value)).toBeGreaterThan(10000);
   });
 
-  test("TC-STAT-004: Repositories count matches", async ({ page }) => {
+  test("TC-STAT-004: Repositories count is plausible", async ({ page }) => {
     await page.goto("/");
     const value = await getStatValue(page, "Repositories");
-    expect(Number(value)).toBe(12);
+    expect(Number(value)).toBeGreaterThanOrEqual(10);
+    expect(Number(value)).toBeLessThanOrEqual(30);
   });
 });

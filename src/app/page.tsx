@@ -8,19 +8,13 @@ import {
   Clock,
   Globe,
   TrendingUp,
-  GitCommit,
-  FlaskConical,
-  Layers,
-  Code2,
-  FolderGit2,
-  CalendarDays,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Nav from "@/components/Nav";
 import Logo from "@/components/Logo";
 import EmailObfuscator from "@/components/EmailObfuscator";
-import { getGitHubStats } from "@/lib/github-stats";
+import StatsGrid from "@/components/StatsGrid";
 
 /* Code-split client components — separate chunks, not in main bundle */
 const CookieBanner = dynamic(() => import("@/components/CookieBanner"));
@@ -62,9 +56,8 @@ function getDaysSinceStart(): number {
 
 /* ---------- page ---------- */
 
-export default async function Home() {
+export default function Home() {
   const devDays = getDaysSinceStart();
-  const stats = await getGitHubStats();
   return (
     <>
       <Nav />
@@ -275,28 +268,8 @@ export default async function Home() {
                 </p>
               </div>
 
-              {/* Stats grid — 6 tiles */}
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-                {[
-                  { icon: CalendarDays, value: String(devDays), label: "Days since First Commit" },
-                  { icon: GitCommit, value: stats.commits.toLocaleString("de-DE"), label: "Commits" },
-                  { icon: FlaskConical, value: "300+", label: "Automatisierte Tests" },
-                  { icon: Layers, value: "46+", label: "REST Endpoints" },
-                  { icon: Code2, value: stats.linesOfCode > 0 ? stats.linesOfCode.toLocaleString("de-DE") : "—", label: "Zeilen Code" },
-                  { icon: FolderGit2, value: String(stats.repos), label: "Repositories" },
-                ].map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="rounded-xl bg-surface p-5 text-center"
-                  >
-                    <stat.icon size={20} className="mx-auto text-accent" />
-                    <p className="mt-2 font-heading text-2xl font-bold text-text-primary md:text-3xl">
-                      {stat.value}
-                    </p>
-                    <p className="mt-1 text-xs text-text-secondary">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
+              {/* Stats grid — renders instantly with fallback, fetches live data in background */}
+              <StatsGrid devDays={devDays} />
             </div>
           </div>
         </section>
@@ -455,7 +428,7 @@ export default async function Home() {
         <div className="mt-4 flex flex-col items-center gap-1">
           <p className="text-center text-xs text-muted dark:text-text-secondary/50">Stuttgart, Deutschland</p>
           <div className="text-muted dark:text-text-secondary/50">
-            <LiveTicker fetchedAt={stats.fetchedAt} />
+            <LiveTicker fetchedAt={new Date().toISOString()} />
           </div>
         </div>
       </footer>
