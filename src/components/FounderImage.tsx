@@ -9,8 +9,8 @@ const PHOTOS = [
     alt: "German Rauhut — Gründer von neckarshore.ai, Software-Entwickler und KI-Berater aus Stuttgart",
   },
   {
-    src: "/images/german-rauhut-founder-neckarshore.jpg",
-    alt: "German Rauhut — Gründer von neckarshore.ai (Farbportrait)",
+    src: "/images/german-rauhut-founder-bw2.png",
+    alt: "German Rauhut — Gründer von neckarshore.ai (Schwarz-Weiß Portrait, Variante)",
   },
 ];
 
