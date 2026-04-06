@@ -15,6 +15,7 @@ import Nav from "@/components/Nav";
 import Logo from "@/components/Logo";
 import EmailObfuscator from "@/components/EmailObfuscator";
 import StatsGrid from "@/components/StatsGrid";
+import FounderImage from "@/components/FounderImage";
 
 /* Code-split client components — separate chunks, not in main bundle */
 const CookieBanner = dynamic(() => import("@/components/CookieBanner"));
@@ -278,14 +279,7 @@ export default function Home() {
         <section id="founder" className="bg-white px-4 py-20 md:px-6 md:py-24 dark:bg-surface">
           <div className="mx-auto max-w-[1200px]">
             <div className="grid items-start gap-12 md:grid-cols-[280px_1fr]">
-              <Image
-                src="/images/german-rauhut-founder-neckarshore.jpg"
-                alt="German Rauhut — Gründer von neckarshore.ai, Software-Entwickler und KI-Berater aus Stuttgart"
-                width={288}
-                height={288}
-                className="mx-auto rounded-2xl object-cover md:mx-0"
-                loading="lazy"
-              />
+              <FounderImage />
 
               <div>
                 <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl dark:text-text-primary">
