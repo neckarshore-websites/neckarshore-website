@@ -197,7 +197,7 @@ export default function Home() {
                   icon: TestTubeDiagonal,
                   title: "Quality Engineering",
                   subtitle: "Testen, bevor es knallt.",
-                  text: "300+ automatisierte Tests, OWASP LLM Top 10, EU AI Act Compliance, Golden Datasets. Wir testen KI-Systeme mit derselben Strenge wie klassische Software — plus AI-spezifische Dimensionen.",
+                  text: "Hunderte automatisierte Tests, OWASP LLM Top 10, EU AI Act Compliance, Golden Datasets. Wir testen KI-Systeme mit derselben Strenge wie klassische Software — plus AI-spezifische Dimensionen.",
                 },
                 {
                   icon: Users,
