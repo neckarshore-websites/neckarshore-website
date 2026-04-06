@@ -18,9 +18,9 @@ interface Stats {
 }
 
 const FALLBACK: Stats = {
-  commits: 604,
+  commits: 780,
   repos: 13,
-  linesOfCode: 134494,
+  linesOfCode: 95000,
   fetchedAt: "",
 };
 
@@ -97,8 +97,8 @@ export default function StatsGrid({ devDays }: { devDays: number }) {
   const tiles = [
     { icon: CalendarDays, value: String(devDays), label: "Days since First Commit" },
     { icon: GitCommit, value: formatDE(commits), label: "Commits" },
-    { icon: FlaskConical, value: "300+", label: "Automatisierte Tests" },
-    { icon: Layers, value: "46+", label: "REST Endpoints" },
+    { icon: FlaskConical, value: "454", label: "Automatisierte Tests" },
+    { icon: Layers, value: "92", label: "REST Endpoints" },
     { icon: Code2, value: linesOfCode > 0 ? formatDE(linesOfCode) : "—", label: "Zeilen Code" },
     { icon: FolderGit2, value: String(repos), label: "Repositories" },
   ];

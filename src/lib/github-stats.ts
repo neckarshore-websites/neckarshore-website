@@ -13,6 +13,7 @@ const REPOS = [
   "GmanFooFoo/promptHamster",
   // neckarshore-ai org
   "neckarshore-ai/hq",
+  "neckarshore-ai/mmp-obsidian-vault-autopilot",
   "neckarshore-ai/neckarshore-website",
   "neckarshore-ai/OMNIXIS-prod-or-pretend",
   "neckarshore-ai/tools-claude-plugins",
@@ -109,9 +110,9 @@ export async function getGitHubStats(): Promise<GitHubStats> {
     console.error("GitHub stats fetch failed:", error);
     if (cachedStats) return { ...cachedStats, fetchedAt: new Date().toISOString() };
     return {
-      commits: 604,
+      commits: 780,
       repos: REPOS.length,
-      linesOfCode: 134494,
+      linesOfCode: 95000,
       fetchedAt: new Date().toISOString(),
     };
   }
