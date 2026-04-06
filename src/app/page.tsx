@@ -343,7 +343,7 @@ export default function Home() {
               Bereit, näher zusammenzuarbeiten?
             </h2>
             <p className="mt-6 text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-              15 Minuten Kennenlerntermin — wir reden über euer Projekt, nicht über unsere Folien.
+              20 Minuten Kennenlerntermin — wir reden über euer Projekt, nicht über unsere Folien.
             </p>
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <a
