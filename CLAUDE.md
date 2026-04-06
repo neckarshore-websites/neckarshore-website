@@ -1,5 +1,10 @@
 @AGENTS.md
 
+## Deploy Policy
+
+- **Push after every commit on `main`.** No local-only commits — Vercel auto-deploys on push.
+- Exception: only hold back if explicitly told to ("nicht pushen", "noch nicht deployen").
+
 ## E2E Tests (Playwright)
 
 ### Commands
