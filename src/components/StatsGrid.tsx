@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   GitCommit,
   FlaskConical,
@@ -10,19 +10,15 @@ import {
   CalendarDays,
 } from "lucide-react";
 
-interface Stats {
+export interface StatsData {
+  days: number;
   commits: number;
-  repos: number;
+  tests: number;
+  endpoints: number;
   linesOfCode: number;
-  fetchedAt: string;
+  repos: number;
+  updatedAt: string;
 }
-
-const FALLBACK: Stats = {
-  commits: 780,
-  repos: 13,
-  linesOfCode: 95000,
-  fetchedAt: "",
-};
 
 const ANIMATION_DURATION = 1200; // ms
 const ANIMATION_STEPS = 30;
@@ -31,17 +27,15 @@ function formatDE(n: number): string {
   return n.toLocaleString("de-DE");
 }
 
-/** Animates a number from `from` to `to` over ANIMATION_DURATION ms */
+/** Animates a number from 0 to target on first render */
 function useAnimatedNumber(target: number): number {
-  const [display, setDisplay] = useState(target);
-  const prevRef = useRef(target);
+  const [display, setDisplay] = useState(0);
+  const hasAnimated = useRef(false);
 
   useEffect(() => {
-    const from = prevRef.current;
-    const to = target;
-    if (from === to) return;
+    if (hasAnimated.current) return;
+    hasAnimated.current = true;
 
-    prevRef.current = to;
     const stepMs = ANIMATION_DURATION / ANIMATION_STEPS;
     let step = 0;
 
@@ -50,7 +44,7 @@ function useAnimatedNumber(target: number): number {
       const progress = step / ANIMATION_STEPS;
       // ease-out curve
       const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplay(Math.round(from + (to - from) * eased));
+      setDisplay(Math.round(target * eased));
       if (step >= ANIMATION_STEPS) clearInterval(interval);
     }, stepMs);
 
@@ -60,46 +54,25 @@ function useAnimatedNumber(target: number): number {
   return display;
 }
 
-function formatTimestamp(iso: string): string {
-  if (!iso) return "";
-  const d = new Date(iso);
-  const now = new Date();
-  const diffMs = now.getTime() - d.getTime();
-  const diffMin = Math.floor(diffMs / 60_000);
-
-  if (diffMin < 1) return "gerade eben";
-  if (diffMin < 60) return `vor ${diffMin} Min.`;
-  const diffH = Math.floor(diffMin / 60);
-  if (diffH < 24) return `vor ${diffH} Std.`;
-  return d.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
-}
-
-export default function StatsGrid({ devDays }: { devDays: number }) {
-  const [stats, setStats] = useState<Stats>(FALLBACK);
-  const [isLive, setIsLive] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/github-stats")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (data && data.commits > 0) {
-          setStats(data);
-          setIsLive(true);
-        }
-      })
-      .catch(() => {});
-  }, []);
-
+export default function StatsGrid({
+  stats,
+  devDays,
+}: {
+  stats: StatsData;
+  devDays: number;
+}) {
   const commits = useAnimatedNumber(stats.commits);
+  const tests = useAnimatedNumber(stats.tests);
+  const endpoints = useAnimatedNumber(stats.endpoints);
   const linesOfCode = useAnimatedNumber(stats.linesOfCode);
   const repos = useAnimatedNumber(stats.repos);
 
   const tiles = [
     { icon: CalendarDays, value: String(devDays), label: "Days since First Commit" },
     { icon: GitCommit, value: formatDE(commits), label: "Commits" },
-    { icon: FlaskConical, value: "454", label: "Automatisierte Tests" },
-    { icon: Layers, value: "92", label: "REST Endpoints" },
-    { icon: Code2, value: linesOfCode > 0 ? formatDE(linesOfCode) : "—", label: "Zeilen Code" },
+    { icon: FlaskConical, value: formatDE(tests), label: "Automatisierte Tests" },
+    { icon: Layers, value: String(endpoints), label: "REST Endpoints" },
+    { icon: Code2, value: formatDE(linesOfCode), label: "Zeilen Code" },
     { icon: FolderGit2, value: String(repos), label: "Repositories" },
   ];
 
@@ -116,9 +89,9 @@ export default function StatsGrid({ devDays }: { devDays: number }) {
           </div>
         ))}
       </div>
-      {isLive && stats.fetchedAt && (
-        <p className="mt-3 text-right text-[10px] font-mono text-text-secondary/40 transition-opacity duration-500">
-          Updated {formatTimestamp(stats.fetchedAt)}
+      {stats.updatedAt && (
+        <p className="mt-3 text-right text-[10px] font-mono text-text-secondary/40">
+          Stand: {new Date(stats.updatedAt).toLocaleDateString("de-DE")}
         </p>
       )}
     </div>

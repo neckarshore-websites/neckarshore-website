@@ -1,0 +1,132 @@
+name: Update Stats
+
+on:
+  schedule:
+    - cron: "0 4 * * *" # 04:00 UTC = 05:00 CET (06:00 CEST in summer)
+  workflow_dispatch: # manual trigger for testing
+
+permissions:
+  contents: write
+
+jobs:
+  update-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.STATS_PAT }}
+
+      - name: Install cloc
+        run: sudo apt-get install -y cloc
+
+      - name: Collect stats
+        env:
+          STATS_PAT: ${{ secrets.STATS_PAT }}
+        run: |
+          set -euo pipefail
+
+          CONFIG=$(cat stats-config.json)
+          START_DATE=$(echo "$CONFIG" | jq -r '.startDate')
+          REPO_COUNT=$(echo "$CONFIG" | jq '.repos | length')
+
+          # Days since first commit
+          START_EPOCH=$(date -d "$START_DATE" +%s)
+          NOW_EPOCH=$(date +%s)
+          DAYS=$(( (NOW_EPOCH - START_EPOCH) / 86400 ))
+
+          TOTAL_LOC=0
+          TOTAL_COMMITS=0
+
+          mkdir -p /tmp/repos
+
+          for i in $(seq 0 $((REPO_COUNT - 1))); do
+            OWNER=$(echo "$CONFIG" | jq -r ".repos[$i].owner")
+            NAME=$(echo "$CONFIG" | jq -r ".repos[$i].name")
+            PRIVATE=$(echo "$CONFIG" | jq -r ".repos[$i].private")
+            REPO="${OWNER}/${NAME}"
+
+            echo "--- Processing ${REPO} ---"
+
+            # Clone (shallow) for LoC count
+            CLONE_URL="https://github.com/${REPO}.git"
+            if [ "$PRIVATE" = "true" ]; then
+              CLONE_URL="https://x-access-token:${STATS_PAT}@github.com/${REPO}.git"
+            fi
+            git clone --depth 1 --quiet "$CLONE_URL" "/tmp/repos/${NAME}" 2>/dev/null || {
+              echo "  WARN: clone failed for ${REPO}, skipping LoC"
+            }
+
+            if [ -d "/tmp/repos/${NAME}" ]; then
+              LOC=$(cloc "/tmp/repos/${NAME}" --json 2>/dev/null | jq '.SUM.code // 0' 2>/dev/null || echo 0)
+              echo "  LoC: ${LOC}"
+              TOTAL_LOC=$((TOTAL_LOC + LOC))
+            fi
+
+            # Commits via GitHub API (contributors endpoint sums all contributions)
+            COMMITS=$(curl -sf \
+              -H "Authorization: Bearer ${STATS_PAT}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/${REPO}/contributors?per_page=100&anon=true" \
+              | jq '[.[].contributions] | add // 0' 2>/dev/null || echo 0)
+            echo "  Commits: ${COMMITS}"
+            TOTAL_COMMITS=$((TOTAL_COMMITS + COMMITS))
+          done
+
+          # Fetch OMNIXIS backend stats (tests + endpoints) if available
+          OMNIXIS_REPO=$(echo "$CONFIG" | jq -r '.omnixisStatsRepo')
+          OMNIXIS_PATH=$(echo "$CONFIG" | jq -r '.omnixisStatsPath')
+
+          TESTS=464
+          ENDPOINTS=92
+
+          OMNIXIS_STATS=$(curl -sf \
+            -H "Authorization: Bearer ${STATS_PAT}" \
+            -H "Accept: application/vnd.github.v3.raw" \
+            "https://api.github.com/repos/${OMNIXIS_REPO}/contents/${OMNIXIS_PATH}" 2>/dev/null || echo "")
+
+          if [ -n "$OMNIXIS_STATS" ] && echo "$OMNIXIS_STATS" | jq . >/dev/null 2>&1; then
+            FETCHED_TESTS=$(echo "$OMNIXIS_STATS" | jq '.tests.total // 0')
+            FETCHED_ENDPOINTS=$(echo "$OMNIXIS_STATS" | jq '.endpoints // 0')
+            if [ "$FETCHED_TESTS" -gt 0 ]; then TESTS=$FETCHED_TESTS; fi
+            if [ "$FETCHED_ENDPOINTS" -gt 0 ]; then ENDPOINTS=$FETCHED_ENDPOINTS; fi
+            echo "--- OMNIXIS stats fetched: tests=${TESTS}, endpoints=${ENDPOINTS} ---"
+          else
+            echo "--- OMNIXIS stats not available, using fallbacks ---"
+          fi
+
+          echo ""
+          echo "=== TOTALS ==="
+          echo "Days: ${DAYS}"
+          echo "Commits: ${TOTAL_COMMITS}"
+          echo "Tests: ${TESTS}"
+          echo "Endpoints: ${ENDPOINTS}"
+          echo "LoC: ${TOTAL_LOC}"
+          echo "Repos: ${REPO_COUNT}"
+
+          # Write stats.json via jq (no user input, all values computed internally)
+          jq -n \
+            --argjson days "$DAYS" \
+            --argjson commits "$TOTAL_COMMITS" \
+            --argjson tests "$TESTS" \
+            --argjson endpoints "$ENDPOINTS" \
+            --argjson linesOfCode "$TOTAL_LOC" \
+            --argjson repos "$REPO_COUNT" \
+            --arg updatedAt "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '{days: $days, commits: $commits, tests: $tests, endpoints: $endpoints, linesOfCode: $linesOfCode, repos: $repos, updatedAt: $updatedAt}' \
+            > public/stats.json
+
+          echo ""
+          echo "=== public/stats.json ==="
+          cat public/stats.json
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/stats.json
+          if git diff --staged --quiet; then
+            echo "No changes to stats — skipping commit"
+          else
+            git commit -m "chore: update daily stats"
+            git push
+          fi

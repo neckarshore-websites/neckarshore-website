@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import {
   Cpu,
   FileText,
@@ -14,7 +16,7 @@ import Image from "next/image";
 import Nav from "@/components/Nav";
 import Logo from "@/components/Logo";
 import EmailObfuscator from "@/components/EmailObfuscator";
-import StatsGrid from "@/components/StatsGrid";
+import StatsGrid, { type StatsData } from "@/components/StatsGrid";
 import FounderImage from "@/components/FounderImage";
 
 /* Code-split client components — separate chunks, not in main bundle */
@@ -55,10 +57,28 @@ function getDaysSinceStart(): number {
   return Math.max(1, Math.ceil(diff / (1000 * 60 * 60 * 24)));
 }
 
+function loadStats(): StatsData {
+  const statsPath = path.join(process.cwd(), "public", "stats.json");
+  try {
+    return JSON.parse(fs.readFileSync(statsPath, "utf-8"));
+  } catch {
+    return {
+      days: 17,
+      commits: 780,
+      tests: 464,
+      endpoints: 92,
+      linesOfCode: 95000,
+      repos: 13,
+      updatedAt: "",
+    };
+  }
+}
+
 /* ---------- page ---------- */
 
 export default function Home() {
   const devDays = getDaysSinceStart();
+  const stats = loadStats();
   return (
     <>
       <Nav />
@@ -270,7 +290,7 @@ export default function Home() {
               </div>
 
               {/* Stats grid — renders instantly with fallback, fetches live data in background */}
-              <StatsGrid devDays={devDays} />
+              <StatsGrid stats={stats} devDays={devDays} />
             </div>
           </div>
         </section>
