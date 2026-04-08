@@ -1,24 +1,16 @@
+import Image from "next/image";
+
 export function NIcon({ className = "h-6 w-auto" }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 32 40"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      aria-hidden="true"
-    >
-      <path
-        d="M4 36V4h4l16 22V4h4v32h-4L8 14v22H4z"
-        fill="currentColor"
-      />
-      <path
-        d="M6 24c3-2 6-2 9 0s6 2 9 0"
-        stroke="#0E7490"
-        strokeWidth="2"
-        strokeLinecap="round"
-        fill="none"
-      />
-    </svg>
+    <Image
+      src="/images/neckarshore-logo-n.jpg"
+      alt="neckarshore.ai logo"
+      width={40}
+      height={42}
+      sizes="40px"
+      className={`rounded-[3px] dark:rounded-none ${className}`}
+      priority
+    />
   );
 }
 
@@ -34,8 +26,8 @@ export default function Logo({
       className={`inline-flex items-center gap-0.5 ${size} ${className}`}
       aria-label="NECKARSHORE.AI"
     >
-      <NIcon className="h-[1.15em] w-auto shrink-0" />
-      <span className="font-heading font-semibold uppercase tracking-tight leading-none text-inherit">
+      <NIcon className="h-[1.4em] w-auto shrink-0 object-contain" />
+      <span className="font-heading text-[1.2em] font-semibold uppercase tracking-tight leading-none text-inherit">
         ECKARSHORE<span className="text-accent">.AI</span>
       </span>
     </span>
