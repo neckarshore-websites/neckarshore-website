@@ -429,13 +429,14 @@ export default function Home() {
         <section className="bg-[#B2F0FF] px-4 py-20 md:px-6 md:py-24 dark:bg-[#1A4D5C]">
           <div className="mx-auto max-w-[1200px]">
             <div className="grid items-start gap-12 md:grid-cols-[280px_1fr]">
-              <div className="mx-auto h-64 w-64 overflow-hidden rounded-2xl md:mx-0 md:h-72 md:w-72">
+              <div className="mx-auto overflow-hidden rounded-2xl md:mx-0">
                 <Image
                   src="/images/neckarshore-ai-expert-system.jpg"
                   alt="KI-Expertensystem von neckarshore.ai — spezialisierte AI-Agenten für Architektur, Quality Engineering, Dokumentation und Deployment"
-                  width={960}
-                  height={960}
-                  className="h-full w-full object-cover dark:invert-0 invert"
+                  width={288}
+                  height={288}
+                  className="rounded-2xl object-cover"
+                  loading="lazy"
                 />
               </div>
 
