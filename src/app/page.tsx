@@ -10,6 +10,8 @@ import {
   Clock,
   Globe,
   TrendingUp,
+  Terminal,
+  ExternalLink,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -27,6 +29,7 @@ const ImageModal = dynamic(() => import("@/components/ImageModal"));
 /* ---------- constants ---------- */
 
 const OMNIXIS_DAY_ONE = new Date("2026-03-22");
+const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
 
 const faqItems = [
   {
@@ -137,6 +140,101 @@ export default function Home() {
             }}
           />
         </section>
+
+        {/* ===== HERO TEASER — bordeaux strip, remove ~3 weeks after Vault Autopilot launch ===== */}
+        {showOssLaunch && (
+        <>
+        <div className="bg-[#5C1A2A] px-4 py-3 md:px-6">
+          <div className="mx-auto flex max-w-[1200px] items-center justify-center gap-3 text-sm text-[#F5C6D0] md:text-base">
+            <span className="rounded-full bg-white/15 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-white">
+              Neu
+            </span>
+            <span>
+              Obsidian Vault Autopilot — unser erstes Open-Source-Projekt ist live.
+            </span>
+            <a
+              href="#open-source"
+              className="shrink-0 font-medium text-white transition-colors hover:text-[#F5C6D0]"
+              data-track="hero_teaser_oss"
+            >
+              Zum Projekt&nbsp;&rarr;
+            </a>
+          </div>
+        </div>
+
+        {/* ===== OPEN SOURCE CARD — temporary hero placement, move to permanent section after ~3 weeks ===== */}
+        <section id="open-source" className="bg-neutral-light px-4 py-16 md:px-6 md:py-20 dark:bg-deep-space">
+          <div className="mx-auto max-w-[600px]">
+            <p className="text-center text-sm font-semibold uppercase tracking-widest text-accent">
+              Open Source
+            </p>
+            <h2 className="mt-3 text-center font-heading text-2xl font-semibold tracking-tight text-primary md:text-3xl dark:text-text-primary">
+              Tools die wir selbst benutzen. Jetzt auch für euch.
+            </h2>
+
+            {/* Vault Autopilot Card */}
+            <div className="mt-10 flex flex-col rounded-xl border border-primary/10 bg-white p-8 shadow-sm dark:border-text-secondary/10 dark:bg-surface">
+              <div className="flex items-center gap-3">
+                <Terminal size={28} className="text-secondary" />
+                <span className="rounded-full bg-accent/10 px-3 py-0.5 text-xs font-semibold text-accent dark:bg-accent/20">
+                  Beta
+                </span>
+              </div>
+              <h3 className="mt-4 font-heading text-xl font-semibold text-primary dark:text-text-primary">
+                Obsidian Vault Autopilot
+              </h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
+                Claude Code Plugin das dein Second Brain aufräumt — sortiert,
+                benennt um, verbessert die Qualität deiner Notes &amp; sorgt für saubere Properties.
+              </p>
+
+              <div className="mt-5 space-y-2">
+                <div className="flex items-start gap-3">
+                  <code className="inline-block w-[120px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent dark:bg-text-secondary/10">
+                    note-rename
+                  </code>
+                  <span className="text-sm text-neutral-dark/70 dark:text-text-secondary/70">
+                    Benennt um, fixt alle Backlinks im Vault.
+                  </span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <code className="inline-block w-[120px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent dark:bg-text-secondary/10">
+                    inbox-sort
+                  </code>
+                  <span className="text-sm text-neutral-dark/70 dark:text-text-secondary/70">
+                    Analysiert Inhalt, verschiebt in den richtigen Ordner.
+                  </span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <code className="inline-block w-[120px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent/50 italic dark:bg-text-secondary/10">
+                    more coming…
+                  </code>
+                  <span className="text-sm text-neutral-dark/50 italic dark:text-text-secondary/50">
+                    Watch this space.
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-auto flex items-center justify-between pt-6">
+                <span className="text-xs font-medium text-muted dark:text-text-secondary/50">
+                  MIT License
+                </span>
+                <a
+                  href="https://github.com/neckarshore-ai/obsidian-vault-autopilot"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
+                  data-track="oss_vault_autopilot"
+                >
+                  GitHub
+                  <ExternalLink size={14} />
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+        </>
+        )}
 
         {/* ===== WHY NEARSHORE ===== */}
         <section id="why-nearshore" className="bg-white px-4 py-20 md:px-6 md:py-24 dark:bg-surface">
@@ -294,6 +392,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* ===== OPEN SOURCE (permanent section — currently inactive, card is in hero placement above)
+             TODO: Move card back here after launch promotion period (~3 weeks) ===== */}
 
         {/* ===== FOUNDER ===== */}
         <section id="founder" className="bg-white px-4 py-20 md:px-6 md:py-24 dark:bg-surface">
