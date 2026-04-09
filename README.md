@@ -1,5 +1,8 @@
 # neckarshore.ai
 
+[![Lighthouse Audit](https://github.com/neckarshore-ai/neckarshore-website/actions/workflows/lighthouse.yml/badge.svg)](https://github.com/neckarshore-ai/neckarshore-website/actions/workflows/lighthouse.yml)
+[![E2E Tests](https://github.com/neckarshore-ai/neckarshore-website/actions/workflows/e2e.yml/badge.svg)](https://github.com/neckarshore-ai/neckarshore-website/actions/workflows/e2e.yml)
+
 Landing page for [Neckarshore AI](https://neckarshore.ai) — AI consulting and product development from Stuttgart.
 
 ## Tech Stack
@@ -24,7 +27,7 @@ Open [http://localhost:3000](http://localhost:3000).
 npm run test:e2e
 ```
 
-61 end-to-end tests across 7 suites: navigation, links, Calendly CTAs, theme, responsive, SEO, and accessibility.
+74 end-to-end tests across 9 suites: navigation, links, Calendly CTAs, theme, responsive, SEO, accessibility, smoke, and stats.
 
 ## Links
 

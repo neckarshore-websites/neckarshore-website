@@ -53,3 +53,16 @@ Use test IDs when referencing tests in logs, reports, and issues.
 - Assign the next available TC-ID in the suite
 - Viewports: 393px (iPhone 15 Pro), 414px (iPhone 14 Plus), 768px (iPad Mini)
 - Chromium only (Firefox/WebKit added when needed)
+
+## CI Health Check (Session Startup)
+
+At every session start, **before any feature work**, run:
+
+```bash
+gh run list --workflow=lighthouse.yml --limit=3 --json conclusion,createdAt,headBranch
+gh run list --workflow=e2e.yml --limit=3 --json conclusion,createdAt,headBranch 2>/dev/null
+```
+
+- If any run shows `"conclusion": "failure"` → investigate and fix **before** starting new work
+- Report CI status in session greeting: "CI: ✅ grün" or "CI: ❌ Lighthouse failing since [date]"
+- Lighthouse runs on every push to `main` and weekly (Monday 06:00 UTC)
