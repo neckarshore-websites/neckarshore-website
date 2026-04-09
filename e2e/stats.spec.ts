@@ -18,7 +18,7 @@ test.describe("Stats Tiles @smoke", () => {
   }) => {
     await page.goto("/");
     const value = await getStatValue(page, "Days since First Commit");
-    expect(Number(value)).toBeGreaterThan(0);
+    expect(Number(value)).toBeGreaterThan(15);
   });
 
   test("TC-STAT-002: Commits count is plausible", async ({ page }) => {
@@ -26,14 +26,14 @@ test.describe("Stats Tiles @smoke", () => {
     // Wait for animation to finish (1200ms duration)
     await page.waitForTimeout(1500);
     const value = await getStatValue(page, "Commits");
-    expect(parseDE(value)).toBeGreaterThan(100);
+    expect(parseDE(value)).toBeGreaterThan(750);
   });
 
   test("TC-STAT-003: Zeilen Code is plausible", async ({ page }) => {
     await page.goto("/");
     await page.waitForTimeout(1500);
     const value = await getStatValue(page, "Zeilen Code");
-    expect(parseDE(value)).toBeGreaterThan(10000);
+    expect(parseDE(value)).toBeGreaterThan(120000);
   });
 
   test("TC-STAT-004: Repositories count is plausible", async ({ page }) => {
@@ -48,14 +48,14 @@ test.describe("Stats Tiles @smoke", () => {
     await page.goto("/");
     await page.waitForTimeout(1500);
     const value = await getStatValue(page, "Automatisierte Tests");
-    expect(parseDE(value)).toBeGreaterThan(100);
+    expect(parseDE(value)).toBeGreaterThan(370);
   });
 
   test("TC-STAT-006: Endpoints count is plausible", async ({ page }) => {
     await page.goto("/");
     await page.waitForTimeout(1500);
     const value = await getStatValue(page, "REST Endpoints");
-    expect(Number(value)).toBeGreaterThan(10);
+    expect(Number(value)).toBeGreaterThan(75);
   });
 
   test("TC-STAT-007: No tile shows zero or dash", async ({ page }) => {
