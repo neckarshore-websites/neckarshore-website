@@ -90,7 +90,7 @@ export default function StatsGrid({
         ))}
       </div>
       {stats.updatedAt && (
-        <p className="mt-3 text-right text-[10px] font-mono text-text-secondary/40">
+        <p className="mt-3 text-right text-[10px] font-mono text-text-secondary/60">
           Stand: {new Date(stats.updatedAt).toLocaleDateString("de-DE")}
         </p>
       )}

@@ -366,7 +366,7 @@ export default function Home() {
                   <ImageModal
                     src="/images/omnixis-conceived-whiteboard-2024-12-11.jpg"
                     alt="OMNIXIS Whiteboard-Skizze, Sindelfingen, Dezember 2024"
-                    className="cursor-pointer text-secondary underline decoration-secondary/30 underline-offset-2 transition-colors hover:text-text-primary hover:decoration-secondary"
+                    className="inline-flex min-h-[24px] items-center cursor-pointer text-secondary underline decoration-secondary/30 underline-offset-2 transition-colors hover:text-text-primary hover:decoration-secondary"
                   >
                     Conceived
                   </ImageModal>
@@ -375,7 +375,7 @@ export default function Home() {
                   <ImageModal
                     src="/images/omnixis-born-first-session-2026-03-22.png"
                     alt="Erste OMNIXIS Claude Code Session, März 2026"
-                    className="cursor-pointer text-secondary underline decoration-secondary/30 underline-offset-2 transition-colors hover:text-text-primary hover:decoration-secondary"
+                    className="inline-flex min-h-[24px] items-center cursor-pointer text-secondary underline decoration-secondary/30 underline-offset-2 transition-colors hover:text-text-primary hover:decoration-secondary"
                   >
                     Born
                   </ImageModal>
