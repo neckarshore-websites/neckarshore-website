@@ -429,9 +429,14 @@ export default function Home() {
         <section className="bg-[#B2F0FF] px-4 py-20 md:px-6 md:py-24 dark:bg-[#1A4D5C]">
           <div className="mx-auto max-w-[1200px]">
             <div className="grid items-start gap-12 md:grid-cols-[280px_1fr]">
-              {/* Photo placeholder */}
-              <div className="mx-auto flex h-64 w-64 items-center justify-center rounded-2xl bg-white/40 md:mx-0 md:h-72 md:w-72 dark:bg-white/10">
-                <span className="text-sm text-primary/70 dark:text-text-secondary/70">Foto folgt</span>
+              <div className="mx-auto h-64 w-64 overflow-hidden rounded-2xl md:mx-0 md:h-72 md:w-72">
+                <Image
+                  src="/images/neckarshore-ai-expert-system.jpg"
+                  alt="KI-Expertensystem von neckarshore.ai — spezialisierte AI-Agenten für Architektur, Quality Engineering, Dokumentation und Deployment"
+                  width={960}
+                  height={960}
+                  className="h-full w-full object-cover dark:invert-0 invert"
+                />
               </div>
 
               <div>
