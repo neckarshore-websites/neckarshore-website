@@ -32,6 +32,7 @@ See `CLAUDE.md` → "Lighthouse Device Matrix" for profile definitions and gate 
 | 11 | 2026-04-10 | 052863b | mobile-slow | 53 | 100 | 100 | 100 | 8.0s | 561ms | 0.001 | ad-hoc (Stage 2 baseline 2/3 vs prod) |
 | 12 | 2026-04-10 | 052863b | mobile-slow | 44 | 100 | 100 | 100 | 8.0s | 1.2s | 0.001 | ad-hoc (Stage 2 baseline 3/3 vs prod) |
 | 13 | 2026-04-10 | 27db642 | mobile-4g | 94 | 96 | 100 | 100 | 2.6s | 122ms | 0.000 | session-start vs prod — **A11y regression**: 19x `text-accent` (#0e7490) on slate-800/900 below WCAG AA (2.74-3.33:1, need 4.5:1), stat-tile subtitles |
+| 14 | 2026-04-10 | 91aa708 | mobile-4g | 93 | 96 | 100 | 100 | 2.6s | 141ms | 0.000 | post-fix vs prod — stat-tile fix (`accent-bright`) shipped + verified. A11y stays at 96 because axe now surfaces 6 other contrast issues (CTA muted, Email link, Footer mono, CookieBanner link, hero inline-accent, `text-text-secondary/50` opacity). **Accepted at 96 > 95 hard gate**, deferred as P2 "A11y Hardening Pass" |
 
 > **Baseline established 2026-04-10 (local, rows 1/3).** Mobile Slow (Edge-5G) reveals the blind spot: Perf 70-71, LCP 9.6s. This is the scenario a colleague reported from France on weak 5G. CI vs local delta is minimal (±1 point).
 
