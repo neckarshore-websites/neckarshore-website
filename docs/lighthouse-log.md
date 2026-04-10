@@ -19,8 +19,11 @@ See `CLAUDE.md` → "Lighthouse Device Matrix" for profile definitions and gate 
 
 | # | Date | Commit | Profile | Perf | A11y | BP | SEO | LCP | TBT | CLS | Trigger |
 |---|------|--------|---------|------|------|----|-----|-----|-----|-----|---------|
-| 1 | 2026-04-10 | b6015bc | desktop | 100 | 100 | 100 | 100 | 678ms | 0ms | 0.001 | baseline |
-| 2 | 2026-04-10 | b6015bc | mobile-4g | 95 | 100 | 100 | 100 | 2.8s | 74ms | 0.001 | baseline |
-| 3 | 2026-04-10 | b6015bc | mobile-slow | 71 | 100 | 100 | 100 | 9.6s | 124ms | 0.001 | baseline |
+| 1 | 2026-04-10 | b6015bc | desktop | 100 | 100 | 100 | 100 | 678ms | 0ms | 0.001 | local-baseline |
+| 2 | 2026-04-10 | b6015bc | mobile-4g | 95 | 100 | 100 | 100 | 2.8s | 74ms | 0.001 | local-baseline |
+| 3 | 2026-04-10 | b6015bc | mobile-slow | 71 | 100 | 100 | 100 | 9.6s | 124ms | 0.001 | local-baseline |
+| 4 | 2026-04-10 | ccded1b | desktop | 100 | 100 | 100 | 100 | 525ms | 16ms | 0.001 | ci |
+| 5 | 2026-04-10 | ccded1b | mobile-4g | 94 | 100 | 100 | 100 | 3.0s | 100ms | 0.001 | ci |
+| 6 | 2026-04-10 | ccded1b | mobile-slow | 70 | 100 | 100 | 100 | 9.6s | 159ms | 0.001 | ci |
 
-> **Baseline established 2026-04-10.** Mobile Slow (Edge-5G) reveals the blind spot: Perf 71, LCP 9.6s. This is the scenario a colleague reported from France on weak 5G. Stage 2 follow-up: set Mobile Slow threshold based on this baseline (e.g., Perf ≥ 65) once 3-5 runs confirm stability.
+> **Baseline established 2026-04-10.** Mobile Slow (Edge-5G) reveals the blind spot: Perf 70-71, LCP 9.6s. This is the scenario a colleague reported from France on weak 5G. CI vs local delta is minimal (±1 point), confirming the profile is stable across hosts. Stage 2 follow-up: set Mobile Slow threshold based on this baseline (e.g., Perf ≥ 65) once 3-5 runs confirm variance envelope.

@@ -49,3 +49,4 @@ jobs:
           name: lighthouse-reports
           path: .lighthouse/
           retention-days: 14
+          include-hidden-files: true
