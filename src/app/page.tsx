@@ -271,7 +271,7 @@ export default function Home() {
                   <h3 className="mt-4 font-heading text-xl font-semibold text-primary md:text-2xl dark:text-text-primary">
                     {item.title}
                   </h3>
-                  <p className="mt-1 text-sm font-medium text-accent">{item.subtitle}</p>
+                  <p className="mt-1 text-sm font-medium text-accent dark:text-accent-bright">{item.subtitle}</p>
                   <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">{item.text}</p>
                 </div>
               ))}
@@ -332,7 +332,7 @@ export default function Home() {
                   <h3 className="mt-4 font-heading text-lg font-semibold text-primary md:text-xl dark:text-text-primary">
                     {service.title}
                   </h3>
-                  <p className="mt-1 text-sm font-medium text-accent">{service.subtitle}</p>
+                  <p className="mt-1 text-sm font-medium text-accent dark:text-accent-bright">{service.subtitle}</p>
                   <p className="mt-3 text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
                     {service.text}
                   </p>
@@ -406,7 +406,7 @@ export default function Home() {
                 <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl dark:text-text-primary">
                   German Rauhut
                 </h2>
-                <p className="mt-1 text-lg font-medium text-accent">
+                <p className="mt-1 text-lg font-medium text-accent dark:text-accent-bright">
                   Gründer, neckarshore.ai
                 </p>
                 <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
@@ -445,7 +445,7 @@ export default function Home() {
                 <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl dark:text-text-primary">
                   Unser Ansatz
                 </h2>
-                <p className="mt-1 text-lg font-medium text-primary/70 dark:text-accent">
+                <p className="mt-1 text-lg font-medium text-primary/70 dark:text-accent-bright">
                   Enterprise-Qualität ohne Enterprise-Headcount
                 </p>
                 <p className="mt-6 max-w-2xl text-lg leading-relaxed text-primary/80 dark:text-text-secondary">
