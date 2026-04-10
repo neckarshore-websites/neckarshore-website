@@ -66,3 +66,48 @@ gh run list --workflow=e2e.yml --limit=3 --json conclusion,createdAt,headBranch 
 - If any run shows `"conclusion": "failure"` → investigate and fix **before** starting new work
 - Report CI status in session greeting: "CI: ✅ grün" or "CI: ❌ Lighthouse failing since [date]"
 - Lighthouse runs on every push to `main` and weekly (Monday 06:00 UTC)
+
+## Lighthouse Device Matrix
+
+Three profiles, differentiated gates. Hard gates fail CI; soft gates report warnings only.
+
+| # | Profil | Form Factor | Network | CPU | Gate | Perf Threshold | Purpose |
+|---|--------|-------------|---------|-----|------|----------------|---------|
+| 1 | Desktop | desktop | 40ms / 10 Mbps | 1× | Hard | 95 | LAN baseline — developer experience |
+| 2 | Mobile 4G | mobile | 150ms / 1.6 Mbps | 4× | Hard | 90 | Default mobile user (German city) |
+| 3 | Mobile Slow | mobile | 400ms / 400 Kbps | 6× | Soft-Warn | — (Stage 2) | Edge-of-coverage (weak 5G, rural, train) |
+
+**Accessibility / Best Practices / SEO:** all 95 hard on Desktop + Mobile 4G. Mobile Slow reports only.
+
+### Commands
+
+- `npm run lighthouse:quick` — all 3 profiles (CI mode, assumes server on :3000)
+- `npm run lighthouse:desktop` — single profile for dev-loop iteration
+- `npm run lighthouse:mobile` — single profile (Mobile 4G) for dev-loop
+- `npm run lighthouse:slow` — single profile (Mobile Slow / Edge-5G) for dev-loop
+- `npm run lighthouse` — full pipeline (build + start + all profiles + stop)
+
+### Gate Philosophy
+
+- **Desktop (hard, 95):** Desktop scores 100 in practice. 5-point buffer for real fluctuation, not 15.
+- **Mobile 4G (hard, 90):** Mobile 4G scores 96 in practice. 6-point buffer. Catches silent regressions — the previous threshold of 85 was a monitoring hole, not a safety net.
+- **Mobile Slow (soft):** Flaky by nature on GitHub Actions runners. Collect baseline first (Stage 2), then set threshold as `baseline − 5`. Purpose is **visibility**, not blocking.
+
+### Reports
+
+Per-profile JSON reports land in `.lighthouse/report-<profile>.json` and are uploaded as CI artifacts (14-day retention). Script surfaces LCP / FCP / TBT / CLS / Speed Index raw values alongside category scores.
+
+### Delta Awareness
+
+If a previous report exists before a run, the script prints the score delta next to each category (e.g., `Performance: 94 (−2 vs last)`). Helps spot slow drift over time.
+
+### Logging Results
+
+Log every run in `docs/lighthouse-log.md` — one row per run per profile:
+
+```
+| # | Date | Commit | Profile | Perf | A11y | BP | SEO | LCP | TBT | CLS | Trigger |
+```
+
+- **Trigger:** `session-start`, `session-end`, `ad-hoc`, `ci`
+- **Cleanup:** delete rows older than 14 days

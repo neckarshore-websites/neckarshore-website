@@ -4,38 +4,97 @@
  * Local Lighthouse audit — runs against a prod build on localhost.
  *
  * Usage:
- *   npm run lighthouse          (builds, starts, audits, stops)
- *   npm run lighthouse:quick    (skips build, assumes server is running on :3000)
+ *   npm run lighthouse           (builds, starts, audits all profiles, stops)
+ *   npm run lighthouse:quick     (skips build, assumes server is running on :3000)
  *
- * Thresholds (exit 1 if any score is below):
- *   Performance:    85
- *   Accessibility: 95
- *   Best Practices: 95
- *   SEO:           95
+ * Device Matrix (3 profiles):
+ *   1. Desktop     — LAN baseline, 1x CPU, 40ms / 10 Mbps         [hard gate]
+ *   2. Mobile 4G   — Lighthouse default mobile (Slow 4G)          [hard gate]
+ *   3. Mobile Slow — Edge-of-coverage 5G / weak signal            [soft warn only]
  *
- * Performance threshold is 85 (not 95) because Next.js framework JS overhead
- * costs ~12 points that are not optimizable without dropping client interactivity.
- * See 2026-04-03 session report for details.
+ * Gate Policy:
+ *   - Hard profiles exit 1 if any score is below threshold.
+ *   - Soft profiles report warnings but never fail the build.
+ *   - Soft profile is flaky by nature on GitHub Actions runners — we collect
+ *     baseline data first, then set thresholds in Stage 2.
+ *
+ * Thresholds history:
+ *   - Perf 85 was chosen historically because mobile Next.js framework JS
+ *     overhead costs ~12 points on 4x CPU throttle. Raised to 90 (Mobile 4G)
+ *     and 95 (Desktop) in 2026-04-10 to catch silent regressions.
  */
 
 import { execFileSync, spawn } from "node:child_process";
-import { readFileSync, mkdirSync } from "node:fs";
+import { readFileSync, existsSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 
-const THRESHOLDS = {
-  performance: 85,
-  accessibility: 95,
-  "best-practices": 95,
-  seo: 95,
-};
+// ── Profile Definitions ──────────────────────────────────────────────
 
-const URL = "http://localhost:3000";
+const PROFILES = [
+  {
+    name: "desktop",
+    label: "Desktop",
+    gate: "hard",
+    lhArgs: ["--preset=desktop"],
+    thresholds: {
+      performance: 95,
+      accessibility: 95,
+      "best-practices": 95,
+      seo: 95,
+    },
+    reportFile: "report-desktop.json",
+  },
+  {
+    name: "mobile-4g",
+    label: "Mobile 4G",
+    gate: "hard",
+    lhArgs: ["--form-factor=mobile", "--screenEmulation.mobile"],
+    thresholds: {
+      performance: 90,
+      accessibility: 95,
+      "best-practices": 95,
+      seo: 95,
+    },
+    reportFile: "report-mobile-4g.json",
+  },
+  {
+    name: "mobile-slow",
+    label: "Mobile Slow (Edge-5G)",
+    gate: "soft",
+    lhArgs: [
+      "--form-factor=mobile",
+      "--screenEmulation.mobile",
+      "--throttling-method=simulate",
+      "--throttling.rttMs=400",
+      "--throttling.throughputKbps=400",
+      "--throttling.cpuSlowdownMultiplier=6",
+    ],
+    // Thresholds intentionally null until Stage 2 baseline is established.
+    thresholds: null,
+    reportFile: "report-mobile-slow.json",
+  },
+];
+
+const URL = process.env.LIGHTHOUSE_URL || "http://localhost:3000";
 const QUICK = process.argv.includes("--quick");
 const MAX_RETRIES = 3;
+
+// Optional: filter to a single profile via --profile=desktop|mobile-4g|mobile-slow
+const profileArg = process.argv.find((a) => a.startsWith("--profile="));
+const selectedProfile = profileArg ? profileArg.split("=")[1] : null;
+const PROFILES_TO_RUN = selectedProfile
+  ? PROFILES.filter((p) => p.name === selectedProfile)
+  : PROFILES;
+
+if (selectedProfile && PROFILES_TO_RUN.length === 0) {
+  console.error(`Unknown profile: ${selectedProfile}`);
+  console.error(`Available: ${PROFILES.map((p) => p.name).join(", ")}`);
+  process.exit(2);
+}
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
@@ -91,6 +150,52 @@ function runLighthouse(lhBin, targetUrl, outputPath, extraArgs = []) {
   }
 }
 
+function getScores(report) {
+  const cats = report.categories || {};
+  return {
+    performance: Math.round((cats.performance?.score || 0) * 100),
+    accessibility: Math.round((cats.accessibility?.score || 0) * 100),
+    "best-practices": Math.round((cats["best-practices"]?.score || 0) * 100),
+    seo: Math.round((cats.seo?.score || 0) * 100),
+  };
+}
+
+function getMetrics(report) {
+  const a = report.audits || {};
+  return {
+    lcp: a["largest-contentful-paint"]?.numericValue,
+    fcp: a["first-contentful-paint"]?.numericValue,
+    tbt: a["total-blocking-time"]?.numericValue,
+    cls: a["cumulative-layout-shift"]?.numericValue,
+    si: a["speed-index"]?.numericValue,
+  };
+}
+
+function fmtMs(n) {
+  if (n == null) return "—";
+  return n >= 1000 ? `${(n / 1000).toFixed(1)}s` : `${Math.round(n)}ms`;
+}
+
+function fmtCls(n) {
+  if (n == null) return "—";
+  return n.toFixed(3);
+}
+
+function fmtDelta(current, previous) {
+  if (previous == null) return "";
+  const diff = current - previous;
+  if (diff === 0) return " (±0)";
+  const sign = diff > 0 ? "+" : "";
+  return ` (${sign}${diff} vs last)`;
+}
+
+function capitalizeKey(key) {
+  return key
+    .split("-")
+    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+    .join(" ");
+}
+
 // ── Main ─────────────────────────────────────────────────────────────
 
 let server;
@@ -117,43 +222,78 @@ try {
   mkdirSync(reportDir, { recursive: true });
   const lhBin = resolve(ROOT, "node_modules/.bin/lighthouse");
 
-  log("Running Lighthouse audit (desktop)...");
-  const reportDesktop = resolve(reportDir, "report.json");
-  runLighthouse(lhBin, URL, reportDesktop, ["--preset=desktop"]);
+  const hardFailures = [];
+  const softWarnings = [];
+  const summary = [];
 
-  log("Running Lighthouse audit (mobile)...");
-  const reportMobile = resolve(reportDir, "report-mobile.json");
-  runLighthouse(lhBin, URL, reportMobile, [
-    "--form-factor=mobile",
-    "--screenEmulation.mobile",
-  ]);
+  for (const profile of PROFILES_TO_RUN) {
+    const reportPath = resolve(reportDir, profile.reportFile);
 
-  const desktopResult = JSON.parse(readFileSync(reportDesktop, "utf-8"));
-  const mobileResult = JSON.parse(readFileSync(reportMobile, "utf-8"));
-  const failures = [];
-
-  for (const [label, report] of [["Desktop", desktopResult], ["Mobile", mobileResult]]) {
-    console.log(`\n── ${label} ──`);
-    const cats = report.categories;
-
-    for (const [key, threshold] of Object.entries(THRESHOLDS)) {
-      const score = Math.round((cats[key]?.score || 0) * 100);
-      const pass = score >= threshold;
-      const icon = pass ? "+" : "FAIL";
-      const name = key.charAt(0).toUpperCase() + key.slice(1);
-      console.log(`  ${icon} ${name}: ${score} (threshold: ${threshold})`);
-      if (!pass) failures.push(`${label} ${name}: ${score} < ${threshold}`);
+    // Capture previous scores for delta-awareness BEFORE overwriting the file.
+    let previousScores = null;
+    if (existsSync(reportPath)) {
+      try {
+        previousScores = getScores(JSON.parse(readFileSync(reportPath, "utf-8")));
+      } catch {
+        // Ignore malformed previous report.
+      }
     }
+
+    log(`Running Lighthouse audit (${profile.label})...`);
+    runLighthouse(lhBin, URL, reportPath, profile.lhArgs);
+
+    const report = JSON.parse(readFileSync(reportPath, "utf-8"));
+    const scores = getScores(report);
+    const metrics = getMetrics(report);
+
+    console.log(`\n── ${profile.label} [${profile.gate}] ──`);
+
+    for (const [key, score] of Object.entries(scores)) {
+      const delta = fmtDelta(score, previousScores?.[key]);
+      const threshold = profile.thresholds?.[key];
+
+      if (threshold != null) {
+        const pass = score >= threshold;
+        const icon = pass ? "  ✓" : "  ✗";
+        console.log(
+          `${icon} ${capitalizeKey(key)}: ${score} (threshold: ${threshold})${delta}`
+        );
+        if (!pass) {
+          const failure = `${profile.label} ${capitalizeKey(key)}: ${score} < ${threshold}`;
+          if (profile.gate === "hard") {
+            hardFailures.push(failure);
+          } else {
+            softWarnings.push(failure);
+          }
+        }
+      } else {
+        // No threshold set (soft profile, Stage 2 pending) — report only.
+        console.log(`  · ${capitalizeKey(key)}: ${score}${delta}`);
+      }
+    }
+
+    console.log(
+      `    LCP: ${fmtMs(metrics.lcp)} | FCP: ${fmtMs(metrics.fcp)} | ` +
+        `TBT: ${fmtMs(metrics.tbt)} | CLS: ${fmtCls(metrics.cls)} | ` +
+        `SI: ${fmtMs(metrics.si)}`
+    );
+
+    summary.push({ profile: profile.label, gate: profile.gate, scores, metrics });
   }
 
-  if (failures.length > 0) {
-    console.log("\nLighthouse gate FAILED:");
-    for (const f of failures) console.log(`   - ${f}`);
-    process.exit(1);
-  } else {
-    log("All scores above thresholds. Ship it.");
-    process.exit(0);
+  if (softWarnings.length > 0) {
+    console.log("\n⚠ Soft warnings (reported, not blocking):");
+    for (const w of softWarnings) console.log(`   - ${w}`);
   }
+
+  if (hardFailures.length > 0) {
+    console.log("\n✗ Lighthouse hard gate FAILED:");
+    for (const f of hardFailures) console.log(`   - ${f}`);
+    process.exit(1);
+  }
+
+  log("All hard gates passed. Ship it.");
+  process.exit(0);
 } finally {
   if (server) server.kill("SIGTERM");
 }

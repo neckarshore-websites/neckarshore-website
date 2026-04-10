@@ -12,7 +12,10 @@
     "test:smoke": "BASE_URL=https://neckarshore.ai playwright test --grep @smoke",
     "test:smoke:local": "playwright test --grep @smoke",
     "lighthouse": "node scripts/lighthouse.mjs",
-    "lighthouse:quick": "node scripts/lighthouse.mjs --quick"
+    "lighthouse:quick": "node scripts/lighthouse.mjs --quick",
+    "lighthouse:desktop": "node scripts/lighthouse.mjs --quick --profile=desktop",
+    "lighthouse:mobile": "node scripts/lighthouse.mjs --quick --profile=mobile-4g",
+    "lighthouse:slow": "node scripts/lighthouse.mjs --quick --profile=mobile-slow"
   },
   "dependencies": {
     "@upstash/redis": "1.37.0",
