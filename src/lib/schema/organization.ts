@@ -73,6 +73,7 @@ export const organizationSchema = {
       sameAs: [
         "https://www.linkedin.com/company/neckarshore/",
         "https://github.com/neckarshore-ai",
+        "https://www.google.com/maps?cid=7274492185454983746",
       ],
     },
     {
