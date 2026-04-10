@@ -111,3 +111,40 @@ Log every run in `docs/lighthouse-log.md` — one row per run per profile:
 
 - **Trigger:** `session-start`, `session-end`, `ad-hoc`, `ci`
 - **Cleanup:** delete rows older than 14 days
+
+## SEO — Structured Data (JSON-LD)
+
+> **Important:** Render JSON-LD via a **native HTML `<script type="application/ld+json">` tag**, NOT via `next/script`.
+
+### Why (AD-19, Session C 2026-04-10)
+
+`next/script` with `strategy="beforeInteractive"` or `"afterInteractive"` injects the payload into Next's hydration stream, not into the server-rendered HTML. Google's crawler reads the raw SSR response and will NOT see schema that only exists in the hydration payload — the brand entity becomes invisible to search.
+
+This bit us once: the XSS security hook blocked the raw-HTML injection prop on inline script elements, we worked around it with `next/script`, and shipped a JSON-LD that looked correct in DevTools but was missing from `curl https://neckarshore.ai/`. Google Rich Results Test: zero items detected.
+
+### The Rule
+
+1. Use a native `<script>` element rendered directly in JSX, with the schema JSON as its text content.
+2. Render it inside a **Server Component** (not a Client Component) so it lands in the SSR HTML.
+3. If the XSS/security hook blocks the pattern, talk to James — do NOT reach for `next/script` as the workaround.
+
+### Verification (mandatory after any JSON-LD change)
+
+```bash
+# 1. Confirm both scripts are in the SSR HTML, not the hydration payload:
+curl -s https://neckarshore.ai/ | grep -c 'application/ld+json'   # expect >= 2
+
+# 2. Parse and list @types from @graph:
+curl -s https://neckarshore.ai/ | python3 -c "import sys,re,json; [print(n.get('@type')) for m in re.findall(r'<script[^>]*ld\+json[^>]*>(.*?)</script>', sys.stdin.read(), re.DOTALL) for n in (json.loads(m).get('@graph',[json.loads(m)]))]"
+
+# 3. Run Google Rich Results Test against the live URL (user, browser):
+#    https://search.google.com/test/rich-results?url=https%3A%2F%2Fneckarshore.ai%2F
+```
+
+Expected `@types`: `['Organization','ProfessionalService']`, `Person`, `WebSite`, `WebPage`, `FAQPage`.
+
+### Related
+
+- Schema source of truth: `lib/schema/organization.ts`
+- Planning decision: AD-19 — JsonLd via Native Script Tag (OMNIXIS-planning/docs/decisions/)
+- Incident reports: Linus Session B + C (OMNIXIS-planning/docs/reports/2026-04-10-linus-fe-{b,c}.md)
