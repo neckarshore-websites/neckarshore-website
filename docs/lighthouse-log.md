@@ -25,5 +25,7 @@ See `CLAUDE.md` → "Lighthouse Device Matrix" for profile definitions and gate 
 | 4 | 2026-04-10 | ccded1b | desktop | 100 | 100 | 100 | 100 | 525ms | 16ms | 0.001 | ci |
 | 5 | 2026-04-10 | ccded1b | mobile-4g | 94 | 100 | 100 | 100 | 3.0s | 100ms | 0.001 | ci |
 | 6 | 2026-04-10 | ccded1b | mobile-slow | 70 | 100 | 100 | 100 | 9.6s | 159ms | 0.001 | ci |
+| 7 | 2026-04-10 | 7c6ac9a | mobile-4g | 93 | 100 | 100 | 100 | 3.0s | 102ms | 0.000 | ad-hoc (pre-SEO-fix; baseline before srcset repair) |
+| 8 | 2026-04-10 | 7c6ac9a | desktop | 100 | 100 | 100 | 100 | 653ms | 0ms | 0.001 | ad-hoc (pre-SEO-fix; baseline before srcset repair) |
 
 > **Baseline established 2026-04-10.** Mobile Slow (Edge-5G) reveals the blind spot: Perf 70-71, LCP 9.6s. This is the scenario a colleague reported from France on weak 5G. CI vs local delta is minimal (±1 point), confirming the profile is stable across hosts. Stage 2 follow-up: set Mobile Slow threshold based on this baseline (e.g., Perf ≥ 65) once 3-5 runs confirm variance envelope.

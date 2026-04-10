@@ -30,6 +30,7 @@ export default function FounderImage() {
         alt={photo.alt}
         width={288}
         height={288}
+        sizes="288px"
         className="rounded-2xl object-cover transition-opacity duration-300"
         loading="lazy"
       />

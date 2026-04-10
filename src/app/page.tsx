@@ -435,6 +435,7 @@ export default function Home() {
                   alt="KI-Expertensystem von neckarshore.ai — spezialisierte AI-Agenten für Architektur, Quality Engineering, Dokumentation und Deployment"
                   width={288}
                   height={288}
+                  sizes="288px"
                   className="rounded-2xl object-cover"
                   loading="lazy"
                 />
