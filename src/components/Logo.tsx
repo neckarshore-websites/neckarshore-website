@@ -8,7 +8,7 @@ export function NIcon({ className = "h-6 w-auto" }: { className?: string }) {
       width={40}
       height={42}
       sizes="40px"
-      className={`rounded-[3px] dark:rounded-none ${className}`}
+      className={`rounded-[3px] ${className}`}
       priority
     />
   );

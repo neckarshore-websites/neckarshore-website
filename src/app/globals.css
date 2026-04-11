@@ -10,7 +10,7 @@
   --color-accent-hover: #0C6478;
   --color-accent-active: #0A5468;
   --color-accent-bright: #22D3EE; /* Dark-mode only — WCAG AA on #0F172A/#1E2937, used for small text on dark surfaces */
-  --color-neutral-light: #F8FAFC;
+  --color-neutral-light: #F1F5F9;
   --color-neutral-dark: #1E2937;
   --color-success: #10B981;
   --color-error: #EF4444;
