@@ -1,6 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const baseURL = process.env.BASE_URL || "http://localhost:3000";
+const PORT = process.env.PORT || "3000";
+const baseURL = process.env.BASE_URL || `http://localhost:${PORT}`;
 const isLocal = baseURL.includes("localhost");
 
 export default defineConfig({
@@ -24,8 +25,8 @@ export default defineConfig({
   ...(isLocal
     ? {
         webServer: {
-          command: "npm run dev",
-          url: "http://localhost:3000",
+          command: `npm run dev -- --port ${PORT}`,
+          url: `http://localhost:${PORT}`,
           reuseExistingServer: !process.env.CI,
         },
       }
