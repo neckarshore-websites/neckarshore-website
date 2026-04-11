@@ -17,7 +17,7 @@ export default function EmailObfuscator() {
       id="email-link"
       href="#kontakt"
       onClick={handleClick}
-      className="text-base font-medium text-accent transition-colors hover:text-accent-hover"
+      className="text-base font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright dark:hover:text-accent-bright/80"
     >
       {/* Render as separate spans to confuse scrapers */}
       <span>info</span>

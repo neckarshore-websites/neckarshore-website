@@ -483,7 +483,7 @@ export default function Home() {
               >
                 Kennenlerntermin buchen
               </a>
-              <span className="text-muted dark:text-text-secondary/50">oder</span>
+              <span className="text-muted dark:text-text-tertiary">oder</span>
               <EmailObfuscator />
             </div>
           </div>
@@ -548,8 +548,8 @@ export default function Home() {
           </p>
         </div>
         <div className="mt-4 flex flex-col items-center gap-1">
-          <p className="text-center text-xs text-muted dark:text-text-secondary/50">Stuttgart, Deutschland</p>
-          <div className="text-muted dark:text-text-secondary/50">
+          <p className="text-center text-xs text-muted dark:text-text-tertiary">Stuttgart, Deutschland</p>
+          <div className="text-muted dark:text-text-tertiary">
             <LiveTicker fetchedAt={new Date().toISOString()} />
           </div>
         </div>

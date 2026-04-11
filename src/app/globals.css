@@ -21,6 +21,7 @@
   --color-surface: #1E2937;
   --color-text-primary: #F1F5F9;
   --color-text-secondary: #CBD5E1;
+  --color-text-tertiary: #94A3B8; /* Dark-mode only — WCAG AA on #0F172A (6.4:1) and #1E2937 (5.6:1). Replaces text-secondary/50 opacity anti-pattern. */
 
   /* Fonts */
   --font-heading: var(--font-space-grotesk);

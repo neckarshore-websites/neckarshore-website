@@ -28,7 +28,7 @@ export default function Logo({
     >
       <NIcon className="h-[1.4em] w-auto shrink-0 object-contain" />
       <span className="font-heading text-[1.2em] font-semibold uppercase tracking-tight leading-none text-inherit">
-        ECKARSHORE<span className="text-accent">.AI</span>
+        ECKARSHORE<span className="text-accent dark:text-accent-bright">.AI</span>
       </span>
     </span>
   );

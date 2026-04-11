@@ -24,7 +24,7 @@ export default function CookieBanner() {
         <p className="text-sm text-muted dark:text-text-secondary">
           Diese Website verwendet ausschließlich technisch notwendige Cookies.
           Keine Tracking-Cookies, keine Drittanbieter.{" "}
-          <a href="/datenschutz" className="text-accent underline hover:text-accent-hover">
+          <a href="/datenschutz" className="text-accent underline hover:text-accent-hover dark:text-accent-bright dark:hover:text-accent-bright/80">
             Datenschutzerklärung
           </a>
         </p>
