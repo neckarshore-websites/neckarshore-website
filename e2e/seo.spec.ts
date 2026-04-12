@@ -47,4 +47,34 @@ test.describe("SEO Basics", () => {
     expect(response.status()).toBe(200);
     expect(await response.text()).toContain("<urlset");
   });
+
+  test("TC-SEO-010: homepage has og:image meta tag", async ({ page }) => {
+    await page.goto("/");
+    const ogImage = page.locator('meta[property="og:image"]');
+    await expect(ogImage).toHaveAttribute("content", /og-image/);
+  });
+
+  test("TC-SEO-011: og:image dimensions are 1200x630", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute(
+      "content",
+      "1200",
+    );
+    await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute(
+      "content",
+      "630",
+    );
+  });
+
+  test("TC-SEO-012: twitter card is summary_large_image", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+      "content",
+      "summary_large_image",
+    );
+    await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute(
+      "content",
+      /og-image/,
+    );
+  });
 });
