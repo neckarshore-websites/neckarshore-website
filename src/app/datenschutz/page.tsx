@@ -4,7 +4,30 @@ import Logo from "@/components/Logo";
 
 export const metadata: Metadata = {
   title: "Datenschutzerklärung — neckarshore.ai",
-  description: "Datenschutzerklärung von neckarshore.ai — Informationen zur Datenverarbeitung.",
+  description:
+    "Datenschutzerklärung von neckarshore.ai — Informationen zur Datenverarbeitung.",
+  openGraph: {
+    title: "Datenschutzerklärung — neckarshore.ai",
+    description:
+      "Datenschutzerklärung von neckarshore.ai — Informationen zur Datenverarbeitung gemäß DSGVO.",
+    url: "https://neckarshore.ai/datenschutz",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "neckarshore.ai — Software Development. Closer to Home.",
+        type: "image/jpeg",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Datenschutzerklärung — neckarshore.ai",
+    description:
+      "Datenschutzerklärung von neckarshore.ai — Informationen zur Datenverarbeitung gemäß DSGVO.",
+    images: ["/og-image.jpg"],
+  },
 };
 
 export default function Datenschutz() {

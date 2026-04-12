@@ -4,7 +4,30 @@ import Logo from "@/components/Logo";
 
 export const metadata: Metadata = {
   title: "Impressum — neckarshore.ai",
-  description: "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart.",
+  description:
+    "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart.",
+  openGraph: {
+    title: "Impressum — neckarshore.ai",
+    description:
+      "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart.",
+    url: "https://neckarshore.ai/impressum",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "neckarshore.ai — Software Development. Closer to Home.",
+        type: "image/jpeg",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Impressum — neckarshore.ai",
+    description:
+      "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart.",
+    images: ["/og-image.jpg"],
+  },
 };
 
 export default function Impressum() {

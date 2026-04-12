@@ -77,4 +77,43 @@ test.describe("SEO Basics", () => {
       /og-image/,
     );
   });
+
+  // OG metadata consistency per page — prevents drift where subpages
+  // inherit the homepage OG title/url instead of their own.
+  const OG_DRIFT_TESTS = [
+    {
+      id: "TC-SEO-013",
+      path: "/impressum",
+      ogTitleContains: "Impressum",
+      ogUrlContains: "/impressum",
+    },
+    {
+      id: "TC-SEO-014",
+      path: "/datenschutz",
+      ogTitleContains: "Datenschutz",
+      ogUrlContains: "/datenschutz",
+    },
+  ];
+
+  for (const { id, path, ogTitleContains, ogUrlContains } of OG_DRIFT_TESTS) {
+    test(`${id}: ${path} has page-specific og:title and og:url`, async ({ page }) => {
+      await page.goto(path);
+      await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
+        "content",
+        new RegExp(ogTitleContains),
+      );
+      await expect(page.locator('meta[property="og:url"]')).toHaveAttribute(
+        "content",
+        new RegExp(ogUrlContains),
+      );
+      await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+        "content",
+        /og-image/,
+      );
+      await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+        "content",
+        "summary_large_image",
+      );
+    });
+  }
 });
