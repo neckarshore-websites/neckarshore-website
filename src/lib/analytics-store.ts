@@ -7,6 +7,10 @@ const LOCAL_FILE = join(process.cwd(), "analytics-local.json");
 interface AnalyticsStore {
   push(key: string, value: string): Promise<void>;
   list(key: string): Promise<string[]>;
+  /** Add a value to a set (for unique-visitor counting). */
+  addToSet(key: string, value: string): Promise<void>;
+  /** Get the size of a set. */
+  setSize(key: string): Promise<number>;
 }
 
 function createRedisStore(): AnalyticsStore {
@@ -18,6 +22,12 @@ function createRedisStore(): AnalyticsStore {
     async list(key) {
       const raw = await redis.lrange(key, 0, -1);
       return raw.map((r) => (typeof r === "string" ? r : JSON.stringify(r)));
+    },
+    async addToSet(key, value) {
+      await redis.sadd(key, value);
+    },
+    async setSize(key) {
+      return await redis.scard(key);
     },
   };
 }
@@ -41,6 +51,19 @@ function createLocalStore(): AnalyticsStore {
     },
     async list(key) {
       return read()[key] || [];
+    },
+    async addToSet(key, value) {
+      const data = read();
+      const setKey = `set:${key}`;
+      if (!data[setKey]) data[setKey] = [];
+      if (!data[setKey].includes(value)) {
+        data[setKey].push(value);
+        write(data);
+      }
+    },
+    async setSize(key) {
+      const data = read();
+      return (data[`set:${key}`] || []).length;
     },
   };
 }

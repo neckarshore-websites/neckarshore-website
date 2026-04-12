@@ -2,8 +2,28 @@
 
 import { useEffect, useRef } from "react";
 
+/** Extract UTM parameters from current URL (once per page load). */
+function getUtmParams(): Record<string, string> {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const utm: Record<string, string> = {};
+    for (const key of ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"]) {
+      const val = params.get(key);
+      if (val) utm[key] = val;
+    }
+    return utm;
+  } catch {
+    return {};
+  }
+}
+
+/** Cached UTM params — evaluated once when the module loads in the browser. */
+let cachedUtm: Record<string, string> | null = null;
+
 function track(event: string, data?: Record<string, unknown>) {
   try {
+    if (!cachedUtm) cachedUtm = getUtmParams();
+
     const source = (navigator as Navigator & { webdriver?: boolean }).webdriver
       ? "playwright"
       : "browser";
@@ -16,6 +36,8 @@ function track(event: string, data?: Record<string, unknown>) {
         device: window.innerWidth < 768 ? "mobile" : "desktop",
         timestamp: new Date().toISOString(),
         source,
+        // UTM params — only included when present
+        ...(Object.keys(cachedUtm).length > 0 ? { utm: cachedUtm } : {}),
         ...data,
       })
     );
