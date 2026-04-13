@@ -28,6 +28,9 @@ export const metadata: Metadata = {
       "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart.",
     images: ["/og-image.jpg"],
   },
+  alternates: {
+    canonical: "https://neckarshore.ai/impressum",
+  },
 };
 
 export default function Impressum() {

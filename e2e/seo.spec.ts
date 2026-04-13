@@ -96,6 +96,20 @@ test.describe("SEO Basics", () => {
     });
   }
 
+  // Canonical URL — every page must have an explicit canonical to prevent duplicate content
+  const CANONICAL_TESTS = [
+    { id: "TC-SEO-018", path: "/", canonical: "https://neckarshore.ai" },
+    { id: "TC-SEO-019", path: "/impressum", canonical: "https://neckarshore.ai/impressum" },
+    { id: "TC-SEO-020", path: "/datenschutz", canonical: "https://neckarshore.ai/datenschutz" },
+  ];
+
+  for (const { id, path, canonical } of CANONICAL_TESTS) {
+    test(`${id}: ${path} has correct canonical URL`, async ({ page }) => {
+      await page.goto(path);
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", canonical);
+    });
+  }
+
   // OG metadata consistency per page — prevents drift where subpages
   // inherit the homepage OG title/url instead of their own.
   const OG_DRIFT_TESTS = [

@@ -28,6 +28,9 @@ export const metadata: Metadata = {
       "Datenschutzerklärung von neckarshore.ai — Informationen zur Datenverarbeitung gemäß DSGVO.",
     images: ["/og-image.jpg"],
   },
+  alternates: {
+    canonical: "https://neckarshore.ai/datenschutz",
+  },
 };
 
 export default function Datenschutz() {
