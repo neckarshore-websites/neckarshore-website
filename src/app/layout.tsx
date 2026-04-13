@@ -10,6 +10,7 @@ const spaceGrotesk = localFont({
   variable: "--font-space-grotesk",
   display: "swap",
   weight: "300 700",
+  preload: false,
 });
 
 const inter = localFont({

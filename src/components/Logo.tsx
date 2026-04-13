@@ -7,7 +7,6 @@ export function NIcon({ className = "h-6 w-auto" }: { className?: string }) {
       alt="neckarshore.ai logo"
       width={40}
       height={42}
-      sizes="40px"
       className={`rounded-[3px] ${className}`}
       priority
     />
