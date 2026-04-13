@@ -11,6 +11,9 @@ export const metadata: Metadata = {
     description:
       "Datenschutzerklärung von neckarshore.ai — Informationen zur Datenverarbeitung, Cookies und Ihren Rechten gemäß DSGVO.",
     url: "https://neckarshore.ai/datenschutz",
+    siteName: "neckarshore.ai",
+    locale: "de_DE",
+    type: "website",
     images: [
       {
         url: "/og-image.jpg",
