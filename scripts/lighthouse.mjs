@@ -15,8 +15,8 @@
  * Gate Policy:
  *   - Hard profiles exit 1 if any score is below threshold.
  *   - Soft profiles report warnings but never fail the build.
- *   - Soft profile is flaky by nature on GitHub Actions runners — we collect
- *     baseline data first, then set thresholds in Stage 2.
+ *   - Mobile Slow Stage 2 thresholds set 2026-04-13 after 5-run baseline
+ *     (median 68, threshold = median − 5 = 63).
  *
  * Thresholds history:
  *   - Perf 85 was chosen historically because mobile Next.js framework JS
@@ -73,8 +73,14 @@ const PROFILES = [
       "--throttling.throughputKbps=400",
       "--throttling.cpuSlowdownMultiplier=6",
     ],
-    // Thresholds intentionally null until Stage 2 baseline is established.
-    thresholds: null,
+    // Stage 2 thresholds (2026-04-13): baseline median 68, formula = baseline − 5.
+    // 5 runs (local+CI): [67, 68, 68, 70, 71]. Variance ±4 pts, stable enough.
+    thresholds: {
+      performance: 63,
+      accessibility: 95,
+      "best-practices": 95,
+      seo: 95,
+    },
     reportFile: "report-mobile-slow.json",
   },
 ];

@@ -94,9 +94,9 @@ Three profiles, differentiated gates. Hard gates fail CI; soft gates report warn
 |---|--------|-------------|---------|-----|------|----------------|---------|
 | 1 | Desktop | desktop | 40ms / 10 Mbps | 1× | Hard | 95 | LAN baseline — developer experience |
 | 2 | Mobile 4G | mobile | 150ms / 1.6 Mbps | 4× | Hard | 90 | Default mobile user (German city) |
-| 3 | Mobile Slow | mobile | 400ms / 400 Kbps | 6× | Soft-Warn | — (Stage 2) | Edge-of-coverage (weak 5G, rural, train) |
+| 3 | Mobile Slow | mobile | 400ms / 400 Kbps | 6× | Soft-Warn | 63 | Edge-of-coverage (weak 5G, rural, train) |
 
-**Accessibility / Best Practices / SEO:** all 95 hard on Desktop + Mobile 4G. Mobile Slow reports only.
+**Accessibility / Best Practices / SEO:** all 95 across all profiles (hard on Desktop + Mobile 4G, soft-warn on Mobile Slow).
 
 ### Commands
 
@@ -110,7 +110,7 @@ Three profiles, differentiated gates. Hard gates fail CI; soft gates report warn
 
 - **Desktop (hard, 95):** Desktop scores 100 in practice. 5-point buffer for real fluctuation, not 15.
 - **Mobile 4G (hard, 90):** Mobile 4G scores 96 in practice. 6-point buffer. Catches silent regressions — the previous threshold of 85 was a monitoring hole, not a safety net.
-- **Mobile Slow (soft):** Flaky by nature on GitHub Actions runners. Collect baseline first (Stage 2), then set threshold as `baseline − 5`. Purpose is **visibility**, not blocking.
+- **Mobile Slow (soft, 63):** Stage 2 complete (2026-04-13). 5-run baseline: [67, 68, 68, 70, 71], median 68, threshold = median − 5. Purpose is **visibility**, not blocking.
 
 ### Reports
 
