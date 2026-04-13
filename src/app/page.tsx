@@ -209,14 +209,14 @@ export default function Home() {
                   <code className="inline-block w-[120px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent/50 italic dark:bg-text-secondary/10">
                     more coming…
                   </code>
-                  <span className="text-sm text-neutral-dark/50 italic dark:text-text-secondary/50">
+                  <span className="text-sm text-neutral-dark/50 italic dark:text-text-tertiary">
                     Watch this space.
                   </span>
                 </div>
               </div>
 
               <div className="mt-auto flex items-center justify-between pt-6">
-                <span className="text-xs font-medium text-muted dark:text-text-secondary/50">
+                <span className="text-xs font-medium text-muted dark:text-text-tertiary">
                   MIT License
                 </span>
                 <a
