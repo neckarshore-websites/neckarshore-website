@@ -14,4 +14,5 @@ Rows older than 14 days are deleted.
 | 7 | 2026-04-12 | 23:50:00 | session-end | 600f9e4 | 79 | 79 | 0 | 39s | — (post-OG-Drift-Fix, 5 new SEO tests: TC-SEO-010..014) |
 | 8 | 2026-04-13 | — | session-start | cd42d31 | 79 | 79 | 0 | 34s | — |
 | 9 | 2026-04-13 | — | ad-hoc | 7dea3d4 | 82 | 82 | 0 | 42s | — (post-OG-description-fix, 3 new: TC-SEO-015..017) |
-| 10 | 2026-04-13 | — | ad-hoc | HEAD | 85 | 85 | 0 | 48s | — (post-canonical-fix, 3 new: TC-SEO-018..020) |
+| 10 | 2026-04-13 | — | ad-hoc | 75af305 | 85 | 85 | 0 | 48s | — (post-canonical-fix, 3 new: TC-SEO-018..020) |
+| 11 | 2026-04-13 | — | session-end | 75af305 | 85 | 85 | 0 | 53s | — |
