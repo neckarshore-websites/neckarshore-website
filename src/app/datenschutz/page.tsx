@@ -5,11 +5,11 @@ import Logo from "@/components/Logo";
 export const metadata: Metadata = {
   title: "Datenschutzerklärung — neckarshore.ai",
   description:
-    "Datenschutzerklärung von neckarshore.ai — Informationen zur Datenverarbeitung.",
+    "Datenschutzerklärung von neckarshore.ai — Informationen zur Datenverarbeitung, Cookies und Ihren Rechten gemäß DSGVO.",
   openGraph: {
     title: "Datenschutzerklärung — neckarshore.ai",
     description:
-      "Datenschutzerklärung von neckarshore.ai — Informationen zur Datenverarbeitung gemäß DSGVO.",
+      "Datenschutzerklärung von neckarshore.ai — Informationen zur Datenverarbeitung, Cookies und Ihren Rechten gemäß DSGVO.",
     url: "https://neckarshore.ai/datenschutz",
     images: [
       {

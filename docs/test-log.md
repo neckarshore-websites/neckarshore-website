@@ -12,3 +12,5 @@ Rows older than 14 days are deleted.
 | 5 | 2026-04-12 | 00:30:00 | session-start | 2aa6371 | 74 | 74 | 0 | 56s | — (Playwright webServer on PORT=3100 while OMNIXIS backend held :3000 — Item #14 fix validated) |
 | 6 | 2026-04-12 | 00:47:00 | ad-hoc | 711a4a2 | 74 | 74 | 0 | 46s | — (post-A11y Hardening Pass verification, PORT=3100, all Theme/Contrast TC-THM-001..003 green) |
 | 7 | 2026-04-12 | 23:50:00 | session-end | 600f9e4 | 79 | 79 | 0 | 39s | — (post-OG-Drift-Fix, 5 new SEO tests: TC-SEO-010..014) |
+| 8 | 2026-04-13 | — | session-start | cd42d31 | 79 | 79 | 0 | 34s | — |
+| 9 | 2026-04-13 | — | ad-hoc | HEAD | 82 | 82 | 0 | 42s | — (post-OG-description-fix, 3 new: TC-SEO-015..017) |

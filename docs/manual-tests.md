@@ -1,0 +1,27 @@
+# Manual Tests (Human-in-the-Loop)
+
+These tests require a human with browser access. They verify platform-specific rendering that automated E2E tests cannot cover.
+
+## When to Run
+
+- After OG/meta tag changes
+- After SEO work or schema changes
+- Before LinkedIn/social media campaigns
+- Monthly as a routine check
+
+## Test Cases
+
+| # | ID | Test | Tool | URL | What to check | Frequency |
+|---|----|------|------|-----|---------------|-----------|
+| 1 | TC-MAN-OG-001 | OG Preview — All Platforms | OpenGraph.xyz | https://www.opengraph.xyz/ | Image renders (not cropped/distorted), title + description readable, no metadata warnings | After OG/meta changes, monthly |
+| 2 | TC-MAN-OG-002 | LinkedIn Post Inspector | LinkedIn | https://www.linkedin.com/post-inspector/ | Preview matches brand, author found, description adequate length (>=100 chars) | After OG/meta changes, before LinkedIn campaigns |
+| 3 | TC-MAN-OG-003 | X/Twitter Card Validator | X | https://cards-dev.twitter.com/validator | Card renders as `summary_large_image`, image + text correct | After X account created, after OG changes |
+| 4 | TC-MAN-OG-004 | Google Rich Results Test | Google | https://search.google.com/test/rich-results | JSON-LD valid, all @types detected, no errors | After schema/JSON-LD changes |
+
+## Results Log
+
+| # | Date | Tester | TC-ID | Result | Notes |
+|---|------|--------|-------|--------|-------|
+| 1 | 2026-04-13 | User | TC-MAN-OG-001 | PASS | Image + metadata correct on all platforms. Description flagged as short (97 chars) — fixed this session. |
+| 2 | 2026-04-13 | User | TC-MAN-OG-002 | PASS (with warnings) | Author: "No author found", Publish date: missing. Author fix deployed this session. |
+| 3 | 2026-04-13 | User | TC-MAN-OG-003 | FAIL | No X/Twitter account exists for neckarshore.ai. User task — coordinate with Gary. |

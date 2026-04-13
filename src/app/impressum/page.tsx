@@ -5,11 +5,11 @@ import Logo from "@/components/Logo";
 export const metadata: Metadata = {
   title: "Impressum — neckarshore.ai",
   description:
-    "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart.",
+    "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart. Angaben gemäß § 5 TMG.",
   openGraph: {
     title: "Impressum — neckarshore.ai",
     description:
-      "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart.",
+      "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart. Angaben gemäß § 5 TMG.",
     url: "https://neckarshore.ai/impressum",
     images: [
       {

@@ -78,6 +78,24 @@ test.describe("SEO Basics", () => {
     );
   });
 
+  // OG description length — LinkedIn recommends ≥100 chars, OpenGraph.xyz recommends 110-160
+  const OG_DESC_LENGTH_TESTS = [
+    { id: "TC-SEO-015", path: "/" },
+    { id: "TC-SEO-016", path: "/impressum" },
+    { id: "TC-SEO-017", path: "/datenschutz" },
+  ];
+
+  for (const { id, path } of OG_DESC_LENGTH_TESTS) {
+    test(`${id}: ${path} og:description is at least 110 characters`, async ({ page }) => {
+      await page.goto(path);
+      const content = await page
+        .locator('meta[property="og:description"]')
+        .getAttribute("content");
+      expect(content).toBeTruthy();
+      expect(content!.length).toBeGreaterThanOrEqual(110);
+    });
+  }
+
   // OG metadata consistency per page — prevents drift where subpages
   // inherit the homepage OG title/url instead of their own.
   const OG_DRIFT_TESTS = [

@@ -44,7 +44,7 @@ Log every run in `docs/test-log.md` — one row per run (compact format):
 
 ### Test IDs
 
-Every test has a stable ID: `TC-[SUITE]-[NNN]`. Suites: `NAV`, `LNK`, `CAL`, `THM`, `RES`, `SEO`, `A11Y`.
+Every test has a stable ID: `TC-[SUITE]-[NNN]`. Suites: `NAV`, `LNK`, `CAL`, `THM`, `RES`, `SEO`, `A11Y`, `SMK`, `STAT`, `MAN-OG`.
 Use test IDs when referencing tests in logs, reports, and issues.
 
 ### Adding Tests
@@ -53,6 +53,25 @@ Use test IDs when referencing tests in logs, reports, and issues.
 - Assign the next available TC-ID in the suite
 - Viewports: 393px (iPhone 15 Pro), 414px (iPhone 14 Plus), 768px (iPad Mini)
 - Chromium only (Firefox/WebKit added when needed)
+
+## Manual Tests (Human-in-the-Loop)
+
+### Test Cases
+
+Documented in `docs/manual-tests.md`. These require a human with browser access (OG previews, LinkedIn inspector, Rich Results Test).
+
+Suites: `TC-MAN-OG-001` through `TC-MAN-OG-004`.
+
+### When to Offer
+
+At session end, after E2E tests pass, ask:
+> "E2E grün. Willst du in diesem Run die manuellen Test Cases durchführen? (`docs/manual-tests.md`)"
+
+Only offer when: OG/meta tags changed, SEO work done, or deploy to production happened.
+
+### Logging Results
+
+Log results in the "Results Log" table in `docs/manual-tests.md`. Tester is always "User".
 
 ## CI Health Check (Session Startup)
 

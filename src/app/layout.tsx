@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "neckarshore.ai — Software Development. Closer to Home.",
     description:
-      "KI-beschleunigte Softwareentwicklung aus Stuttgart. DSGVO-by-Design, Made in Germany, AI-Powered.",
+      "KI-beschleunigte Softwareentwicklung aus Stuttgart. Gleiche Zeitzone, gleiche Sprache, gleiche Datenschutzstandards — Made in Germany.",
     url: "https://neckarshore.ai",
     siteName: "neckarshore.ai",
     locale: "de_DE",
@@ -46,8 +46,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "neckarshore.ai — Software Development. Closer to Home.",
     description:
-      "KI-beschleunigte Softwareentwicklung aus Stuttgart. DSGVO-by-Design, Made in Germany, AI-Powered.",
+      "KI-beschleunigte Softwareentwicklung aus Stuttgart. Gleiche Zeitzone, gleiche Sprache, gleiche Datenschutzstandards — Made in Germany.",
     images: ["/og-image.jpg"],
+  },
+  other: {
+    "article:author": "https://www.linkedin.com/in/german-rauhut/",
   },
   robots: {
     index: true,
