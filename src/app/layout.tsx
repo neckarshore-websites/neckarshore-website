@@ -49,9 +49,6 @@ export const metadata: Metadata = {
       "KI-beschleunigte Softwareentwicklung aus Stuttgart. Gleiche Zeitzone, gleiche Sprache, gleiche Datenschutzstandards — Made in Germany.",
     images: ["/og-image.jpg"],
   },
-  other: {
-    "article:author": "https://www.linkedin.com/in/german-rauhut/",
-  },
   robots: {
     index: true,
     follow: true,
