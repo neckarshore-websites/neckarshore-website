@@ -16,3 +16,4 @@ Rows older than 14 days are deleted.
 | 9 | 2026-04-13 | — | ad-hoc | 7dea3d4 | 82 | 82 | 0 | 42s | — (post-OG-description-fix, 3 new: TC-SEO-015..017) |
 | 10 | 2026-04-13 | — | ad-hoc | 75af305 | 85 | 85 | 0 | 48s | — (post-canonical-fix, 3 new: TC-SEO-018..020) |
 | 11 | 2026-04-13 | — | session-end | 75af305 | 85 | 85 | 0 | 53s | — |
+| 12 | 2026-04-13 | — | session-end | 108cc05 | 85 | 85 | 0 | 28s | — (Session B: article:author removed, logo srcset trimmed, font preload deferred) |
