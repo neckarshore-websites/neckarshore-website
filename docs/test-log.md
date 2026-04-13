@@ -19,3 +19,5 @@ Rows older than 14 days are deleted.
 | 12 | 2026-04-13 | — | session-end | 108cc05 | 85 | 85 | 0 | 28s | — (Session B: article:author removed, logo srcset trimmed, font preload deferred) |
 | 13 | 2026-04-13 | — | session-start | 3f9efc0 | 85 | 85 | 0 | 34s | — |
 | 14 | 2026-04-13 | — | session-end | b2422ef | 85 | 85 | 0 | 37s | — (Session C: Mobile Slow Stage 2 threshold set) |
+| 15 | 2026-04-13 | — | session-start | 16abeee | 85 | 85 | 0 | 51s | — |
+| 16 | 2026-04-13 | — | session-end | 8c41c4d | 85 | 85 | 0 | 21s | — |
