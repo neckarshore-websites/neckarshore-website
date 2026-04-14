@@ -21,3 +21,5 @@ Rows older than 14 days are deleted.
 | 14 | 2026-04-13 | — | session-end | b2422ef | 85 | 85 | 0 | 37s | — (Session C: Mobile Slow Stage 2 threshold set) |
 | 15 | 2026-04-13 | — | session-start | 16abeee | 85 | 85 | 0 | 51s | — |
 | 16 | 2026-04-13 | — | session-end | 8c41c4d | 85 | 85 | 0 | 21s | — |
+| 17 | 2026-04-14 | — | session-start | 927d3d5 | 85 | 85 | 0 | 24s | — |
+| 18 | 2026-04-14 | — | ad-hoc | 927d3d5 | 85 | 85 | 0 | 30s | — (post Next 16.2.3 + lucide-react pin + optimizePackageImports) |
