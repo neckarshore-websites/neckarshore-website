@@ -38,6 +38,9 @@ See `CLAUDE.md` → "Lighthouse Device Matrix" for profile definitions and gate 
 | 17 | 2026-04-13 | 3f9efc0 | mobile-slow | 67 | 96 | 100 | 100 | 9.6s | 120ms | 0.001 | Stage 2 baseline run 1/3 |
 | 18 | 2026-04-13 | 3f9efc0 | mobile-slow | 68 | 96 | 100 | 100 | 9.5s | 46ms | 0.001 | Stage 2 baseline run 2/3 |
 | 19 | 2026-04-13 | 3f9efc0 | mobile-slow | 68 | 96 | 100 | 100 | 9.4s | 44ms | 0.001 | Stage 2 baseline run 3/3 |
+| 20 | 2026-04-19 | 2fcc117 | desktop | 100 | 96 | 100 | — | 719ms | 13ms | 0.004 | ci (post R4 OMNIXIS→OMNOPSIS rebrand) |
+| 21 | 2026-04-19 | 2fcc117 | mobile-4g | 95 | 96 | 100 | — | 2.9s | 51ms | 0.037 | ci (post R4 OMNIXIS→OMNOPSIS rebrand) |
+| 22 | 2026-04-19 | 2fcc117 | mobile-slow | 68 | 96 | 100 | — | 9.3s | 104ms | 0.037 | ci (post R4 OMNIXIS→OMNOPSIS rebrand) |
 
 > **Baseline established 2026-04-10 (local, rows 1/3).** Mobile Slow (Edge-5G) reveals the blind spot: Perf 70-71, LCP 9.6s. This is the scenario a colleague reported from France on weak 5G. CI vs local delta is minimal (±1 point).
 
