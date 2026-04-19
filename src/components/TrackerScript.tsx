@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { BRAND } from "@/lib/brand";
 
 /** Extract UTM parameters from current URL (once per page load). */
 function getUtmParams(): Record<string, string> {
@@ -95,7 +96,7 @@ export default function TrackerScript() {
     const sectionIds = [
       "services",
       "why-nearshore",
-      "omnixis",
+      BRAND.SECTION_ID,
       "founder",
       "cta",
       "faq",

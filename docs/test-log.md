@@ -23,3 +23,4 @@ Rows older than 14 days are deleted.
 | 16 | 2026-04-13 | — | session-end | 8c41c4d | 85 | 85 | 0 | 21s | — |
 | 17 | 2026-04-14 | — | session-start | 927d3d5 | 85 | 85 | 0 | 24s | — |
 | 18 | 2026-04-14 | — | ad-hoc | 927d3d5 | 85 | 85 | 0 | 30s | — (post Next 16.2.3 + lucide-react pin + optimizePackageImports) |
+| 19 | 2026-04-19 | — | ad-hoc | (pre-commit) | 85 | 85 | 0 | 53s | — (R4 OMNIXIS→OMNOPSIS rebrand: lib/brand.ts + page.tsx + Nav + TrackerScript + llms.txt + 3 e2e specs; section anchor #omnixis→#omnopsis) |

@@ -11,7 +11,7 @@ export const VIEWPORTS = [
 ] as const;
 
 /** Homepage anchor sections */
-export const SECTIONS = ["services", "why-nearshore", "omnixis", "founder"] as const;
+export const SECTIONS = ["services", "why-nearshore", "omnopsis", "founder"] as const;
 
 /** Calendly booking URL */
 export const CALENDLY_URL = "https://calendly.com/rauhut/20min";

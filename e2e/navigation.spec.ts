@@ -10,7 +10,7 @@ test.describe("Navigation", () => {
   const scrollTests: Record<string, string> = {
     "TC-NAV-002": "services",
     "TC-NAV-003": "why-nearshore",
-    "TC-NAV-004": "omnixis",
+    "TC-NAV-004": "omnopsis",
     "TC-NAV-005": "founder",
   };
 

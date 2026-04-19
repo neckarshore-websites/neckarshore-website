@@ -4,11 +4,12 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
+import { BRAND } from "@/lib/brand";
 
 const navLinks = [
   { href: "/#services", label: "Services", track: "nav_services" },
   { href: "/#why-nearshore", label: "Warum Nearshore", track: "nav_why-nearshore" },
-  { href: "/#omnixis", label: "OMNIXIS", track: "nav_omnixis" },
+  { href: `/#${BRAND.SECTION_ID}`, label: BRAND.NAV_LABEL, track: BRAND.TRACK_KEY },
   { href: "/#founder", label: "Über uns", track: "nav_founder" },
 ];
 

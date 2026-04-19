@@ -14,7 +14,7 @@ test.describe("Smoke @smoke", () => {
 
   test("TC-SMK-002: key sections present on homepage", async ({ page }) => {
     await page.goto("/");
-    for (const id of ["services", "why-nearshore", "omnixis", "founder"]) {
+    for (const id of ["services", "why-nearshore", "omnopsis", "founder"]) {
       await expect(page.locator(`#${id}`)).toBeAttached();
     }
   });

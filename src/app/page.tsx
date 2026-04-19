@@ -20,6 +20,7 @@ import Logo from "@/components/Logo";
 import EmailObfuscator from "@/components/EmailObfuscator";
 import StatsGrid, { type StatsData } from "@/components/StatsGrid";
 import FounderImage from "@/components/FounderImage";
+import { BRAND } from "@/lib/brand";
 
 /* Code-split client components — separate chunks, not in main bundle */
 const CookieBanner = dynamic(() => import("@/components/CookieBanner"));
@@ -28,13 +29,12 @@ const ImageModal = dynamic(() => import("@/components/ImageModal"));
 
 /* ---------- constants ---------- */
 
-const OMNIXIS_DAY_ONE = new Date("2026-03-22");
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
 
 const faqItems = [
   {
-    q: "Was ist OMNIXIS?",
-    a: "OMNIXIS Documentor+X ist unsere KI-first Documentation Engine. Sie zieht automatisch aus Git, Jira und Confluence und generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten. Fail-closed: Wenn die Evidenz schwach ist, verweigert das System die Antwort — lieber schweigen als lügen.",
+    q: `Was ist ${BRAND.PRODUCT_SHORT}?`,
+    a: `${BRAND.PRODUCT_NAME} ist unsere KI-first Documentation Engine. Sie zieht automatisch aus Git, Jira und Confluence und generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten. Fail-closed: Wenn die Evidenz schwach ist, verweigert das System die Antwort — lieber schweigen als lügen.`,
   },
   {
     q: "Was bedeutet BYOLLM?",
@@ -56,7 +56,7 @@ const faqItems = [
 
 function getDaysSinceStart(): number {
   const now = new Date();
-  const diff = now.getTime() - OMNIXIS_DAY_ONE.getTime();
+  const diff = now.getTime() - BRAND.DAY_ONE.getTime();
   return Math.max(1, Math.ceil(diff / (1000 * 60 * 60 * 24)));
 }
 
@@ -297,7 +297,7 @@ export default function Home() {
                   icon: FileText,
                   title: "Documentation Automation",
                   subtitle: "Doku, die sich selbst schreibt.",
-                  text: "Unser Flaggschiff-Produkt OMNIXIS generiert automatisch Compliance-Doku, technische Doku und Chatbot-Antworten aus eurem Git, Jira und Confluence. Fail-closed: lieber schweigen als lügen.",
+                  text: `Unser Flaggschiff-Produkt ${BRAND.PRODUCT_SHORT} generiert automatisch Compliance-Doku, technische Doku und Chatbot-Antworten aus eurem Git, Jira und Confluence. Fail-closed: lieber schweigen als lügen.`,
                 },
                 {
                   icon: Brain,
@@ -342,8 +342,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ===== OMNIXIS TEASER ===== */}
-        <section id="omnixis" className="bg-primary px-4 py-20 md:px-6 md:py-24">
+        {/* ===== OMNOPSIS TEASER ===== */}
+        <section id={BRAND.SECTION_ID} className="bg-primary px-4 py-20 md:px-6 md:py-24">
           <div className="mx-auto max-w-[1200px]">
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
@@ -351,7 +351,7 @@ export default function Home() {
                   Unser Flaggschiff
                 </p>
                 <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
-                  OMNIXIS Documentor+X
+                  {BRAND.PRODUCT_NAME}
                 </h2>
                 <p className="mt-6 text-lg leading-relaxed text-text-secondary">
                   KI-first Documentation Engine. Zieht automatisch aus Git, Jira und Confluence —
@@ -365,7 +365,7 @@ export default function Home() {
                 <p className="mt-6 text-sm font-mono text-text-secondary/70">
                   <ImageModal
                     src="/images/omnixis-conceived-whiteboard-2024-12-11.jpg"
-                    alt="OMNIXIS Whiteboard-Skizze, Sindelfingen, Dezember 2024"
+                    alt={`${BRAND.PRODUCT_SHORT} Whiteboard-Skizze, Sindelfingen, Dezember 2024`}
                     className="inline-flex min-h-[24px] items-center cursor-pointer text-secondary underline decoration-secondary/30 underline-offset-2 transition-colors hover:text-text-primary hover:decoration-secondary"
                   >
                     Conceived
@@ -374,7 +374,7 @@ export default function Home() {
                   <br />
                   <ImageModal
                     src="/images/omnixis-born-first-session-2026-03-22.png"
-                    alt="Erste OMNIXIS Claude Code Session, März 2026"
+                    alt={`Erste ${BRAND.PRODUCT_SHORT} Claude Code Session, März 2026`}
                     className="inline-flex min-h-[24px] items-center cursor-pointer text-secondary underline decoration-secondary/30 underline-offset-2 transition-colors hover:text-text-primary hover:decoration-secondary"
                   >
                     Born
@@ -412,7 +412,7 @@ export default function Home() {
                 <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
                   Ehemaliger Mercedes-Benz IT — jetzt Gründer von neckarshore.ai in Stuttgart. Ich
                   baue Software mit KI-Beschleunigung und automatisiere alles, was keiner machen will.
-                  Mein Flaggschiff OMNIXIS dokumentiert sich selbst — weil niemand Doku schreiben will,
+                  Mein Flaggschiff {BRAND.PRODUCT_SHORT} dokumentiert sich selbst — weil niemand Doku schreiben will,
                   aber alle meckern wenn keine da ist.
                 </p>
                 <p className="mt-4 max-w-2xl text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
