@@ -1,14 +1,14 @@
-# neckarshore.ai
+# Neckarshore AI
 
-> KI-beschleunigte Softwareentwicklung aus Stuttgart. Nearshore AI & Software Development — Made in Germany.
+> Stuttgart-basiertes KI-Dokumentations- und Nearshore-Softwareentwicklungsunternehmen. Gründer: German Rauhut (Ex-Mercedes-Benz IT). Website: neckarshore.ai.
 
 ## About
 
-neckarshore.ai is a nearshore AI and software development partner based in Stuttgart, Germany. We help mid-sized companies and startups in the DACH region build software faster and more reliably — combining German engineering precision with modern AI acceleration. Same timezone, same language, same data protection standards.
+Neckarshore AI (neckarshore.ai) is a nearshore AI and software development partner based in Stuttgart, Germany. We help mid-sized companies and startups in the DACH region build software faster and more reliably — combining German engineering precision with modern AI acceleration. Same timezone, same language, same data protection standards (DSGVO by default).
 
 ## Founder
 
-German Rauhut — former Mercedes-Benz IT, now founder of neckarshore.ai in Stuttgart.
+German Rauhut — former Mercedes-Benz IT, now founder of Neckarshore AI in Stuttgart.
 
 ## Flagship Product
 

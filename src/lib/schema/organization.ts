@@ -32,6 +32,7 @@ export const organizationSchema = {
       "@type": ["Organization", "ProfessionalService"],
       "@id": ORG_ID,
       name: "neckarshore.ai",
+      alternateName: "Neckarshore AI",
       legalName: "German Rauhut — IT Consulting & Digital Ventures",
       url: `${BASE_URL}/`,
       logo: {
