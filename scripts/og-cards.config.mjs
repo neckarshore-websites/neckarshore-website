@@ -110,6 +110,25 @@ export const cards = [
     ],
   },
 
+  // ─── GitHub Repo Card: obsidian-x-scraper ───
+  // Repo currently private; card prepared for future public release.
+  {
+    label: "GitHub Repo Card — obsidian-x-scraper",
+    dest: "docs/branding/github-social-preview-x-scraper.jpg",
+    width: 1280,
+    height: 640,
+    padding: 80,
+    headline: "X",
+    headlineAccent: "in Markdown.",
+    tagline:
+      "Obsidian skill for X profiles and threads via the official X API. Output: neutral Markdown briefings polished by Anthropic Haiku — ToS-compliant, no third-party scraping.",
+    chips: [
+      { text: "Skill", variant: "dot" },
+      { text: "X API", variant: "plain" },
+      { text: "Open Source", variant: "accent" },
+    ],
+  },
+
   // ─── GitHub Repo Card: obsidian-social-scrapers-common (L18c) ───
   {
     label: "GitHub Repo Card — obsidian-social-scrapers-common",
