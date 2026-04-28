@@ -72,26 +72,26 @@ jobs:
             TOTAL_COMMITS=$((TOTAL_COMMITS + COMMITS))
           done
 
-          # Fetch OMNIXIS backend stats (tests + endpoints) if available
-          OMNIXIS_REPO=$(echo "$CONFIG" | jq -r '.omnixisStatsRepo')
-          OMNIXIS_PATH=$(echo "$CONFIG" | jq -r '.omnixisStatsPath')
+          # Fetch OMNOPSIS backend stats (tests + endpoints) if available
+          OMNOPSIS_REPO=$(echo "$CONFIG" | jq -r '.omnopsisStatsRepo')
+          OMNOPSIS_PATH=$(echo "$CONFIG" | jq -r '.omnopsisStatsPath')
 
           TESTS=464
           ENDPOINTS=92
 
-          OMNIXIS_STATS=$(curl -sf \
+          OMNOPSIS_STATS=$(curl -sf \
             -H "Authorization: Bearer ${STATS_PAT}" \
             -H "Accept: application/vnd.github.v3.raw" \
-            "https://api.github.com/repos/${OMNIXIS_REPO}/contents/${OMNIXIS_PATH}" 2>/dev/null || echo "")
+            "https://api.github.com/repos/${OMNOPSIS_REPO}/contents/${OMNOPSIS_PATH}" 2>/dev/null || echo "")
 
-          if [ -n "$OMNIXIS_STATS" ] && echo "$OMNIXIS_STATS" | jq . >/dev/null 2>&1; then
-            FETCHED_TESTS=$(echo "$OMNIXIS_STATS" | jq '.tests.total // 0')
-            FETCHED_ENDPOINTS=$(echo "$OMNIXIS_STATS" | jq '.endpoints // 0')
+          if [ -n "$OMNOPSIS_STATS" ] && echo "$OMNOPSIS_STATS" | jq . >/dev/null 2>&1; then
+            FETCHED_TESTS=$(echo "$OMNOPSIS_STATS" | jq '.tests.total // 0')
+            FETCHED_ENDPOINTS=$(echo "$OMNOPSIS_STATS" | jq '.endpoints // 0')
             if [ "$FETCHED_TESTS" -gt 0 ]; then TESTS=$FETCHED_TESTS; fi
             if [ "$FETCHED_ENDPOINTS" -gt 0 ]; then ENDPOINTS=$FETCHED_ENDPOINTS; fi
-            echo "--- OMNIXIS stats fetched: tests=${TESTS}, endpoints=${ENDPOINTS} ---"
+            echo "--- OMNOPSIS stats fetched: tests=${TESTS}, endpoints=${ENDPOINTS} ---"
           else
-            echo "--- OMNIXIS stats not available, using fallbacks ---"
+            echo "--- OMNOPSIS stats not available, using fallbacks ---"
           fi
 
           echo ""
