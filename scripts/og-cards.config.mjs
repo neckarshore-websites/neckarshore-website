@@ -74,6 +74,60 @@ export const cards = [
     ],
   },
 
+  // ─── GitHub Repo Card: obsidian-instagram-scraper (L18a) ───
+  {
+    label: "GitHub Repo Card — obsidian-instagram-scraper",
+    dest: "docs/branding/github-social-preview-instagram-scraper.jpg",
+    width: 1280,
+    height: 640,
+    padding: 80,
+    headline: "Instagram",
+    headlineAccent: "in Markdown.",
+    tagline:
+      "Apify-powered Obsidian skill for Instagram profiles and Reels. Reels transcribed locally via whisper.cpp, posts polished into neutral Markdown briefings by Anthropic Haiku.",
+    chips: [
+      { text: "Skill", variant: "dot" },
+      { text: "Apify", variant: "plain" },
+      { text: "Open Source", variant: "accent" },
+    ],
+  },
+
+  // ─── GitHub Repo Card: obsidian-linkedin-scraper (L18b) ───
+  {
+    label: "GitHub Repo Card — obsidian-linkedin-scraper",
+    dest: "docs/branding/github-social-preview-linkedin-scraper.jpg",
+    width: 1280,
+    height: 640,
+    padding: 80,
+    headline: "LinkedIn",
+    headlineAccent: "in Markdown.",
+    tagline:
+      "Apify-powered Obsidian skill for LinkedIn profiles and posts. Output: neutral Markdown briefings polished by Anthropic Haiku — no engagement-bait formatting.",
+    chips: [
+      { text: "Skill", variant: "dot" },
+      { text: "Apify", variant: "plain" },
+      { text: "Open Source", variant: "accent" },
+    ],
+  },
+
+  // ─── GitHub Repo Card: obsidian-social-scrapers-common (L18c) ───
+  {
+    label: "GitHub Repo Card — obsidian-social-scrapers-common",
+    dest: "docs/branding/github-social-preview-scrapers-common.jpg",
+    width: 1280,
+    height: 640,
+    padding: 80,
+    headline: "Social Scrapers",
+    headlineAccent: "Shared core.",
+    tagline:
+      "Shared TypeScript utilities for the Obsidian social-scraper family — Apify wrappers, Haiku polishing, Markdown rendering. Lego blocks, no duplication.",
+    chips: [
+      { text: "TypeScript", variant: "dot" },
+      { text: "Shared Lib", variant: "plain" },
+      { text: "Open Source", variant: "accent" },
+    ],
+  },
+
   // ─── GitHub Repo Card: OMNOPSIS (core product) ───
   // Blocked on MASCHIN positioning brief — see docs/branding/positioning-request-maschin.md
   {
