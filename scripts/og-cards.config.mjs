@@ -84,7 +84,7 @@ export const cards = [
     headline: "Instagram",
     headlineAccent: "in Markdown.",
     tagline:
-      "Apify-powered Obsidian skill for Instagram profiles and Reels. Reels transcribed locally via whisper.cpp, posts polished into neutral Markdown briefings by Anthropic Haiku.",
+      "Apify-powered Obsidian skill for Instagram profiles and Reels. Reels transcribed locally via whisper.cpp, posts polished into neutral Markdown briefings by the AI model of your choice.",
     chips: [
       { text: "Skill", variant: "dot" },
       { text: "Apify", variant: "plain" },
@@ -102,7 +102,7 @@ export const cards = [
     headline: "LinkedIn",
     headlineAccent: "in Markdown.",
     tagline:
-      "Apify-powered Obsidian skill for LinkedIn profiles and posts. Output: neutral Markdown briefings polished by Anthropic Haiku — no engagement-bait formatting.",
+      "Apify-powered Obsidian skill for LinkedIn profiles and posts. Output: neutral Markdown briefings polished by the AI model of your choice — no engagement-bait formatting.",
     chips: [
       { text: "Skill", variant: "dot" },
       { text: "Apify", variant: "plain" },
@@ -121,7 +121,7 @@ export const cards = [
     headline: "X",
     headlineAccent: "in Markdown.",
     tagline:
-      "Obsidian skill for X profiles and threads via the official X API. Output: neutral Markdown briefings polished by Anthropic Haiku — ToS-compliant, no third-party scraping.",
+      "Obsidian skill for X profiles and threads via the official X API. Output: neutral Markdown briefings polished by the AI model of your choice — ToS-compliant, no third-party scraping.",
     chips: [
       { text: "Skill", variant: "dot" },
       { text: "X API", variant: "plain" },
@@ -139,7 +139,7 @@ export const cards = [
     headline: "Social Scrapers",
     headlineAccent: "Shared core.",
     tagline:
-      "Shared TypeScript utilities for the Obsidian social-scraper family — Apify wrappers, Haiku polishing, Markdown rendering. Lego blocks, no duplication.",
+      "Shared TypeScript utilities for the Obsidian social-scraper family — Apify wrappers, AI polishing, Markdown rendering. Lego blocks, no duplication.",
     chips: [
       { text: "TypeScript", variant: "dot" },
       { text: "Shared Lib", variant: "plain" },
