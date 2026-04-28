@@ -83,7 +83,7 @@ OG scraper support for WebP is patchy. A single well-compressed JPEG serves ever
 | 1 | neckarshore.ai site OG | `neckarshore.ai OG (website SSR)` | `public/og-image.jpg` | Live, referenced in `src/app/layout.tsx` |
 | 2 | GitHub: `neckarshore-website` | `GitHub Repo Card — neckarshore-website` | `docs/branding/github-social-preview-website.jpg` | Generated, awaiting manual upload to GitHub repo Settings |
 | 3 | GitHub: `obsidian-vault-autopilot` | `GitHub Repo Card — obsidian-vault-autopilot` | `docs/branding/github-social-preview-vault-autopilot.jpg` | Generated, awaiting manual upload to GitHub repo Settings |
-| 4 | GitHub: `OMNIXIS` | `GitHub Repo Card — OMNIXIS` | — | Skipped — awaiting MASCHIN positioning brief ([positioning-request-maschin.md](./positioning-request-maschin.md)) |
+| 4 | GitHub: `OMNOPSIS` | `GitHub Repo Card — OMNOPSIS` | — | Skipped — awaiting MASCHIN positioning brief ([positioning-request-maschin.md](./positioning-request-maschin.md)) |
 | 5 | GitHub: `Comedy-Execution-Engine` | `GitHub Repo Card — Comedy-Execution-Engine` | — | Skipped — awaiting MASCHIN positioning brief ([positioning-request-maschin.md](./positioning-request-maschin.md)) |
 
 ---

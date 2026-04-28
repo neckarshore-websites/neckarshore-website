@@ -2,19 +2,19 @@
   "startDate": "2026-03-22",
   "repos": [
     { "owner": "GmanFooFoo", "name": "MEMORY-context-for-AI", "private": true },
-    { "owner": "GmanFooFoo", "name": "OMNIXIS", "private": true },
+    { "owner": "GmanFooFoo", "name": "omnopsis-backend", "private": true },
     { "owner": "GmanFooFoo", "name": "omnixis-AI-SW-documention", "private": true },
-    { "owner": "GmanFooFoo", "name": "OMNIXIS-legacy-document-importer", "private": true },
-    { "owner": "GmanFooFoo", "name": "OMNIXIS-planning", "private": true },
-    { "owner": "GmanFooFoo", "name": "OMNIXIS-test-management", "private": true },
+    { "owner": "omnopsis-ai", "name": "omnopsis-document-importer", "private": true },
+    { "owner": "GmanFooFoo", "name": "omnopsis-planning", "private": true },
+    { "owner": "GmanFooFoo", "name": "omnopsis-test-management", "private": true },
     { "owner": "GmanFooFoo", "name": "png-AI-documentation-BPMN", "private": true },
     { "owner": "GmanFooFoo", "name": "promptHamster", "private": true },
     { "owner": "neckarshore-ai", "name": "hq", "private": true },
     { "owner": "neckarshore-ai", "name": "mmp-obsidian-vault-autopilot", "private": false },
     { "owner": "neckarshore-ai", "name": "neckarshore-website", "private": false },
-    { "owner": "neckarshore-ai", "name": "OMNIXIS-prod-or-pretend", "private": false },
+    { "owner": "neckarshore-ai", "name": "mmp-prod-or-pretend", "private": false },
     { "owner": "neckarshore-ai", "name": "tools-claude-plugins", "private": false }
   ],
-  "omnixisStatsRepo": "GmanFooFoo/OMNIXIS",
-  "omnixisStatsPath": "backend/stats.json"
+  "omnopsisStatsRepo": "GmanFooFoo/omnopsis-backend",
+  "omnopsisStatsPath": "backend/stats.json"
 }

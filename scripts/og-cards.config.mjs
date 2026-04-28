@@ -74,11 +74,11 @@ export const cards = [
     ],
   },
 
-  // ─── GitHub Repo Card: OMNIXIS (core product) ───
+  // ─── GitHub Repo Card: OMNOPSIS (core product) ───
   // Blocked on MASCHIN positioning brief — see docs/branding/positioning-request-maschin.md
   {
-    label: "GitHub Repo Card — OMNIXIS",
-    dest: "docs/branding/github-social-preview-omnixis.jpg",
+    label: "GitHub Repo Card — OMNOPSIS",
+    dest: "docs/branding/github-social-preview-omnopsis.jpg",
     width: 1280,
     height: 640,
     padding: 80,
