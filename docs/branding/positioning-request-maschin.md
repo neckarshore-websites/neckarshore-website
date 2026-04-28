@@ -28,12 +28,12 @@ Open them in Finder Quicklook or your image viewer of choice. Both share an iden
 
 ---
 
-## Repo 1: OMNIXIS
+## Repo 1: OMNOPSIS
 
 **Context I have:**
-- `~/Developer/projects/OMNIXIS/README.md` line 1-3:
-  > OMNIXIS — AI-first documentation engine. Connects Git, Jira, and Confluence to generate compliance docs, technical documentation, and a persona-aware chatbot.
-- Session-state calls OMNIXIS the "flagship product" and refers to "OMNIXIS Documentor" as the product positioning
+- `~/Developer/projects/OMNOPSIS/README.md` line 1-3:
+  > OMNOPSIS — AI-first documentation engine. Connects Git, Jira, and Confluence to generate compliance docs, technical documentation, and a persona-aware chatbot.
+- Session-state calls OMNOPSIS the "flagship product" and refers to "OMNOPSIS Documentor" as the product positioning
 - Target audience: DACH Mittelstand CTOs, enterprise-ready, "Made in Germany" / DSGVO
 - Name is parked — "Documenter vs Documentor" decision deferred until product-market-fit (see pending decisions in session-state)
 - Not yet public — card is aspirational, not urgent
@@ -42,7 +42,7 @@ Open them in Finder Quicklook or your image viewer of choice. Both share an iden
 - Headline + Accent (e.g., "Documentation that" / "writes itself." or similar — your call)
 - Tagline (one sentence, can be German or English — your call based on target audience)
 - 3 chips — suggestions: "Made in Germany" / "DSGVO" / "NestJS" or "Enterprise" / "Self-Hosted" / "AI-Powered" — your call
-- Should the wordmark stay `NECKARSHORE.AI` (product-under-brand) or switch to `OMNIXIS` as its own wordmark? The current system assumes brand block is fixed — if you want OMNIXIS standalone, that's a template fork, not a config change. **Recommendation:** keep `NECKARSHORE.AI` for now, switch later if OMNIXIS gets its own brand system.
+- Should the wordmark stay `NECKARSHORE.AI` (product-under-brand) or switch to `OMNOPSIS` as its own wordmark? The current system assumes brand block is fixed — if you want OMNOPSIS standalone, that's a template fork, not a config change. **Recommendation:** keep `NECKARSHORE.AI` for now, switch later if OMNOPSIS gets its own brand system.
 
 ## Repo 2: Comedy-Execution-Engine
 
@@ -68,7 +68,7 @@ Open them in Finder Quicklook or your image viewer of choice. Both share an iden
 Drop your answers back as a markdown block like this (I'll copy-paste into `scripts/og-cards.config.mjs`):
 
 ```js
-// OMNIXIS
+// OMNOPSIS
 headline: "...",
 headlineAccent: "...",
 tagline: "...",

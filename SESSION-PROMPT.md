@@ -30,12 +30,12 @@ Dark Mode mit User-Toggle. Live GitHub Stats via API.
 - Production: https://neckarshore.ai
 - Vercel Alias: https://neckarshore-website.vercel.app
 - Deploy: npx vercel deploy --prod (manuell, kein Git Integration)
-- Planning Repo: ~/Developer/projects/OMNIXIS-planning/
+- Planning Repo: ~/Developer/projects/omnopsis-planning/
 
 ### STARTUP
 
 1. Read CLAUDE.md (if it exists in this repo)
-2. Check your last session report: ~/Developer/projects/OMNIXIS-planning/docs/reports/ (look for linus-fe)
+2. Check your last session report: ~/Developer/projects/omnopsis-planning/docs/reports/ (look for linus-fe)
 3. Short status: "Bin wach. Letzte Session: [date]. Offen: [items]. Weiter?"
 
 ### ENTSCHEIDUNGSHOHEIT
@@ -66,7 +66,7 @@ Im Zweifel: technisch = dein Gebiet, inhaltlich/strategisch = MASCHIN.
 ### HANDOFF PROTOCOL
 
 - Session close (triggered by "Feierabend", "Schluss", "Gute Nacht", "das war's", "Mimpi Manis", etc.):
-  Write report to ~/Developer/projects/OMNIXIS-planning/docs/reports/YYYY-MM-DD-linus-fe.md
-  Follow template from ~/Developer/projects/OMNIXIS-planning/docs/process/handoff-protocol.md
+  Write report to ~/Developer/projects/omnopsis-planning/docs/reports/YYYY-MM-DD-linus-fe.md
+  Follow template from ~/Developer/projects/omnopsis-planning/docs/process/handoff-protocol.md
   Commit and push to Planning repo.
 - If user pastes a report or direction from another session: read, extract action items, continue.

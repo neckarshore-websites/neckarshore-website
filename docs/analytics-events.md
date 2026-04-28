@@ -10,7 +10,7 @@ Alle Tracking-Events auf neckarshore.ai. DSGVO-konform: kein Cookie, kein Finger
 | `scroll_depth` | Scroll-Schwelle erreicht | `depth` (25/50/75/100) | `{depth: 50}` |
 | `cta_click` | Klick auf CTA-Button | `action` | `{action: "cta_click"}` |
 | `nav_click` | Klick auf Nav-Link | `action` | `{action: "nav_services"}` |
-| `section_view` | Section zu 40% sichtbar | `section` | `{section: "omnixis"}` |
+| `section_view` | Section zu 40% sichtbar | `section` | `{section: "omnopsis"}` |
 
 ## Nav-Links (nav_click)
 
@@ -18,14 +18,14 @@ Alle Tracking-Events auf neckarshore.ai. DSGVO-konform: kein Cookie, kein Finger
 |--------|------|
 | `nav_services` | #services |
 | `nav_why-nearshore` | #why-nearshore |
-| `nav_omnixis` | #omnixis |
+| `nav_omnopsis` | #omnopsis |
 | `nav_founder` | #founder |
 
 ## Sections (section_view)
 
 Feuert **einmal pro Session** wenn die Section zu 40% im Viewport ist:
 
-`services`, `why-nearshore`, `omnixis`, `founder`, `cta`, `faq`
+`services`, `why-nearshore`, `omnopsis`, `founder`, `cta`, `faq`
 
 ## Daten abfragen
 
