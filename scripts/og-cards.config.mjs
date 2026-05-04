@@ -147,6 +147,44 @@ export const cards = [
     ],
   },
 
+  // ─── GitHub Repo Card: imap-mailbox-cleanup ───
+  // Personal repo (GmanFooFoo namespace), produced in the neckarshore.ai
+  // visual system because it's part of the user's broader portfolio surface.
+  {
+    label: "GitHub Repo Card — imap-mailbox-cleanup",
+    dest: "docs/branding/github-social-preview-imap-cleanup.jpg",
+    width: 1280,
+    height: 640,
+    padding: 80,
+    headline: "Mailbox Triage.",
+    headlineAccent: "Dry-run first.",
+    tagline:
+      "Hybrid CLI + Claude Code Skill for IONOS IMAP cleanup. Dry-run by default, soft-delete only, audit-logged. Battle-tested: 7.982 → 690 messages without a single loss.",
+    chips: [
+      { text: "Python", variant: "dot" },
+      { text: "CLI + Skill", variant: "plain" },
+      { text: "MIT Licensed", variant: "accent" },
+    ],
+  },
+
+  // ─── GitHub Repo Card: neckarshore-easter-eggs ───
+  {
+    label: "GitHub Repo Card — neckarshore-easter-eggs",
+    dest: "docs/branding/github-social-preview-easter-eggs.jpg",
+    width: 1280,
+    height: 640,
+    padding: 80,
+    headline: "Session Easter Eggs.",
+    headlineAccent: "Auto-synced.",
+    tagline:
+      "Songs, films, posters and quotes from an AI-orchestration team's session-close rituals. Hallucination-guarded — only real songs, real films, real quotes make it in.",
+    chips: [
+      { text: "Skills", variant: "dot" },
+      { text: "Verified", variant: "plain" },
+      { text: "Open Source", variant: "accent" },
+    ],
+  },
+
   // ─── GitHub Repo Card: OMNOPSIS (core product) ───
   // Blocked on MASCHIN positioning brief — see docs/branding/positioning-request-maschin.md
   {
