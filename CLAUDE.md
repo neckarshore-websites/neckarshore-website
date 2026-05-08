@@ -165,5 +165,5 @@ Expected `@types`: `['Organization','ProfessionalService']`, `Person`, `WebSite`
 ### Related
 
 - Schema source of truth: `lib/schema/organization.ts`
-- Planning decision: AD-19 — JsonLd via Native Script Tag (OMNIXIS-planning/docs/decisions/)
-- Incident reports: Linus Session B + C (OMNIXIS-planning/docs/reports/2026-04-10-linus-fe-{b,c}.md)
+- Planning decision: AD-19 — JsonLd via Native Script Tag (omnopsis-planning/docs/decisions/)
+- Incident reports: Linus Session B + C (omnopsis-planning/docs/reports/2026-04-10-linus-fe-{b,c}.md)
