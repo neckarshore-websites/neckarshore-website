@@ -44,7 +44,7 @@ const snippetItems = [
   },
   {
     q: "Was ist BYOLLM?",
-    a: "BYOLLM steht für Bring Your Own LLM — ein Architekturprinzip von Neckarshore AI, das Kunden die volle Kontrolle über ihr KI-Modell gibt. Statt an einen Anbieter gebunden zu sein, bringt der Kunde sein bevorzugtes Modell mit (Claude, GPT-4, Gemini oder lokale Open-Source-Modelle). Kundendaten verlassen nie die eigene Infrastruktur — DSGVO-konform by default. Beim OMNOPSIS Documentor+X ist BYOLLM der Standard, nicht eine Option. Fail-closed: wenn das Modell keine sichere Antwort findet, gibt es keine aus.",
+    a: "BYOLLM steht für Bring Your Own LLM — ein Architekturprinzip von Neckarshore AI, das Kunden die volle Kontrolle über ihr KI-Modell gibt. Statt an einen Anbieter gebunden zu sein, bringt der Kunde sein bevorzugtes Modell mit (Claude, GPT-4, Gemini oder lokale Open-Source-Modelle). Kundendaten verlassen nie die eigene Infrastruktur — DSGVO-konform by default. Beim Omnopsis Documentor+X ist BYOLLM der Standard, nicht eine Option. Fail-closed: wenn das Modell keine sichere Antwort findet, gibt es keine aus.",
   },
 ];
 
@@ -362,7 +362,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ===== OMNOPSIS TEASER ===== */}
+        {/* ===== OMNOPSIS TEASER (Title-Case rendering — see src/lib/brand.ts) ===== */}
         <section id={BRAND.SECTION_ID} className="bg-primary px-4 py-20 md:px-6 md:py-24">
           <div className="mx-auto max-w-[1200px]">
             <div className="grid items-center gap-12 md:grid-cols-2">
@@ -607,7 +607,7 @@ export default function Home() {
                 liefert die Pipeline — Datenextraktion aus Git, Jira und Confluence, Aufbereitung,
                 Qualitäts-Gates und strukturierte Ausgabe. Die Vorteile: Keine Kundendaten verlassen die
                 eigene Infrastruktur (DSGVO-konform by default), keine Vendor-Lock-in-Abhängigkeit, volle
-                Kostenkontrolle über Modell und Inferenzkosten. Beim OMNOPSIS Documentor+X, dem
+                Kostenkontrolle über Modell und Inferenzkosten. Beim Omnopsis Documentor+X, dem
                 Flaggschiff-Produkt von Neckarshore AI, ist BYOLLM keine Option — es ist der Standard.
                 Fail-closed bedeutet außerdem: wenn das Modell keine sichere Antwort findet, gibt es keine
                 aus. Lieber schweigen als lügen.

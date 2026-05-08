@@ -12,12 +12,12 @@ German Rauhut — former Mercedes-Benz IT, now founder of Neckarshore AI in Stut
 
 ## Flagship Product
 
-OMNOPSIS Documentor+X — an AI-first documentation engine that automatically generates compliance docs, technical documentation, and persona-aware chatbot responses from Git, Jira, and Confluence. BYOLLM (Bring Your Own LLM), fail-closed architecture, European hosting.
+Omnopsis Documentor+X — an AI-first documentation engine that automatically generates compliance docs, technical documentation, and persona-aware chatbot responses from Git, Jira, and Confluence. BYOLLM (Bring Your Own LLM), fail-closed architecture, European hosting.
 
 ## Services
 
 1. AI-Powered Development — NestJS, TypeScript, PostgreSQL production stack
-2. Documentation Automation — OMNOPSIS Documentor+X
+2. Documentation Automation — Omnopsis Documentor+X
 3. AI Consulting & Strategy — LLM selection, automation assessment
 4. DSGVO-by-Design — BYOLLM, tenant isolation, German hosting
 5. Quality Engineering — 300+ automated tests, OWASP LLM Top 10, EU AI Act
