@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { store } from "@/lib/analytics-store";
-import { createHash } from "crypto";
+import { createHash, timingSafeEqual } from "crypto";
 
 // ---------------------------------------------------------------------------
 // Config
@@ -60,6 +60,44 @@ function getClientIp(req: NextRequest): string {
   const xff = req.headers.get("x-forwarded-for");
   if (xff) return xff.split(",")[0].trim();
   return req.headers.get("x-real-ip") || "0.0.0.0";
+}
+
+// ---------------------------------------------------------------------------
+// Auth — GET only (POST stays public for visitor pings)
+// ---------------------------------------------------------------------------
+
+/**
+ * Constant-time comparison of provided Bearer token vs ANALYTICS_READ_TOKEN.
+ *
+ * Fail-closed: if the env var is absent or empty, all GET requests are
+ * rejected — even with a token provided. This prevents a missing-env-var
+ * deploy from making the endpoint silently world-readable.
+ *
+ * Note: this handler runs in the Node runtime (default — no `export const
+ * runtime`). If flipped to Edge in future, replace `timingSafeEqual` with
+ * the Web Crypto `subtle` equivalent.
+ *
+ * dr-sommer Z1 Finding 1.1 (High/S). Plan-doc:
+ * omnopsis-planning/docs/plans/api-track-auth-hardening.md
+ */
+function isAuthenticated(req: NextRequest): boolean {
+  const expected = process.env.ANALYTICS_READ_TOKEN;
+  if (!expected || expected.length === 0) return false; // fail-closed
+
+  const auth = req.headers.get("authorization") || "";
+  if (!auth.startsWith("Bearer ")) return false;
+
+  const provided = auth.slice("Bearer ".length);
+  // timingSafeEqual requires equal-length buffers — length pre-check is OK:
+  // it leaks only token-length (fixed 64 chars from openssl rand -hex 32),
+  // never token content.
+  if (provided.length !== expected.length) return false;
+
+  try {
+    return timingSafeEqual(Buffer.from(provided), Buffer.from(expected));
+  } catch {
+    return false; // defensive — length pre-check should make this unreachable
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -203,6 +241,10 @@ function buildSessions(events: TrackedEvent[]): {
 }
 
 export async function GET(req: NextRequest) {
+  if (!isAuthenticated(req)) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+
   const { searchParams } = new URL(req.url);
   const day = searchParams.get("day") || new Date().toISOString().slice(0, 10);
   const days = Math.min(parseInt(searchParams.get("days") || "1", 10), 90);
@@ -271,19 +313,29 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  return NextResponse.json({
-    totalEvents,
-    pageViews,
-    uniqueVisitors: totalUniqueVisitors,
-    days: Object.keys(results).length,
-    sessions,
-    geo: geoBreakdown,
-    utm: {
-      sources: utmSources,
-      mediums: utmMediums,
-      campaigns: utmCampaigns,
+  return NextResponse.json(
+    {
+      totalEvents,
+      pageViews,
+      uniqueVisitors: totalUniqueVisitors,
+      days: Object.keys(results).length,
+      sessions,
+      geo: geoBreakdown,
+      utm: {
+        sources: utmSources,
+        mediums: utmMediums,
+        campaigns: utmCampaigns,
+      },
+      referrers,
+      data: results,
     },
-    referrers,
-    data: results,
-  });
+    {
+      headers: {
+        // Authenticated payload — never cache at the edge or in browsers.
+        // Prevents a previously-authenticated response from leaking to an
+        // anonymous GET that happens to hit the same CDN edge.
+        "Cache-Control": "private, no-store",
+      },
+    }
+  );
 }

@@ -27,7 +27,11 @@ test.describe("Smoke @smoke", () => {
   });
 
   test("TC-SMK-004: tracking endpoint is reachable", async ({ request }) => {
-    const res = await request.get("/api/track?day=1970-01-01");
+    const token = process.env.ANALYTICS_READ_TOKEN;
+    test.skip(!token, "ANALYTICS_READ_TOKEN not set in test env");
+    const res = await request.get("/api/track?day=1970-01-01", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     expect(res.status()).toBe(200);
   });
 
