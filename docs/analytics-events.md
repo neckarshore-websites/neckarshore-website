@@ -30,15 +30,25 @@ Feuert **einmal pro Session** wenn die Section zu 40% im Viewport ist:
 ## Daten abfragen
 
 ```bash
+# Auth: GET requires Authorization: Bearer ${ANALYTICS_READ_TOKEN}
+# Token is set in Vercel env-vars (production + preview separately).
+# Generate locally: openssl rand -hex 32
+
 # Heute
-curl https://neckarshore.ai/api/track?day=2026-04-05
+curl -H "Authorization: Bearer $ANALYTICS_READ_TOKEN" \
+  "https://neckarshore.ai/api/track?day=2026-04-05"
 
 # Letzte 7 Tage
-curl https://neckarshore.ai/api/track?days=7
+curl -H "Authorization: Bearer $ANALYTICS_READ_TOKEN" \
+  "https://neckarshore.ai/api/track?days=7"
 
 # Inkl. Playwright-Test-Events
-curl https://neckarshore.ai/api/track?days=1&include_test=true
+curl -H "Authorization: Bearer $ANALYTICS_READ_TOKEN" \
+  "https://neckarshore.ai/api/track?days=1&include_test=true"
 ```
+
+> **Note:** POST (visitor-ping via `navigator.sendBeacon`) stays public.
+> Only GET (analytics read) requires the Bearer token.
 
 **Response:**
 
