@@ -14,11 +14,37 @@ const navLinks = [
   { href: "/#founder", label: "Über uns", track: "nav_founder" },
 ];
 
-export default function Nav() {
+interface NavProps {
+  showOssLaunch?: boolean;
+}
+
+export default function Nav({ showOssLaunch = false }: NavProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <nav className="fixed top-0 z-50 w-full border-b border-primary/5 bg-neutral-light/80 backdrop-blur-md dark:border-text-secondary/10 dark:bg-deep-space/80">
+      {/* ===== ANNOUNCEMENT STRIP — bordeaux, conditional, remove ~3 weeks after Vault Autopilot launch ===== */}
+      {showOssLaunch && (
+        <div className="bg-[#5C1A2A] px-4 py-2.5 md:px-6">
+          <div className="mx-auto flex max-w-[1200px] items-center justify-center gap-2 text-[13px] text-[#F5C6D0] md:gap-3 md:text-sm">
+            <span className="rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white md:text-xs">
+              Neu
+            </span>
+            <span className="truncate">
+              <span className="font-medium text-white">Obsidian Vault Autopilot</span>
+              <span className="hidden md:inline"> — unser erstes Open-Source-Projekt ist live.</span>
+            </span>
+            <a
+              href="/#open-source"
+              className="shrink-0 font-medium text-white underline-offset-4 transition-colors hover:underline hover:text-[#F5C6D0]"
+              data-track="hero_teaser_oss"
+            >
+              Zum Projekt&nbsp;&rarr;
+            </a>
+          </div>
+        </div>
+      )}
+
       <div className="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-3 md:px-6">
         <Link href="/" className="flex items-center gap-2" aria-label="neckarshore.ai Home">
           <Logo size="text-xl" className="text-primary/70 dark:text-text-secondary" />

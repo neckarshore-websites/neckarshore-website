@@ -57,6 +57,8 @@
 /* Smooth scroll */
 html {
   scroll-behavior: smooth;
+  /* Anchor jumps land below sticky nav (≈ 96px when announcement strip visible). */
+  scroll-padding-top: 6.5rem;
 }
 
 body {

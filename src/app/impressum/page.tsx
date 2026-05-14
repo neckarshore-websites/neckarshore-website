@@ -37,11 +37,13 @@ export const metadata: Metadata = {
   },
 };
 
+const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+
 export default function Impressum() {
   return (
     <>
-      <Nav />
-      <main className="mx-auto max-w-[800px] px-4 pt-32 pb-20 md:px-6">
+      <Nav showOssLaunch={showOssLaunch} />
+      <main className="mx-auto max-w-[800px] px-4 pt-40 pb-20 md:px-6">
         <h1 className="font-heading text-4xl font-bold text-accent md:text-5xl">Impressum</h1>
 
         <div className="prose-neckarshore mt-10 space-y-8 text-neutral-dark/80 leading-relaxed dark:text-text-secondary">
