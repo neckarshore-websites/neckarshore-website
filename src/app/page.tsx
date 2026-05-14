@@ -11,6 +11,7 @@ import {
   Globe,
   TrendingUp,
   Terminal,
+  Layers,
   ExternalLink,
 } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -101,10 +102,10 @@ export default function Home() {
   const stats = loadStats();
   return (
     <>
-      <Nav />
+      <Nav showOssLaunch={showOssLaunch} />
       <main>
         {/* ===== HERO ===== */}
-        <section className="relative overflow-hidden bg-neutral-light px-4 pt-32 pb-20 md:px-6 md:pt-40 md:pb-24 dark:bg-deep-space">
+        <section className="relative overflow-hidden bg-neutral-light px-4 pt-40 pb-20 md:px-6 md:pt-44 md:pb-24 dark:bg-deep-space">
           <div className="mx-auto max-w-[1200px]">
             <h1 className="font-heading text-4xl font-bold leading-[1.1] tracking-tight text-primary md:text-[56px] dark:text-text-primary">
               Software Development.
@@ -161,99 +162,174 @@ export default function Home() {
           />
         </section>
 
-        {/* ===== HERO TEASER — bordeaux strip, remove ~3 weeks after Vault Autopilot launch ===== */}
+        {/* ===== OPEN SOURCE — two cards: Vault Autopilot + Social Scrapers Core ===== */}
         {showOssLaunch && (
-        <>
-        <div className="bg-[#5C1A2A] px-4 py-3 md:px-6">
-          <div className="mx-auto flex max-w-[1200px] items-center justify-center gap-3 text-sm text-[#F5C6D0] md:text-base">
-            <span className="rounded-full bg-white/15 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-white">
-              Neu
-            </span>
-            <span>
-              Obsidian Vault Autopilot — unser erstes Open-Source-Projekt ist live.
-            </span>
-            <a
-              href="#open-source"
-              className="shrink-0 font-medium text-white transition-colors hover:text-[#F5C6D0]"
-              data-track="hero_teaser_oss"
-            >
-              Zum Projekt&nbsp;&rarr;
-            </a>
-          </div>
-        </div>
-
-        {/* ===== OPEN SOURCE CARD — temporary hero placement, move to permanent section after ~3 weeks ===== */}
         <section id="open-source" className="bg-neutral-light px-4 py-16 md:px-6 md:py-20 dark:bg-deep-space">
-          <div className="mx-auto max-w-[600px]">
-            <p className="text-center text-sm font-semibold uppercase tracking-widest text-accent">
+          <div className="mx-auto max-w-[1200px]">
+            <p className="text-center text-sm font-semibold uppercase tracking-widest text-accent-hover dark:text-accent-bright">
               Open Source
             </p>
             <h2 className="mt-3 text-center font-heading text-2xl font-semibold tracking-tight text-primary md:text-3xl dark:text-text-primary">
               Tools die wir selbst benutzen. Jetzt auch für euch.
             </h2>
 
-            {/* Vault Autopilot Card */}
-            <div className="mt-10 flex flex-col rounded-xl border border-primary/10 bg-white p-8 shadow-sm dark:border-text-secondary/10 dark:bg-surface">
-              <div className="flex items-center gap-3">
-                <Terminal size={28} className="text-secondary" />
-                <span className="rounded-full bg-accent/10 px-3 py-0.5 text-xs font-semibold text-accent dark:bg-accent/20">
-                  Beta
-                </span>
-              </div>
-              <h3 className="mt-4 font-heading text-xl font-semibold text-primary dark:text-text-primary">
-                Obsidian Vault Autopilot
-              </h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                Claude Code Plugin das dein Second Brain aufräumt — sortiert,
-                benennt um, verbessert die Qualität deiner Notes &amp; sorgt für saubere Properties.
-              </p>
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
+              {/* ───── Card 1: Obsidian Vault Autopilot ───── */}
+              <div className="flex flex-col rounded-xl border border-primary/10 bg-white p-8 shadow-sm dark:border-text-secondary/10 dark:bg-surface">
+                <div className="flex items-center gap-3">
+                  <Terminal size={28} className="text-secondary" />
+                  <span className="rounded-full bg-accent/10 px-3 py-0.5 text-xs font-semibold text-accent-hover dark:bg-accent/20 dark:text-accent-bright">
+                    Beta
+                  </span>
+                </div>
+                <h3 className="mt-4 font-heading text-xl font-semibold text-primary dark:text-text-primary">
+                  Obsidian Vault Autopilot
+                </h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
+                  AI-Vault-Automation für Obsidian × Claude Code. Sortiert die
+                  Inbox, benennt Notes um, füllt Frontmatter — vier Skills halten
+                  deinen Second Brain im Hintergrund auf Linie.
+                </p>
 
-              <div className="mt-5 space-y-2">
-                <div className="flex items-start gap-3">
-                  <code className="inline-block w-[120px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent dark:bg-text-secondary/10">
-                    note-rename
-                  </code>
-                  <span className="text-sm text-neutral-dark/70 dark:text-text-secondary/70">
-                    Benennt um, fixt alle Backlinks im Vault.
-                  </span>
+                <div className="mt-5 space-y-2.5">
+                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
+                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
+                      property-enrich
+                    </code>
+                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
+                      Füllt fehlende Frontmatter automatisch — title, dates, source, priority.
+                      Fundament für alle anderen Skills.
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
+                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
+                      inbox-sort
+                    </code>
+                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
+                      Verschiebt neue Notes aus dem Inbox-Root in den passenden Subfolder.
+                      Kein manuelles Filing mehr.
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
+                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
+                      note-rename
+                    </code>
+                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
+                      Vergibt sinnvolle Filenames und fixt parallel sämtliche Wikilinks im Vault.
+                      Unauffällig im Hintergrund.
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
+                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
+                      property-describe
+                    </code>
+                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
+                      Erzeugt knappe `description`-Frontmatter aus dem Inhalt.
+                      Beta — usable today, Polish-Loop läuft.
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <code className="inline-block w-[120px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent dark:bg-text-secondary/10">
-                    inbox-sort
-                  </code>
-                  <span className="text-sm text-neutral-dark/70 dark:text-text-secondary/70">
-                    Analysiert Inhalt, verschiebt in den richtigen Ordner.
+
+                <p className="mt-4 text-xs italic text-muted dark:text-text-tertiary">
+                  … weitere in Entwicklung
+                </p>
+
+                <div className="mt-auto flex items-center justify-between pt-6">
+                  <span className="text-xs font-medium text-muted dark:text-text-tertiary">
+                    MIT License
                   </span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <code className="inline-block w-[120px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent/50 italic dark:bg-text-secondary/10">
-                    more coming…
-                  </code>
-                  <span className="text-sm text-neutral-dark/50 italic dark:text-text-tertiary">
-                    Watch this space.
-                  </span>
+                  <a
+                    href="https://github.com/neckarshore-ai/obsidian-vault-autopilot"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
+                    data-track="oss_vault_autopilot"
+                  >
+                    GitHub
+                    <ExternalLink size={14} />
+                  </a>
                 </div>
               </div>
 
-              <div className="mt-auto flex items-center justify-between pt-6">
-                <span className="text-xs font-medium text-muted dark:text-text-tertiary">
-                  MIT License
-                </span>
-                <a
-                  href="https://github.com/neckarshore-ai/obsidian-vault-autopilot"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
-                  data-track="oss_vault_autopilot"
-                >
-                  GitHub
-                  <ExternalLink size={14} />
-                </a>
+              {/* ───── Card 2: Obsidian Social Scrapers (Shared Core) ───── */}
+              <div className="flex flex-col rounded-xl border border-primary/10 bg-white p-8 shadow-sm dark:border-text-secondary/10 dark:bg-surface">
+                <div className="flex items-center gap-3">
+                  <Layers size={28} className="text-secondary" />
+                  <span className="rounded-full bg-accent/10 px-3 py-0.5 text-xs font-semibold text-accent-hover dark:bg-accent/20 dark:text-accent-bright">
+                    Beta
+                  </span>
+                </div>
+                <h3 className="mt-4 font-heading text-xl font-semibold text-primary dark:text-text-primary">
+                  Obsidian Social Scrapers
+                </h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
+                  Shared Core für drei Scraper-Plugins. Profile + Posts von
+                  Instagram, LinkedIn und X direkt in deinen Vault. Apify-Wrappers,
+                  AI-Polishing und Markdown-Rendering — Lego-Blocks, keine Duplikation.
+                </p>
+
+                <div className="mt-5 space-y-2.5">
+                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
+                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
+                      shared core
+                    </code>
+                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
+                      TypeScript-Lego für die drei Scraper-Plugins.
+                      Apify-Wrapper, AI-Polish, Markdown-Rendering.
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
+                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
+                      linkedin-scraper
+                    </code>
+                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
+                      Profile + Posts mit Engagement-Daten und neutralisiertem
+                      Briefing-Text statt Engagement-Bait.
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
+                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
+                      x-scraper
+                    </code>
+                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
+                      Profile + Tweets, Threads und Quote-Tweets via offizielle
+                      X API v2 — ToS-konform, kein Web-Scrape.
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
+                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
+                      instagram-scraper
+                    </code>
+                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
+                      Profile + Posts inklusive Reels-Transkription via lokalem
+                      Whisper.cpp — kein Cloud-Audio.
+                    </span>
+                  </div>
+                </div>
+
+                <p className="mt-4 text-xs italic text-muted dark:text-text-tertiary">
+                  … weitere in Entwicklung
+                </p>
+
+                <div className="mt-auto flex items-center justify-between pt-6">
+                  <span className="text-xs font-medium text-muted dark:text-text-tertiary">
+                    MIT License
+                  </span>
+                  <a
+                    href="https://github.com/neckarshore-ai/obsidian-social-scrapers-common"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
+                    data-track="oss_social_scrapers"
+                  >
+                    GitHub
+                    <ExternalLink size={14} />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </section>
-        </>
         )}
 
         {/* ===== WHY NEARSHORE ===== */}

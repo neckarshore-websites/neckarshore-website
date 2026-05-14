@@ -7,10 +7,12 @@ export const metadata: Metadata = {
   description: "Diese Seite existiert nicht. Zurück zur Startseite von neckarshore.ai.",
 };
 
+const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+
 export default function NotFound() {
   return (
     <>
-      <Nav />
+      <Nav showOssLaunch={showOssLaunch} />
       <main className="mx-auto flex min-h-[70vh] max-w-[800px] flex-col items-center justify-center px-4 text-center">
         <p className="font-mono text-sm tracking-widest text-accent">404</p>
         <h1 className="mt-3 font-heading text-4xl font-bold text-primary md:text-5xl dark:text-text-primary">
