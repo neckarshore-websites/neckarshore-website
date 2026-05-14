@@ -20,11 +20,11 @@ import Logo from "@/components/Logo";
 import EmailObfuscator from "@/components/EmailObfuscator";
 import StatsGrid, { type StatsData } from "@/components/StatsGrid";
 import FounderImage from "@/components/FounderImage";
+import LiveTicker from "@/components/LiveTicker";
 import { BRAND } from "@/lib/brand";
 
 /* Code-split client components — separate chunks, not in main bundle */
 const CookieBanner = dynamic(() => import("@/components/CookieBanner"));
-const LiveTicker = dynamic(() => import("@/components/LiveTicker"));
 const ImageModal = dynamic(() => import("@/components/ImageModal"));
 
 /* ---------- constants ---------- */

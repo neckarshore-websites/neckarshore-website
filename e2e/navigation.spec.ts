@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { SECTIONS, SCROLL_TIMEOUT } from "./helpers";
+import { SCROLL_TIMEOUT } from "./helpers";
 
 test.describe("Navigation", () => {
   test("TC-NAV-001: homepage loads with visible H1", async ({ page }) => {

@@ -20,10 +20,16 @@ export default function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // localStorage + matchMedia are client-only. The toggle stays hidden on the
+    // server (mounted=false) and reveals itself once we know the user's theme
+    // preference. This is a deliberate one-time hydration-safe reveal — not a
+    // render loop. The two setState calls happen exactly once per mount.
+    /* eslint-disable react-hooks/set-state-in-effect -- intentional mount-only theme rehydration; see comment above */
     setMounted(true);
     const stored = localStorage.getItem("theme") as Theme | null;
     const initial = stored || "system";
     setTheme(initial);
+    /* eslint-enable react-hooks/set-state-in-effect */
     applyTheme(initial);
 
     // Listen for system theme changes
