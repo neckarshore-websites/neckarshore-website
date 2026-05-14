@@ -6,9 +6,12 @@ export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (!localStorage.getItem("cookie-consent")) {
-      setVisible(true);
-    }
+    // localStorage is only available client-side. The banner must stay hidden
+    // during SSR (server can't read user consent) and reveal itself post-mount
+    // if no consent cookie exists. This is a deliberate one-time hydration-safe
+    // reveal, not a render-loop hazard.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional mount-only localStorage probe; see comment above
+    if (!localStorage.getItem("cookie-consent")) setVisible(true);
   }, []);
 
   const accept = () => {

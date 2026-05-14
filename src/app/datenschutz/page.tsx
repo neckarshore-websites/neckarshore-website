@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import Nav from "@/components/Nav";
 import Logo from "@/components/Logo";
 
@@ -299,9 +300,9 @@ export default function Datenschutz() {
 
       <footer className="border-t border-primary/5 bg-white px-4 py-10 md:px-6 dark:border-text-secondary/10 dark:bg-surface">
         <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-sm text-muted dark:text-text-secondary/60 md:flex-row md:justify-between">
-          <a href="/">
+          <Link href="/">
             <Logo size="text-xl" className="opacity-60" />
-          </a>
+          </Link>
           <div className="flex gap-6">
             <a href="/impressum" className="transition-colors hover:text-accent">
               Impressum

@@ -146,7 +146,7 @@ function runLighthouse(lhBin, targetUrl, outputPath, extraArgs = []) {
         throw new Error("Performance score is null (likely NO_LCP trace error)");
       }
       return;
-    } catch (err) {
+    } catch {
       if (attempt < MAX_RETRIES) {
         console.log(`  Attempt ${attempt} failed, retrying...`);
       } else {
