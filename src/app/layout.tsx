@@ -6,18 +6,18 @@ import { organizationSchema } from "@/lib/schema/organization";
 import "./globals.css";
 
 const spaceGrotesk = localFont({
-  src: "../fonts/SpaceGrotesk-Variable.woff2",
+  src: "../fonts/SpaceGrotesk-Variable-subset.woff2",
   variable: "--font-space-grotesk",
   display: "swap",
-  weight: "300 700",
+  weight: "400 700",
   preload: false,
 });
 
 const inter = localFont({
-  src: "../fonts/Inter-Variable.woff2",
+  src: "../fonts/Inter-Variable-subset.woff2",
   variable: "--font-inter",
   display: "swap",
-  weight: "100 900",
+  weight: "400 700",
 });
 
 export const metadata: Metadata = {
