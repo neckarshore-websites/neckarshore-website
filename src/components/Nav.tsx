@@ -34,13 +34,13 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
               <span className="font-medium text-white">Obsidian Vault Autopilot</span>
               <span className="hidden md:inline"> — unser erstes Open-Source-Projekt ist live.</span>
             </span>
-            <a
+            <Link
               href="/#open-source"
               className="shrink-0 font-medium text-white underline-offset-4 transition-colors hover:underline hover:text-[#F5C6D0]"
               data-track="hero_teaser_oss"
             >
               Zum Projekt&nbsp;&rarr;
-            </a>
+            </Link>
           </div>
         </div>
       )}
