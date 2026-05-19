@@ -16,13 +16,18 @@
 
 | Suite | File | Tests | What |
 |-------|------|-------|------|
-| Navigation | `e2e/navigation.spec.ts` | 10 | Anchor scroll per section, subpage nav, footer, logo, mobile menu |
-| Links | `e2e/links.spec.ts` | 9 | No 404s, `target="_blank"`, external link reachability |
+| Smoke | `e2e/smoke.spec.ts` | 5 | Critical-path loads (TC-SMK-*) — homepage, subpages, no console errors |
+| Navigation | `e2e/navigation.spec.ts` | 7 | Anchor scroll per section, subpage nav, footer, logo, mobile menu |
+| Links | `e2e/links.spec.ts` | 3 | No 404s, `target="_blank"`, external link reachability |
 | Calendly | `e2e/calendly.spec.ts` | 3 | CTA URL correct, reachable, on all pages |
 | Theme | `e2e/theme.spec.ts` | 3 | Dark/light toggle, WCAG AA contrast (accent + headings) |
-| Responsive | `e2e/responsive.spec.ts` | 12 | No overflow on 393/414/768px, nav usable |
-| SEO | `e2e/seo.spec.ts` | 9 | Meta title/description per page, JSON-LD, robots.txt, sitemap.xml |
-| Accessibility | `e2e/accessibility.spec.ts` | 15 | H1 count, heading hierarchy, lang, alt text, aria — all pages |
+| Responsive | `e2e/responsive.spec.ts` | 2 | No overflow on 393/414/768px, nav usable |
+| SEO | `e2e/seo.spec.ts` | 11 | Meta title/description per page, JSON-LD, robots.txt, sitemap.xml |
+| Accessibility | `e2e/accessibility.spec.ts` | 5 | H1 count, heading hierarchy, lang, alt text, aria — all pages |
+| Stats | `e2e/stats.spec.ts` | 8 | Stats tiles render with backend values (TC-STAT-*) |
+| API Track Auth | `e2e/api-track-auth.spec.ts` | 6 | `/api/track` GET auth-hardening (TC-STAT-009, dr-sommer Z1.1) |
+
+Total: 53 tests across 10 suites.
 
 ### When to Run
 
@@ -79,8 +84,11 @@ At every session start, **before any feature work**, run:
 
 ```bash
 gh run list --workflow=lighthouse.yml --limit=3 --json conclusion,createdAt,headBranch
-gh run list --workflow=e2e.yml --limit=3 --json conclusion,createdAt,headBranch 2>/dev/null
+gh run list --workflow=lint.yml --limit=3 --json conclusion,createdAt,headBranch
+gh run list --workflow=update-stats.yml --limit=3 --json conclusion,createdAt,headBranch
 ```
+
+(No dedicated `e2e.yml` workflow — E2E suite runs locally via `npm run test:e2e`. CI-side E2E is a backlog item.)
 
 - If any run shows `"conclusion": "failure"` → investigate and fix **before** starting new work
 - Report CI status in session greeting: "CI: ✅ grün" or "CI: ❌ Lighthouse failing since [date]"
