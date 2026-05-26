@@ -45,3 +45,9 @@ yarn-error.log*
 next-env.d.ts
 .env*.local
 analytics-local.json
+
+# local tooling + manual lighthouse runs
+.claude/
+lh-local.json
+lighthouse-report.report.html
+lighthouse-report.report.json
