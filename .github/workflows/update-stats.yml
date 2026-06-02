@@ -62,13 +62,18 @@ jobs:
               TOTAL_LOC=$((TOTAL_LOC + LOC))
             fi
 
-            # Commits via GitHub API (contributors endpoint sums all contributions)
-            COMMITS=$(curl -sf \
+            # Commits via GitHub API (contributors endpoint sums all contributions).
+            # -L follows the 301 a renamed/org-moved repo returns; without it the
+            # body is empty and the repo silently counts as 0 commits.
+            COMMITS=$(curl -sfL \
               -H "Authorization: Bearer ${STATS_PAT}" \
               -H "Accept: application/vnd.github.v3+json" \
               "https://api.github.com/repos/${REPO}/contributors?per_page=100&anon=true" \
               | jq '[.[].contributions] | add // 0' 2>/dev/null || echo 0)
             echo "  Commits: ${COMMITS}"
+            if [ "${COMMITS}" -eq 0 ]; then
+              echo "  WARN: ${REPO} returned 0 commits — repo renamed/moved (stale stats-config.json) or token lacks access?"
+            fi
             TOTAL_COMMITS=$((TOTAL_COMMITS + COMMITS))
           done
 
@@ -79,7 +84,7 @@ jobs:
           TESTS=464
           ENDPOINTS=92
 
-          OMNOPSIS_STATS=$(curl -sf \
+          OMNOPSIS_STATS=$(curl -sfL \
             -H "Authorization: Bearer ${STATS_PAT}" \
             -H "Accept: application/vnd.github.v3.raw" \
             "https://api.github.com/repos/${OMNOPSIS_REPO}/contents/${OMNOPSIS_PATH}" 2>/dev/null || echo "")
