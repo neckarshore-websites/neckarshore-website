@@ -11,11 +11,8 @@
     "test:e2e:ui": "playwright test --ui",
     "test:smoke": "BASE_URL=https://neckarshore.ai playwright test --grep @smoke",
     "test:smoke:local": "playwright test --grep @smoke",
-    "lighthouse": "node scripts/lighthouse.mjs",
-    "lighthouse:quick": "node scripts/lighthouse.mjs --quick",
-    "lighthouse:desktop": "node scripts/lighthouse.mjs --quick --profile=desktop",
-    "lighthouse:mobile": "node scripts/lighthouse.mjs --quick --profile=mobile-4g",
-    "lighthouse:slow": "node scripts/lighthouse.mjs --quick --profile=mobile-slow"
+    "site-quality": "site-quality",
+    "site-quality:local": "site-quality --serve"
   },
   "dependencies": {
     "@upstash/redis": "1.37.0",
@@ -25,6 +22,7 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@neckarshore-websites/site-quality": "0.1.0",
     "@playwright/test": "1.59.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
@@ -32,7 +30,6 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
-    "lighthouse": "13.0.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
