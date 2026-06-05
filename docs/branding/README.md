@@ -109,3 +109,52 @@ Uploads are manual on purpose — GitHub has no API for this surface, and the fi
 - **Accent-Bright (`#22D3EE`) for headline accent, Brand-Accent (`#0E7490`) for `.AI`.** The brighter cyan is the dark-mode token (WCAG AA compliant on `#0F172A`) used for focal content. The darker brand color stays as the permanent brand signature in the wordmark. This matches the A11y decision from Linus Session F.
 - **Three chips max.** Reads in under one glance. "dot / plain / accent" gives three visual weights to rank the chips (highlight-first, secondary, tertiary highlight).
 - **No logo-as-visual.** The current neckarshore.ai logo is a JPEG without a vector source (see backlog ticket #11). Using it as the hero visual would mean scaling a raster — unacceptable for a headline slot. Text is the hero instead.
+
+---
+
+## Org Avatars (GitHub organization profile pictures)
+
+A separate, transparent-PNG system for the **GitHub organization avatars** under the
+neckarshore profile. Distinct from the social-preview cards above — different generator,
+different output.
+
+**Decision (Variante A, Linus 2026-06-05):** keep the **N-monogram identical** across all
+orgs (= family DNA), differentiate child orgs with a small **color-coded corner badge**
+(color + letter) bottom-right. The parent org `neckarshore-ai` stays **badge-free**
+(= mothership). The letter is *not* a replacement for the N — swapping the main letter per
+org would destroy brand recognition.
+
+| # | Org | Badge letter | Badge color | In-palette? |
+|---|---|---|---|---|
+| 1 | `neckarshore-ai` | — (none) | — | parent |
+| 2 | `OMNOPSIS.AI` (flagship) | O | `#F43F5E` Rose | extension |
+| 3 | `neckarshore-websites` | W | `#00B8D4` Teal | yes (accent) |
+| 4 | `neckarshore-agents` | A | `#6366F1` Indigo | extension |
+| 5 | `neckarshore-mmps` | M | `#F59E0B` Amber | extension |
+| 6 | `neckarshore-skills` | S | `#10B981` Emerald | yes (success) |
+
+**Why transparent + safe-area padding:** GitHub recommends ~500×500, square, <1MB, and
+crops org avatars (rounded-square — and circle in some surfaces). A full-bleed tile with a
+corner badge gets clipped at the rounding. The monogram sits at ~91% of a 512×512 canvas
+(≈4% transparent padding each side), so the squircle corners clear GitHub's tile rounding
+while the large corner badge overlaps well into the N by design (v3, 2026-06-05 review).
+
+> **Note:** v3 is tuned for GitHub's rounded-square org display, **not** circle-safe — in a
+> hard circular crop the badge corner (~304px from center) would exceed the 256px inscribed
+> radius. Fine for GitHub orgs; if a circular surface is ever needed, shrink the badge or
+> raise `pad` (the earlier circle-safe v1 used icon 372 / pad 70 / badge 156).
+
+**How to (re)generate:**
+
+1. Edit `scripts/org-avatars.config.mjs` (add/remove orgs, change letter/color).
+2. Run:
+   ```bash
+   node scripts/generate-org-avatars.mjs
+   ```
+3. Output lands in `public/images/brand/org-avatars/neckarshore-org-<key>.png`.
+4. Upload manually: GitHub → Org → `Settings` → `Profile` → `Upload new picture`.
+
+**Base image:** `public/images/brand/neckarshore-icon-base.png` — currently Logo 8 at
+183px raster, so 512px output is slightly soft. Badge letters already use the self-hosted
+Space Grotesk woff2. Swap the base for a high-res / SVG export once the designer delivers
+(backlog #11) — geometry in `DESIGN` stays unchanged, output gets crisp automatically.
