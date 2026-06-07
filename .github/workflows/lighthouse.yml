@@ -1,6 +1,10 @@
 name: Lighthouse Audit
 
 on:
+  # Manual fallback — the scheduled cron has proven unreliable on low-traffic
+  # repos (3 of 4 sites' Monday crons never fired on 2026-06-01). Lets us
+  # trigger an on-demand Lighthouse run via `gh workflow run lighthouse.yml`.
+  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
