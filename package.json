@@ -15,7 +15,10 @@
     "lighthouse:quick": "node scripts/lighthouse.mjs --quick",
     "lighthouse:desktop": "node scripts/lighthouse.mjs --quick --profile=desktop",
     "lighthouse:mobile": "node scripts/lighthouse.mjs --quick --profile=mobile-4g",
-    "lighthouse:slow": "node scripts/lighthouse.mjs --quick --profile=mobile-slow"
+    "lighthouse:slow": "node scripts/lighthouse.mjs --quick --profile=mobile-slow",
+    "crawl": "node scripts/link-crawler.mjs",
+    "crawl:internal": "node scripts/link-crawler.mjs --no-external",
+    "crawl:test": "node scripts/link-crawler.mjs --self-test"
   },
   "dependencies": {
     "@upstash/redis": "1.37.0",
