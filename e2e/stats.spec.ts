@@ -40,8 +40,12 @@ test.describe("Stats Tiles @smoke", () => {
     await page.goto("/");
     await page.waitForTimeout(1500);
     const value = await getStatValue(page, "Repositories");
-    expect(Number(value)).toBeGreaterThanOrEqual(10);
-    expect(Number(value)).toBeLessThanOrEqual(30);
+    // Plausibility guard, not an exact count. Post-restructure the stats-config
+    // counts all neckarshore-* orgs + omnopsis-ai (31 repos as of 2026-06-12).
+    // Generous upper bound leaves headroom for ecosystem growth while still
+    // catching an absurd value (e.g. a config that accidentally pulls forks).
+    expect(Number(value)).toBeGreaterThanOrEqual(20);
+    expect(Number(value)).toBeLessThanOrEqual(100);
   });
 
   test("TC-STAT-005: Tests count is plausible", async ({ page }) => {
