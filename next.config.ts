@@ -40,10 +40,14 @@ import type { NextConfig } from "next";
 // keeping the live header strict. Without this dev-only carve-out, `next dev`
 // (and the Playwright e2e suite, which runs against the dev server) throws
 // "eval() is not supported" console errors under the CSP.
+// Cloudflare Turnstile (Spam-Schutz des Kontaktformulars, dormant bis zur
+// Aktivierung): das Widget-Script + der Challenge-iframe + die siteverify-
+// Fetches laufen gegen https://challenges.cloudflare.com → freigegeben in
+// script-src + frame-src + connect-src.
 const isDev = process.env.NODE_ENV !== "production";
 const scriptSrc = isDev
-  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'"
-  : "script-src 'self' 'unsafe-inline'";
+  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com"
+  : "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com";
 
 const contentSecurityPolicy = [
   "default-src 'self'",
@@ -51,7 +55,8 @@ const contentSecurityPolicy = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  "connect-src 'self'",
+  "connect-src 'self' https://challenges.cloudflare.com",
+  "frame-src https://challenges.cloudflare.com",
   "form-action 'self'",
   "frame-ancestors 'self'",
   "base-uri 'self'",

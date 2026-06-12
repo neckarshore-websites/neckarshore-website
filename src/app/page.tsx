@@ -19,6 +19,7 @@ import Image from "next/image";
 import Nav from "@/components/Nav";
 import Logo from "@/components/Logo";
 import EmailObfuscator from "@/components/EmailObfuscator";
+import ContactForm from "@/components/ContactForm";
 import StatsGrid, { type StatsData } from "@/components/StatsGrid";
 import FounderImage from "@/components/FounderImage";
 import LiveTicker from "@/components/LiveTicker";
@@ -410,6 +411,16 @@ export default function Home() {
               </a>
               <span className="text-muted dark:text-text-tertiary">oder</span>
               <EmailObfuscator />
+            </div>
+
+            <div
+              id="kontakt"
+              className="mx-auto mt-12 max-w-[560px] border-t border-primary/10 pt-10 text-left dark:border-text-secondary/15"
+            >
+              <p className="mb-5 text-center text-base text-muted dark:text-text-secondary">
+                Lieber schreiben? Schick uns direkt eine Nachricht:
+              </p>
+              <ContactForm />
             </div>
           </div>
         </section>
