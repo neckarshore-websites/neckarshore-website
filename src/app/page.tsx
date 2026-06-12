@@ -18,7 +18,6 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import Nav from "@/components/Nav";
 import Logo from "@/components/Logo";
-import EmailObfuscator from "@/components/EmailObfuscator";
 import ContactForm from "@/components/ContactForm";
 import StatsGrid, { type StatsData } from "@/components/StatsGrid";
 import FounderImage from "@/components/FounderImage";
@@ -409,8 +408,6 @@ export default function Home() {
               >
                 Kennenlerntermin buchen
               </a>
-              <span className="text-muted dark:text-text-tertiary">oder</span>
-              <EmailObfuscator />
             </div>
 
             <div
