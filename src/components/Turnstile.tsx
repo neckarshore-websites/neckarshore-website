@@ -41,6 +41,7 @@ interface TurnstileApi {
       sitekey: string;
       language?: string;
       theme?: "auto" | "light" | "dark";
+      appearance?: "always" | "execute" | "interaction-only";
       action?: string;
     },
   ) => string;
@@ -99,7 +100,13 @@ export function Turnstile() {
         widgetId = window.turnstile.render(mountRef.current, {
           sitekey,
           language: "de",
-          theme: "auto",
+          // interaction-only: the widget stays invisible while it auto-passes
+          // (the managed-mode happy path) and only surfaces if Cloudflare needs
+          // a real interactive challenge — no persistent box, so no light/dark
+          // mismatch with the page theme. theme:"dark" matches the dark-leaning
+          // brand for that rare visible case. (Linus 2026-06-12, Option B.)
+          theme: "dark",
+          appearance: "interaction-only",
         });
       })
       .catch(() => {
