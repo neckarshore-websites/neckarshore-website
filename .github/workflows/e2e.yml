@@ -9,6 +9,12 @@ name: E2E (Playwright)
 # playwright.config.ts (`npm run dev` on :3000) — no separate build/start step
 # needed. The config already sets workers=1 + retries=2 under CI for
 # shared-runner stability.
+#
+# Uses `test:e2e:ci` = `playwright test --grep-invert @external`: the gate runs
+# only deterministic tests of our own code. @external-tagged tests hit
+# third-party hosts (EU ODR link, Calendly) which bot-block datacenter IPs →
+# false fails in CI. External-URL liveness is covered by the link-crawler cron
+# (L-TEST-COVERAGE-PACKAGE item 3); full local `npm run test:e2e` still runs them.
 
 on:
   workflow_dispatch:
@@ -46,8 +52,8 @@ jobs:
       - name: Install Playwright browser (chromium)
         run: npx playwright install --with-deps chromium
 
-      - name: Run E2E tests
-        run: npm run test:e2e
+      - name: Run E2E tests (excludes @external)
+        run: npm run test:e2e:ci
 
       - name: Upload Playwright report
         if: always()

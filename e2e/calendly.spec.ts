@@ -22,7 +22,9 @@ test.describe("Calendly CTAs", () => {
     }
   });
 
-  test("TC-CAL-003: Calendly URL is reachable", async ({ request }) => {
+  // @external — hits Calendly; excluded from the CI gate (third-party uptime is
+  // not our code). Covered by the link-crawler cron + full local runs.
+  test("TC-CAL-003: Calendly URL is reachable", { tag: "@external" }, async ({ request }) => {
     const response = await request.get(CALENDLY_URL);
     expect(response.status()).toBeLessThan(400);
   });
