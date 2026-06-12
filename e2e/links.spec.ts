@@ -43,7 +43,10 @@ test.describe("Links", () => {
       }
     });
 
-    test(`${idReach}: external links on ${path} are reachable`, async ({ page, request }) => {
+    // @external — hits third-party hosts (EU ODR, etc.); excluded from the CI
+    // gate (datacenter IPs get bot-blocked → false fails). External liveness is
+    // covered by the link-crawler cron. Runs in full local `npm run test:e2e`.
+    test(`${idReach}: external links on ${path} are reachable`, { tag: "@external" }, async ({ page, request }) => {
       await page.goto(path);
       const externalLinks = await page.locator('a[href^="https://"]').all();
       const hrefs = new Set<string>();

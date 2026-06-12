@@ -1,0 +1,64 @@
+name: E2E (Playwright)
+
+# Wires the local Playwright suite into CI so it gates every PR + push to main.
+# Until now the e2e suite ran local-only (CLAUDE.md: "CI-side E2E is a backlog
+# item") — the 91 tests blocked no merge. This is the structural
+# "tests-before-features" gate (L-TEST-COVERAGE-PACKAGE item 1).
+#
+# The dev server is managed by Playwright's `webServer` block in
+# playwright.config.ts (`npm run dev` on :3000) — no separate build/start step
+# needed. The config already sets workers=1 + retries=2 under CI for
+# shared-runner stability.
+#
+# Uses `test:e2e:ci` = `playwright test --grep-invert @external`: the gate runs
+# only deterministic tests of our own code. @external-tagged tests hit
+# third-party hosts (EU ODR link, Calendly) which bot-block datacenter IPs →
+# false fails in CI. External-URL liveness is covered by the link-crawler cron
+# (L-TEST-COVERAGE-PACKAGE item 3); full local `npm run test:e2e` still runs them.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  # Cancel superseded PR runs; let every push-to-main run complete (each main
+  # commit stays gated).
+  group: e2e-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  e2e:
+    name: Playwright E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser (chromium)
+        run: npx playwright install --with-deps chromium
+
+      - name: Run E2E tests (excludes @external)
+        run: npm run test:e2e:ci
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
