@@ -5,7 +5,7 @@ const baseURL = process.env.BASE_URL || `http://localhost:${PORT}`;
 const isLocal = baseURL.includes("localhost");
 
 export default defineConfig({
-  testDir: "./e2e",
+  testDir: "./tests/e2e",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,

@@ -16,18 +16,18 @@
 
 | Suite | File | Tests | What |
 |-------|------|-------|------|
-| Smoke | `e2e/smoke.spec.ts` | 5 | Critical-path loads (TC-SMK-*) — homepage, subpages, no console errors |
-| Navigation | `e2e/navigation.spec.ts` | 7 | Anchor scroll per section, subpage nav, footer, logo, mobile menu |
-| Links | `e2e/links.spec.ts` | 3 | No 404s, `target="_blank"`, external link reachability |
-| Calendly | `e2e/calendly.spec.ts` | 3 | CTA URL correct, reachable, on all pages |
-| Theme | `e2e/theme.spec.ts` | 3 | Dark/light toggle, WCAG AA contrast (accent + headings) |
-| Responsive | `e2e/responsive.spec.ts` | 2 | No overflow on 393/414/768px, nav usable |
-| SEO | `e2e/seo.spec.ts` | 11 | Meta title/description per page, JSON-LD, robots.txt, sitemap.xml |
-| Accessibility | `e2e/accessibility.spec.ts` | 5 | H1 count, heading hierarchy, lang, alt text, aria — all pages |
-| Stats | `e2e/stats.spec.ts` | 8 | Stats tiles render with backend values (TC-STAT-*) |
-| API Track Auth | `e2e/api-track-auth.spec.ts` | 6 | `/api/track` GET auth-hardening (TC-STAT-009, dr-sommer Z1.1) |
+| Smoke | `tests/e2e/smoke.spec.ts` | 5 | Critical-path loads (TC-SMK-*) — homepage, subpages, no console errors |
+| Navigation | `tests/e2e/navigation.spec.ts` | 10 | Anchor scroll per section, subpage nav, footer, logo, mobile menu |
+| Links | `tests/e2e/links.spec.ts` | 9 | No 404s, `target="_blank"`, external link reachability |
+| Calendly | `tests/e2e/calendly.spec.ts` | 3 | CTA URL correct, reachable, on all pages |
+| Theme | `tests/e2e/theme.spec.ts` | 3 | Dark/light toggle, WCAG AA contrast (accent + headings) |
+| Responsive | `tests/e2e/responsive.spec.ts` | 12 | No overflow on 393/414/768px, nav usable |
+| SEO | `tests/e2e/seo.spec.ts` | 20 | Meta title/description per page, JSON-LD, robots.txt, sitemap.xml |
+| Accessibility | `tests/e2e/accessibility.spec.ts` | 15 | H1 count, heading hierarchy, lang, alt text, aria — all pages |
+| Stats | `tests/e2e/stats.spec.ts` | 8 | Stats tiles render with backend values (TC-STAT-*) |
+| API Track Auth | `tests/e2e/api-track-auth.spec.ts` | 6 | `/api/track` GET auth-hardening (TC-STAT-009, dr-sommer Z1.1) |
 
-Total: 53 tests across 10 suites.
+Total: 91 tests across 10 suites.
 
 ### When to Run
 
@@ -54,7 +54,7 @@ Use test IDs when referencing tests in logs, reports, and issues.
 
 ### Adding Tests
 
-- One spec file per concern, in `e2e/`
+- One spec file per concern, in `tests/e2e/`
 - Assign the next available TC-ID in the suite
 - Viewports: 393px (iPhone 15 Pro), 414px (iPhone 14 Plus), 768px (iPad Mini)
 - Chromium only (Firefox/WebKit added when needed)
