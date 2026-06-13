@@ -19,6 +19,13 @@
  * Those are `unsure`, never `dead` — they never open an issue. Only a link that
  * is provably gone (404/410) or whose host no longer resolves (DNS) is `dead`.
  *
+ * Soft-block exception: a few consumer platforms (delivery apps, etc.) serve a
+ * hard 404/410 to datacenter IPs while the page is alive for real users — a
+ * 404-shaped bot-block. Hosts in `CONFIG.softBlockDomains` get their `dead`
+ * verdict downgraded to `unsure` so they never false-fire. The list is
+ * evidence-seeded (ubereats: 404 from CI, 307→200 from a German IP), never
+ * speculative.
+ *
  * SSR-discovery limit (acknowledged, fine for static marketing pages): a raw
  * `fetch` sees only the server-rendered HTML, so client-only links would be
  * missed. Our marketing sites render their links server-side, so this is
@@ -64,6 +71,12 @@ const CONFIG = {
   backoffMs: 1500, // grows linearly per retry — gentle, never tight-polls a host
   userAgent: "neckarshore-link-check/1.0 (+https://neckarshore.ai)",
   reportPath: "link-check-report.json",
+  // Consumer platforms that geo/bot-gate by IP: they serve a hard 404/410 to
+  // datacenter IPs (GitHub Actions) while the page is alive for real users.
+  // A `dead` verdict on these hosts is downgraded to `unsure` so the cron never
+  // false-fires on a link that works. Evidence-seeded — add a host ONLY when a
+  // run proves it false-deads (e.g. ubereats: 404 from CI, 307→200 from a DE IP).
+  softBlockDomains: ["ubereats.com"],
 };
 
 const DEAD_ERRORS = new Set(["ENOTFOUND", "ECONNREFUSED"]);
@@ -81,6 +94,28 @@ export function classify(status, errCode) {
   if (status === 404 || status === 410) return "dead";
   if (DEAD_ERRORS.has(errCode)) return "dead";
   return "unsure"; // 403 / 429 / 408 / other-4xx / 5xx / timeout / unknown
+}
+
+/** True if `url`'s host is (a subdomain of) a known geo/bot-gating platform. */
+export function isSoftBlockHost(url, softBlockDomains = []) {
+  let host;
+  try {
+    host = new URL(url).hostname;
+  } catch {
+    return false;
+  }
+  return softBlockDomains.some((d) => host === d || host.endsWith(`.${d}`));
+}
+
+/**
+ * Final verdict = the raw classify() contract, with one policy layer on top:
+ * a `dead` on a known geo/bot-gated host is downgraded to `unsure`, because a
+ * 404/410 from a datacenter IP there is a soft-block, not a removed page.
+ */
+export function verdictFor(url, status, errCode, softBlockDomains = []) {
+  const v = classify(status, errCode);
+  if (v === "dead" && isSoftBlockHost(url, softBlockDomains)) return "unsure";
+  return v;
 }
 
 /** External links server-rendered on `html` — same scan as the crawler, minus same-origin. */
@@ -123,7 +158,12 @@ async function checkUrl(url, opts) {
     last = await probeOnce(url, opts);
     if (classify(last.status, last.errCode) === "alive") break;
   }
-  return { url, status: last.status, errCode: last.errCode, verdict: classify(last.status, last.errCode) };
+  return {
+    url,
+    status: last.status,
+    errCode: last.errCode,
+    verdict: verdictFor(url, last.status, last.errCode, opts.softBlockDomains),
+  };
 }
 
 /** Fetch one page's SSR HTML, or null (logged) if it can't be read. */
@@ -228,6 +268,15 @@ function selfTest() {
   eq(classify(0, "timeout"), "unsure", "timeout unsure");
   eq(classify(0, "EAI_AGAIN"), "unsure", "transient DNS EAI_AGAIN unsure");
   eq(classify(0, null), "unsure", "unknown failure unsure");
+
+  // soft-block downgrade (the datacenter-IP geo-gate guard)
+  const sb = ["ubereats.com"];
+  eq(verdictFor("https://www.ubereats.com/de/store/x", 404, null, sb), "unsure", "soft-block 404 → unsure");
+  eq(verdictFor("https://www.ubereats.com/x", 200, null, sb), "alive", "soft-block 200 stays alive");
+  eq(verdictFor("https://ristorante-goldoni.de/gone", 404, null, sb), "dead", "normal-host 404 stays dead");
+  eq(verdictFor("https://x.com/y", 404, null, []), "dead", "empty soft-block list → 404 dead");
+  eq(isSoftBlockHost("https://deliveroo.ubereats.com/x", sb), true, "soft-block matches subdomain");
+  eq(isSoftBlockHost("https://notubereats.com/x", sb), false, "soft-block does not match lookalike host");
 
   // external filtering
   const html = `<a href="/internal">x</a><a href="https://calendly.com/x">c</a><link href="https://fonts.example/f.css"><a href="mailto:a@b.de">m</a>`;
