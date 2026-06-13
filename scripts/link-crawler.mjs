@@ -26,6 +26,7 @@
  */
 
 import { argv, exit } from "node:process";
+import { pathToFileURL } from "node:url";
 
 // ── Config ───────────────────────────────────────────────────────────
 
@@ -380,7 +381,11 @@ async function main() {
   exit(hardFail ? 1 : 0);
 }
 
-main().catch((err) => {
-  console.error("crawler crashed:", err);
-  exit(1);
-});
+// Run the CLI only when executed directly — importing this module for its pure
+// helpers (e.g. link-check.mjs) must NOT kick off a crawl as a side effect.
+if (import.meta.url === pathToFileURL(argv[1] ?? "").href) {
+  main().catch((err) => {
+    console.error("crawler crashed:", err);
+    exit(1);
+  });
+}

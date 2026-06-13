@@ -1,0 +1,124 @@
+name: Link Check (external liveness)
+
+# Leg-3 of the test-coverage package (L-TEST-COVERAGE-PACKAGE). Weekly probe of
+# the EXTERNAL links our 4 sites server-render, so a third-party going dark
+# (404/410/DNS) opens a GitHub issue — while datacenter-IP bot-blocks
+# (LinkedIn HTTP 999, Cloudflare 403/429) are classified `unsure` and never
+# false-fire. This is the home the e2e `@external`-tagged tests point at: those
+# bot-blockable checks are excluded from the per-PR gate (e2e.yml) and covered
+# here on a cadence instead.
+#
+# No `npm ci` — scripts/link-check.mjs is zero-dependency (Node 20 global fetch
+# + the crawler's exported href scan). The run stays GREEN even when external
+# links rot; the Issue is the alarm, not red CI (third-party rot is not our
+# build failing).
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Weekly Monday 07:00 UTC — an hour after the Lighthouse cron, off the
+    # push-to-main hot path. (GitHub free-tier schedule drift is expected and
+    # harmless for a liveness check.)
+    - cron: "0 7 * * 1"
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: link-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  link-check:
+    name: External link liveness
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+
+      - name: Self-test (classify contract)
+        run: node scripts/link-check.mjs --self-test
+
+      - name: Check external links
+        run: node scripts/link-check.mjs --json
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: link-check-report
+          path: link-check-report.json
+          retention-days: 30
+
+      - name: Open / update / resolve issue on dead links
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let report;
+            try {
+              report = JSON.parse(fs.readFileSync('link-check-report.json', 'utf8'));
+            } catch {
+              core.warning('No link-check-report.json — the check step likely crashed. Nothing to file.');
+              return;
+            }
+
+            const LABEL = 'link-rot';
+            const TITLE = '🔗 Link rot — external links need attention';
+            const dead = report.dead || [];
+
+            // Ensure the label exists (idempotent).
+            try {
+              await github.rest.issues.createLabel({
+                ...context.repo,
+                name: LABEL,
+                color: 'B60205',
+                description: 'A monitored external link is provably dead (404/410/DNS).',
+              });
+            } catch { /* already exists */ }
+
+            const open = (await github.rest.issues.listForRepo({
+              ...context.repo, state: 'open', labels: LABEL,
+            })).data[0];
+
+            // Self-heal: nothing dead → close any standing issue.
+            if (dead.length === 0) {
+              if (open) {
+                await github.rest.issues.createComment({
+                  ...context.repo, issue_number: open.number,
+                  body: `✅ Link check ${report.checkedAt}: no dead external links remain. Auto-closing.`,
+                });
+                await github.rest.issues.update({ ...context.repo, issue_number: open.number, state: 'closed' });
+              }
+              core.info('No dead external links.');
+              return;
+            }
+
+            const code = (d) => (d.status === 0 ? `ERR:${d.errCode}` : `HTTP ${d.status}`);
+            const body = [
+              `Weekly link check found **${dead.length} dead external link(s)** — provably gone (404/410/DNS), not a bot-block.`,
+              '',
+              '| Status | URL | Linked from |',
+              '|---|---|---|',
+              ...dead.map((d) => `| ${code(d)} | ${d.url} | ${(d.foundOn || []).join('<br>')} |`),
+              '',
+              `_Checked at ${report.checkedAt}. \`unsure\` links (bot-block/transient: ${report.totals.unsure}) are intentionally not listed — they never open an issue._`,
+              '_Source: `scripts/link-check.mjs` · workflow `.github/workflows/link-check.yml`._',
+            ].join('\n');
+
+            if (open) {
+              await github.rest.issues.update({ ...context.repo, issue_number: open.number, body });
+              await github.rest.issues.createComment({
+                ...context.repo, issue_number: open.number,
+                body: `🔄 Re-checked ${report.checkedAt}: ${dead.length} dead link(s) still present (description updated).`,
+              });
+            } else {
+              await github.rest.issues.create({ ...context.repo, title: TITLE, labels: [LABEL], body });
+            }
