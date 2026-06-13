@@ -22,6 +22,12 @@
  *   - Perf 85 was chosen historically because mobile Next.js framework JS
  *     overhead costs ~12 points on 4x CPU throttle. Raised to 90 (Mobile 4G)
  *     and 95 (Desktop) in 2026-04-10 to catch silent regressions.
+ *   - Desktop 95 → 80 on 2026-06-13 (cross-site calibration, D-LIN-27-2 /
+ *     Codify-Brief #458 "anchor below worst-observed"). The Desktop-95 gate
+ *     cried wolf: it false-red on pure shared-runner TBT variance (neckarshore
+ *     {86,93,98,100}, goldoni {89,90}, rauhut 67-spike) and got admin-bypassed
+ *     repeatedly. 80 sits ~6pp under worst-normal-observed across the family;
+ *     Mobile 4G (90) remains the real perf canary (framework JS shows under 4×).
  */
 
 import { execFileSync, spawn } from "node:child_process";
@@ -41,7 +47,14 @@ const PROFILES = [
     gate: "hard",
     lhArgs: ["--preset=desktop"],
     thresholds: {
-      performance: 95,
+      // Desktop Perf relaxed 95 → 80 on 2026-06-13 (anchor below worst-observed).
+      // On a 1× CPU desktop preset these static pages are so fast that the
+      // composite Perf score tracks GitHub-runner TBT jitter, not the site:
+      // observed {86, 93, 98, 100} ⇔ TBT {308, 203, 105, 2}ms while LCP <1s /
+      // CLS 0.004 stay rock-solid. 80 = ~6pp under worst-normal (86); a real
+      // regression below 80 still hard-fails, normal TBT noise passes.
+      // See "Thresholds history" above + CLAUDE.md → Gate Philosophy.
+      performance: 80,
       accessibility: 95,
       "best-practices": 95,
       seo: 95,
