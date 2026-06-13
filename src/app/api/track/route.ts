@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { store } from "@/lib/analytics-store";
+import { isWebVitalName, summarizeWebVitals } from "@/lib/web-vitals";
 import { createHash, timingSafeEqual } from "crypto";
 
 // ---------------------------------------------------------------------------
@@ -12,6 +13,7 @@ const VALID_EVENTS = new Set([
   "scroll_depth",
   "nav_click",
   "section_view",
+  "web_vital", // field Core Web Vitals (LCP/INP/CLS/FCP/TTFB) — L-NECK-FIELD-WEBVITALS-SELFHOST
 ]);
 
 /** Session gap: events from the same visitor within 30 min = same session. */
@@ -112,6 +114,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "invalid event" }, { status: 400 });
     }
 
+    // web_vital events carry a metric name + numeric value. Reject malformed
+    // ones (e.g. deprecated FID, NaN) so the field-CWV store stays clean.
+    const isVital = body.event === "web_vital";
+    if (isVital && (!isWebVitalName(body.metric) || typeof body.value !== "number" || !Number.isFinite(body.value))) {
+      return NextResponse.json({ error: "invalid web_vital" }, { status: 400 });
+    }
+
     const timestamp = body.timestamp || new Date().toISOString();
     const day = timestamp.slice(0, 10);
 
@@ -138,6 +147,10 @@ export async function POST(req: NextRequest) {
       vid: visitorHash,
       geo: geo.country ? geo : null,
       utm: body.utm || null,
+      // web_vital fields (null for all other event types)
+      metric: isVital ? body.metric : null,
+      value: isVital ? body.value : null,
+      rating: isVital && typeof body.rating === "string" ? body.rating : null,
     };
 
     // Store the event
@@ -169,6 +182,9 @@ interface TrackedEvent {
   vid: string;
   geo: { country: string | null; region: string | null } | null;
   utm: Record<string, string> | null;
+  metric?: string | null;
+  value?: number | null;
+  rating?: string | null;
 }
 
 /**
@@ -274,15 +290,26 @@ export async function GET(req: NextRequest) {
   }
 
   const allEvents = Object.values(results).flat();
-  const totalEvents = allEvents.length;
-  const pageViews = allEvents.filter((e) => e.event === "page_view").length;
+
+  // web_vital beacons are perf telemetry, not user interactions — keep them out
+  // of the interaction aggregations (totals/sessions/geo/utm) and summarize them
+  // separately as field Core Web Vitals.
+  const interactionEvents = allEvents.filter((e) => e.event !== "web_vital");
+  const webVitals = summarizeWebVitals(
+    allEvents
+      .filter((e) => e.event === "web_vital")
+      .map((e) => ({ metric: e.metric ?? "", value: e.value ?? Number.NaN }))
+  );
+
+  const totalEvents = interactionEvents.length;
+  const pageViews = interactionEvents.filter((e) => e.event === "page_view").length;
 
   // --- Session analytics (Feature 2) ---
-  const sessions = buildSessions(allEvents);
+  const sessions = buildSessions(interactionEvents);
 
   // --- Geo breakdown (Feature 3) ---
   const geoBreakdown: Record<string, number> = {};
-  for (const e of allEvents) {
+  for (const e of interactionEvents) {
     if (e.geo?.country) {
       geoBreakdown[e.geo.country] = (geoBreakdown[e.geo.country] || 0) + 1;
     }
@@ -292,7 +319,7 @@ export async function GET(req: NextRequest) {
   const utmSources: Record<string, number> = {};
   const utmMediums: Record<string, number> = {};
   const utmCampaigns: Record<string, number> = {};
-  for (const e of allEvents) {
+  for (const e of interactionEvents) {
     if (e.utm) {
       if (e.utm.utm_source) utmSources[e.utm.utm_source] = (utmSources[e.utm.utm_source] || 0) + 1;
       if (e.utm.utm_medium) utmMediums[e.utm.utm_medium] = (utmMediums[e.utm.utm_medium] || 0) + 1;
@@ -302,7 +329,7 @@ export async function GET(req: NextRequest) {
 
   // --- Referrer breakdown (bonus: normalize referrers) ---
   const referrers: Record<string, number> = {};
-  for (const e of allEvents) {
+  for (const e of interactionEvents) {
     if (e.referrer) {
       try {
         const host = new URL(e.referrer).hostname.replace(/^www\./, "");
@@ -320,6 +347,7 @@ export async function GET(req: NextRequest) {
       uniqueVisitors: totalUniqueVisitors,
       days: Object.keys(results).length,
       sessions,
+      webVitals,
       geo: geoBreakdown,
       utm: {
         sources: utmSources,
