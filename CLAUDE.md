@@ -26,8 +26,9 @@
 | Accessibility | `tests/e2e/accessibility.spec.ts` | 15 | H1 count, heading hierarchy, lang, alt text, aria — all pages |
 | Stats | `tests/e2e/stats.spec.ts` | 8 | Stats tiles render with backend values (TC-STAT-*) |
 | API Track Auth | `tests/e2e/api-track-auth.spec.ts` | 6 | `/api/track` GET auth-hardening (TC-STAT-009, dr-sommer Z1.1) |
+| Web Vitals | `tests/e2e/web-vitals.spec.ts` | 11 | Field CWV pipeline (TC-WV-*) — p75 lib units, `/api/track` web_vital ingest, browser beacon emission |
 
-Total: 91 tests across 10 suites.
+Total: 102 tests across 11 suites.
 
 ### When to Run
 
@@ -49,7 +50,7 @@ Log every run in `docs/test-log.md` — one row per run (compact format):
 
 ### Test IDs
 
-Every test has a stable ID: `TC-[SUITE]-[NNN]`. Suites: `NAV`, `LNK`, `CAL`, `THM`, `RES`, `SEO`, `A11Y`, `SMK`, `STAT`, `MAN-OG`.
+Every test has a stable ID: `TC-[SUITE]-[NNN]`. Suites: `NAV`, `LNK`, `CAL`, `THM`, `RES`, `SEO`, `A11Y`, `SMK`, `STAT`, `WV`, `MAN-OG`.
 Use test IDs when referencing tests in logs, reports, and issues.
 
 ### Adding Tests

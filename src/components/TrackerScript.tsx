@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { onCLS, onFCP, onINP, onLCP, onTTFB, type Metric } from "web-vitals";
 import { BRAND } from "@/lib/brand";
 
 /** Extract UTM parameters from current URL (once per page load). */
@@ -56,6 +57,18 @@ export default function TrackerScript() {
 
     // Page view
     track("page_view");
+
+    // Field Core Web Vitals — real-user LCP/INP/CLS/FCP/TTFB into /api/track.
+    // Each library callback fires at most once per page load (LCP/CLS/INP flush
+    // on page-hide); we forward the canonical metric name, value + rating.
+    // L-NECK-FIELD-WEBVITALS-SELFHOST — €0, first-party, cookie-free.
+    const reportVital = (m: Metric) =>
+      track("web_vital", { metric: m.name, value: m.value, rating: m.rating, id: m.id });
+    onLCP(reportVital);
+    onINP(reportVital);
+    onCLS(reportVital);
+    onFCP(reportVital);
+    onTTFB(reportVital);
 
     // Scroll depth
     const thresholds = [25, 50, 75, 100];
