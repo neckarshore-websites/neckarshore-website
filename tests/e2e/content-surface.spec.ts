@@ -166,3 +166,76 @@ test.describe("Content surface — ClearPath product", () => {
     expect(String(apps[0].url)).toContain("clearpath-52.vercel.app");
   });
 });
+
+// SEO/GEO dual-axis acceptance sweep over every new route (Task 6).
+const NEW_PAGES = [
+  { path: "/glossar", title: "Glossar", canonical: "https://neckarshore.ai/glossar" },
+  {
+    path: "/glossar/bestaetigungsfehler",
+    title: "Bestätigungsfehler",
+    canonical: "https://neckarshore.ai/glossar/bestaetigungsfehler",
+  },
+  {
+    path: "/glossar/ueberlebenden-verzerrung",
+    title: "Überlebenden-Verzerrung",
+    canonical: "https://neckarshore.ai/glossar/ueberlebenden-verzerrung",
+  },
+  {
+    path: "/glossar/versunkene-kosten-falle",
+    title: "Versunkene-Kosten-Falle",
+    canonical: "https://neckarshore.ai/glossar/versunkene-kosten-falle",
+  },
+  { path: "/products", title: "Produkte", canonical: "https://neckarshore.ai/products" },
+  {
+    path: "/products/clearpath",
+    title: "ClearPath",
+    canonical: "https://neckarshore.ai/products/clearpath",
+  },
+] as const;
+
+test.describe("Content surface — SEO/GEO dual-axis sweep", () => {
+  for (const p of NEW_PAGES) {
+    test(`TC-CNT-030 [${p.path}]: unique title, single H1, canonical, JSON-LD`, async ({
+      page,
+    }) => {
+      const res = await page.goto(p.path);
+      expect(res?.status()).toBe(200);
+
+      const title = await page.title();
+      expect(title).toContain(p.title);
+      expect(title).toContain("neckarshore.ai");
+
+      await expect(page.locator("h1")).toHaveCount(1);
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+        "href",
+        p.canonical,
+      );
+
+      const blocks = await ldJson(page);
+      expect(blocks.length).toBeGreaterThanOrEqual(1);
+      expect(blocks.every((b) => b["@context"] === "https://schema.org")).toBe(true);
+    });
+
+    test(`TC-CNT-031 [${p.path}]: lang=de, no heading skips, no overflow @393px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 393, height: 852 });
+      await page.goto(p.path);
+
+      expect(await page.locator("html").getAttribute("lang")).toBe("de");
+
+      const headings = await page.locator("h1, h2, h3, h4, h5, h6").all();
+      let last = 0;
+      for (const h of headings) {
+        const level = parseInt((await h.evaluate((el) => el.tagName)).replace("H", ""), 10);
+        if (last > 0) expect(level).toBeLessThanOrEqual(last + 1);
+        last = level;
+      }
+
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+      );
+      expect(overflow).toBe(false);
+    });
+  }
+});
