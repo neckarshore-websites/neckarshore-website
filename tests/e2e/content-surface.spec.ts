@@ -123,3 +123,46 @@ test.describe("Content surface — Products index", () => {
     }
   });
 });
+
+test.describe("Content surface — ClearPath product", () => {
+  test("TC-CNT-020: 200, single H1, definition lead is the first paragraph", async ({
+    page,
+  }) => {
+    const res = await page.goto("/products/clearpath");
+    expect(res?.status()).toBe(200);
+    await expect(page.locator("h1")).toHaveCount(1);
+    await expect(page.locator("h1")).toContainText("ClearPath");
+    await expect(page.locator("article p").first()).toContainText(
+      "Beschreibe eine Entscheidung",
+    );
+  });
+
+  test("TC-CNT-021: live-app link present and rel-correct", async ({ page }) => {
+    await page.goto("/products/clearpath");
+    const live = page.locator('a[href="https://clearpath-52.vercel.app"]').first();
+    await expect(live).toBeVisible();
+    await expect(live).toHaveAttribute("target", "_blank");
+    await expect(live).toHaveAttribute("rel", /noopener/);
+  });
+
+  test("TC-CNT-022: links to all three related glossary entries", async ({ page }) => {
+    await page.goto("/products/clearpath");
+    for (const slug of [
+      "bestaetigungsfehler",
+      "ueberlebenden-verzerrung",
+      "versunkene-kosten-falle",
+    ]) {
+      await expect(page.locator(`a[href="/glossar/${slug}"]`).first()).toBeVisible();
+    }
+  });
+
+  test("TC-CNT-023: emits exactly one SoftwareApplication JSON-LD block", async ({ page }) => {
+    await page.goto("/products/clearpath");
+    const apps = (await ldJson(page)).filter((b) => b["@type"] === "SoftwareApplication");
+    expect(apps).toHaveLength(1);
+    expect(apps[0].name).toBe("ClearPath");
+    expect(apps[0].operatingSystem).toBe("Web");
+    expect(apps[0].offers).toBeTruthy();
+    expect(String(apps[0].url)).toContain("clearpath-52.vercel.app");
+  });
+});
