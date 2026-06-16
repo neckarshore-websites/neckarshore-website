@@ -93,3 +93,33 @@ test.describe("Content surface — Glossar", () => {
     });
   }
 });
+
+test.describe("Content surface — Products index", () => {
+  test("TC-CNT-010: /products renders 200 with the three tier headings", async ({ page }) => {
+    const res = await page.goto("/products");
+    expect(res?.status()).toBe(200);
+    await expect(page.locator("h1")).toHaveCount(1);
+    for (const tier of ["Omnopsis", "MMPs", "Skills"]) {
+      await expect(
+        page.getByRole("heading", { name: tier, exact: true, level: 2 }),
+      ).toBeVisible();
+    }
+  });
+
+  test("TC-CNT-011: ClearPath card links to /products/clearpath", async ({ page }) => {
+    await page.goto("/products");
+    await expect(page.locator('a[href="/products/clearpath"]').first()).toBeVisible();
+  });
+
+  test("TC-CNT-012: no empty or placeholder internal links", async ({ page }) => {
+    await page.goto("/products");
+    const hrefs = await page
+      .locator("main a")
+      .evaluateAll((els) => els.map((e) => e.getAttribute("href")));
+    expect(hrefs.length).toBeGreaterThan(0);
+    for (const href of hrefs) {
+      expect(href).toBeTruthy();
+      expect(href).not.toBe("#");
+    }
+  });
+});
