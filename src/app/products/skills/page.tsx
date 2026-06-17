@@ -18,11 +18,15 @@ export const metadata: Metadata = pageMetadata({
 
 export default function SkillsPage() {
   return (
-    <SubPortal category={category} description={description}>
+    <SubPortal category={category} description={description} wide>
       {/* Rich skill cards (one per portfolio item, in portfolio order). Heading level
           h2 — directly under the page h1, no skip. Falls back to the plain ProductCard
-          for any item that has no rich card data yet. */}
-      <div className="mt-12 grid gap-6 md:grid-cols-2">
+          for any item that has no rich card data yet.
+
+          Grid breakpoint is lg (1024px), NOT md: at tablet-portrait width (768px) two
+          rich cards get cramped, so we stay single-column there (full-width, readable)
+          and only split into two columns at tablet-landscape / desktop. */}
+      <div className="mt-12 grid gap-6 lg:grid-cols-2">
         {category.items.map((item) => {
           const card = SKILL_CARDS[item.slug];
           return card ? (

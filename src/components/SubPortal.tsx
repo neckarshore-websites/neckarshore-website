@@ -18,11 +18,14 @@ export default function SubPortal({
   category,
   description,
   children,
+  wide = false,
 }: {
   category: PortfolioCategory;
   description: string;
   /** When provided, replaces the default ProductCard grid (incl. its own grid wrapper). */
   children?: ReactNode;
+  /** Widen the main column from 960px to 1200px (for the richer SkillCard grid). */
+  wide?: boolean;
 }) {
   const schema = collectionPageSchema({
     name: `${category.title} — neckarshore.ai`,
@@ -34,7 +37,9 @@ export default function SubPortal({
     <>
       <Nav showOssLaunch={showOssLaunch} />
       <JsonLd data={schema} id={`schema-collectionpage-${category.id}`} />
-      <main className="mx-auto max-w-[960px] px-4 pt-40 pb-20 md:px-6">
+      <main
+        className={`mx-auto px-4 pt-40 pb-20 md:px-6 ${wide ? "max-w-[1200px]" : "max-w-[960px]"}`}
+      >
         <nav
           aria-label="Brotkrumen"
           className="mb-8 text-sm text-muted dark:text-text-secondary/60"
