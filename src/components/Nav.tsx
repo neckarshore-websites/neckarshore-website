@@ -138,8 +138,10 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
           <Logo size="text-xl" className="text-primary/70 dark:text-text-secondary" />
         </Link>
 
-        {/* Desktop */}
-        <div className="hidden items-center gap-8 md:flex">
+        {/* Desktop nav — shown from lg (1024px). Below that the hamburger handles it:
+            at tablet-portrait width (768px) the full desktop row crowds the logo + clips
+            the CTA, so the breakpoint is lg, not md (matches the SkillCard grid). */}
+        <div className="hidden items-center gap-8 lg:flex">
           {navLinksLead.map((link) => (
             <a
               key={link.href}
@@ -173,8 +175,8 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
           </a>
         </div>
 
-        {/* Mobile: theme toggle + hamburger */}
-        <div className="flex items-center gap-2 md:hidden">
+        {/* Mobile + tablet-portrait (< lg): theme toggle + hamburger */}
+        <div className="flex items-center gap-2 lg:hidden">
           <ThemeToggle />
           <button
             onClick={() => setOpen(!open)}
@@ -188,7 +190,7 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
 
       {/* Mobile menu */}
       {open && (
-        <div className="border-t border-primary/5 bg-neutral-light px-4 pb-6 pt-4 dark:border-text-secondary/10 dark:bg-deep-space md:hidden">
+        <div className="border-t border-primary/5 bg-neutral-light px-4 pb-6 pt-4 dark:border-text-secondary/10 dark:bg-deep-space lg:hidden">
           {navLinksLead.map((link) => (
             <a
               key={link.href}

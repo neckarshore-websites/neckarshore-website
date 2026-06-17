@@ -27,7 +27,10 @@ test.describe("Responsive", () => {
     test(`${idNav}: nav is usable on ${vp.name} (${vp.width}px)`, async ({ page }) => {
       await page.setViewportSize({ width: vp.width, height: vp.height });
       await page.goto("/");
-      if (vp.width < 768) {
+      // Nav switches from hamburger to the desktop row at lg (1024px), so every tested
+      // viewport (≤768px) gets the hamburger; the desktop row is covered by navigation.spec
+      // at the default Desktop-Chrome viewport (1280px ≥ 1024px).
+      if (vp.width < 1024) {
         await expect(page.locator('nav button[aria-label="Menü öffnen"]')).toBeVisible();
       } else {
         await expect(page.locator('nav a[href="/#services"]')).toBeVisible();
