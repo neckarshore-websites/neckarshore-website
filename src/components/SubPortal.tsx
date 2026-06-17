@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -16,9 +17,12 @@ const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
 export default function SubPortal({
   category,
   description,
+  children,
 }: {
   category: PortfolioCategory;
   description: string;
+  /** When provided, replaces the default ProductCard grid (incl. its own grid wrapper). */
+  children?: ReactNode;
 }) {
   const schema = collectionPageSchema({
     name: `${category.title} — neckarshore.ai`,
@@ -62,11 +66,13 @@ export default function SubPortal({
           </p>
         </header>
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-2">
-          {category.items.map((item) => (
-            <ProductCard key={item.slug} item={item} headingLevel="h2" />
-          ))}
-        </div>
+        {children ?? (
+          <div className="mt-12 grid gap-4 sm:grid-cols-2">
+            {category.items.map((item) => (
+              <ProductCard key={item.slug} item={item} headingLevel="h2" />
+            ))}
+          </div>
+        )}
 
         <div className="mt-12 border-t border-primary/5 pt-8 dark:border-text-secondary/10">
           <Link
