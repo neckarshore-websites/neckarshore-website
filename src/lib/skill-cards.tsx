@@ -1,4 +1,11 @@
-import { Layers, Mail, SpellCheck, Terminal, type LucideIcon } from "lucide-react";
+import {
+  Layers,
+  Mail,
+  SpellCheck,
+  Terminal,
+  UtensilsCrossed,
+  type LucideIcon,
+} from "lucide-react";
 
 /**
  * Rich OSS-tool card content — the detailed "skill card" surface (icon + badge +
@@ -36,12 +43,17 @@ export interface SkillCardData {
   capabilities: SkillCapability[];
   /** Optional italic footer note above the license row (e.g. "… weitere in Entwicklung"). */
   moreNote?: string;
-  /** License label, bottom-left. */
-  license: string;
-  /** GitHub repository URL, bottom-right button. */
-  repoUrl: string;
-  /** Analytics key for the GitHub button. */
-  track: string;
+  /** License label, footer-left (e.g. "MIT License"). Omit for non-OSS cards. */
+  license?: string;
+  /** GitHub repository URL — a GitHub button (footer-right) renders only when set. */
+  repoUrl?: string;
+  /** Analytics key for the GitHub button (only used when repoUrl is set). */
+  track?: string;
+  /**
+   * Footer pill for cards that are NOT a downloadable OSS tool (e.g. "Referenz-Beispiel").
+   * Stands in for the license/GitHub footer when there is no public repo.
+   */
+  footerBadge?: string;
 }
 
 export const SKILL_CARDS: Record<string, SkillCardData> = {
@@ -165,5 +177,35 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
     license: "MIT License",
     repoUrl: "https://github.com/neckarshore-skills/ai-phrase-check",
     track: "oss_phrase_check",
+  },
+
+  // 5 — NEW. A bespoke client skill from a PRIVATE barter deal → no public repo,
+  // client name genericized ("Restaurant-Menüpflege"). Shown as a reference example,
+  // not a downloadable OSS tool. If it later lands in a neckarshore-skills repo, set
+  // repoUrl + license and drop footerBadge → it becomes a normal OSS card.
+  "restaurant-menu-update": {
+    icon: UtensilsCrossed,
+    title: "Restaurant-Menüpflege",
+    description:
+      "Verwandelt das wiederkehrende Menü-Update eines Restaurants in einen geprüften, reproduzierbaren Vorgang. Der Inhaber liefert die neue Karte als PDF, Foto oder Text — der Skill macht daraus publikationsreife Website-Inhalte, prüft jeden Allergen-Code gegen die Referenz, baut und lintet die Seite und öffnet einen fertigen Pull Request mit Vorschau-Deploy zur Abnahme.",
+    capabilities: [
+      {
+        code: "quellen-parsing",
+        text: "Liest die Karte aus PDF, Foto oder Freitext ein und zerlegt sie in einzelne Gerichte und Weine.",
+      },
+      {
+        code: "allergen-check",
+        text: "Gleicht jeden Allergen- und Zusatzstoff-Code (LMIV / ZZulV) gegen die zentrale Referenz ab — unbekannte Codes werden gemeldet, nie geraten.",
+      },
+      {
+        code: "umlaut-fix",
+        text: "Korrigiert ASCII-Schreibweisen aus alten Word-Vorlagen zu echten Umlauten und ß (Kaese → Käse); italienische Gerichtnamen bleiben im Original.",
+      },
+      {
+        code: "pr-preview",
+        text: "Build, Lint und Konsistenz-Check laufen automatisch; öffnet einen Pull Request mit Test-Plan und Vercel-Vorschau zur Freigabe.",
+      },
+    ],
+    footerBadge: "Referenz-Beispiel",
   },
 };

@@ -62,21 +62,33 @@ export function SkillCard({
         </p>
       )}
 
-      <div className="mt-auto flex items-center justify-between pt-6">
-        <span className="text-xs font-medium text-muted dark:text-text-tertiary">
-          {card.license}
-        </span>
-        <a
-          href={card.repoUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
-          data-track={card.track}
-        >
-          GitHub
-          <ExternalLink size={14} aria-hidden="true" />
-        </a>
-      </div>
+      {(card.footerBadge || card.license || card.repoUrl) && (
+        <div className="mt-auto flex items-center justify-between gap-3 pt-6">
+          {card.footerBadge ? (
+            <span className="rounded-full bg-primary/5 px-3 py-1 text-xs font-medium uppercase tracking-wider text-muted dark:bg-text-secondary/10 dark:text-text-tertiary">
+              {card.footerBadge}
+            </span>
+          ) : card.license ? (
+            <span className="text-xs font-medium text-muted dark:text-text-tertiary">
+              {card.license}
+            </span>
+          ) : (
+            <span aria-hidden="true" />
+          )}
+          {card.repoUrl && (
+            <a
+              href={card.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
+              data-track={card.track}
+            >
+              GitHub
+              <ExternalLink size={14} aria-hidden="true" />
+            </a>
+          )}
+        </div>
+      )}
     </div>
   );
 }

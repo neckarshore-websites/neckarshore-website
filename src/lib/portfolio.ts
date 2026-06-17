@@ -196,6 +196,18 @@ export const PORTFOLIO: PortfolioCategory[] = [
         applicationCategory: "UtilitiesApplication",
         noindex: true,
       },
+      {
+        name: "Restaurant-Menüpflege",
+        slug: "restaurant-menu-update",
+        tagline:
+          "Wöchentliches Menü-Update als geprüfter, reproduzierbarer Vorgang — inkl. Allergen-Validierung (LMIV/ZZulV).",
+        status: "preview",
+        href: "/products/restaurant-menu-update",
+        isExternal: false,
+        schemaType: "SoftwareApplication",
+        applicationCategory: "DeveloperApplication",
+        noindex: true,
+      },
     ],
   },
   {
