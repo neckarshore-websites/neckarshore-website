@@ -85,7 +85,12 @@ export default async function GlossarEntryPage({
           </div>
         </article>
 
-        <div className="mt-12 border-t border-primary/5 pt-8 dark:border-text-secondary/10">
+        <p className="mt-10 text-sm italic text-muted dark:text-text-tertiary">
+          <span className="font-medium not-italic">Wie dieser Text entstand:</span>{" "}
+          KI-beschleunigt entworfen, vom Gründer redigiert.
+        </p>
+
+        <div className="mt-8 border-t border-primary/5 pt-8 dark:border-text-secondary/10">
           <Link
             href="/glossar"
             className="text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"

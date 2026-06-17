@@ -90,6 +90,13 @@ test.describe("Content surface — Glossar", () => {
         const text = await page.locator("article").innerText();
         expect(wordCount(text)).toBeLessThanOrEqual(160);
       });
+
+      test(`TC-CNT-007 [${entry.slug}]: carries the "Wie dieser Text entstand" note`, async ({
+        page,
+      }) => {
+        await page.goto(`/glossar/${entry.slug}`);
+        await expect(page.getByText("Wie dieser Text entstand")).toBeVisible();
+      });
     });
   }
 });
@@ -164,6 +171,11 @@ test.describe("Content surface — ClearPath product", () => {
     expect(apps[0].operatingSystem).toBe("Web");
     expect(apps[0].offers).toBeTruthy();
     expect(String(apps[0].url)).toContain("clearpath-52.vercel.app");
+  });
+
+  test('TC-CNT-024: carries the "Wie dieser Text entstand" note', async ({ page }) => {
+    await page.goto("/products/clearpath");
+    await expect(page.getByText("Wie dieser Text entstand")).toBeVisible();
   });
 });
 
