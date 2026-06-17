@@ -274,6 +274,10 @@ export default function Home() {
         {/* ===== OMNOPSIS TEASER (Title-Case rendering — see src/lib/brand.ts) ===== */}
         <section id={BRAND.SECTION_ID} className="bg-primary px-4 py-20 md:px-6 md:py-24">
           <div className="mx-auto max-w-[1200px]">
+            {/* TEMP COMPARE — remove with the V1/V2 blocks below */}
+            <span className="mb-6 inline-block rounded bg-accent px-3 py-1 font-mono text-xs font-bold uppercase tracking-wider text-white">
+              Original — heute live
+            </span>
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-widest text-secondary">
@@ -317,6 +321,84 @@ export default function Home() {
               </div>
 
               {/* Stats grid — renders instantly with fallback, fetches live data in background */}
+              <StatsGrid stats={stats} devDays={devDays} />
+            </div>
+          </div>
+        </section>
+
+        {/* ===== TEMP COMPARE: VERSION 1 — Engine-led (remove after decision) ===== */}
+        <section className="bg-primary px-4 py-20 md:px-6 md:py-24">
+          <div className="mx-auto max-w-[1200px]">
+            <span className="mb-6 inline-block rounded bg-accent px-3 py-1 font-mono text-xs font-bold uppercase tracking-wider text-white">
+              Version 1 — Engine-led
+            </span>
+            <div className="grid items-center gap-12 md:grid-cols-2">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-widest text-secondary">
+                  Wie wir bauen
+                </p>
+                <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
+                  Eine Bauweise.
+                  <br />
+                  Ein wachsendes Portfolio.
+                </h2>
+                <p className="mt-6 text-lg leading-relaxed text-text-secondary">
+                  Vom Flagship Omnopsis über fokussierte MMPs bis zu Open-Source-Skills — alles aus
+                  einer Engine: KI-beschleunigte Entwicklung mit deutscher Datenschutz-Disziplin.
+                </p>
+                <p className="mt-6 font-mono text-sm text-text-secondary/70">
+                  BYOLLM · Fail-closed · Hosting in Deutschland · Made in Germany
+                </p>
+                <Link
+                  href="/products"
+                  className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-secondary transition-colors hover:text-text-primary"
+                >
+                  Alle Produkte ansehen →
+                </Link>
+              </div>
+              <StatsGrid stats={stats} devDays={devDays} />
+            </div>
+          </div>
+        </section>
+
+        {/* ===== TEMP COMPARE: VERSION 2 — Portfolio-led (remove after decision) ===== */}
+        <section className="bg-primary px-4 py-20 md:px-6 md:py-24">
+          <div className="mx-auto max-w-[1200px]">
+            <span className="mb-6 inline-block rounded bg-accent px-3 py-1 font-mono text-xs font-bold uppercase tracking-wider text-white">
+              Version 2 — Portfolio-led
+            </span>
+            <div className="grid items-center gap-12 md:grid-cols-2">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-widest text-secondary">
+                  Unser Portfolio
+                </p>
+                <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
+                  Ein Flagship. Mehrere Produkte. Eine Bauweise.
+                </h2>
+                <p className="mt-6 text-lg leading-relaxed text-text-secondary">
+                  Strukturiert gebaut — KI-beschleunigt, DSGVO-by-Design, Made in Germany:
+                </p>
+                <ul className="mt-6 space-y-3">
+                  <li>
+                    <span className="font-heading font-semibold text-text-primary">Omnopsis</span>
+                    <span className="text-text-secondary"> — Flagship · KI-first Documentation Engine</span>
+                  </li>
+                  <li>
+                    <span className="font-heading font-semibold text-text-primary">ClearPath &amp; MMPs</span>
+                    <span className="text-text-secondary"> — Produkte mit Marktreife</span>
+                  </li>
+                  <li>
+                    <span className="font-heading font-semibold text-text-primary">Skills</span>
+                    <span className="text-text-secondary"> — fokussierte Open-Source-Werkzeuge</span>
+                  </li>
+                </ul>
+                <Link
+                  href="/products"
+                  className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-secondary transition-colors hover:text-text-primary"
+                >
+                  Alle Produkte ansehen →
+                </Link>
+              </div>
               <StatsGrid stats={stats} devDays={devDays} />
             </div>
           </div>
