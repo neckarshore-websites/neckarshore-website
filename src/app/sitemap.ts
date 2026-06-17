@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllGlossarEntries } from "@/lib/content/glossar";
+import { allProductRoutes } from "@/lib/portfolio";
 
 /**
  * Dynamic sitemap — auto-regenerates on every build with current lastModified.
@@ -18,8 +19,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/impressum",
     "/datenschutz",
     "/glossar",
-    "/products",
-    "/products/clearpath",
+    // /products, the 4 sub-portals, and the bespoke own-page details (omnopsis, clearpath).
+    // External sites + noindex preview skeletons are excluded by allProductRoutes().
+    ...allProductRoutes(),
     ...getAllGlossarEntries().map((entry) => `/glossar/${entry.slug}`),
   ].sort((a, b) => a.localeCompare(b));
 

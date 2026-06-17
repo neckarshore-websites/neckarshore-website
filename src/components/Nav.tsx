@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
+import { PORTFOLIO } from "@/lib/portfolio";
 
 const navLinksLead = [
   { href: "/#services", label: "Services", track: "nav_services" },
@@ -13,27 +14,14 @@ const navLinksLead = [
 
 const navLinksTail = [{ href: "/#founder", label: "Über uns", track: "nav_founder" }];
 
-// Produkte dropdown — slim category menu; each entry scrolls to its tier on the /products portal.
-const productLinks = [
-  {
-    href: "/products#tier-omnopsis",
-    label: "Omnopsis",
-    sub: "Flagship",
-    track: "nav_products_omnopsis",
-  },
-  {
-    href: "/products#tier-mmps",
-    label: "MMPs",
-    sub: "Minimum Marketable Products",
-    track: "nav_products_mmps",
-  },
-  {
-    href: "/products#tier-skills",
-    label: "Skills",
-    sub: "Fokussierte Werkzeuge",
-    track: "nav_products_skills",
-  },
-];
+// Produkte dropdown — one entry per portfolio category, linking to its sub-portal page.
+// Derived from the central PORTFOLIO config (single source of truth — add a category there).
+const productLinks = PORTFOLIO.map((category) => ({
+  href: category.href,
+  label: category.navLabel,
+  sub: category.subtitle,
+  track: category.track,
+}));
 
 interface NavProps {
   showOssLaunch?: boolean;

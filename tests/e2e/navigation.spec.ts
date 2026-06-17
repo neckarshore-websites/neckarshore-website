@@ -21,18 +21,21 @@ test.describe("Navigation", () => {
     });
   }
 
-  // TC-NAV-004 was the "Omnopsis" header anchor link; that link was replaced by the
-  // Produkte dropdown (2026-06-17). "Produkte" navigates to the portal; the dropdown
-  // reveals category shortcuts on hover/focus.
-  test("TC-NAV-004: Produkte dropdown reveals the category links on hover", async ({ page }) => {
+  // TC-NAV-004 was the "Omnopsis" header anchor link; replaced by the Produkte dropdown
+  // (2026-06-17). The dropdown now reveals one link per portfolio category, each pointing
+  // at its sub-portal PAGE (not an anchor). "Produkte" itself navigates to the portal.
+  test("TC-NAV-004: Produkte dropdown reveals the category sub-portal links on hover", async ({
+    page,
+  }) => {
     await page.goto("/");
     await page.locator("nav").getByRole("link", { name: "Produkte", exact: true }).hover();
-    const omnopsisLink = page.locator('nav a[href="/products#tier-omnopsis"]');
-    await expect(omnopsisLink).toBeVisible();
-    await expect(page.locator('nav a[href="/products#tier-mmps"]')).toBeVisible();
-    await expect(page.locator('nav a[href="/products#tier-skills"]')).toBeVisible();
-    await omnopsisLink.click();
-    await expect(page).toHaveURL(/\/products/);
+    const flagshipsLink = page.locator('nav a[href="/products/flagships"]');
+    await expect(flagshipsLink).toBeVisible();
+    await expect(page.locator('nav a[href="/products/mmps"]')).toBeVisible();
+    await expect(page.locator('nav a[href="/products/skills"]')).toBeVisible();
+    await expect(page.locator('nav a[href="/products/websites"]')).toBeVisible();
+    await flagshipsLink.click();
+    await expect(page).toHaveURL(/\/products\/flagships/);
   });
 
   test("TC-NAV-006: nav link from /impressum navigates to homepage #services", async ({ page }) => {

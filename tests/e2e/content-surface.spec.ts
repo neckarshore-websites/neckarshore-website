@@ -102,11 +102,11 @@ test.describe("Content surface — Glossar", () => {
 });
 
 test.describe("Content surface — Products index", () => {
-  test("TC-CNT-010: /products renders 200 with the three tier headings", async ({ page }) => {
+  test("TC-CNT-010: /products renders 200 with the four category headings", async ({ page }) => {
     const res = await page.goto("/products");
     expect(res?.status()).toBe(200);
     await expect(page.locator("h1")).toHaveCount(1);
-    for (const tier of ["Omnopsis", "MMPs", "Skills"]) {
+    for (const tier of ["Flagships", "MMPs", "Skills", "Websites"]) {
       await expect(
         page.getByRole("heading", { name: tier, exact: true, level: 2 }),
       ).toBeVisible();
@@ -212,6 +212,52 @@ const NEW_PAGES = [
     path: "/products/omnopsis",
     title: "Omnopsis Documentor+X",
     canonical: "https://neckarshore.ai/products/omnopsis",
+  },
+  // Sub-portals (one per portfolio category) — 2026-06-17 tree rebuild.
+  { path: "/products/flagships", title: "Flagships", canonical: "https://neckarshore.ai/products/flagships" },
+  { path: "/products/mmps", title: "MMPs", canonical: "https://neckarshore.ai/products/mmps" },
+  { path: "/products/skills", title: "Skills", canonical: "https://neckarshore.ai/products/skills" },
+  { path: "/products/websites", title: "Websites", canonical: "https://neckarshore.ai/products/websites" },
+  // Preview skeleton detail pages (dynamic [slug] route). noindex, but reachable + structured.
+  {
+    path: "/products/snakeoil-check",
+    title: "Snakeoil-Check",
+    canonical: "https://neckarshore.ai/products/snakeoil-check",
+  },
+  {
+    path: "/products/local-seo-hub",
+    title: "Local-SEO-Hub",
+    canonical: "https://neckarshore.ai/products/local-seo-hub",
+  },
+  {
+    path: "/products/phonesis",
+    title: "Phonesis Voicebank",
+    canonical: "https://neckarshore.ai/products/phonesis",
+  },
+  {
+    path: "/products/prod-or-pretend",
+    title: "Prod-or-Pretend",
+    canonical: "https://neckarshore.ai/products/prod-or-pretend",
+  },
+  {
+    path: "/products/obsidian-vault-autopilot",
+    title: "Obsidian Vault Autopilot",
+    canonical: "https://neckarshore.ai/products/obsidian-vault-autopilot",
+  },
+  {
+    path: "/products/ai-phrase-check",
+    title: "AI Phrase Check",
+    canonical: "https://neckarshore.ai/products/ai-phrase-check",
+  },
+  {
+    path: "/products/imap-mailbox-cleanup",
+    title: "IMAP Mailbox Cleanup",
+    canonical: "https://neckarshore.ai/products/imap-mailbox-cleanup",
+  },
+  {
+    path: "/products/social-scrapers",
+    title: "Social Scrapers",
+    canonical: "https://neckarshore.ai/products/social-scrapers",
   },
 ] as const;
 
