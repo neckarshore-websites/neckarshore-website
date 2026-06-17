@@ -161,7 +161,10 @@ export const PORTFOLIO: PortfolioCategory[] = [
         isExternal: false,
         schemaType: "SoftwareApplication",
         applicationCategory: "DeveloperApplication",
-        noindex: true,
+        // Bespoke own page (src/app/products/obsidian-vault-autopilot) → excluded from the
+        // [slug] skeleton + indexable (no noindex): the first skills detail page with real
+        // SEO/GEO content sourced from the repo README.
+        hasOwnPage: true,
       },
       {
         name: "Social Scrapers",

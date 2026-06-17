@@ -16,10 +16,13 @@ export function SkillCard({
   headingLevel = "h3",
 }: {
   card: SkillCardData;
-  headingLevel?: "h2" | "h3";
+  headingLevel?: "h1" | "h2" | "h3";
 }) {
   const Heading = headingLevel;
   const Icon = card.icon;
+  // As a detail-page hero (h1) the title scales up to read as a page title, in line
+  // with the sibling product pages; in a listing grid (h2/h3) it stays compact.
+  const titleClass = headingLevel === "h1" ? "text-2xl md:text-3xl" : "text-xl";
 
   return (
     <div className="flex flex-col rounded-xl border border-primary/10 bg-white p-8 shadow-sm dark:border-text-secondary/10 dark:bg-surface">
@@ -32,7 +35,9 @@ export function SkillCard({
         )}
       </div>
 
-      <Heading className="mt-4 font-heading text-xl font-semibold text-primary dark:text-text-primary">
+      <Heading
+        className={`mt-4 font-heading font-semibold text-primary dark:text-text-primary ${titleClass}`}
+      >
         {card.title}
       </Heading>
 
