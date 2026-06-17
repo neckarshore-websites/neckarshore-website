@@ -49,7 +49,7 @@ const TIERS: Tier[] = [
     items: [
       {
         name: "ClearPath",
-        tagline: "Ein mentaler Firewall gegen kognitive Verzerrungen.",
+        tagline: "Eine mentale Firewall gegen kognitive Verzerrungen.",
         href: "/products/clearpath",
       },
       {

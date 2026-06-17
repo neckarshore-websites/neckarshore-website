@@ -10,7 +10,7 @@ const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
 export const metadata: Metadata = pageMetadata({
   title: "Glossar — Kognitive Verzerrungen | neckarshore.ai",
   description:
-    "Ein kuratiertes Glossar kognitiver Verzerrungen — jeder Denkfehler in einem Satz erklärt, mit Kontext und Bezug zu ClearPath, dem mentalen Firewall gegen Verzerrungen.",
+    "Ein kuratiertes Glossar kognitiver Verzerrungen — jeder Denkfehler in einem Satz erklärt, mit Kontext und Bezug zu ClearPath, der mentalen Firewall gegen Verzerrungen.",
   path: "/glossar",
 });
 
@@ -37,7 +37,7 @@ export default function GlossarIndex() {
             >
               ClearPath
             </Link>
-            , den mentalen Firewall gegen diese Verzerrungen.
+            , die mentale Firewall gegen diese Verzerrungen.
           </p>
         </header>
 
