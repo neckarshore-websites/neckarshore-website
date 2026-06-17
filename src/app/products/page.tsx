@@ -38,7 +38,7 @@ const TIERS: Tier[] = [
       {
         name: "Omnopsis Documentor",
         tagline: "KI-gestützte Dokumentations-Automatisierung für Engineering-Teams.",
-        href: "/#omnopsis",
+        href: "/products/omnopsis",
       },
     ],
   },
@@ -49,7 +49,7 @@ const TIERS: Tier[] = [
     items: [
       {
         name: "ClearPath",
-        tagline: "Ein mentaler Firewall gegen kognitive Verzerrungen.",
+        tagline: "Eine mentale Firewall gegen kognitive Verzerrungen.",
         href: "/products/clearpath",
       },
       {
@@ -123,7 +123,7 @@ export default function ProductsIndex() {
               <div className="flex items-baseline gap-3 border-b border-primary/5 pb-3 dark:border-text-secondary/10">
                 <h2
                   id={`tier-${tier.id}`}
-                  className="font-heading text-2xl font-bold text-primary dark:text-text-primary"
+                  className="scroll-mt-28 font-heading text-2xl font-bold text-primary dark:text-text-primary"
                 >
                   {tier.title}
                 </h2>

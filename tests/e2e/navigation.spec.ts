@@ -10,7 +10,6 @@ test.describe("Navigation", () => {
   const scrollTests: Record<string, string> = {
     "TC-NAV-002": "services",
     "TC-NAV-003": "why-nearshore",
-    "TC-NAV-004": "omnopsis",
     "TC-NAV-005": "founder",
   };
 
@@ -21,6 +20,20 @@ test.describe("Navigation", () => {
       await expect(page.locator(`#${section}`)).toBeInViewport({ timeout: SCROLL_TIMEOUT });
     });
   }
+
+  // TC-NAV-004 was the "Omnopsis" header anchor link; that link was replaced by the
+  // Produkte dropdown (2026-06-17). "Produkte" navigates to the portal; the dropdown
+  // reveals category shortcuts on hover/focus.
+  test("TC-NAV-004: Produkte dropdown reveals the category links on hover", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("nav").getByRole("link", { name: "Produkte", exact: true }).hover();
+    const omnopsisLink = page.locator('nav a[href="/products#tier-omnopsis"]');
+    await expect(omnopsisLink).toBeVisible();
+    await expect(page.locator('nav a[href="/products#tier-mmps"]')).toBeVisible();
+    await expect(page.locator('nav a[href="/products#tier-skills"]')).toBeVisible();
+    await omnopsisLink.click();
+    await expect(page).toHaveURL(/\/products/);
+  });
 
   test("TC-NAV-006: nav link from /impressum navigates to homepage #services", async ({ page }) => {
     await page.goto("/impressum");

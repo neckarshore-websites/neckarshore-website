@@ -118,6 +118,11 @@ test.describe("Content surface — Products index", () => {
     await expect(page.locator('a[href="/products/clearpath"]').first()).toBeVisible();
   });
 
+  test("TC-CNT-013: Omnopsis card links to /products/omnopsis", async ({ page }) => {
+    await page.goto("/products");
+    await expect(page.locator('a[href="/products/omnopsis"]').first()).toBeVisible();
+  });
+
   test("TC-CNT-012: no empty or placeholder internal links", async ({ page }) => {
     await page.goto("/products");
     const hrefs = await page
@@ -202,6 +207,11 @@ const NEW_PAGES = [
     path: "/products/clearpath",
     title: "ClearPath",
     canonical: "https://neckarshore.ai/products/clearpath",
+  },
+  {
+    path: "/products/omnopsis",
+    title: "Omnopsis Documentor+X",
+    canonical: "https://neckarshore.ai/products/omnopsis",
   },
 ] as const;
 

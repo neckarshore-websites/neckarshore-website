@@ -1,6 +1,6 @@
 ---
 name: "ClearPath"
-headline: "ClearPath — ein mentaler Firewall gegen kognitive Verzerrungen."
+headline: "ClearPath — eine mentale Firewall gegen kognitive Verzerrungen."
 definition: "Beschreibe eine Entscheidung, und ClearPath benennt die drei Denkfehler, die dein Urteil am wahrscheinlichsten verzerren — und erzwingt eine 60-Sekunden-Pause, bevor du handelst."
 liveUrl: "https://clearpath-52.vercel.app"
 applicationCategory: "BusinessApplication"

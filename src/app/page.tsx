@@ -27,7 +27,6 @@ import { BRAND } from "@/lib/brand";
 
 /* Code-split client components — separate chunks, not in main bundle */
 const CookieBanner = dynamic(() => import("@/components/CookieBanner"));
-const ImageModal = dynamic(() => import("@/components/ImageModal"));
 
 /* ---------- constants ---------- */
 
@@ -271,49 +270,42 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ===== OMNOPSIS TEASER (Title-Case rendering — see src/lib/brand.ts) ===== */}
+        {/* ===== PORTFOLIO / FLAGSHIP — reframed 2026-06-17 (was Omnopsis-only teaser).
+            Omnopsis story (engine copy + Conceived/Born photos + timeline) relocating to
+            /products/omnopsis. id kept so existing /#omnopsis anchors still land here. ===== */}
         <section id={BRAND.SECTION_ID} className="bg-primary px-4 py-20 md:px-6 md:py-24">
           <div className="mx-auto max-w-[1200px]">
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-widest text-secondary">
-                  Unser Flaggschiff
+                  Unser Portfolio
                 </p>
                 <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
-                  {BRAND.PRODUCT_NAME}
+                  Ein Flagship. Mehrere Produkte. Skills. Eine Bauweise.
                 </h2>
                 <p className="mt-6 text-lg leading-relaxed text-text-secondary">
-                  KI-first Documentation Engine. Zieht automatisch aus Git, Jira und Confluence —
-                  generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten.
+                  Strukturiert gebaut — KI-beschleunigt, DSGVO-by-Design, Made in Germany:
                 </p>
-                <p className="mt-4 text-lg leading-relaxed text-text-secondary">
-                  BYOLLM: Eure Daten verlassen euer Haus nicht.
-                  <br />
-                  Fail-closed: lieber schweigen als lügen.
-                </p>
-                <p className="mt-6 text-sm font-mono text-text-secondary/70">
-                  <ImageModal
-                    src="/images/omnixis-conceived-whiteboard-2024-12-11.jpg"
-                    alt={`${BRAND.PRODUCT_SHORT} Whiteboard-Skizze, Sindelfingen, Dezember 2024`}
-                    className="inline-flex min-h-[24px] items-center cursor-pointer text-secondary underline decoration-secondary/30 underline-offset-2 transition-colors hover:text-text-primary hover:decoration-secondary"
-                  >
-                    Conceived
-                  </ImageModal>
-                  {" "}December 11, 2024 in Sindelfingen.
-                  <br />
-                  <ImageModal
-                    src="/images/omnixis-born-first-session-2026-03-22.png"
-                    alt={`Erste ${BRAND.PRODUCT_SHORT} Claude Code Session, März 2026`}
-                    className="inline-flex min-h-[24px] items-center cursor-pointer text-secondary underline decoration-secondary/30 underline-offset-2 transition-colors hover:text-text-primary hover:decoration-secondary"
-                  >
-                    Born
-                  </ImageModal>
-                  {" "}March 22, 2026 in Stuttgart.
-                  <br />
-                  MVP Q2 2026.
-                  <br />
-                  LIVE Q3 2026.
-                </p>
+                <ul className="mt-6 space-y-3">
+                  <li>
+                    <span className="font-heading font-semibold text-text-primary">Omnopsis</span>
+                    <span className="text-text-secondary"> — Flagship · KI-first Documentation Engine</span>
+                  </li>
+                  <li>
+                    <span className="font-heading font-semibold text-text-primary">ClearPath &amp; MMPs</span>
+                    <span className="text-text-secondary"> — Produkte mit Marktreife</span>
+                  </li>
+                  <li>
+                    <span className="font-heading font-semibold text-text-primary">Skills</span>
+                    <span className="text-text-secondary"> — fokussierte Open-Source-Werkzeuge</span>
+                  </li>
+                </ul>
+                <Link
+                  href="/products"
+                  className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-secondary transition-colors hover:text-text-primary"
+                >
+                  Alle Produkte ansehen →
+                </Link>
               </div>
 
               {/* Stats grid — renders instantly with fallback, fetches live data in background */}

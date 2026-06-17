@@ -1,21 +1,121 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
-import { BRAND } from "@/lib/brand";
 
-const navLinks = [
+const navLinksLead = [
   { href: "/#services", label: "Services", track: "nav_services" },
   { href: "/#why-nearshore", label: "Warum Nearshore", track: "nav_why-nearshore" },
-  { href: `/#${BRAND.SECTION_ID}`, label: BRAND.NAV_LABEL, track: BRAND.TRACK_KEY },
-  { href: "/#founder", label: "Über uns", track: "nav_founder" },
+];
+
+const navLinksTail = [{ href: "/#founder", label: "Über uns", track: "nav_founder" }];
+
+// Produkte dropdown — slim category menu; each entry scrolls to its tier on the /products portal.
+const productLinks = [
+  {
+    href: "/products#tier-omnopsis",
+    label: "Omnopsis",
+    sub: "Flagship",
+    track: "nav_products_omnopsis",
+  },
+  {
+    href: "/products#tier-mmps",
+    label: "MMPs",
+    sub: "Minimum Marketable Products",
+    track: "nav_products_mmps",
+  },
+  {
+    href: "/products#tier-skills",
+    label: "Skills",
+    sub: "Fokussierte Werkzeuge",
+    track: "nav_products_skills",
+  },
 ];
 
 interface NavProps {
   showOssLaunch?: boolean;
+}
+
+/** Desktop "Produkte" dropdown — hover + click, Escape to close, keyboard-reachable. */
+function ProductsDropdown() {
+  const [open, setOpen] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const openNow = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setOpen(true);
+  };
+  const closeSoon = () => {
+    closeTimer.current = setTimeout(() => setOpen(false), 120);
+  };
+
+  return (
+    <div
+      className="relative"
+      onMouseEnter={openNow}
+      onMouseLeave={closeSoon}
+      onFocus={openNow}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpen(false);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Escape") setOpen(false);
+      }}
+    >
+      {/* "Produkte" navigates to the portal; the dropdown is a hover/focus shortcut.
+          (A click-toggle conflicts with hover-open — a click after the synthetic
+          mouseenter would immediately re-close it.) */}
+      <Link
+        href="/products"
+        aria-expanded={open}
+        aria-haspopup="menu"
+        data-track="nav_products"
+        className="flex items-center gap-1 text-sm font-medium text-primary/70 transition-colors duration-150 hover:text-accent dark:text-text-secondary/70 dark:hover:text-accent"
+      >
+        Produkte
+        <ChevronDown
+          size={14}
+          aria-hidden="true"
+          className={`transition-transform duration-150 ${open ? "rotate-180" : ""}`}
+        />
+      </Link>
+
+      {open && (
+        <div
+          role="menu"
+          className="absolute left-1/2 top-full z-50 mt-3 w-64 -translate-x-1/2 overflow-hidden rounded-xl border border-primary/10 bg-neutral-light shadow-xl dark:border-text-secondary/15 dark:bg-surface"
+        >
+          {productLinks.map((p) => (
+            <Link
+              key={p.href}
+              href={p.href}
+              role="menuitem"
+              data-track={p.track}
+              onClick={() => setOpen(false)}
+              className="flex flex-col gap-0.5 px-4 py-3 transition-colors hover:bg-primary/5 dark:hover:bg-text-secondary/10"
+            >
+              <span className="text-sm font-semibold text-primary dark:text-text-primary">
+                {p.label}
+              </span>
+              <span className="text-xs text-muted dark:text-text-tertiary">{p.sub}</span>
+            </Link>
+          ))}
+          <Link
+            href="/products"
+            role="menuitem"
+            data-track="nav_products_all"
+            onClick={() => setOpen(false)}
+            className="block border-t border-primary/10 px-4 py-3 text-sm font-medium text-accent transition-colors hover:bg-primary/5 dark:border-text-secondary/15 dark:text-accent-bright dark:hover:bg-text-secondary/10"
+          >
+            Alle Produkte →
+          </Link>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function Nav({ showOssLaunch = false }: NavProps) {
@@ -52,7 +152,18 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
 
         {/* Desktop */}
         <div className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
+          {navLinksLead.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              data-track={link.track}
+              className="text-sm font-medium text-primary/70 transition-colors duration-150 hover:text-accent dark:text-text-secondary/70 dark:hover:text-accent"
+            >
+              {link.label}
+            </a>
+          ))}
+          <ProductsDropdown />
+          {navLinksTail.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -90,7 +201,7 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
       {/* Mobile menu */}
       {open && (
         <div className="border-t border-primary/5 bg-neutral-light px-4 pb-6 pt-4 dark:border-text-secondary/10 dark:bg-deep-space md:hidden">
-          {navLinks.map((link) => (
+          {navLinksLead.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -101,6 +212,46 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
               {link.label}
             </a>
           ))}
+
+          {/* Produkte group */}
+          <p className="pt-3 text-xs font-semibold uppercase tracking-wider text-muted dark:text-text-tertiary">
+            Produkte
+          </p>
+          {productLinks.map((p) => (
+            <Link
+              key={p.href}
+              href={p.href}
+              data-track={p.track}
+              onClick={() => setOpen(false)}
+              className="block py-2 pl-3 text-base font-medium text-primary/70 transition-colors hover:text-accent dark:text-text-secondary/70 dark:hover:text-accent"
+            >
+              {p.label}
+              <span className="ml-2 text-xs font-normal text-muted dark:text-text-tertiary">
+                {p.sub}
+              </span>
+            </Link>
+          ))}
+          <Link
+            href="/products"
+            data-track="nav_products_all"
+            onClick={() => setOpen(false)}
+            className="block py-2 pl-3 text-base font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
+          >
+            Alle Produkte →
+          </Link>
+
+          {navLinksTail.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              data-track={link.track}
+              onClick={() => setOpen(false)}
+              className="block py-3 text-base font-medium text-primary/70 transition-colors hover:text-accent dark:text-text-secondary/70 dark:hover:text-accent"
+            >
+              {link.label}
+            </a>
+          ))}
+
           <a
             href="https://calendly.com/rauhut/20min"
             target="_blank"
