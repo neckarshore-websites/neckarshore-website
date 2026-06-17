@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import Link from "next/link";
 import Nav from "@/components/Nav";
 import Logo from "@/components/Logo";
 import ContactForm from "@/components/ContactForm";
@@ -705,13 +706,19 @@ export default function Home() {
       <footer className="border-t border-primary/5 bg-white px-4 py-10 md:px-6 dark:border-text-secondary/10 dark:bg-surface">
         <div className="mx-auto flex max-w-[1200px] flex-col items-center gap-4 text-sm text-muted md:flex-row md:justify-between dark:text-text-secondary/60">
           <Logo size="text-xl" className="text-primary/70 dark:text-text-secondary" />
-          <div className="flex gap-6">
-            <a href="/impressum" className="transition-colors hover:text-accent">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            <Link href="/products" className="transition-colors hover:text-accent">
+              Produkte
+            </Link>
+            <Link href="/glossar" className="transition-colors hover:text-accent">
+              Glossar
+            </Link>
+            <Link href="/impressum" className="transition-colors hover:text-accent">
               Impressum
-            </a>
-            <a href="/datenschutz" className="transition-colors hover:text-accent">
+            </Link>
+            <Link href="/datenschutz" className="transition-colors hover:text-accent">
               Datenschutz
-            </a>
+            </Link>
           </div>
           <p>
             &copy; 2026 neckarshore.ai — German Rauhut, IT Consulting &amp; Digital Ventures
