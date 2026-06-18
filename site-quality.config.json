@@ -1,0 +1,6 @@
+{
+  "baseUrl": "http://localhost:3000",
+  "paths": ["/"],
+  "profiles": ["desktop", "mobile-5g", "mobile-4g"],
+  "serve": { "build": "next build", "start": "next start" }
+}

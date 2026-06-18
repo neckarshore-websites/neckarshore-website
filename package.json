@@ -13,12 +13,8 @@
     "test:search:unit": "NODE_ENV=production tsx tests/search/index-data.test.ts",
     "test:smoke": "BASE_URL=https://neckarshore.ai playwright test --grep @smoke",
     "test:smoke:local": "playwright test --grep @smoke",
-    "lighthouse": "node scripts/lighthouse.mjs",
-    "lighthouse:quick": "node scripts/lighthouse.mjs --quick",
-    "lighthouse:desktop": "node scripts/lighthouse.mjs --quick --profile=desktop",
-    "lighthouse:mobile": "node scripts/lighthouse.mjs --quick --profile=mobile-4g",
-    "lighthouse:5g": "node scripts/lighthouse.mjs --quick --profile=mobile-5g",
-    "test:lighthouse:unit": "node --test scripts/lighthouse-profiles.test.mjs",
+    "lighthouse": "site-quality --serve",
+    "lighthouse:quick": "site-quality",
     "crawl": "node scripts/link-crawler.mjs",
     "crawl:internal": "node scripts/link-crawler.mjs --no-external",
     "crawl:test": "node scripts/link-crawler.mjs --self-test",
@@ -39,6 +35,7 @@
     "web-vitals": "5.3.0"
   },
   "devDependencies": {
+    "@neckarshore-websites/site-quality": "0.1.0",
     "@playwright/test": "1.59.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
@@ -48,7 +45,6 @@
     "@types/sanitize-html": "2.16.1",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
-    "lighthouse": "13.0.3",
     "tailwindcss": "^4",
     "tsx": "4.22.4",
     "typescript": "^5"

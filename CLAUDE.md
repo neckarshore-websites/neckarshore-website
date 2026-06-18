@@ -98,7 +98,9 @@ gh run list --workflow=update-stats.yml --limit=3 --json conclusion,createdAt,he
 
 ## Lighthouse Device Matrix
 
-Three profiles. **Performance is soft-warn on all of them** (advisory, never blocks); **A11y / Best Practices / SEO are hard @95** on all of them (a drop fails CI). Profiles live in `scripts/lighthouse-profiles.mjs`; the regression test `scripts/lighthouse-profiles.test.mjs` locks the shape.
+Profiles + gate logic are **centralized** in the shared package [`@neckarshore-websites/site-quality`](https://github.com/neckarshore-websites/site-quality) (single source of truth across all ecosystem sites; the package's own `defaults.test.mjs` locks the profile shape). This repo wires it via three things: a committed `.npmrc` (scope pin, no secret), a `site-quality.config.json` (baseUrl + paths + serve block), and one exact-version devDependency.
+
+Three profiles. **Performance is soft-warn on all of them** (advisory, never blocks); **A11y / Best Practices / SEO are hard @95** on all of them (a drop fails CI).
 
 | # | Profil | Form Factor | Network | CPU | Perf Gate | Perf Warn-Line | Purpose |
 |---|--------|-------------|---------|-----|-----------|----------------|---------|
@@ -112,12 +114,10 @@ Three profiles. **Performance is soft-warn on all of them** (advisory, never blo
 
 ### Commands
 
-- `npm run lighthouse:quick` — all 3 profiles (CI mode, assumes server on :3000)
-- `npm run lighthouse:desktop` — single profile for dev-loop iteration
-- `npm run lighthouse:mobile` — single profile (Mobile 4G / Slow-4G) for dev-loop
-- `npm run lighthouse:5g` — single profile (Mobile 5G / fast network) for dev-loop
-- `npm run test:lighthouse:unit` — profile-shape regression test (no Chrome; ~0.1s)
-- `npm run lighthouse` — full pipeline (build + start + all profiles + stop)
+- `npm run lighthouse` — full local pipeline (`site-quality --serve`: build + start + all 3 profiles + stop)
+- `npm run lighthouse:quick` — `site-quality` (CI mode, assumes server already on :3000)
+
+Both run all three profiles (the package has no per-profile filter). Installing the package needs the `@neckarshore-websites` scope token: locally `export NODE_AUTH_TOKEN=$(gh auth token)` before `npm ci`; CI supplies it from `secrets.GITHUB_TOKEN` (the `lighthouse.yml` job has `permissions: packages: read`).
 
 ### Gate Philosophy
 
