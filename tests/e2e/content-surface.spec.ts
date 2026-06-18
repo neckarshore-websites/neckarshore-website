@@ -355,24 +355,36 @@ test.describe("Skills on-page overview table @content", () => {
     await expect(table.getByRole("row")).toHaveCount(6);
   });
 
-  test("TC-CNT-033: every bookmark targets an existing card anchor on the page", async ({
+  test("TC-CNT-033: every overview-table link resolves — in-page anchor → its card, detail link → a product route", async ({
     page,
   }) => {
     await page.goto("/products/skills");
-    const links = page.locator('table a[href^="#"]');
+    // One Tool link per skill row. "Beides" nav: skills with a real detail page link
+    // off-page (/products/<slug>); skeleton skills fall back to an in-page bookmark
+    // (#slug) that scrolls to their card.
+    const links = page.locator("table tbody a");
     const n = await links.count();
     expect(n).toBe(5);
+    let anchors = 0;
     for (let i = 0; i < n; i++) {
       const href = await links.nth(i).getAttribute("href");
-      await expect(page.locator(`#${href!.slice(1)}`)).toBeAttached();
+      expect(href).toBeTruthy();
+      if (href!.startsWith("#")) {
+        anchors++;
+        await expect(page.locator(`#${href!.slice(1)}`)).toBeAttached();
+      } else {
+        expect(href).toMatch(/^\/products\/[a-z0-9-]+$/);
+      }
     }
+    // at least one in-page bookmark remains (skeleton skills haven't graduated yet)
+    expect(anchors).toBeGreaterThanOrEqual(1);
   });
 
   test("TC-CNT-034: clicking a bookmark scrolls the matching card near the top", async ({
     page,
   }) => {
     await page.goto("/products/skills");
-    const link = page.locator('table a[href^="#"]').nth(2); // 3rd skill
+    const link = page.locator('table a[href^="#"]').first(); // first in-page bookmark (robust as detail pages grow)
     const id = (await link.getAttribute("href"))!.slice(1);
     await link.click();
     await expect(page).toHaveURL(new RegExp(`#${id}$`));
