@@ -10,6 +10,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ci": "playwright test --grep-invert @external",
     "test:e2e:ui": "playwright test --ui",
+    "test:search:unit": "NODE_ENV=production tsx tests/search/index-data.test.ts",
     "test:smoke": "BASE_URL=https://neckarshore.ai playwright test --grep @smoke",
     "test:smoke:local": "playwright test --grep @smoke",
     "lighthouse": "node scripts/lighthouse.mjs",
@@ -28,6 +29,7 @@
     "gray-matter": "4.0.3",
     "lucide-react": "1.7.0",
     "marked": "18.0.2",
+    "minisearch": "7.2.0",
     "next": "16.2.6",
     "nodemailer": "8.0.7",
     "react": "19.2.4",
@@ -47,6 +49,7 @@
     "eslint-config-next": "16.2.6",
     "lighthouse": "13.0.3",
     "tailwindcss": "^4",
+    "tsx": "4.22.4",
     "typescript": "^5"
   }
 }

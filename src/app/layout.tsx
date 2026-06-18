@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import TrackerScript from "@/components/TrackerScript";
 import { JsonLd } from "@/components/JsonLd";
+import { SearchProvider } from "@/components/search/SearchProvider";
 import { organizationSchema } from "@/lib/schema/organization";
 import "./globals.css";
 
@@ -71,7 +72,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen bg-neutral-light text-primary dark:bg-deep-space dark:text-text-primary">
         <JsonLd data={organizationSchema} id="schema-org" />
-        {children}
+        <SearchProvider>{children}</SearchProvider>
         <TrackerScript />
       </body>
     </html>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
+import { SearchButton } from "./search/SearchButton";
 import { PORTFOLIO } from "@/lib/portfolio";
 
 const navLinksLead = [
@@ -163,6 +164,7 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
               {link.label}
             </a>
           ))}
+          <SearchButton />
           <ThemeToggle />
           <a
             href="https://calendly.com/rauhut/20min"
@@ -175,8 +177,9 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
           </a>
         </div>
 
-        {/* Mobile + tablet-portrait (< lg): theme toggle + hamburger */}
+        {/* Mobile + tablet-portrait (< lg): search + theme toggle + hamburger */}
         <div className="flex items-center gap-2 lg:hidden">
+          <SearchButton />
           <ThemeToggle />
           <button
             onClick={() => setOpen(!open)}

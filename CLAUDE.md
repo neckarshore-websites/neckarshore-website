@@ -27,8 +27,9 @@
 | Stats | `tests/e2e/stats.spec.ts` | 8 | Stats tiles render with backend values (TC-STAT-*) |
 | API Track Auth | `tests/e2e/api-track-auth.spec.ts` | 6 | `/api/track` GET auth-hardening (TC-STAT-009, dr-sommer Z1.1) |
 | Web Vitals | `tests/e2e/web-vitals.spec.ts` | 11 | Field CWV pipeline (TC-WV-*) — p75 lib units, `/api/track` web_vital ingest, browser beacon emission |
+| Search | `tests/e2e/search.spec.ts` | 7 | Cmd+K site search (TC-SRCH-*) — open/close, glossar+product+section hits, mobile button, external new-tab (@external), no console errors |
 
-Total: 102 tests across 11 suites.
+Per-suite counts above have drifted (the table predates the Content `TC-CNT-*` suite); `docs/test-log.md` carries the authoritative run count (latest ~171 e2e). Plus a non-Playwright unit suite: **`npm run test:search:unit`** (12 checks, `tsx` + `node:assert`) — the search-index coverage invariant (every portfolio + glossar slug indexed).
 
 ### When to Run
 
@@ -50,7 +51,7 @@ Log every run in `docs/test-log.md` — one row per run (compact format):
 
 ### Test IDs
 
-Every test has a stable ID: `TC-[SUITE]-[NNN]`. Suites: `NAV`, `LNK`, `CAL`, `THM`, `RES`, `SEO`, `A11Y`, `SMK`, `STAT`, `WV`, `MAN-OG`.
+Every test has a stable ID: `TC-[SUITE]-[NNN]`. Suites: `NAV`, `LNK`, `CAL`, `THM`, `RES`, `SEO`, `A11Y`, `SMK`, `STAT`, `WV`, `SRCH`, `MAN-OG`.
 Use test IDs when referencing tests in logs, reports, and issues.
 
 ### Adding Tests
