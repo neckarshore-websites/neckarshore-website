@@ -37,6 +37,8 @@ export interface SkillCardData {
   badge?: string;
   /** Card heading text. */
   title: string;
+  /** One short clause (≈4–8 words) for the on-page overview table — what it solves. */
+  summary: string;
   /** Lead paragraph under the heading. */
   description: string;
   /** Capability / sub-skill rows (chip + text). */
@@ -62,6 +64,7 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
     icon: Terminal,
     badge: "Beta",
     title: "Obsidian Vault Autopilot",
+    summary: "Sortiert, benennt und reichert Obsidian-Notizen automatisch an.",
     description:
       "AI-Vault-Automation für Obsidian × Claude Code. Sortiert die Inbox, benennt Notes um, füllt Frontmatter — vier Skills halten deinen Second Brain im Hintergrund auf Linie.",
     capabilities: [
@@ -93,6 +96,7 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
     icon: Layers,
     badge: "Beta",
     title: "Obsidian Social Scrapers",
+    summary: "Instagram-, LinkedIn- und X-Profile als neutrale Vault-Briefings.",
     description:
       "Shared Core für drei Scraper-Plugins. Profile + Posts von Instagram, LinkedIn und X direkt in deinen Vault. Apify-Wrappers, AI-Polishing und Markdown-Rendering — Lego-Blocks, keine Duplikation.",
     capabilities: [
@@ -124,6 +128,7 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
     icon: Mail,
     badge: "Beta",
     title: "IMAP Mailbox Cleanup",
+    summary: "Regelbasierte IMAP-Postfach-Triage, dry-run by default.",
     description:
       "Hybrid aus CLI und Claude-Skill für die Triage großer IMAP-Postfächer. Räumt nach klaren Regeln auf — dry-run als Default, jede Aktion audit-logged. Läuft gegen dein eigenes Postfach (IONOS getestet), ohne Cloud-Zwischenstopp.",
     capabilities: [
@@ -154,6 +159,7 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
     icon: SpellCheck,
     badge: "Beta",
     title: "AI Phrase Check",
+    summary: "Erkennt KI-typische Floskeln in DE/EN-Text, lokal.",
     description:
       "Erkennt KI-typische Floskeln in deutschem und englischem Text — die verräterischen Phrasen, an denen sich generierte Sprache erkennen lässt. Läuft als Claude-Skill lokal, kein Text verlässt deine Maschine.",
     capabilities: [
@@ -186,6 +192,7 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
   "restaurant-menu-update": {
     icon: UtensilsCrossed,
     title: "Restaurant-Menüpflege",
+    summary: "Menü-Update als geprüfter, reproduzierbarer Workflow.",
     description:
       "Verwandelt das wiederkehrende Menü-Update eines Restaurants in einen geprüften, reproduzierbaren Vorgang. Der Inhaber liefert die neue Karte als PDF, Foto oder Text — der Skill macht daraus publikationsreife Website-Inhalte, prüft jeden Allergen-Code gegen die Referenz, baut und lintet die Seite und öffnet einen fertigen Pull Request mit Vorschau-Deploy zur Abnahme.",
     capabilities: [
