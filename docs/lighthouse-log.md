@@ -1,6 +1,6 @@
 # Lighthouse Log
 
-Rolling 14-day window of Lighthouse audit runs across all 3 profiles (Desktop, Mobile 4G, Mobile Slow).
+Rolling 14-day window of Lighthouse audit runs across all 3 profiles (Desktop, Mobile 5G, Mobile 4G).
 
 See `CLAUDE.md` → "Lighthouse Device Matrix" for profile definitions and gate policy.
 
@@ -9,7 +9,7 @@ See `CLAUDE.md` → "Lighthouse Device Matrix" for profile definitions and gate 
 | # | Date | Commit | Profile | Perf | A11y | BP | SEO | LCP | TBT | CLS | Trigger |
 |---|------|--------|---------|------|------|----|-----|-----|-----|-----|---------|
 
-- **Profile:** `desktop`, `mobile-4g`, `mobile-slow`
+- **Profile:** `desktop`, `mobile-5g`, `mobile-4g` (the legacy `mobile-slow` / Edge-5G profile was retired 2026-06-18; older rows below keep it for history)
 - **Trigger:** `session-start`, `session-end`, `ad-hoc`, `ci`
 - **LCP / TBT:** milliseconds or seconds
 - **CLS:** unitless (target < 0.1)
