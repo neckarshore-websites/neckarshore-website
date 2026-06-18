@@ -123,6 +123,42 @@ test.describe("Content surface — Products index", () => {
     await expect(page.locator('a[href="/products/omnopsis"]').first()).toBeVisible();
   });
 
+  // Portal = teaser: only the featured Top-N per category + a "mehr" tile; the
+  // remainder lives on the sub-portal (2026-06-18 top-3 reframe).
+  test("TC-CNT-014: portal shows only featured MMPs + a 'mehr' tile, dropped MMPs absent", async ({
+    page,
+  }) => {
+    await page.goto("/products");
+    // featured Top-3 present on the portal teaser
+    for (const slug of ["clearpath", "snakeoil-check", "phonesis"]) {
+      await expect(page.locator(`a[href="/products/${slug}"]`).first()).toBeVisible();
+    }
+    // non-featured MMPs are NOT on the teaser (they live on the sub-portal)
+    for (const slug of ["local-seo-hub", "prod-or-pretend"]) {
+      await expect(page.locator(`a[href="/products/${slug}"]`)).toHaveCount(0);
+    }
+    // the "mehr" tile links to the MMP sub-portal and signals the remainder
+    const more = page.locator('a[data-track="nav_products_mmps_more"]');
+    await expect(more).toBeVisible();
+    await expect(more).toHaveAttribute("href", "/products/mmps");
+    await expect(more).toContainText("weitere");
+  });
+
+  test("TC-CNT-015: the MMP sub-portal lists the FULL category (featured + dropped)", async ({
+    page,
+  }) => {
+    await page.goto("/products/mmps");
+    for (const slug of [
+      "clearpath",
+      "snakeoil-check",
+      "phonesis",
+      "local-seo-hub",
+      "prod-or-pretend",
+    ]) {
+      await expect(page.locator(`a[href="/products/${slug}"]`).first()).toBeVisible();
+    }
+  });
+
   test("TC-CNT-012: no empty or placeholder internal links", async ({ page }) => {
     await page.goto("/products");
     const hrefs = await page
