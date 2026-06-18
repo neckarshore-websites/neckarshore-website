@@ -14,6 +14,11 @@
  *
  * Adding a product = ONE entry here (AP-1, "add a product = 1 edit"). Nav, portal,
  * sub-portals, the dynamic detail route, and the sitemap all derive from PORTFOLIO.
+ *
+ * PORTAL TEASER vs SUB-PORTAL (2026-06-18): the /products portal shows only the
+ * `featured` Top-N per category + a "mehr" tile into the sub-portal; the sub-portal
+ * lists the FULL category. Within a category, featured items lead (in their declared
+ * order = Founder's Top-N), the remainder follows A→Z.
  */
 
 export type ProductStatus = "live" | "preview" | "external";
@@ -28,6 +33,8 @@ export interface PortfolioItem {
   /** Placeholder one-liner — refined in the content pass (Schritt 2). */
   tagline: string;
   status: ProductStatus;
+  /** Top-N teaser flag: shown on the /products portal; non-featured live on the sub-portal only. */
+  featured?: boolean;
   /** Link target: internal "/products/<slug>" OR an external "https://…". */
   href: string;
   /** external → renders target=_blank, no detail page, excluded from sitemap + generateStaticParams. */
@@ -48,6 +55,8 @@ export interface PortfolioCategory {
   title: string;
   /** Dropdown sub-label / portal section subtitle. */
   subtitle: string;
+  /** Short framing shown on the /products portal between the heading and the cards. */
+  intro: string;
   /** Nav dropdown label. */
   navLabel: string;
   /** Sub-portal route, "/products/<id>". */
@@ -61,7 +70,9 @@ export const PORTFOLIO: PortfolioCategory[] = [
   {
     id: "flagships",
     title: "Flagships",
-    subtitle: "Unser Flaggschiff",
+    subtitle: "Unsere Hauptprodukte",
+    intro:
+      "Produkte, die einen Markt gewinnen sollen. Omnopsis ist das erste — weitere folgen.",
     navLabel: "Flagships",
     href: "/products/flagships",
     track: "nav_products_flagships",
@@ -71,6 +82,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
         slug: "omnopsis",
         tagline: "KI-first Documentation Engine für Engineering-Teams — fail-closed, BYOLLM, DSGVO-by-Design.",
         status: "live",
+        featured: true,
         href: "/products/omnopsis",
         isExternal: false,
         schemaType: "SoftwareApplication",
@@ -83,15 +95,19 @@ export const PORTFOLIO: PortfolioCategory[] = [
     id: "mmps",
     title: "MMPs",
     subtitle: "Minimum Marketable Products",
+    intro:
+      "Marktreife Produkte mit klarem Fokus — jedes löst ein konkretes Problem. Schlägt eines durch, wird es zum Hauptprodukt.",
     navLabel: "MMPs",
     href: "/products/mmps",
     track: "nav_products_mmps",
+    // Featured Top-3 (ClearPath · Snakeoil-Check · Phonesis) lead; remainder A→Z.
     items: [
       {
         name: "ClearPath",
         slug: "clearpath",
         tagline: "Eine mentale Firewall gegen kognitive Verzerrungen.",
         status: "live",
+        featured: true,
         href: "/products/clearpath",
         isExternal: false,
         schemaType: "SoftwareApplication",
@@ -103,10 +119,23 @@ export const PORTFOLIO: PortfolioCategory[] = [
         slug: "snakeoil-check",
         tagline: "Neutraler KI-Reality-Check für Online-Coachings und High-Ticket-Angebote.",
         status: "preview",
+        featured: true,
         href: "/products/snakeoil-check",
         isExternal: false,
         schemaType: "SoftwareApplication",
         applicationCategory: "BusinessApplication",
+        noindex: true,
+      },
+      {
+        name: "Phonesis Voicebank",
+        slug: "phonesis",
+        tagline: "Ein Archiv echter menschlicher Stimmen für den deutschen Markt.",
+        status: "preview",
+        featured: true,
+        href: "/products/phonesis",
+        isExternal: false,
+        schemaType: "SoftwareApplication",
+        applicationCategory: "MultimediaApplication",
         noindex: true,
       },
       {
@@ -118,17 +147,6 @@ export const PORTFOLIO: PortfolioCategory[] = [
         isExternal: false,
         schemaType: "SoftwareApplication",
         applicationCategory: "BusinessApplication",
-        noindex: true,
-      },
-      {
-        name: "Phonesis Voicebank",
-        slug: "phonesis",
-        tagline: "Ein Archiv echter menschlicher Stimmen für den deutschen Markt.",
-        status: "preview",
-        href: "/products/phonesis",
-        isExternal: false,
-        schemaType: "SoftwareApplication",
-        applicationCategory: "MultimediaApplication",
         noindex: true,
       },
       {
@@ -148,15 +166,19 @@ export const PORTFOLIO: PortfolioCategory[] = [
     id: "skills",
     title: "Skills",
     subtitle: "Fokussierte Open-Source-Werkzeuge",
+    intro:
+      "Kleine, scharf geschnittene Open-Source-Werkzeuge — die Tools, die wir selbst täglich benutzen. Jetzt auch für euch.",
     navLabel: "Skills",
     href: "/products/skills",
     track: "nav_products_skills",
+    // Featured Top-3 (Obsidian Vault Autopilot · Social Scrapers · IMAP Mailbox Cleanup) lead; remainder A→Z.
     items: [
       {
         name: "Obsidian Vault Autopilot",
         slug: "obsidian-vault-autopilot",
         tagline: "Open-Source-Automatisierung für Wissens-Vaults in Obsidian — sortiert, benennt, taggt und reichert Notizen an.",
         status: "preview",
+        featured: true,
         href: "/products/obsidian-vault-autopilot",
         isExternal: false,
         schemaType: "SoftwareApplication",
@@ -171,6 +193,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
         slug: "social-scrapers",
         tagline: "Obsidian-Skills für Instagram-, LinkedIn- und X-Profile — neutrale Markdown-Briefings statt Engagement-Bait.",
         status: "preview",
+        featured: true,
         href: "/products/social-scrapers",
         isExternal: false,
         schemaType: "SoftwareApplication",
@@ -182,6 +205,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
         slug: "imap-mailbox-cleanup",
         tagline: "Hybrid CLI + Claude-Skill für IONOS-IMAP-Postfach-Triage — dry-run by default, audit-logged.",
         status: "preview",
+        featured: true,
         href: "/products/imap-mailbox-cleanup",
         isExternal: false,
         schemaType: "SoftwareApplication",
@@ -217,25 +241,30 @@ export const PORTFOLIO: PortfolioCategory[] = [
     id: "websites",
     title: "Websites",
     subtitle: "Web-Präsenz — Beifang",
+    intro:
+      "Echte Kundenprojekte, nebenbei entstanden — dieselbe Bauweise wie alles andere: KI-beschleunigt, DSGVO-by-Design.",
     navLabel: "Websites",
     href: "/products/websites",
     track: "nav_products_websites",
+    // Featured Top-3 (neckarshore.ai · Ristorante Goldoni · Oakwood Golf Club) lead; remainder A→Z.
     items: [
-      {
-        name: "Ristorante Goldoni",
-        slug: "ristorante-goldoni",
-        tagline: "Web-Präsenz für ein italienisches Restaurant.",
-        status: "external",
-        href: "https://ristorante-goldoni.de",
-        isExternal: true,
-        schemaType: "none",
-      },
       {
         name: "neckarshore.ai",
         slug: "neckarshore",
         tagline: "Diese Seite — KI-beschleunigt gebaut, DSGVO-by-Design.",
         status: "external",
+        featured: true,
         href: "https://neckarshore.ai",
+        isExternal: true,
+        schemaType: "none",
+      },
+      {
+        name: "Ristorante Goldoni",
+        slug: "ristorante-goldoni",
+        tagline: "Web-Präsenz für ein italienisches Restaurant.",
+        status: "external",
+        featured: true,
+        href: "https://ristorante-goldoni.de",
         isExternal: true,
         schemaType: "none",
       },
@@ -244,6 +273,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
         slug: "oakwood-golf-club",
         tagline: "Web-Präsenz für einen Golfclub — Mitglieder-Portal in Arbeit.",
         status: "external",
+        featured: true,
         href: "https://oakwoodgolfclub.de",
         isExternal: true,
         schemaType: "none",
@@ -269,6 +299,16 @@ export function allCategories(): PortfolioCategory[] {
 /** Flat list of all items across every category. */
 export function allItems(): PortfolioItem[] {
   return PORTFOLIO.flatMap((c) => c.items);
+}
+
+/** Teaser items for the /products portal: the featured Top-N of a category. */
+export function featuredItems(category: PortfolioCategory): PortfolioItem[] {
+  return category.items.filter((i) => i.featured);
+}
+
+/** Count of a category's items not shown on the portal teaser (live on the sub-portal). */
+export function hiddenItemCount(category: PortfolioCategory): number {
+  return category.items.length - featuredItems(category).length;
 }
 
 /** Slugs that the dynamic [slug] route owns: internal, non-bespoke skeletons. */
