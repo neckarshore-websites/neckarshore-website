@@ -8,7 +8,7 @@ import { pageMetadata } from "@/lib/seo";
 import { SKILL_CARDS } from "@/lib/skill-cards";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
-const REPO = "https://github.com/neckarshore-ai/obsidian-vault-autopilot";
+const REPO = "https://github.com/neckarshore-skills/obsidian-vault-autopilot";
 const card = SKILL_CARDS["obsidian-vault-autopilot"];
 
 const DEFINITION =

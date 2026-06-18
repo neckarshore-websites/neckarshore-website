@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import type { SkillCardData } from "@/lib/skill-cards";
 
@@ -10,22 +11,30 @@ import type { SkillCardData } from "@/lib/skill-cards";
  *
  * `headingLevel` is a prop so the card never forces a heading skip: it sits under a
  * section h2 on a listing (→ "h3") or directly under a page h1 (→ "h2"). Default "h3".
+ *
+ * `detailHref` (listing only) links the title + a "Mehr erfahren →" CTA to the skill's
+ * detail page. Omitted on the detail page's own hero card (you're already there) and on
+ * skeleton skills with no real detail page yet.
  */
 export function SkillCard({
   card,
   headingLevel = "h3",
   id,
+  detailHref,
 }: {
   card: SkillCardData;
   headingLevel?: "h1" | "h2" | "h3";
   /** Optional anchor id — the on-page overview table bookmarks jump to `#<id>`. */
   id?: string;
+  /** Optional detail-page URL — lights up the title link + "Mehr erfahren →" CTA. */
+  detailHref?: string;
 }) {
   const Heading = headingLevel;
   const Icon = card.icon;
   // As a detail-page hero (h1) the title scales up to read as a page title, in line
   // with the sibling product pages; in a listing grid (h2/h3) it stays compact.
   const titleClass = headingLevel === "h1" ? "text-2xl md:text-3xl" : "text-xl";
+  const detailTrack = card.track ? `${card.track}_detail` : undefined;
 
   return (
     <div id={id} className="flex flex-col rounded-xl border border-primary/10 bg-white p-8 shadow-sm dark:border-text-secondary/10 dark:bg-surface">
@@ -41,7 +50,17 @@ export function SkillCard({
       <Heading
         className={`mt-4 font-heading font-semibold text-primary dark:text-text-primary ${titleClass}`}
       >
-        {card.title}
+        {detailHref ? (
+          <Link
+            href={detailHref}
+            className="transition-colors hover:text-accent dark:hover:text-accent-bright"
+            data-track={detailTrack}
+          >
+            {card.title}
+          </Link>
+        ) : (
+          card.title
+        )}
       </Heading>
 
       <p className="mt-2 text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
@@ -70,7 +89,7 @@ export function SkillCard({
         </p>
       )}
 
-      {(card.footerBadge || card.license || card.repoUrl) && (
+      {(card.footerBadge || card.license || card.repoUrl || detailHref) && (
         <div className="mt-auto flex items-center justify-between gap-3 pt-6">
           {card.footerBadge ? (
             <span className="rounded-full bg-primary/5 px-3 py-1 text-xs font-medium uppercase tracking-wider text-muted dark:bg-text-secondary/10 dark:text-text-tertiary">
@@ -83,18 +102,29 @@ export function SkillCard({
           ) : (
             <span aria-hidden="true" />
           )}
-          {card.repoUrl && (
-            <a
-              href={card.repoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
-              data-track={card.track}
-            >
-              GitHub
-              <ExternalLink size={14} aria-hidden="true" />
-            </a>
-          )}
+          <div className="flex items-center gap-4">
+            {detailHref && (
+              <Link
+                href={detailHref}
+                className="inline-flex items-center gap-1 text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
+                data-track={detailTrack}
+              >
+                Mehr erfahren →
+              </Link>
+            )}
+            {card.repoUrl && (
+              <a
+                href={card.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
+                data-track={card.track}
+              >
+                GitHub
+                <ExternalLink size={14} aria-hidden="true" />
+              </a>
+            )}
+          </div>
         </div>
       )}
     </div>
