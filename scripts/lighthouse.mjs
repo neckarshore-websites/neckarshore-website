@@ -7,102 +7,40 @@
  *   npm run lighthouse           (builds, starts, audits all profiles, stops)
  *   npm run lighthouse:quick     (skips build, assumes server is running on :3000)
  *
- * Device Matrix (3 profiles):
- *   1. Desktop     — LAN baseline, 1x CPU, 40ms / 10 Mbps         [hard gate]
- *   2. Mobile 4G   — Lighthouse default mobile (Slow 4G)          [hard gate]
- *   3. Mobile Slow — Edge-of-coverage 5G / weak signal            [soft warn only]
+ * Device Matrix (3 profiles) — defined in ./lighthouse-profiles.mjs:
+ *   1. Desktop    — LAN baseline, --preset=desktop, 1× CPU
+ *   2. Mobile 5G  — fast network (~50 Mbps, RTT 20ms), 4× CPU
+ *   3. Mobile 4G  — Lighthouse Slow-4G default (~1.6 Mbps, RTT 150ms), 4× CPU
  *
- * Gate Policy:
- *   - Hard profiles exit 1 if any score is below threshold.
- *   - Soft profiles report warnings but never fail the build.
- *   - Mobile Slow Stage 2 thresholds set 2026-04-13 after 5-run baseline
- *     (median 68, threshold = median − 5 = 63).
+ * 5G is FASTER than 4G — the network ordering is correct. The old
+ * "Mobile Slow (Edge-5G)" profile (400 Kbps / 6× CPU) was DELETED 2026-06-18:
+ * 400 Kbps is slower than 4G, so the "5G" label inverted reality.
  *
- * Thresholds history:
- *   - Perf 85 was chosen historically because mobile Next.js framework JS
- *     overhead costs ~12 points on 4x CPU throttle. Raised to 90 (Mobile 4G)
- *     and 95 (Desktop) in 2026-04-10 to catch silent regressions.
- *   - Desktop 95 → 80 on 2026-06-13 (cross-site calibration, D-LIN-27-2 /
- *     Codify-Brief #458 "anchor below worst-observed"). The Desktop-95 gate
- *     cried wolf: it false-red on pure shared-runner TBT variance (neckarshore
- *     {86,93,98,100}, goldoni {89,90}, rauhut 67-spike) and got admin-bypassed
- *     repeatedly. 80 sits ~6pp under worst-normal-observed across the family;
- *     Mobile 4G (90) remains the real perf canary (framework JS shows under 4×).
+ * Gate Policy (German Rauhut directive 2026-06-18):
+ *   - performance is SOFT on EVERY profile — advisory warning line, never blocks.
+ *     The exit code reflects ONLY hard-gate failures. No hard perf gate on 4G —
+ *     we do not block on an old-tech network the audience has moved past.
+ *   - accessibility / best-practices / seo are HARD @95 on every profile —
+ *     deterministic categories, a drop is a real defect.
+ *   - Per-metric soft override lives in each profile's `softMetrics` list.
+ *
+ * Full rationale + canonical design source: see ./lighthouse-profiles.mjs.
  */
 
 import { execFileSync, spawn } from "node:child_process";
 import { readFileSync, existsSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { PROFILES } from "./lighthouse-profiles.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
-
-// ── Profile Definitions ──────────────────────────────────────────────
-
-const PROFILES = [
-  {
-    name: "desktop",
-    label: "Desktop",
-    gate: "hard",
-    lhArgs: ["--preset=desktop"],
-    thresholds: {
-      // Desktop Perf relaxed 95 → 80 on 2026-06-13 (anchor below worst-observed).
-      // On a 1× CPU desktop preset these static pages are so fast that the
-      // composite Perf score tracks GitHub-runner TBT jitter, not the site:
-      // observed {86, 93, 98, 100} ⇔ TBT {308, 203, 105, 2}ms while LCP <1s /
-      // CLS 0.004 stay rock-solid. 80 = ~6pp under worst-normal (86); a real
-      // regression below 80 still hard-fails, normal TBT noise passes.
-      // See "Thresholds history" above + CLAUDE.md → Gate Philosophy.
-      performance: 80,
-      accessibility: 95,
-      "best-practices": 95,
-      seo: 95,
-    },
-    reportFile: "report-desktop.json",
-  },
-  {
-    name: "mobile-4g",
-    label: "Mobile 4G",
-    gate: "hard",
-    lhArgs: ["--form-factor=mobile", "--screenEmulation.mobile"],
-    thresholds: {
-      performance: 90,
-      accessibility: 95,
-      "best-practices": 95,
-      seo: 95,
-    },
-    reportFile: "report-mobile-4g.json",
-  },
-  {
-    name: "mobile-slow",
-    label: "Mobile Slow (Edge-5G)",
-    gate: "soft",
-    lhArgs: [
-      "--form-factor=mobile",
-      "--screenEmulation.mobile",
-      "--throttling-method=simulate",
-      "--throttling.rttMs=400",
-      "--throttling.throughputKbps=400",
-      "--throttling.cpuSlowdownMultiplier=6",
-    ],
-    // Stage 2 thresholds (2026-04-13): baseline median 68, formula = baseline − 5.
-    // 5 runs (local+CI): [67, 68, 68, 70, 71]. Variance ±4 pts, stable enough.
-    thresholds: {
-      performance: 63,
-      accessibility: 95,
-      "best-practices": 95,
-      seo: 95,
-    },
-    reportFile: "report-mobile-slow.json",
-  },
-];
 
 const URL = process.env.LIGHTHOUSE_URL || "http://localhost:3000";
 const QUICK = process.argv.includes("--quick");
 const MAX_RETRIES = 3;
 
-// Optional: filter to a single profile via --profile=desktop|mobile-4g|mobile-slow
+// Optional: filter to a single profile via --profile=desktop|mobile-5g|mobile-4g
 const profileArg = process.argv.find((a) => a.startsWith("--profile="));
 const selectedProfile = profileArg ? profileArg.split("=")[1] : null;
 const PROFILES_TO_RUN = selectedProfile
@@ -273,16 +211,20 @@ try {
 
       if (threshold != null) {
         const pass = score >= threshold;
-        const icon = pass ? "  ✓" : "  ✗";
+        // A metric is soft if the whole profile is soft OR it is listed in the
+        // profile's per-metric softMetrics override (e.g. performance everywhere).
+        const isSoftMetric =
+          profile.gate === "soft" || profile.softMetrics?.includes(key);
+        const icon = pass ? "  ✓" : isSoftMetric ? "  ⚠" : "  ✗";
         console.log(
           `${icon} ${capitalizeKey(key)}: ${score} (threshold: ${threshold})${delta}`
         );
         if (!pass) {
           const failure = `${profile.label} ${capitalizeKey(key)}: ${score} < ${threshold}`;
-          if (profile.gate === "hard") {
-            hardFailures.push(failure);
-          } else {
+          if (isSoftMetric) {
             softWarnings.push(failure);
+          } else {
+            hardFailures.push(failure);
           }
         }
       } else {

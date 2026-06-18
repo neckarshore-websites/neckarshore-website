@@ -98,29 +98,32 @@ gh run list --workflow=update-stats.yml --limit=3 --json conclusion,createdAt,he
 
 ## Lighthouse Device Matrix
 
-Three profiles, differentiated gates. Hard gates fail CI; soft gates report warnings only.
+Three profiles. **Performance is soft-warn on all of them** (advisory, never blocks); **A11y / Best Practices / SEO are hard @95** on all of them (a drop fails CI). Profiles live in `scripts/lighthouse-profiles.mjs`; the regression test `scripts/lighthouse-profiles.test.mjs` locks the shape.
 
-| # | Profil | Form Factor | Network | CPU | Gate | Perf Threshold | Purpose |
-|---|--------|-------------|---------|-----|------|----------------|---------|
-| 1 | Desktop | desktop | 40ms / 10 Mbps | 1× | Hard | 80 | LAN baseline — developer experience |
-| 2 | Mobile 4G | mobile | 150ms / 1.6 Mbps | 4× | Hard | 90 | Default mobile user (German city) |
-| 3 | Mobile Slow | mobile | 400ms / 400 Kbps | 6× | Soft-Warn | 63 | Edge-of-coverage (weak 5G, rural, train) |
+| # | Profil | Form Factor | Network | CPU | Perf Gate | Perf Warn-Line | Purpose |
+|---|--------|-------------|---------|-----|-----------|----------------|---------|
+| 1 | Desktop | desktop | `--preset=desktop` (LAN) | 1× | Soft-Warn | 80 | LAN baseline — developer experience |
+| 2 | Mobile 5G | mobile | 20ms / ~50 Mbps | 4× | Soft-Warn | 90 | Default mobile user (DACH, 5G-default) |
+| 3 | Mobile 4G | mobile | 150ms / ~1.6 Mbps (Slow-4G) | 4× | Soft-Warn | 90 | Slow-network visibility canary |
 
-**Accessibility / Best Practices / SEO:** all 95 across all profiles (hard on Desktop + Mobile 4G, soft-warn on Mobile Slow).
+5G is faster than 4G — the network ordering is correct. The pre-2026-06-18 "Mobile Slow (Edge-5G)" profile (400 Kbps / 6× CPU) was **deleted**: 400 Kbps is slower than 4G, so the "5G" label inverted reality; sub-4G is an unserviceable audience.
+
+**Accessibility / Best Practices / SEO:** hard @95 on all three profiles — these are the only gates that fail CI.
 
 ### Commands
 
 - `npm run lighthouse:quick` — all 3 profiles (CI mode, assumes server on :3000)
 - `npm run lighthouse:desktop` — single profile for dev-loop iteration
-- `npm run lighthouse:mobile` — single profile (Mobile 4G) for dev-loop
-- `npm run lighthouse:slow` — single profile (Mobile Slow / Edge-5G) for dev-loop
+- `npm run lighthouse:mobile` — single profile (Mobile 4G / Slow-4G) for dev-loop
+- `npm run lighthouse:5g` — single profile (Mobile 5G / fast network) for dev-loop
+- `npm run test:lighthouse:unit` — profile-shape regression test (no Chrome; ~0.1s)
 - `npm run lighthouse` — full pipeline (build + start + all profiles + stop)
 
 ### Gate Philosophy
 
-- **Desktop (hard, 80):** Relaxed 95 → 80 on 2026-06-13 (cross-site calibration, D-LIN-27-2 / Codify-Brief #458 "anchor below worst-observed"). On a 1× CPU preset these static pages are so fast the composite Perf score tracks shared-runner TBT jitter, not the site — observed {86, 93, 98, 100} ⇔ TBT {308, 203, 105, 2}ms while LCP <1s / CLS 0.004 stay rock-solid. The old 95 false-red on pure runner noise and got admin-bypassed repeatedly (PR #94, neckarshore main reds). 80 sits ~6pp under worst-normal-observed; a real regression below 80 still hard-fails. Mobile 4G (90) is the real perf canary.
-- **Mobile 4G (hard, 90):** Mobile 4G scores 96 in practice. 6-point buffer. Catches silent regressions — the previous threshold of 85 was a monitoring hole, not a safety net.
-- **Mobile Slow (soft, 63):** Stage 2 complete (2026-04-13). 5-run baseline: [67, 68, 68, 70, 71], median 68, threshold = median − 5. Purpose is **visibility**, not blocking.
+- **Performance is soft-warn everywhere (German Rauhut directive, 2026-06-18).** Perf scores track shared-runner CPU jitter, not the site — on the 1× desktop preset a fast static page swings {70, 86, 93, 98, 100} ⇔ TBT noise while LCP <1s / CLS 0.004 stay rock-solid. A hard perf gate cried wolf and got admin-bypassed repeatedly (PR #94, recurring `main` reds, the 2026-06-18 stats-commit red). It is now an **advisory warning line** per profile: the run prints `⚠` and lists the metric under "Soft warnings", but the exit code is unchanged. Visibility is kept (warning + logged LCP/TBT/CLS + run-to-run delta); the auto-block is gone. **Explicitly no hard perf gate on 4G** — the audience is 5G-default; we do not block the build on an old-tech network.
+- **A11y / Best Practices / SEO are hard @95 on all three profiles** — deterministic categories (the site hits 100), so a drop is a real defect, not runner noise. These are the *only* failures that change the exit code.
+- **Why the old hard perf gates were dropped:** the family-wide false-red cascade (neckarshore {86,93,98,100}, goldoni {89,90}, rauhut 67-spike, the deleted Edge-5G {44–71}) all stemmed from gating an inherently variable metric. The fix is structural — make perf advisory — not another threshold chase.
 
 ### Reports
 
