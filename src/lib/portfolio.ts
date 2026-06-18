@@ -10,7 +10,7 @@
  *
  * The tree mirrors the real GitHub org split (verified live 2026-06-17):
  *   flagships → omnopsis-ai · mmps → neckarshore-mmps · skills → neckarshore-skills
- *   websites  → neckarshore-websites (Beifang)
+ *   websites  → neckarshore-websites
  *
  * Adding a product = ONE entry here (AP-1, "add a product = 1 edit"). Nav, portal,
  * sub-portals, the dynamic detail route, and the sitemap all derive from PORTFOLIO.
@@ -63,6 +63,13 @@ export interface PortfolioCategory {
   href: string;
   /** Analytics key prefix. */
   track: string;
+  /**
+   * Optional balance/teaser tile for the /products portal. Rendered (desktop + tablet
+   * only — `hidden sm:flex`) when the category's tile count is ODD, i.e. a lone card
+   * would sit on the 2-col grid. Auto-hides once the category gains a real card or a
+   * "+N weitere" tile (even count). Honest copy lives here, not in the JSX.
+   */
+  balanceTile?: { eyebrow: string; line: string; cta: string };
   items: PortfolioItem[];
 }
 
@@ -76,6 +83,13 @@ export const PORTFOLIO: PortfolioCategory[] = [
     navLabel: "Flagships",
     href: "/products/flagships",
     track: "nav_products_flagships",
+    // Balance tile: Flagships has a single card today → fills the lone-card gap on
+    // the 2-col portal grid (desktop/tablet). Auto-hides when a 2nd flagship lands.
+    balanceTile: {
+      eyebrow: "Weitere folgen",
+      line: "Omnopsis ist das erste Flaggschiff.",
+      cta: "Mehr erfahren",
+    },
     items: [
       {
         name: "Omnopsis Documentor+X",
@@ -240,7 +254,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
   {
     id: "websites",
     title: "Websites",
-    subtitle: "Web-Präsenz — Beifang",
+    subtitle: "Web-Präsenz & Kundenprojekte",
     intro:
       "Echte Kundenprojekte, nebenbei entstanden — dieselbe Bauweise wie alles andere: KI-beschleunigt, DSGVO-by-Design.",
     navLabel: "Websites",

@@ -5,7 +5,7 @@ import { PORTFOLIO } from "@/lib/portfolio";
 
 const category = PORTFOLIO.find((c) => c.id === "websites")!;
 const description =
-  "Web-Präsenzen, die wir nebenbei bauen — Beifang zum Kerngeschäft. Dieselbe Arbeitsweise: schnell, sauber, DSGVO-by-Design.";
+  "Echte Web-Projekte für Kunden und eigene Marken — nebenbei entstanden, mit derselben Sorgfalt wie unsere Produkte: KI-beschleunigt, sauber, DSGVO-by-Design.";
 
 export const metadata: Metadata = pageMetadata({
   title: `${category.title} — neckarshore.ai`,

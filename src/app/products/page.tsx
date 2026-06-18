@@ -49,6 +49,9 @@ export default function ProductsIndex() {
           {PORTFOLIO.map((category) => {
             const featured = featuredItems(category);
             const hidden = hiddenItemCount(category);
+            const tileCount = featured.length + (hidden > 0 ? 1 : 0);
+            const balanceTile =
+              tileCount % 2 === 1 ? category.balanceTile : undefined;
             return (
               <section key={category.id} aria-labelledby={`tier-${category.id}`}>
                 <div className="flex items-baseline gap-3 border-b border-primary/5 pb-3 dark:border-text-secondary/10">
@@ -89,6 +92,24 @@ export default function ProductsIndex() {
                       </span>
                       <span className="mt-1 font-heading text-base font-semibold text-accent transition-colors group-hover:text-accent-hover dark:text-accent-bright">
                         Alle {category.title} ansehen →
+                      </span>
+                    </Link>
+                  )}
+                  {balanceTile && (
+                    <Link
+                      href={category.href}
+                      data-track={`${category.track}_balance`}
+                      aria-label={`Mehr über unsere ${category.title} erfahren`}
+                      className="group hidden flex-col items-start justify-center rounded-xl border border-dashed border-primary/20 px-6 py-5 transition-colors hover:border-accent hover:bg-accent/5 sm:flex dark:border-text-secondary/20 dark:hover:border-accent-bright dark:hover:bg-accent-bright/5"
+                    >
+                      <span className="text-sm font-medium text-muted dark:text-text-tertiary">
+                        {balanceTile.eyebrow}
+                      </span>
+                      <span className="mt-1 text-[15px] leading-relaxed text-neutral-dark/70 dark:text-text-secondary/80">
+                        {balanceTile.line}
+                      </span>
+                      <span className="mt-2 font-heading text-base font-semibold text-accent transition-colors group-hover:text-accent-hover dark:text-accent-bright">
+                        {balanceTile.cta} →
                       </span>
                     </Link>
                   )}
