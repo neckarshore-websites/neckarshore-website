@@ -587,7 +587,7 @@ export default function Home() {
                     MIT License
                   </span>
                   <a
-                    href="https://github.com/neckarshore-ai/obsidian-vault-autopilot"
+                    href="https://github.com/neckarshore-skills/obsidian-vault-autopilot"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
@@ -664,7 +664,7 @@ export default function Home() {
                     MIT License
                   </span>
                   <a
-                    href="https://github.com/neckarshore-ai/obsidian-social-scrapers-common"
+                    href="https://github.com/neckarshore-skills/obsidian-social-scrapers-common"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"

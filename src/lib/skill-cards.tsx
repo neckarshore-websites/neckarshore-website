@@ -56,6 +56,11 @@ export interface SkillCardData {
    * Stands in for the license/GitHub footer when there is no public repo.
    */
   footerBadge?: string;
+  /**
+   * Code visibility — drives the "Code" column on the skills overview table.
+   * "public" = open-source repo on GitHub; "private" = bespoke / no public repo.
+   */
+  visibility: "public" | "private";
 }
 
 export const SKILL_CARDS: Record<string, SkillCardData> = {
@@ -87,8 +92,9 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
     ],
     moreNote: "… weitere in Entwicklung",
     license: "MIT License",
-    repoUrl: "https://github.com/neckarshore-ai/obsidian-vault-autopilot",
+    repoUrl: "https://github.com/neckarshore-skills/obsidian-vault-autopilot",
     track: "oss_vault_autopilot",
+    visibility: "public",
   },
 
   // 2 — reproduced 1:1 from the former landing-page OSS section.
@@ -119,8 +125,9 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
     ],
     moreNote: "… weitere in Entwicklung",
     license: "MIT License",
-    repoUrl: "https://github.com/neckarshore-ai/obsidian-social-scrapers-common",
+    repoUrl: "https://github.com/neckarshore-skills/obsidian-social-scrapers-common",
     track: "oss_social_scrapers",
+    visibility: "public",
   },
 
   // 3 — NEW (first content draft, refine in the detail pass).
@@ -150,8 +157,9 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
       },
     ],
     license: "MIT License",
-    repoUrl: "https://github.com/neckarshore-ai/imap-mailbox-cleanup",
+    repoUrl: "https://github.com/neckarshore-skills/imap-mailbox-cleanup",
     track: "oss_imap_cleanup",
+    visibility: "public",
   },
 
   // 4 — NEW (first content draft, refine in the detail pass).
@@ -183,12 +191,13 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
     license: "MIT License",
     repoUrl: "https://github.com/neckarshore-skills/ai-phrase-check",
     track: "oss_phrase_check",
+    visibility: "public",
   },
 
   // 5 — NEW. A bespoke client skill from a PRIVATE barter deal → no public repo,
   // client name genericized ("Restaurant-Menüpflege"). Shown as a reference example,
   // not a downloadable OSS tool. If it later lands in a neckarshore-skills repo, set
-  // repoUrl + license and drop footerBadge → it becomes a normal OSS card.
+  // repoUrl + license, flip visibility → "public" and drop footerBadge.
   "restaurant-menu-update": {
     icon: UtensilsCrossed,
     title: "Restaurant-Menüpflege",
@@ -214,5 +223,6 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
       },
     ],
     footerBadge: "Referenz-Beispiel",
+    visibility: "private",
   },
 };
