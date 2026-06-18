@@ -11,11 +11,32 @@
  * skeletons, which ARE in the search index on purpose.
  */
 import assert from "node:assert/strict";
+import { readdirSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import MiniSearch from "minisearch";
 import { buildSearchDocs } from "../../src/lib/search/index-data";
 import { allItems } from "../../src/lib/portfolio";
 import { getAllGlossarEntries } from "../../src/lib/content/glossar";
 import type { SearchDoc } from "../../src/lib/search/types";
+
+/** Every STATIC app route (src/app/**​/page.tsx), excluding dynamic [slug] segments
+ *  and /api — those are covered by the per-item product/glossar doc checks. */
+function staticAppRoutes(): string[] {
+  const APP_DIR = fileURLToPath(new URL("../../src/app", import.meta.url));
+  const routes: string[] = [];
+  const walk = (dir: string, base: string) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      if (e.isDirectory()) {
+        if (e.name.startsWith("[") || e.name === "api") continue; // dynamic / non-page
+        walk(`${dir}/${e.name}`, `${base}/${e.name}`);
+      } else if (e.name === "page.tsx") {
+        routes.push(base === "" ? "/" : base);
+      }
+    }
+  };
+  walk(APP_DIR, "");
+  return routes;
+}
 
 let pass = 0,
   fail = 0;
@@ -56,6 +77,15 @@ check("EVERY glossar entry has a glossar doc with its definition (Volltext)", ()
     const doc = docs.find((d) => d.type === "glossar" && d.url === `/glossar/${entry.slug}`);
     assert.ok(doc, `no search doc for glossar '${entry.term}'`);
     assert.ok(doc!.text.includes(entry.definition), `glossar '${entry.term}' doc missing its definition`);
+  }
+});
+
+check("EVERY static app route is indexed (literal 'alle Seiten indiziert')", () => {
+  // Derives routes from the filesystem, so a newly-added top-level page that
+  // forgot its index entry fails here — not just the hand-listed ones below.
+  for (const route of staticAppRoutes()) {
+    const doc = docs.find((d) => d.url === route);
+    assert.ok(doc, `no search doc for app route ${route} (page.tsx exists, index entry missing)`);
   }
 });
 
