@@ -14,9 +14,12 @@ import type { SkillCardData } from "@/lib/skill-cards";
 export function SkillCard({
   card,
   headingLevel = "h3",
+  id,
 }: {
   card: SkillCardData;
   headingLevel?: "h1" | "h2" | "h3";
+  /** Optional anchor id — the on-page overview table bookmarks jump to `#<id>`. */
+  id?: string;
 }) {
   const Heading = headingLevel;
   const Icon = card.icon;
@@ -25,7 +28,7 @@ export function SkillCard({
   const titleClass = headingLevel === "h1" ? "text-2xl md:text-3xl" : "text-xl";
 
   return (
-    <div className="flex flex-col rounded-xl border border-primary/10 bg-white p-8 shadow-sm dark:border-text-secondary/10 dark:bg-surface">
+    <div id={id} className="flex flex-col rounded-xl border border-primary/10 bg-white p-8 shadow-sm dark:border-text-secondary/10 dark:bg-surface">
       <div className="flex items-center gap-3">
         <Icon size={28} className="text-secondary" aria-hidden="true" />
         {card.badge && (

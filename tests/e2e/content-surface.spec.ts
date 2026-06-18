@@ -307,3 +307,49 @@ test.describe("Content surface — SEO/GEO dual-axis sweep", () => {
     });
   }
 });
+
+test.describe("Skills on-page overview table @content", () => {
+  test("TC-CNT-032: /products/skills renders an overview table with one row per skill", async ({
+    page,
+  }) => {
+    await page.goto("/products/skills");
+    const table = page.getByRole("table");
+    await expect(table).toBeVisible();
+    // 5 portfolio skills → 5 body rows + 1 header row
+    await expect(table.getByRole("row")).toHaveCount(6);
+  });
+
+  test("TC-CNT-033: every bookmark targets an existing card anchor on the page", async ({
+    page,
+  }) => {
+    await page.goto("/products/skills");
+    const links = page.locator('table a[href^="#"]');
+    const n = await links.count();
+    expect(n).toBe(5);
+    for (let i = 0; i < n; i++) {
+      const href = await links.nth(i).getAttribute("href");
+      await expect(page.locator(`#${href!.slice(1)}`)).toBeAttached();
+    }
+  });
+
+  test("TC-CNT-034: clicking a bookmark scrolls the matching card near the top", async ({
+    page,
+  }) => {
+    await page.goto("/products/skills");
+    const link = page.locator('table a[href^="#"]').nth(2); // 3rd skill
+    const id = (await link.getAttribute("href"))!.slice(1);
+    await link.click();
+    await expect(page).toHaveURL(new RegExp(`#${id}$`));
+    await expect
+      .poll(
+        async () => {
+          const top = await page
+            .locator(`#${id}`)
+            .evaluate((el) => Math.round(el.getBoundingClientRect().top));
+          return top > -80 && top < 240; // landed below the sticky nav, not scrolled past
+        },
+        { timeout: 5000 },
+      )
+      .toBe(true);
+  });
+});
