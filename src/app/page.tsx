@@ -285,21 +285,8 @@ export default function Home() {
                 </h2>
                 <p className="mt-6 text-lg leading-relaxed text-text-secondary">
                   Strukturiert gebaut — KI-beschleunigt, DSGVO-by-Design, Made in Germany:
+                  Flagships, MMPs, Skills (&amp; Websites).
                 </p>
-                <ul className="mt-6 space-y-3">
-                  <li>
-                    <span className="font-heading font-semibold text-text-primary">Omnopsis</span>
-                    <span className="text-text-secondary"> — Flagship · KI-first Documentation Engine</span>
-                  </li>
-                  <li>
-                    <span className="font-heading font-semibold text-text-primary">ClearPath &amp; MMPs</span>
-                    <span className="text-text-secondary"> — Produkte mit Marktreife</span>
-                  </li>
-                  <li>
-                    <span className="font-heading font-semibold text-text-primary">Skills</span>
-                    <span className="text-text-secondary"> — fokussierte Open-Source-Werkzeuge</span>
-                  </li>
-                </ul>
                 <Link
                   href="/products"
                   className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-secondary transition-colors hover:text-text-primary"
