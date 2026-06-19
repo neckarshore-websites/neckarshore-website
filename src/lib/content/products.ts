@@ -15,7 +15,8 @@ interface ProductFrontmatter {
   name: string;
   headline: string;
   definition: string;
-  liveUrl: string;
+  /** Live-app URL. Omitted for preview products with no public app yet (→ preview schema, no live CTA). */
+  liveUrl?: string;
   applicationCategory: string;
 }
 

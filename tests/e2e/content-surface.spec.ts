@@ -409,3 +409,43 @@ test.describe("Skills on-page overview table @content", () => {
       .toBe(true);
   });
 });
+
+test.describe("Content surface — Snakeoil-Check preview MMP", () => {
+  test("TC-CNT-035: 200, single H1 contains the name, citable definition is the lead paragraph", async ({
+    page,
+  }) => {
+    const res = await page.goto("/products/snakeoil-check");
+    expect(res?.status()).toBe(200);
+    await expect(page.locator("h1")).toHaveCount(1);
+    await expect(page.locator("h1")).toContainText("Snakeoil-Check");
+    await expect(page.locator("article p").first()).toContainText(
+      "zwölf neutralen Kriterien",
+    );
+  });
+
+  test("TC-CNT-036: renders the five MMP content axes as headings", async ({ page }) => {
+    await page.goto("/products/snakeoil-check");
+    for (const heading of [
+      "Das Problem",
+      "Wie es funktioniert",
+      "Die Idee dahinter",
+      "Status & Roadmap",
+      "Wie dieser Text entstand",
+    ]) {
+      await expect(page.getByRole("heading", { name: heading })).toBeVisible();
+    }
+  });
+
+  test("TC-CNT-037: one preview SoftwareApplication block — no url, no offers (AD-19 fail-closed)", async ({
+    page,
+  }) => {
+    await page.goto("/products/snakeoil-check");
+    const apps = (await ldJson(page)).filter((b) => b["@type"] === "SoftwareApplication");
+    expect(apps).toHaveLength(1);
+    expect(apps[0].name).toBe("Snakeoil-Check");
+    expect(apps[0].operatingSystem).toBe("Web");
+    expect(apps[0].url).toBeUndefined();
+    expect(apps[0].offers).toBeUndefined();
+    expect(String(apps[0].description)).toContain("zwölf neutralen Kriterien");
+  });
+});
