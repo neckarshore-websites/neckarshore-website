@@ -23,7 +23,7 @@ function StatusBadge({ item }: { item: PortfolioItem }) {
   if (item.status === "external") {
     return (
       <span className="shrink-0 rounded-full bg-primary/5 px-3 py-1 text-xs font-medium uppercase tracking-wider text-muted dark:bg-text-secondary/10 dark:text-text-tertiary">
-        Extern&nbsp;↗
+        Website
       </span>
     );
   }
