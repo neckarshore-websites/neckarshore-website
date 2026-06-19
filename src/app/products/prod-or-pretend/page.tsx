@@ -3,16 +3,15 @@ import PreviewProductPage, {
   previewProductMetadata,
 } from "@/components/PreviewProductPage";
 
-const SLUG = "phonesis";
+const SLUG = "prod-or-pretend";
 
 export function generateMetadata(): Metadata {
   return previewProductMetadata({
     slug: SLUG,
-    title:
-      "Phonesis Voicebank — Stimmenarchiv für Familien & Institutionen | neckarshore.ai",
+    title: "Prod-or-Pretend — Qualitäts-Spiegel für Tech-Hype | neckarshore.ai",
   });
 }
 
-export default function PhonesisPage() {
-  return <PreviewProductPage slug={SLUG} ctaName="Phonesis" />;
+export default function ProdOrPretendPage() {
+  return <PreviewProductPage slug={SLUG} />;
 }
