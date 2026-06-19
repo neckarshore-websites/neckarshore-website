@@ -170,6 +170,14 @@ test.describe("Content surface — Products index", () => {
       expect(href).not.toBe("#");
     }
   });
+
+  // The "Extern" badge was misleading (it labelled a project, not an action). Website-tier
+  // cards now carry a plain "Website" badge; the external link still opens in a new tab.
+  test("TC-CNT-016: website cards are labelled 'Website', not 'Extern'", async ({ page }) => {
+    await page.goto("/products/websites");
+    await expect(page.getByText("Extern", { exact: false })).toHaveCount(0);
+    await expect(page.getByText("Website", { exact: true }).first()).toBeVisible();
+  });
 });
 
 test.describe("Content surface — ClearPath product", () => {
