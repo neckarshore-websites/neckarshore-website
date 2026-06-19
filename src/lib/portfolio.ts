@@ -154,7 +154,10 @@ export const PORTFOLIO: PortfolioCategory[] = [
         isExternal: false,
         schemaType: "SoftwareApplication",
         applicationCategory: "MultimediaApplication",
+        // Bespoke preview detail page (src/app/products/phonesis) → excluded from the [slug]
+        // skeleton route. Stays noindex (held out of the sitemap) until the public site launches.
         noindex: true,
+        hasOwnPage: true,
       },
       {
         name: "Local-SEO-Hub",

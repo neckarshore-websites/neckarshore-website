@@ -449,3 +449,44 @@ test.describe("Content surface — Snakeoil-Check preview MMP", () => {
     expect(String(apps[0].description)).toContain("zwölf neutralen Kriterien");
   });
 });
+
+test.describe("Content surface — Phonesis Voicebank preview MMP", () => {
+  test("TC-CNT-038: 200, single H1 contains the name, citable definition is the lead paragraph", async ({
+    page,
+  }) => {
+    const res = await page.goto("/products/phonesis");
+    expect(res?.status()).toBe(200);
+    await expect(page.locator("h1")).toHaveCount(1);
+    await expect(page.locator("h1")).toContainText("Phonesis");
+    await expect(page.locator("article p").first()).toContainText(
+      "kommende Generationen",
+    );
+  });
+
+  test("TC-CNT-039: renders the six MMP content axes as headings", async ({ page }) => {
+    await page.goto("/products/phonesis");
+    for (const heading of [
+      "Das Problem",
+      "Wie es funktioniert",
+      "Die Idee dahinter",
+      "Datenschutz & Ethik",
+      "Status & Roadmap",
+      "Wie dieser Text entstand",
+    ]) {
+      await expect(page.getByRole("heading", { name: heading })).toBeVisible();
+    }
+  });
+
+  test("TC-CNT-040: one preview SoftwareApplication block — no url, no offers (AD-19 fail-closed)", async ({
+    page,
+  }) => {
+    await page.goto("/products/phonesis");
+    const apps = (await ldJson(page)).filter((b) => b["@type"] === "SoftwareApplication");
+    expect(apps).toHaveLength(1);
+    expect(apps[0].name).toBe("Phonesis Voicebank");
+    expect(apps[0].operatingSystem).toBe("Web");
+    expect(apps[0].url).toBeUndefined();
+    expect(apps[0].offers).toBeUndefined();
+    expect(String(apps[0].description)).toContain("kommende Generationen");
+  });
+});
