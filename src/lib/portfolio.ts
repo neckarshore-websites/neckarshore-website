@@ -179,7 +179,11 @@ export const PORTFOLIO: PortfolioCategory[] = [
         isExternal: false,
         schemaType: "SoftwareApplication",
         applicationCategory: "DeveloperApplication",
+        // Bespoke preview detail page (src/app/products/prod-or-pretend) → excluded from the
+        // [slug] skeleton route. Stays noindex (held out of the sitemap) until the public
+        // launch; the page emits the preview schema (no url/offers) until then.
         noindex: true,
+        hasOwnPage: true,
       },
     ],
   },

@@ -490,3 +490,43 @@ test.describe("Content surface — Phonesis Voicebank preview MMP", () => {
     expect(String(apps[0].description)).toContain("kommende Generationen");
   });
 });
+
+test.describe("Content surface — Prod-or-Pretend preview MMP", () => {
+  test("TC-CNT-041: 200, single H1 contains the name, citable definition is the lead paragraph", async ({
+    page,
+  }) => {
+    const res = await page.goto("/products/prod-or-pretend");
+    expect(res?.status()).toBe(200);
+    await expect(page.locator("h1")).toHaveCount(1);
+    await expect(page.locator("h1")).toContainText("Prod-or-Pretend");
+    await expect(page.locator("article p").first()).toContainText(
+      "Substanz von heißer Luft",
+    );
+  });
+
+  test("TC-CNT-042: renders the five MMP content axes as headings", async ({ page }) => {
+    await page.goto("/products/prod-or-pretend");
+    for (const heading of [
+      "Das Problem",
+      "Wie es funktioniert",
+      "Die Idee dahinter",
+      "Status & Roadmap",
+      "Wie dieser Text entstand",
+    ]) {
+      await expect(page.getByRole("heading", { name: heading })).toBeVisible();
+    }
+  });
+
+  test("TC-CNT-043: one preview SoftwareApplication block — no url, no offers (AD-19 fail-closed)", async ({
+    page,
+  }) => {
+    await page.goto("/products/prod-or-pretend");
+    const apps = (await ldJson(page)).filter((b) => b["@type"] === "SoftwareApplication");
+    expect(apps).toHaveLength(1);
+    expect(apps[0].name).toBe("Prod-or-Pretend");
+    expect(apps[0].operatingSystem).toBe("Web");
+    expect(apps[0].url).toBeUndefined();
+    expect(apps[0].offers).toBeUndefined();
+    expect(String(apps[0].description)).toContain("Substanz von heißer Luft");
+  });
+});
