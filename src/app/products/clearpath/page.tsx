@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { Prose } from "@/components/Prose";
 import { JsonLd } from "@/components/JsonLd";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { pageMetadata } from "@/lib/seo";
 import { getProductEntry } from "@/lib/content/products";
+import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { softwareApplicationSchema } from "@/lib/schema/product";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
@@ -37,24 +39,7 @@ export default function ClearPathPage() {
         id="schema-softwareapplication-clearpath"
       />
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
-        <nav
-          aria-label="Brotkrumen"
-          className="mb-8 text-sm text-muted dark:text-text-secondary/60"
-        >
-          <Link href="/" className="transition-colors hover:text-accent">
-            Start
-          </Link>
-          <span className="mx-2" aria-hidden="true">
-            /
-          </span>
-          <Link href="/products" className="transition-colors hover:text-accent">
-            Produkte
-          </Link>
-          <span className="mx-2" aria-hidden="true">
-            /
-          </span>
-          <span className="text-primary/70 dark:text-text-secondary">{entry.name}</span>
-        </nav>
+        <Breadcrumbs trail={breadcrumbTrailForSlug(SLUG)} />
 
         <article>
           <header className="mb-6">
@@ -87,14 +72,7 @@ export default function ClearPathPage() {
           </div>
         </article>
 
-        <div className="mt-12 border-t border-primary/5 pt-8 dark:border-text-secondary/10">
-          <Link
-            href="/products"
-            className="text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
-          >
-            ← Alle Produkte
-          </Link>
-        </div>
+        <ProductDetailNav slug={SLUG} />
       </main>
       <Footer />
     </>

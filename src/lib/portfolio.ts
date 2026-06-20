@@ -21,6 +21,8 @@
  * order = Founder's Top-N), the remainder follows A→Z.
  */
 
+import type { BreadcrumbCrumb } from "@/lib/schema/breadcrumb";
+
 export type ProductStatus = "live" | "preview" | "external";
 export type ProductSchemaType = "SoftwareApplication" | "none";
 export type CategoryId = "flagships" | "mmps" | "skills" | "websites";
@@ -366,4 +368,70 @@ export function allProductRoutes(): string[] {
     .filter((i) => !i.isExternal && !i.noindex)
     .map((i) => i.href);
   return ["/products", ...subPortals, ...indexableDetails];
+}
+
+/** The category that owns a slug (the slug lives in exactly one category). */
+export function categoryForSlug(slug: string): PortfolioCategory | undefined {
+  return PORTFOLIO.find((c) => c.items.some((i) => i.slug === slug));
+}
+
+/**
+ * Full 4-level breadcrumb trail for a product DETAIL page:
+ *   Start › Produkte › <Kategorie> › <Item>
+ * The last crumb (the item) carries no href = the current page.
+ */
+export function breadcrumbTrailForSlug(
+  slug: string,
+  /** Override the leaf label (e.g. a short product name) instead of the full item name. */
+  leafName?: string,
+): BreadcrumbCrumb[] {
+  const category = categoryForSlug(slug);
+  const item = getItemBySlug(slug);
+  const trail: BreadcrumbCrumb[] = [
+    { name: "Start", href: "/" },
+    { name: "Produkte", href: "/products" },
+  ];
+  if (category) trail.push({ name: category.title, href: category.href });
+  if (item) trail.push({ name: leafName ?? item.name });
+  return trail;
+}
+
+/**
+ * 3-level breadcrumb trail for a SUB-PORTAL (category listing) page:
+ *   Start › Produkte › <Kategorie>
+ * The category is the current page → no href on the last crumb.
+ */
+export function breadcrumbTrailForCategory(
+  category: PortfolioCategory,
+): BreadcrumbCrumb[] {
+  return [
+    { name: "Start", href: "/" },
+    { name: "Produkte", href: "/products" },
+    { name: category.title },
+  ];
+}
+
+export interface SiblingNav {
+  /** Previous internal item in the same category (undefined at the start). */
+  prev?: PortfolioItem;
+  /** Next internal item in the same category (undefined at the end). */
+  next?: PortfolioItem;
+}
+
+/**
+ * Within-category prev/next siblings for the "Durchblättern"-Variante (browse one
+ * item to the next without going up). External items are skipped (they have no
+ * detail page to link to); order follows the declared PORTFOLIO order (featured
+ * lead, then A→Z). No wrap-around — clean stop at the category's first/last item.
+ */
+export function siblingNav(slug: string): SiblingNav {
+  const category = categoryForSlug(slug);
+  if (!category) return {};
+  const browsable = category.items.filter((i) => !i.isExternal);
+  const index = browsable.findIndex((i) => i.slug === slug);
+  if (index === -1) return {};
+  return {
+    prev: index > 0 ? browsable[index - 1] : undefined,
+    next: index < browsable.length - 1 ? browsable[index + 1] : undefined,
+  };
 }
