@@ -249,8 +249,11 @@ export const PORTFOLIO: PortfolioCategory[] = [
         href: "/products/ai-phrase-check",
         isExternal: false,
         schemaType: "SoftwareApplication",
-        applicationCategory: "UtilitiesApplication",
-        noindex: true,
+        applicationCategory: "DeveloperApplication",
+        // Bespoke indexable detail page (src/app/products/ai-phrase-check) → excluded from the
+        // [slug] skeleton route, enters the sitemap. Real public MIT OSS skill (like OVA), so
+        // NOT noindex; the page emits SoftwareApplication (real url + free Offer) + FAQPage.
+        hasOwnPage: true,
       },
       {
         name: "Restaurant-Menüpflege",
