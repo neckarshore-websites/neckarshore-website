@@ -3,9 +3,14 @@ import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { pageMetadata } from "@/lib/seo";
-import { allInternalDetailSlugs, getItemBySlug } from "@/lib/portfolio";
+import {
+  allInternalDetailSlugs,
+  breadcrumbTrailForSlug,
+  getItemBySlug,
+} from "@/lib/portfolio";
 import { previewSoftwareApplicationSchema } from "@/lib/schema/product";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
@@ -60,6 +65,8 @@ export default async function ProductDetailPage({
         />
       )}
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
+        <Breadcrumbs trail={breadcrumbTrailForSlug(item.slug)} />
+
         <article>
           <header className="mb-6">
             <h1 className="font-heading text-4xl font-bold text-accent md:text-5xl">
