@@ -530,3 +530,88 @@ test.describe("Content surface — Prod-or-Pretend preview MMP", () => {
     expect(String(apps[0].description)).toContain("Substanz von heißer Luft");
   });
 });
+
+test.describe("Content surface — Local-SEO-Hub preview MMP", () => {
+  test("TC-CNT-044: 200, single H1 contains the name, citable definition is the lead paragraph", async ({
+    page,
+  }) => {
+    const res = await page.goto("/products/local-seo-hub");
+    expect(res?.status()).toBe(200);
+    await expect(page.locator("h1")).toHaveCount(1);
+    await expect(page.locator("h1")).toContainText("Local-SEO-Hub");
+    await expect(page.locator("article p").first()).toContainText(
+      "Sichtbarkeits-Score von 0 bis 100",
+    );
+  });
+
+  test("TC-CNT-045: renders the five MMP content axes as headings", async ({ page }) => {
+    await page.goto("/products/local-seo-hub");
+    for (const heading of [
+      "Das Problem",
+      "Wie es funktioniert",
+      "Die Idee dahinter",
+      "Status & Roadmap",
+      "Wie dieser Text entstand",
+    ]) {
+      await expect(page.getByRole("heading", { name: heading })).toBeVisible();
+    }
+  });
+
+  test("TC-CNT-046: one preview SoftwareApplication block — no url, no offers (AD-19 fail-closed)", async ({
+    page,
+  }) => {
+    await page.goto("/products/local-seo-hub");
+    const apps = (await ldJson(page)).filter((b) => b["@type"] === "SoftwareApplication");
+    expect(apps).toHaveLength(1);
+    expect(apps[0].name).toBe("Local-SEO-Hub");
+    expect(apps[0].operatingSystem).toBe("Web");
+    expect(apps[0].url).toBeUndefined();
+    expect(apps[0].offers).toBeUndefined();
+    expect(String(apps[0].description)).toContain("Sichtbarkeits-Score von 0 bis 100");
+  });
+});
+
+test.describe("Content surface — AI Phrase Check skill detail", () => {
+  test("TC-CNT-047: 200, single H1 contains the name, citable lead paragraph", async ({
+    page,
+  }) => {
+    const res = await page.goto("/products/ai-phrase-check");
+    expect(res?.status()).toBe(200);
+    await expect(page.locator("h1")).toHaveCount(1);
+    await expect(page.locator("h1")).toContainText("AI Phrase Check");
+    await expect(page.locator("article p").first()).toContainText(
+      "verräterischen Spuren von KI-generierter Sprache",
+    );
+  });
+
+  test("TC-CNT-048: renders the skill detail sections as headings", async ({ page }) => {
+    await page.goto("/products/ai-phrase-check");
+    for (const heading of [
+      "Was ist AI Phrase Check?",
+      "Wie es funktioniert",
+      "Zweisprachig: Englisch und Deutsch",
+      "Datenschutz",
+      "Verfügbarkeit",
+      "Häufige Fragen",
+    ]) {
+      await expect(page.getByRole("heading", { name: heading })).toBeVisible();
+    }
+  });
+
+  test("TC-CNT-049: SoftwareApplication (real url + free Offer) + FAQPage JSON-LD — indexable skill posture", async ({
+    page,
+  }) => {
+    await page.goto("/products/ai-phrase-check");
+    const blocks = await ldJson(page);
+    const apps = blocks.filter((b) => b["@type"] === "SoftwareApplication");
+    expect(apps).toHaveLength(1);
+    expect(apps[0].name).toBe("AI Phrase Check");
+    expect(String(apps[0].url)).toContain("github.com/neckarshore-skills/ai-phrase-check");
+    expect(apps[0].isAccessibleForFree).toBe(true);
+    expect(apps[0].offers).toBeDefined();
+    const faqs = blocks.filter((b) => b["@type"] === "FAQPage");
+    expect(faqs).toHaveLength(1);
+    expect(Array.isArray(faqs[0].mainEntity)).toBe(true);
+    expect(faqs[0].mainEntity.length).toBeGreaterThanOrEqual(1);
+  });
+});
