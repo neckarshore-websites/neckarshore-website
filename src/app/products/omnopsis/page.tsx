@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import ImageModal from "@/components/ImageModal";
 import { JsonLd } from "@/components/JsonLd";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { pageMetadata } from "@/lib/seo";
+import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { BRAND } from "@/lib/brand";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
@@ -36,24 +38,7 @@ export default function OmnopsisPage() {
       <Nav showOssLaunch={showOssLaunch} />
       <JsonLd data={omnopsisSchema} id="schema-softwareapplication-omnopsis" />
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
-        <nav
-          aria-label="Brotkrumen"
-          className="mb-8 text-sm text-muted dark:text-text-secondary/60"
-        >
-          <Link href="/" className="transition-colors hover:text-accent">
-            Start
-          </Link>
-          <span className="mx-2" aria-hidden="true">
-            /
-          </span>
-          <Link href="/products" className="transition-colors hover:text-accent">
-            Produkte
-          </Link>
-          <span className="mx-2" aria-hidden="true">
-            /
-          </span>
-          <span className="text-primary/70 dark:text-text-secondary">{BRAND.PRODUCT_SHORT}</span>
-        </nav>
+        <Breadcrumbs trail={breadcrumbTrailForSlug("omnopsis", BRAND.PRODUCT_SHORT)} />
 
         <article>
           <header className="mb-6">
@@ -152,23 +137,20 @@ export default function OmnopsisPage() {
           entworfen, vom Gründer redigiert — dieselbe Arbeitsweise, die Neckarshore baut.
         </p>
 
-        <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-primary/5 pt-8 dark:border-text-secondary/10">
-          <Link
-            href="/products"
-            className="text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
-          >
-            ← Alle Produkte
-          </Link>
-          <a
-            href="https://calendly.com/rauhut/20min"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-track="omnopsis_cta"
-            className="text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
-          >
-            Kennenlerntermin buchen →
-          </a>
-        </div>
+        <ProductDetailNav
+          slug="omnopsis"
+          cta={
+            <a
+              href="https://calendly.com/rauhut/20min"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track="omnopsis_cta"
+              className="text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
+            >
+              Kennenlerntermin buchen →
+            </a>
+          }
+        />
       </main>
       <Footer />
     </>

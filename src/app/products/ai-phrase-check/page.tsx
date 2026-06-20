@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { SkillCard } from "@/components/SkillCard";
 import { pageMetadata } from "@/lib/seo";
+import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { SKILL_CARDS } from "@/lib/skill-cards";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
@@ -102,30 +104,7 @@ export default function AiPhraseCheckPage() {
       <JsonLd data={softwareSchema} id="schema-softwareapplication-ai-phrase-check" />
       <JsonLd data={faqSchema} id="schema-faqpage-ai-phrase-check" />
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
-        <nav
-          aria-label="Brotkrumen"
-          className="mb-8 text-sm text-muted dark:text-text-secondary/60"
-        >
-          <Link href="/" className="transition-colors hover:text-accent">
-            Start
-          </Link>
-          <span className="mx-2" aria-hidden="true">
-            /
-          </span>
-          <Link href="/products" className="transition-colors hover:text-accent">
-            Produkte
-          </Link>
-          <span className="mx-2" aria-hidden="true">
-            /
-          </span>
-          <Link href="/products/skills" className="transition-colors hover:text-accent">
-            Skills
-          </Link>
-          <span className="mx-2" aria-hidden="true">
-            /
-          </span>
-          <span className="text-primary/70 dark:text-text-secondary">AI Phrase Check</span>
-        </nav>
+        <Breadcrumbs trail={breadcrumbTrailForSlug("ai-phrase-check")} />
 
         {/* Hero = the reusable SkillCard, here as the page H1 + at-a-glance summary. */}
         <SkillCard card={card} headingLevel="h1" />
@@ -241,23 +220,20 @@ export default function AiPhraseCheckPage() {
           aus der README und Repo-Dokumentation des Projekts zusammengestellt, vom Gründer redigiert.
         </p>
 
-        <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-primary/5 pt-8 dark:border-text-secondary/10">
-          <Link
-            href="/products/skills"
-            className="text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
-          >
-            ← Alle Skills
-          </Link>
-          <a
-            href={REPO}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-track="ai_phrase_check_detail_github"
-            className="text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
-          >
-            Auf GitHub ansehen →
-          </a>
-        </div>
+        <ProductDetailNav
+          slug="ai-phrase-check"
+          cta={
+            <a
+              href={REPO}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track="ai_phrase_check_detail_github"
+              className="text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
+            >
+              Auf GitHub ansehen →
+            </a>
+          }
+        />
       </main>
       <Footer />
     </>

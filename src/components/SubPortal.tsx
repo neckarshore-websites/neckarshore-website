@@ -4,8 +4,9 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
 import { JsonLd } from "@/components/JsonLd";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { collectionPageSchema } from "@/lib/schema/product";
-import type { PortfolioCategory } from "@/lib/portfolio";
+import { breadcrumbTrailForCategory, type PortfolioCategory } from "@/lib/portfolio";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
 
@@ -40,24 +41,7 @@ export default function SubPortal({
       <main
         className={`mx-auto px-4 pt-40 pb-20 md:px-6 ${wide ? "max-w-[1200px]" : "max-w-[960px]"}`}
       >
-        <nav
-          aria-label="Brotkrumen"
-          className="mb-8 text-sm text-muted dark:text-text-secondary/60"
-        >
-          <Link href="/" className="transition-colors hover:text-accent">
-            Start
-          </Link>
-          <span className="mx-2" aria-hidden="true">
-            /
-          </span>
-          <Link href="/products" className="transition-colors hover:text-accent">
-            Produkte
-          </Link>
-          <span className="mx-2" aria-hidden="true">
-            /
-          </span>
-          <span className="text-primary/70 dark:text-text-secondary">{category.title}</span>
-        </nav>
+        <Breadcrumbs trail={breadcrumbTrailForCategory(category)} />
 
         <header className="max-w-[640px]">
           <p className="font-heading text-sm font-semibold uppercase tracking-wider text-accent">
