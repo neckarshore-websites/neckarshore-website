@@ -27,7 +27,7 @@ export function Breadcrumbs({ trail }: { trail: BreadcrumbCrumb[] }) {
           <Fragment key={`${crumb.name}-${index}`}>
             {index > 0 && (
               <span className="mx-2" aria-hidden="true">
-                /
+                ›
               </span>
             )}
             {crumb.href ? (

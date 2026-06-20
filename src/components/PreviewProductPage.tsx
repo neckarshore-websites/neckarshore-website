@@ -4,8 +4,10 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { Prose } from "@/components/Prose";
 import { JsonLd } from "@/components/JsonLd";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { pageMetadata } from "@/lib/seo";
+import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { getProductEntry } from "@/lib/content/products";
 import { previewSoftwareApplicationSchema } from "@/lib/schema/product";
 
@@ -67,6 +69,8 @@ export default function PreviewProductPage({ slug, ctaName }: PreviewProductPage
         id={`schema-softwareapplication-${slug}`}
       />
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
+        <Breadcrumbs trail={breadcrumbTrailForSlug(slug)} />
+
         <article>
           <header className="mb-6">
             <h1 className="font-heading text-4xl font-bold text-accent md:text-5xl">
