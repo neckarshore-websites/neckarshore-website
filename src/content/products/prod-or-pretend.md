@@ -2,7 +2,7 @@
 name: "Prod-or-Pretend"
 headline: "Prod-or-Pretend — der konstruktive Qualitäts-Spiegel für Tech-Hype."
 definition: "Prod-or-Pretend prüft gehypte Tech-Behauptungen auf LinkedIn und X gegen echte Produktionsstandards — kein Debunker, sondern ein Spiegel, der Entscheidern hilft, Substanz von heißer Luft zu unterscheiden."
-applicationCategory: "DeveloperApplication"
+applicationCategory: "BusinessApplication"
 ---
 
 ## Das Problem
