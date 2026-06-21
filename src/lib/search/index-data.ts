@@ -119,14 +119,22 @@ export function buildSearchDocs(): SearchDoc[] {
       url: cat.href,
     });
     for (const item of cat.items) {
+      // Website items with a case study resolve to their INTERNAL /products/websites/<slug>
+      // page (the card's primary destination) — not the external domain — so on-site search
+      // opens the case study, with the live site one click further. Items without a case
+      // study keep their href (internal detail page, or an external link-out).
+      const url = item.caseStudySlug
+        ? `/products/websites/${item.caseStudySlug}`
+        : item.href;
+      const isExternalLink = item.isExternal && !item.caseStudySlug;
       docs.push({
         id: `product:${cat.id}:${item.slug}`,
         type: "product",
         title: item.name,
         text: item.tagline,
         category: cat.title,
-        url: item.href,
-        ...(item.isExternal ? { external: true } : {}),
+        url,
+        ...(isExternalLink ? { external: true } : {}),
       });
     }
   }

@@ -2,8 +2,8 @@ import { test, expect, type Page } from "@playwright/test";
 
 /**
  * Cmd+K search (TC-SRCH-*). Client-side MiniSearch over the static /api/search-index.
- * The external-tab test is tagged @external (real network to a sibling site) so the
- * CI lane (`test:e2e:ci` = --grep-invert @external) skips it.
+ * Website entries resolve to their internal case study (/products/websites/<slug>), so a
+ * project-name search opens the case study on-site rather than the external domain.
  */
 
 const dialog = (page: Page) => page.getByRole("dialog", { name: "Suche" });
@@ -76,14 +76,12 @@ test.describe("Cmd+K Search @search", () => {
     expect(errors).toEqual([]);
   });
 
-  test("TC-SRCH-007: external site result opens in a new tab @external", async ({ page, context }) => {
+  test("TC-SRCH-007: a website result navigates to its internal case study", async ({ page }) => {
     await openWithShortcut(page, "Meta+k");
     await combo(page).fill("goldoni");
     const opt = page.getByRole("option").first();
     await expect(opt).toBeVisible();
-    const popupPromise = context.waitForEvent("page");
     await opt.click();
-    const popup = await popupPromise;
-    await expect.poll(() => popup.url(), { timeout: 15_000 }).toContain("ristorante-goldoni");
+    await expect(page).toHaveURL(/\/products\/websites\/ristorante-goldoni/, { timeout: 15_000 });
   });
 });
