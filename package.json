@@ -19,6 +19,7 @@
     "lighthouse:mobile": "node scripts/lighthouse.mjs --quick --profile=mobile-4g",
     "lighthouse:5g": "node scripts/lighthouse.mjs --quick --profile=mobile-5g",
     "test:lighthouse:unit": "node --test scripts/lighthouse-profiles.test.mjs",
+    "test:unit": "node --test tests/unit/*.test.mjs",
     "crawl": "node scripts/link-crawler.mjs",
     "crawl:internal": "node scripts/link-crawler.mjs --no-external",
     "crawl:test": "node scripts/link-crawler.mjs --self-test",

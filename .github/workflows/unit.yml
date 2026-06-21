@@ -1,0 +1,31 @@
+# Unit-test gate — guards the estate test-scope aggregator (scripts/aggregate-test-scope.sh)
+# via its pure dir-in → JSON-out unit tests. The aggregator is the "honest estate test number"
+# logic (Charter Artifact 6); the no-double-count + fail-closed-visible rules must stay green
+# on every PR. Scoped to tests/unit/ only — node --test, jq + bash preinstalled on the runner.
+name: Unit
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  unit:
+    name: Node unit tests (tests/unit)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm run test:unit
