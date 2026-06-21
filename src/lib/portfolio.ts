@@ -229,7 +229,10 @@ export const PORTFOLIO: PortfolioCategory[] = [
         isExternal: false,
         schemaType: "SoftwareApplication",
         applicationCategory: "UtilitiesApplication",
-        noindex: true,
+        // Bespoke indexable detail page (src/app/products/social-scrapers) → excluded from the
+        // [slug] skeleton route, enters the sitemap. Public MIT OSS shared core (like OVA), so
+        // NOT noindex; the page emits SoftwareApplication (real url + free Offer) + FAQPage.
+        hasOwnPage: true,
       },
       {
         name: "IMAP Mailbox Cleanup",
@@ -241,7 +244,10 @@ export const PORTFOLIO: PortfolioCategory[] = [
         isExternal: false,
         schemaType: "SoftwareApplication",
         applicationCategory: "UtilitiesApplication",
-        noindex: true,
+        // Bespoke indexable detail page (src/app/products/imap-mailbox-cleanup) → excluded from
+        // the [slug] skeleton route, enters the sitemap. Public MIT OSS, so NOT noindex; the
+        // page emits SoftwareApplication (real url + free Offer) + FAQPage.
+        hasOwnPage: true,
       },
       {
         name: "AI Phrase Check",
@@ -267,7 +273,12 @@ export const PORTFOLIO: PortfolioCategory[] = [
         isExternal: false,
         schemaType: "SoftwareApplication",
         applicationCategory: "DeveloperApplication",
+        // Bespoke detail page (src/app/products/restaurant-menu-update) → excluded from the
+        // [slug] route. PRIVATE, genericized client skill: KEEPS noindex (held out of the
+        // sitemap, no public repo) even though a real page now exists — `hasOwnPage` drives
+        // the link, `noindex` drives robots/sitemap. The two are deliberately decoupled here.
         noindex: true,
+        hasOwnPage: true,
       },
     ],
   },

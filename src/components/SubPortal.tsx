@@ -7,6 +7,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { collectionPageSchema } from "@/lib/schema/product";
 import { breadcrumbTrailForCategory, type PortfolioCategory } from "@/lib/portfolio";
+import { cardDescription } from "@/lib/card-descriptions";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
 
@@ -58,7 +59,12 @@ export default function SubPortal({
         {children ?? (
           <div className="mt-12 grid gap-4 sm:grid-cols-2">
             {category.items.map((item) => (
-              <ProductCard key={item.slug} item={item} headingLevel="h2" />
+              <ProductCard
+                key={item.slug}
+                item={item}
+                headingLevel="h2"
+                description={cardDescription(item.slug)}
+              />
             ))}
           </div>
         )}
