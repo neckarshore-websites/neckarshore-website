@@ -17,12 +17,14 @@ export const metadata: Metadata = pageMetadata({
 });
 
 /**
- * A skill has a real detail page once its content has landed (indexable, noindex
- * dropped). Today that is only OVA (hasOwnPage); the rest are noindex skeletons.
- * `detailHref` is the off-page target; skeletons fall back to the in-page card anchor.
+ * A skill links to its detail page once one EXISTS — keyed on `hasOwnPage`, NOT on
+ * `noindex`. The two are decoupled: `hasOwnPage` = "a real bespoke page exists → link
+ * to it"; `noindex` = "held out of robots/sitemap". A private skill (restaurant-menu-
+ * update) has a page AND stays noindex, so it must still link off-page, not to an anchor.
+ * Any future skeleton skill without a page falls back to the in-page card anchor (`#slug`).
  */
 function detailHrefFor(item: (typeof category.items)[number]): string | undefined {
-  return !item.isExternal && !item.noindex ? item.href : undefined;
+  return !item.isExternal && item.hasOwnPage ? item.href : undefined;
 }
 
 // On-page overview: name + the one problem it solves + code visibility + status. The

@@ -262,7 +262,9 @@ const NEW_PAGES = [
   { path: "/products/mmps", title: "MMPs", canonical: "https://neckarshore.ai/products/mmps" },
   { path: "/products/skills", title: "Skills", canonical: "https://neckarshore.ai/products/skills" },
   { path: "/products/websites", title: "Websites", canonical: "https://neckarshore.ai/products/websites" },
-  // Preview skeleton detail pages (dynamic [slug] route). noindex, but reachable + structured.
+  // Product detail pages (all bespoke now). Reachable + structured; the preview MMPs + the
+  // private restaurant skill are noindex, the OSS skills are indexable — TC-CNT-030 checks the
+  // shared surface (title/H1/canonical/JSON-LD), not the robots flag.
   {
     path: "/products/snakeoil-check",
     title: "Snakeoil-Check",
@@ -302,6 +304,11 @@ const NEW_PAGES = [
     path: "/products/social-scrapers",
     title: "Social Scrapers",
     canonical: "https://neckarshore.ai/products/social-scrapers",
+  },
+  {
+    path: "/products/restaurant-menu-update",
+    title: "Restaurant-Menüpflege",
+    canonical: "https://neckarshore.ai/products/restaurant-menu-update",
   },
 ] as const;
 
@@ -363,13 +370,13 @@ test.describe("Skills on-page overview table @content", () => {
     await expect(table.getByRole("row")).toHaveCount(6);
   });
 
-  test("TC-CNT-033: every overview-table link resolves — in-page anchor → its card, detail link → a product route", async ({
+  test("TC-CNT-033: every overview-table link is a detail-page route (all skills have graduated)", async ({
     page,
   }) => {
     await page.goto("/products/skills");
-    // One Tool link per skill row. "Beides" nav: skills with a real detail page link
-    // off-page (/products/<slug>); skeleton skills fall back to an in-page bookmark
-    // (#slug) that scrolls to their card.
+    // One Tool link per skill row. Every skill now has a bespoke detail page, so each link
+    // points off-page to /products/<slug> — no in-page (#slug) bookmark fallbacks remain. (The
+    // #slug fallback stays in the code for any FUTURE skeleton skill; today there are none.)
     const links = page.locator("table tbody a");
     const n = await links.count();
     expect(n).toBe(5);
@@ -384,29 +391,19 @@ test.describe("Skills on-page overview table @content", () => {
         expect(href).toMatch(/^\/products\/[a-z0-9-]+$/);
       }
     }
-    // at least one in-page bookmark remains (skeleton skills haven't graduated yet)
-    expect(anchors).toBeGreaterThanOrEqual(1);
+    // All skills have graduated to detail pages → zero in-page bookmarks.
+    expect(anchors).toBe(0);
   });
 
-  test("TC-CNT-034: clicking a bookmark scrolls the matching card near the top", async ({
-    page,
-  }) => {
+  test("TC-CNT-034: a Tool link navigates to its product detail page", async ({ page }) => {
     await page.goto("/products/skills");
-    const link = page.locator('table a[href^="#"]').first(); // first in-page bookmark (robust as detail pages grow)
-    const id = (await link.getAttribute("href"))!.slice(1);
+    const link = page.locator('table tbody a[href^="/products/"]').first();
+    const href = (await link.getAttribute("href"))!;
+    expect(href).toMatch(/^\/products\/[a-z0-9-]+$/);
     await link.click();
-    await expect(page).toHaveURL(new RegExp(`#${id}$`));
-    await expect
-      .poll(
-        async () => {
-          const top = await page
-            .locator(`#${id}`)
-            .evaluate((el) => Math.round(el.getBoundingClientRect().top));
-          return top > -80 && top < 240; // landed below the sticky nav, not scrolled past
-        },
-        { timeout: 5000 },
-      )
-      .toBe(true);
+    await expect(page).toHaveURL(new RegExp(`${href}$`));
+    // A real detail page loaded: exactly one H1.
+    await expect(page.locator("h1")).toHaveCount(1);
   });
 });
 
