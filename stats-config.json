@@ -26,13 +26,11 @@
     { "owner": "neckarshore-websites", "name": "oakwoodgolfclub-website", "private": false },
     { "owner": "neckarshore-websites", "name": "rauhut-website", "private": false },
     { "owner": "neckarshore-websites", "name": "site-quality", "private": true },
-    { "owner": "omnopsis-ai", "name": "omnopsis-backend", "private": true },
+    { "owner": "omnopsis-ai", "name": "omnopsis-backend", "private": true, "statsPath": "backend/stats.json" },
     { "owner": "omnopsis-ai", "name": "omnopsis-contracts", "private": true },
     { "owner": "omnopsis-ai", "name": "omnopsis-document-importer", "private": true },
     { "owner": "omnopsis-ai", "name": "omnopsis-frontend", "private": true },
     { "owner": "omnopsis-ai", "name": "omnopsis-planning", "private": true },
     { "owner": "omnopsis-ai", "name": "omnopsis-test-management", "private": true }
-  ],
-  "omnopsisStatsRepo": "omnopsis-ai/omnopsis-backend",
-  "omnopsisStatsPath": "backend/stats.json"
+  ]
 }

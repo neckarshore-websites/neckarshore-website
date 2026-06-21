@@ -38,6 +38,7 @@ jobs:
           TOTAL_COMMITS=0
 
           mkdir -p /tmp/repos
+          mkdir -p /tmp/stats
 
           for i in $(seq 0 $((REPO_COUNT - 1))); do
             OWNER=$(echo "$CONFIG" | jq -r ".repos[$i].owner")
@@ -75,28 +76,56 @@ jobs:
               echo "  WARN: ${REPO} returned 0 commits — repo renamed/moved (stale stats-config.json) or token lacks access?"
             fi
             TOTAL_COMMITS=$((TOTAL_COMMITS + COMMITS))
+
+            # If this repo declares a statsPath, fetch its stats.json into /tmp/stats for the
+            # estate test-scope aggregator. The raw Accept header is mandatory — WITHOUT it the
+            # contents API returns a base64 envelope (.content/.encoding), the aggregator reads
+            # no numeric .tests.total, and the producer collapses to 0 + a false "missing".
+            STATS_PATH=$(echo "$CONFIG" | jq -r ".repos[$i].statsPath // empty")
+            if [ -n "$STATS_PATH" ]; then
+              if curl -sfL \
+                -H "Authorization: Bearer ${STATS_PAT}" \
+                -H "Accept: application/vnd.github.v3.raw" \
+                "https://api.github.com/repos/${REPO}/contents/${STATS_PATH}" \
+                -o "/tmp/stats/${OWNER}__${NAME}.json" 2>/dev/null; then
+                echo "  Stats: fetched ${STATS_PATH}"
+              else
+                echo "  WARN: ${REPO} statsPath ${STATS_PATH} fetch failed — counts as a missing producer"
+              fi
+            fi
           done
 
-          # Fetch OMNOPSIS backend stats (tests + endpoints) if available
-          OMNOPSIS_REPO=$(echo "$CONFIG" | jq -r '.omnopsisStatsRepo')
-          OMNOPSIS_PATH=$(echo "$CONFIG" | jq -r '.omnopsisStatsPath')
+          # --- Estate test-scope rollup ---
+          # Aggregate every producer's fetched stats.json via the unit-tested pure aggregator
+          # (scripts/aggregate-test-scope.sh). No-double-count: byType additive, lenses excluded.
+          # Fail-closed-visible: a declared producer whose file is missing → 0 + WARN + missing[].
+          NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          PREV=$(cat public/stats.json 2>/dev/null || echo '{}')
 
-          TESTS=464
-          ENDPOINTS=92
+          TEST_SCOPE=$(bash scripts/aggregate-test-scope.sh stats-config.json /tmp/stats)
+          echo "--- estate test-scope ---"
+          echo "$TEST_SCOPE" | jq .
 
-          OMNOPSIS_STATS=$(curl -sfL \
-            -H "Authorization: Bearer ${STATS_PAT}" \
-            -H "Accept: application/vnd.github.v3.raw" \
-            "https://api.github.com/repos/${OMNOPSIS_REPO}/contents/${OMNOPSIS_PATH}" 2>/dev/null || echo "")
+          TESTS=$(echo "$TEST_SCOPE" | jq '.total')
+          ENDPOINTS=$(echo "$TEST_SCOPE" | jq '.endpoints')
+          REPORTING=$(echo "$TEST_SCOPE" | jq '.reporting')
+          EXPECTED=$(echo "$TEST_SCOPE" | jq '.expected')
+          TEST_SCOPE_SUBSET=$(echo "$TEST_SCOPE" | jq '{total, byType, reporting, expected, missing}')
+          ESTATE_OUT=$(echo "$TEST_SCOPE" | jq --arg u "$NOW" '. + {updatedAt: $u}')
 
-          if [ -n "$OMNOPSIS_STATS" ] && echo "$OMNOPSIS_STATS" | jq . >/dev/null 2>&1; then
-            FETCHED_TESTS=$(echo "$OMNOPSIS_STATS" | jq '.tests.total // 0')
-            FETCHED_ENDPOINTS=$(echo "$OMNOPSIS_STATS" | jq '.endpoints // 0')
-            if [ "$FETCHED_TESTS" -gt 0 ]; then TESTS=$FETCHED_TESTS; fi
-            if [ "$FETCHED_ENDPOINTS" -gt 0 ]; then ENDPOINTS=$FETCHED_ENDPOINTS; fi
-            echo "--- OMNOPSIS stats fetched: tests=${TESTS}, endpoints=${ENDPOINTS} ---"
-          else
-            echo "--- OMNOPSIS stats not available, using fallbacks ---"
+          if [ "$REPORTING" -lt "$EXPECTED" ]; then
+            echo "WARN: only ${REPORTING}/${EXPECTED} stats producers reported — missing: $(echo "$TEST_SCOPE" | jq -c '.missing')"
+          fi
+
+          # Last-known-good floor: if the rollup totally collapses to 0 (an infra/token failure,
+          # not a real "estate has 0 tests"), keep the previously published numbers + artifact
+          # rather than zeroing the live homepage tile. Per-producer misses still surface above.
+          if [ "$TESTS" -eq 0 ]; then
+            echo "WARN: estate test-scope rolled up to 0 — keeping last-known-good for both JSON outputs."
+            TESTS=$(echo "$PREV" | jq '.tests // 0')
+            ENDPOINTS=$(echo "$PREV" | jq '.endpoints // 0')
+            TEST_SCOPE_SUBSET=$(echo "$PREV" | jq 'if .testScope then .testScope else {total: (.tests // 0), byType: {}, reporting: 0, expected: 0, missing: []} end')
+            if [ -f public/estate-test-scope.json ]; then ESTATE_OUT=$(cat public/estate-test-scope.json); fi
           fi
 
           echo ""
@@ -108,7 +137,9 @@ jobs:
           echo "LoC: ${TOTAL_LOC}"
           echo "Repos: ${REPO_COUNT}"
 
-          # Write stats.json via jq (no user input, all values computed internally)
+          # Write public/stats.json via jq (no user input, all values computed internally).
+          # Top-level `tests` stays = testScope.total for backward-compat; the decomposed
+          # `testScope` drives the new tile breakdown (Task 3).
           jq -n \
             --argjson days "$DAYS" \
             --argjson commits "$TOTAL_COMMITS" \
@@ -116,19 +147,27 @@ jobs:
             --argjson endpoints "$ENDPOINTS" \
             --argjson linesOfCode "$TOTAL_LOC" \
             --argjson repos "$REPO_COUNT" \
-            --arg updatedAt "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-            '{days: $days, commits: $commits, tests: $tests, endpoints: $endpoints, linesOfCode: $linesOfCode, repos: $repos, updatedAt: $updatedAt}' \
+            --argjson testScope "$TEST_SCOPE_SUBSET" \
+            --arg updatedAt "$NOW" \
+            '{days: $days, commits: $commits, tests: $tests, endpoints: $endpoints, linesOfCode: $linesOfCode, repos: $repos, testScope: $testScope, updatedAt: $updatedAt}' \
             > public/stats.json
+
+          # Write public/estate-test-scope.json — the machine-readable rollup (full per-repo
+          # breakdown + lenses) consumed by Plan 2's Obsidian renderer.
+          printf '%s\n' "$ESTATE_OUT" > public/estate-test-scope.json
 
           echo ""
           echo "=== public/stats.json ==="
           cat public/stats.json
+          echo ""
+          echo "=== public/estate-test-scope.json ==="
+          cat public/estate-test-scope.json
 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/stats.json
+          git add public/stats.json public/estate-test-scope.json
           if git diff --staged --quiet; then
             echo "No changes to stats — skipping commit"
           else
