@@ -1,16 +1,20 @@
 {
   "days": 91,
-  "commits": 3759,
-  "tests": 551,
+  "commits": 3769,
+  "tests": 584,
   "endpoints": 96,
-  "linesOfCode": 765310,
+  "linesOfCode": 767064,
   "repos": 31,
   "testScope": {
-    "total": 551,
-    "byType": {},
+    "total": 584,
+    "byType": {
+      "e2e": 255,
+      "integration": 27,
+      "unit": 302
+    },
     "reporting": 1,
     "expected": 1,
     "missing": []
   },
-  "updatedAt": "2026-06-21T08:21:26Z"
+  "updatedAt": "2026-06-21T10:47:08Z"
 }

@@ -1,0 +1,27 @@
+{
+  "byType": {
+    "e2e": 255,
+    "integration": 27,
+    "unit": 302
+  },
+  "endpoints": 96,
+  "expected": 1,
+  "missing": [],
+  "reporting": 1,
+  "repos": [
+    {
+      "audited_sha": "d2dc2ed2c32ef4e872e79a889dd2f2b3f55bf34f",
+      "byType": {
+        "e2e": 255,
+        "integration": 27,
+        "unit": 302
+      },
+      "endpoints": 96,
+      "lenses": {},
+      "repo": "omnopsis-ai/omnopsis-backend",
+      "total": 584
+    }
+  ],
+  "total": 584,
+  "updatedAt": "2026-06-21T10:47:08Z"
+}
