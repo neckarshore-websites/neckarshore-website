@@ -5,8 +5,10 @@ import ImageModal from "@/components/ImageModal";
 import { JsonLd } from "@/components/JsonLd";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
+import { ProductFaq } from "@/components/ProductFaq";
 import { pageMetadata } from "@/lib/seo";
 import { breadcrumbTrailForSlug } from "@/lib/portfolio";
+import { faqForSlug } from "@/lib/product-faqs";
 import { BRAND } from "@/lib/brand";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
@@ -130,6 +132,8 @@ export default function OmnopsisPage() {
               LIVE Q3 2026.
             </p>
           </section>
+
+          <ProductFaq slug="omnopsis" items={faqForSlug("omnopsis")} />
         </article>
 
         <p className="mt-10 text-sm italic text-muted dark:text-text-tertiary">

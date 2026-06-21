@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SkillDetailPage, SkillSection, SkillChipRow } from "@/components/SkillDetailPage";
 import { pageMetadata } from "@/lib/seo";
 import { previewSoftwareApplicationSchema } from "@/lib/schema/product";
+import { faqForSlug } from "@/lib/product-faqs";
 
 const DEFINITION =
   "Restaurant-Menüpflege verwandelt das wiederkehrende Menü-Update eines Restaurants in einen geprüften, reproduzierbaren Vorgang — von der Rohkarte bis zum fertigen Pull Request mit Vorschau-Deploy. Ein bespoke Kundenprojekt, hier anonymisiert als Referenz.";
@@ -39,6 +40,7 @@ export default function RestaurantMenuUpdatePage() {
     <SkillDetailPage
       slug="restaurant-menu-update"
       softwareSchema={softwareSchema}
+      faqItems={faqForSlug("restaurant-menu-update")}
       textOrigin="Aus der internen Skill-Dokumentation des Kundenprojekts zusammengestellt, vom Gründer redigiert. Der Kundenname ist bewusst anonymisiert."
     >
       <SkillSection heading="Was ist die Restaurant-Menüpflege?" className="">

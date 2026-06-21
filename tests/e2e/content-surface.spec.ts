@@ -612,3 +612,63 @@ test.describe("Content surface — AI Phrase Check skill detail", () => {
     expect(faqs[0].mainEntity.length).toBeGreaterThanOrEqual(1);
   });
 });
+
+// Bottom-of-page FAQ on the product detail surface (2026-06-21). The shared ProductFaq
+// primitive renders a visible "Häufige Fragen" section everywhere, but emits FAQPage JSON-LD
+// ONLY on indexable pages — a noindex preview shows the FAQ for human visitors while the
+// schema stays dormant (Google never crawls a noindex page; the markup would be dead weight,
+// and it activates automatically when `noindex` drops at launch).
+test.describe("Content surface — Product FAQ (GEO)", () => {
+  // Indexable pages with a FAQ → visible section + exactly one FAQPage block. Includes the
+  // two SkillDetailPage consumers (social-scrapers, imap-mailbox-cleanup) whose FAQPage render
+  // path moved when SkillDetailPage was refactored onto ProductFaq — this locks their schema.
+  const FAQ_INDEXABLE = [
+    "/products/omnopsis",
+    "/products/clearpath",
+    "/products/social-scrapers",
+    "/products/imap-mailbox-cleanup",
+    "/products/websites/neckarshore",
+    "/products/websites/ristorante-goldoni",
+    "/products/websites/oakwood-golf-club",
+    "/products/websites/rauhut",
+  ] as const;
+
+  // noindex pages (preview MMPs + the private restaurant skill): visible FAQ, NO FAQPage schema.
+  const FAQ_NOINDEX = [
+    "/products/snakeoil-check",
+    "/products/phonesis",
+    "/products/local-seo-hub",
+    "/products/prod-or-pretend",
+    "/products/restaurant-menu-update",
+  ] as const;
+
+  for (const path of FAQ_INDEXABLE) {
+    test(`TC-CNT-055 [${path}]: visible FAQ + one FAQPage JSON-LD with >= 1 question`, async ({
+      page,
+    }) => {
+      const res = await page.goto(path);
+      expect(res?.status()).toBe(200);
+      await expect(
+        page.getByRole("heading", { name: "Häufige Fragen", level: 2 }),
+      ).toBeVisible();
+      const faqs = (await ldJson(page)).filter((b) => b["@type"] === "FAQPage");
+      expect(faqs).toHaveLength(1);
+      expect(Array.isArray(faqs[0].mainEntity)).toBe(true);
+      expect(faqs[0].mainEntity.length).toBeGreaterThanOrEqual(1);
+    });
+  }
+
+  for (const path of FAQ_NOINDEX) {
+    test(`TC-CNT-056 [${path}]: visible FAQ but NO FAQPage schema (noindex → no dead markup)`, async ({
+      page,
+    }) => {
+      const res = await page.goto(path);
+      expect(res?.status()).toBe(200);
+      await expect(
+        page.getByRole("heading", { name: "Häufige Fragen", level: 2 }),
+      ).toBeVisible();
+      const faqs = (await ldJson(page)).filter((b) => b["@type"] === "FAQPage");
+      expect(faqs).toHaveLength(0);
+    });
+  }
+});
