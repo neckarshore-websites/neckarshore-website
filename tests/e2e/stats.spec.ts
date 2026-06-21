@@ -1,4 +1,6 @@
 import { test, expect } from "@playwright/test";
+import fs from "node:fs";
+import path from "node:path";
 
 test.describe("Stats Tiles @smoke", () => {
   async function getStatValue(
@@ -71,6 +73,36 @@ test.describe("Stats Tiles @smoke", () => {
       const text = (await tiles.nth(i).textContent())?.trim() || "";
       expect(text).not.toBe("0");
       expect(text).not.toBe("—");
+    }
+  });
+
+  test("TC-STAT-009: Tests tile reflects testScope.total + byType breakdown", async ({
+    page,
+  }) => {
+    const stats = JSON.parse(
+      fs.readFileSync(path.join(process.cwd(), "public", "stats.json"), "utf-8"),
+    );
+    const expectedTotal: number = stats.testScope?.total ?? stats.tests;
+
+    await page.goto("/");
+    await page.waitForTimeout(1500); // animation settles on the target
+    const value = await getStatValue(page, "Automatisierte Tests");
+    expect(parseDE(value)).toBe(expectedTotal);
+
+    // The breakdown sub-line is present iff byType has positive entries. Structural on purpose:
+    // the test stays green whether or not a backend producer has published a decomposition yet
+    // (byType is {} until Bob's Task-1 producer lands — then the sub-line appears automatically).
+    const byType: Record<string, number> = stats.testScope?.byType ?? {};
+    const positiveTypes = Object.entries(byType).filter(([, n]) => Number(n) > 0);
+    const breakdown = page.getByTestId("tests-breakdown");
+    if (positiveTypes.length > 0) {
+      await expect(breakdown).toBeVisible();
+      const text = (await breakdown.textContent()) ?? "";
+      for (const [type] of positiveTypes) {
+        expect(text).toContain(type);
+      }
+    } else {
+      await expect(breakdown).toHaveCount(0);
     }
   });
 

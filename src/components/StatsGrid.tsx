@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ComponentType } from "react";
 import {
   GitCommit,
   FlaskConical,
@@ -9,6 +9,7 @@ import {
   FolderGit2,
   CalendarDays,
 } from "lucide-react";
+import { breakdownLine } from "@/lib/stats-breakdown";
 
 export interface StatsData {
   days: number;
@@ -18,6 +19,17 @@ export interface StatsData {
   linesOfCode: number;
   repos: number;
   updatedAt: string;
+  /**
+   * Decomposed estate test-scope (Charter Artifact 6). Optional for backward-compat: pre-Task-2
+   * stats.json files have no testScope, so the tile falls back to the flat `tests` scalar.
+   */
+  testScope?: {
+    total: number;
+    byType: Record<string, number>;
+    reporting?: number;
+    expected?: number;
+    missing?: string[];
+  };
 }
 
 const ANIMATION_DURATION = 1200; // ms
@@ -62,15 +74,29 @@ export default function StatsGrid({
   devDays: number;
 }) {
   const commits = useAnimatedNumber(stats.commits);
-  const tests = useAnimatedNumber(stats.tests);
+  // Big number = decomposed estate total when present; flat `tests` otherwise (backward-compat).
+  const tests = useAnimatedNumber(stats.testScope?.total ?? stats.tests);
   const endpoints = useAnimatedNumber(stats.endpoints);
   const linesOfCode = useAnimatedNumber(stats.linesOfCode);
   const repos = useAnimatedNumber(stats.repos);
 
-  const tiles = [
+  // e.g. "255 e2e · 296 unit" (A→Z, zero-types hidden); null until a producer publishes byType.
+  const testsBreakdown = breakdownLine(stats.testScope?.byType);
+
+  const tiles: {
+    icon: ComponentType<{ size?: number; className?: string }>;
+    value: string;
+    label: string;
+    sub?: string | null;
+  }[] = [
     { icon: CalendarDays, value: String(devDays), label: "Days since First Commit" },
     { icon: GitCommit, value: formatDE(commits), label: "Commits" },
-    { icon: FlaskConical, value: formatDE(tests), label: "Automatisierte Tests" },
+    {
+      icon: FlaskConical,
+      value: formatDE(tests),
+      label: "Automatisierte Tests",
+      sub: testsBreakdown,
+    },
     { icon: Layers, value: String(endpoints), label: "REST Endpoints" },
     { icon: Code2, value: formatDE(linesOfCode), label: "Zeilen Code" },
     { icon: FolderGit2, value: String(repos), label: "Repositories" },
@@ -86,6 +112,15 @@ export default function StatsGrid({
               {stat.value}
             </p>
             <p className="mt-1 text-xs text-text-secondary">{stat.label}</p>
+            {/* sub-line only ever set on the Tests tile → the testid is tile-specific */}
+            {stat.sub && (
+              <p
+                data-testid="tests-breakdown"
+                className="mt-1 text-[10px] leading-tight text-text-secondary/70"
+              >
+                {stat.sub}
+              </p>
+            )}
           </div>
         ))}
       </div>
