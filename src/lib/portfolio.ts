@@ -49,6 +49,17 @@ export interface PortfolioItem {
   noindex?: boolean;
   /** true for omnopsis/clearpath: they own bespoke static pages → excluded from [slug] generateStaticParams. */
   hasOwnPage?: boolean;
+  /**
+   * Websites tier only: when set, an internal case-study page exists at
+   * /products/websites/<caseStudySlug>. The card then links its title/CTA to that
+   * internal page and shows a separate "Website ↗" button to `liveUrl`. `isExternal`
+   * stays true (the live site IS external) → the flat /products/<slug> route still
+   * 404s and the [slug] skeleton route still skips it; only the card + the dedicated
+   * /products/websites/[slug] route + the sitemap read this field.
+   */
+  caseStudySlug?: string;
+  /** Websites tier: the live external domain (the card's "Website ↗" button + the case-study CTA). */
+  liveUrl?: string;
 }
 
 export interface PortfolioCategory {
@@ -302,6 +313,8 @@ export const PORTFOLIO: PortfolioCategory[] = [
         href: "https://neckarshore.ai",
         isExternal: true,
         schemaType: "none",
+        caseStudySlug: "neckarshore",
+        liveUrl: "https://neckarshore.ai",
       },
       {
         name: "Ristorante Goldoni",
@@ -312,6 +325,8 @@ export const PORTFOLIO: PortfolioCategory[] = [
         href: "https://ristorante-goldoni.de",
         isExternal: true,
         schemaType: "none",
+        caseStudySlug: "ristorante-goldoni",
+        liveUrl: "https://ristorante-goldoni.de",
       },
       {
         name: "Oakwood Golf Club",
@@ -322,6 +337,8 @@ export const PORTFOLIO: PortfolioCategory[] = [
         href: "https://oakwoodgolfclub.de",
         isExternal: true,
         schemaType: "none",
+        caseStudySlug: "oakwood-golf-club",
+        liveUrl: "https://oakwoodgolfclub.de",
       },
       {
         name: "Rauhut",
@@ -331,6 +348,8 @@ export const PORTFOLIO: PortfolioCategory[] = [
         href: "https://rauhut.com",
         isExternal: true,
         schemaType: "none",
+        caseStudySlug: "rauhut",
+        liveUrl: "https://rauhut.com",
       },
     ],
   },
@@ -369,16 +388,37 @@ export function getItemBySlug(slug: string): PortfolioItem | undefined {
 }
 
 /**
- * Indexable product routes for the sitemap: /products, the 4 sub-portals, and the
- * bespoke own-page details (omnopsis, clearpath). Excludes external sites and
- * noindex preview skeletons (held out until content lands).
+ * Websites-tier items that have an internal case-study page, by their case-study slug.
+ * Feeds generateStaticParams for the /products/websites/[slug] route.
+ */
+export function websiteCaseStudySlugs(): string[] {
+  return allItems()
+    .filter((i) => i.caseStudySlug)
+    .map((i) => i.caseStudySlug!);
+}
+
+/** Look up a website item by its case-study slug. */
+export function getWebsiteItemByCaseStudySlug(
+  caseStudySlug: string,
+): PortfolioItem | undefined {
+  return allItems().find((i) => i.caseStudySlug === caseStudySlug);
+}
+
+/**
+ * Indexable product routes for the sitemap: /products, the 4 sub-portals, the
+ * bespoke own-page details (omnopsis, clearpath), and the website case studies
+ * (/products/websites/<caseStudySlug>). Excludes external live sites and noindex
+ * preview skeletons (held out until content lands).
  */
 export function allProductRoutes(): string[] {
   const subPortals = PORTFOLIO.map((c) => c.href);
   const indexableDetails = allItems()
     .filter((i) => !i.isExternal && !i.noindex)
     .map((i) => i.href);
-  return ["/products", ...subPortals, ...indexableDetails];
+  const caseStudies = websiteCaseStudySlugs().map(
+    (slug) => `/products/websites/${slug}`,
+  );
+  return ["/products", ...subPortals, ...indexableDetails, ...caseStudies];
 }
 
 /** The category that owns a slug (the slug lives in exactly one category). */

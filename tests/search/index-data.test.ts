@@ -67,8 +67,12 @@ check("covers every SearchType", () => {
 
 check("EVERY portfolio item has a product doc (coverage invariant)", () => {
   for (const item of allItems()) {
-    const doc = docs.find((d) => d.type === "product" && d.url === item.href);
-    assert.ok(doc, `no search doc for product '${item.name}' (${item.href})`);
+    // Website case-study items resolve to their internal page; the rest keep their href.
+    const expectedUrl = item.caseStudySlug
+      ? `/products/websites/${item.caseStudySlug}`
+      : item.href;
+    const doc = docs.find((d) => d.type === "product" && d.url === expectedUrl);
+    assert.ok(doc, `no search doc for product '${item.name}' (${expectedUrl})`);
   }
 });
 
@@ -105,10 +109,15 @@ check("the static + section pages are all indexed", () => {
   }
 });
 
-check("external 'Websites' products carry external:true + an https url", () => {
-  const ext = docs.filter((d) => d.type === "product" && d.url.startsWith("http"));
-  assert.ok(ext.length >= 1, "expected at least one external product");
-  for (const d of ext) assert.equal(d.external, true, `${d.title} external flag not set`);
+check("Websites case-study products point INTERNAL (/products/websites/) and are not external", () => {
+  const websiteDocs = docs.filter(
+    (d) => d.type === "product" && d.url.startsWith("/products/websites/"),
+  );
+  assert.ok(websiteDocs.length >= 1, "expected at least one website case-study product doc");
+  for (const d of websiteDocs) {
+    assert.notEqual(d.external, true, `${d.title} wrongly marked external`);
+    assert.ok(!d.url.startsWith("http"), `${d.title} should be an internal url`);
+  }
 });
 
 check("internal docs never set external", () => {
@@ -143,11 +152,13 @@ check("minisearch finds the nearshore section ('nearshore')", () => {
   assert.ok(find("nearshore").some((h) => h.type === "page"), "no page hit for 'nearshore'");
 });
 
-check("minisearch finds an external site ('goldoni') as external product", () => {
+check("minisearch finds 'goldoni' as an internal case-study product", () => {
   const hits = find("goldoni");
   assert.ok(
-    hits.some((h) => h.type === "product" && h.external === true),
-    "no external product hit for 'goldoni'"
+    hits.some(
+      (h) => h.type === "product" && h.url === "/products/websites/ristorante-goldoni",
+    ),
+    "no internal case-study hit for 'goldoni'"
   );
 });
 
