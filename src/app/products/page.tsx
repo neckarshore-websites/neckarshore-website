@@ -6,6 +6,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { JsonLd } from "@/components/JsonLd";
 import { pageMetadata } from "@/lib/seo";
 import { PORTFOLIO, featuredItems, hiddenItemCount } from "@/lib/portfolio";
+import { cardDescription } from "@/lib/card-descriptions";
 import { collectionPageSchema } from "@/lib/schema/product";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
@@ -78,7 +79,12 @@ export default function ProductsIndex() {
 
                 <div className="mt-6 grid gap-4 sm:grid-cols-2">
                   {featured.map((item) => (
-                    <ProductCard key={item.slug} item={item} headingLevel="h3" />
+                    <ProductCard
+                      key={item.slug}
+                      item={item}
+                      headingLevel="h3"
+                      description={cardDescription(item.slug)}
+                    />
                   ))}
                   {hidden > 0 && (
                     <Link

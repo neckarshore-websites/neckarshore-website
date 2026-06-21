@@ -44,10 +44,13 @@ function CardBody({
   item,
   headingLevel,
   cta,
+  description,
 }: {
   item: PortfolioItem;
   headingLevel: "h2" | "h3";
   cta: string;
+  /** Longer (≈3-line) card description; falls back to the short tagline. */
+  description?: string;
 }) {
   const Heading = headingLevel;
   return (
@@ -59,7 +62,7 @@ function CardBody({
         <StatusBadge item={item} />
       </div>
       <p className="mt-2 text-sm leading-relaxed text-neutral-dark/75 dark:text-text-secondary">
-        {item.tagline}
+        {description ?? item.tagline}
       </p>
       <span className="mt-4 inline-block text-sm font-medium text-accent group-hover:text-accent-hover dark:text-accent-bright">
         {cta}
@@ -81,8 +84,9 @@ export function ProductCard({
   /** Rich mode: repository URL → renders a GitHub button (footer-right). */
   repoUrl?: string;
 }) {
-  // Rich mode — title links to the detail page; a GitHub button (when set) links out.
-  if (description || repoUrl) {
+  // Rich mode (MMP cards) — a GitHub button is the defining feature, so it gates rich mode.
+  // A `description` alone (websites, portal teaser, flagship) stays in the compact card below.
+  if (repoUrl) {
     const Heading = headingLevel;
     return (
       <div className={richCardClass}>
@@ -135,13 +139,13 @@ export function ProductCard({
         data-track={`product_card_${item.slug}`}
         className={cardClass}
       >
-        <CardBody item={item} headingLevel={headingLevel} cta="Website öffnen ↗" />
+        <CardBody item={item} headingLevel={headingLevel} cta="Website öffnen ↗" description={description} />
       </a>
     );
   }
   return (
     <Link href={item.href} data-track={`product_card_${item.slug}`} className={cardClass}>
-      <CardBody item={item} headingLevel={headingLevel} cta="Mehr erfahren →" />
+      <CardBody item={item} headingLevel={headingLevel} cta="Mehr erfahren →" description={description} />
     </Link>
   );
 }
