@@ -38,12 +38,28 @@ export function SkillCard({
 
   return (
     <div id={id} className="flex flex-col rounded-xl border border-primary/10 bg-white p-8 shadow-sm dark:border-text-secondary/10 dark:bg-surface">
-      <div className="flex items-center gap-3">
-        <Icon size={28} className="text-secondary" aria-hidden="true" />
-        {card.badge && (
-          <span className="rounded-full bg-accent/10 px-3 py-0.5 text-xs font-semibold text-accent-hover dark:bg-accent/20 dark:text-accent-bright">
-            {card.badge}
-          </span>
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <Icon size={28} className="text-secondary" aria-hidden="true" />
+          {card.badge && (
+            <span className="rounded-full bg-accent/10 px-3 py-0.5 text-xs font-semibold text-accent-hover dark:bg-accent/20 dark:text-accent-bright">
+              {card.badge}
+            </span>
+          )}
+        </div>
+        {/* GitHub button — top-right (Founder layout 2026-06-21). The footer keeps the
+            license-left + "Mehr erfahren →"-right pairing. */}
+        {card.repoUrl && (
+          <a
+            href={card.repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
+            data-track={card.track}
+          >
+            GitHub
+            <ExternalLink size={14} aria-hidden="true" />
+          </a>
         )}
       </div>
 
@@ -89,7 +105,7 @@ export function SkillCard({
         </p>
       )}
 
-      {(card.footerBadge || card.license || card.repoUrl || detailHref) && (
+      {(card.footerBadge || card.license || detailHref) && (
         <div className="mt-auto flex items-center justify-between gap-3 pt-6">
           {card.footerBadge ? (
             <span className="rounded-full bg-primary/5 px-3 py-1 text-xs font-medium uppercase tracking-wider text-muted dark:bg-text-secondary/10 dark:text-text-tertiary">
@@ -102,29 +118,17 @@ export function SkillCard({
           ) : (
             <span aria-hidden="true" />
           )}
-          <div className="flex items-center gap-4">
-            {detailHref && (
-              <Link
-                href={detailHref}
-                className="inline-flex items-center gap-1 text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
-                data-track={detailTrack}
-              >
-                Mehr erfahren →
-              </Link>
-            )}
-            {card.repoUrl && (
-              <a
-                href={card.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
-                data-track={card.track}
-              >
-                GitHub
-                <ExternalLink size={14} aria-hidden="true" />
-              </a>
-            )}
-          </div>
+          {detailHref ? (
+            <Link
+              href={detailHref}
+              className="inline-flex items-center gap-1 text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
+              data-track={detailTrack}
+            >
+              Mehr erfahren →
+            </Link>
+          ) : (
+            <span aria-hidden="true" />
+          )}
         </div>
       )}
     </div>
