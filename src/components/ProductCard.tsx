@@ -130,6 +130,54 @@ export function ProductCard({
     );
   }
 
+  // "Beides" mode (Websites tier with a case study): title/CTA → internal case-study
+  // page, a separate "Website ↗" button → the live external domain. Rendered as a <div>
+  // (not a whole-card link) so the external <a> is never nested inside another anchor.
+  if (item.caseStudySlug) {
+    const Heading = headingLevel;
+    const detailHref = `/products/websites/${item.caseStudySlug}`;
+    return (
+      <div className={richCardClass}>
+        <div className="flex items-start justify-between gap-3">
+          <Heading className="font-heading text-lg font-semibold text-primary dark:text-text-primary">
+            <Link
+              href={detailHref}
+              data-track={`product_card_${item.slug}`}
+              className="transition-colors hover:text-accent dark:hover:text-accent-bright"
+            >
+              {item.name}
+            </Link>
+          </Heading>
+          <StatusBadge item={item} />
+        </div>
+        <p className="mt-2 text-sm leading-relaxed text-neutral-dark/75 dark:text-text-secondary">
+          {description ?? item.tagline}
+        </p>
+        <div className="mt-auto flex items-center justify-between gap-3 pt-5">
+          <Link
+            href={detailHref}
+            data-track={`product_card_more_${item.slug}`}
+            className="inline-flex items-center gap-1 text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
+          >
+            Mehr erfahren →
+          </Link>
+          {item.liveUrl && (
+            <a
+              href={item.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track={`product_card_live_${item.slug}`}
+              className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
+            >
+              Website
+              <ExternalLink size={14} aria-hidden="true" />
+            </a>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   if (item.isExternal) {
     return (
       <a
