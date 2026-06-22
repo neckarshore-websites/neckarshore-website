@@ -89,6 +89,13 @@ test.describe("Content surface — Website case studies", () => {
       await expect(liveCta).toHaveAttribute("target", "_blank");
       await expect(liveCta).toHaveAttribute("rel", /noopener/);
 
+      // Domain subtitle under the H1: shows the lowercase domain and links to the live site.
+      const domainLink = page.locator(`a[data-track="website_domain_${site.slug}"]`);
+      await expect(domainLink).toContainText(site.name);
+      await expect(domainLink).toHaveAttribute("href", site.liveUrl);
+      await expect(domainLink).toHaveAttribute("target", "_blank");
+      await expect(domainLink).toHaveAttribute("rel", /noopener/);
+
       // No horizontal overflow on a narrow phone viewport.
       const overflow = await page.evaluate(
         () =>
