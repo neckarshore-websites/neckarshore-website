@@ -89,7 +89,7 @@ export function ProductCard({
   headingLevel?: "h2" | "h3";
   /** Rich mode: a longer card description (falls back to `item.tagline`). */
   description?: string;
-  /** Rich mode: repository URL → renders a GitHub button (footer-right). */
+  /** Rich mode: repository URL → renders a GitHub button (top-right, like SkillCard). */
   repoUrl?: string;
 }) {
   // Rich mode (MMP cards) — a GitHub button is the defining feature, so it gates rich mode.
@@ -98,22 +98,37 @@ export function ProductCard({
     const Heading = headingLevel;
     return (
       <div className={richCardClass}>
+        {/* Row 1 mirrors the SkillCard layout: status badge left, GitHub button top-right. */}
         <div className="flex items-start justify-between gap-3">
-          <Heading className="font-heading text-lg font-semibold text-primary dark:text-text-primary">
-            <Link
-              href={item.href}
-              data-track={`product_card_${item.slug}`}
-              className="relative z-10 transition-colors hover:text-accent dark:hover:text-accent-bright"
-            >
-              {item.name}
-            </Link>
-          </Heading>
-          <StatusBadge item={item} />
+          <div className="flex items-center gap-2">
+            <StatusBadge item={item} />
+          </div>
+          <a
+            href={repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track={`product_card_github_${item.slug}`}
+            className="relative z-10 inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
+          >
+            GitHub
+            <ExternalLink size={14} aria-hidden="true" />
+          </a>
         </div>
+        <Heading className="mt-4 font-heading text-lg font-semibold text-primary dark:text-text-primary">
+          <Link
+            href={item.href}
+            data-track={`product_card_${item.slug}`}
+            className="relative z-10 transition-colors hover:text-accent dark:hover:text-accent-bright"
+          >
+            {item.name}
+          </Link>
+        </Heading>
         <p className="mt-2 text-sm leading-relaxed text-neutral-dark/75 dark:text-text-secondary">
           {description ?? item.tagline}
         </p>
-        <div className="mt-auto flex items-center justify-between gap-3 pt-5">
+        {/* Footer mirrors SkillCard: "Mehr erfahren →" bottom-right (it is also the stretched
+            whole-card link). */}
+        <div className="mt-auto flex items-center justify-end gap-3 pt-5">
           <Link
             href={item.href}
             data-track={`product_card_more_${item.slug}`}
@@ -121,18 +136,6 @@ export function ProductCard({
           >
             Mehr erfahren →
           </Link>
-          {repoUrl && (
-            <a
-              href={repoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-track={`product_card_github_${item.slug}`}
-              className="relative z-10 inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
-            >
-              GitHub
-              <ExternalLink size={14} aria-hidden="true" />
-            </a>
-          )}
         </div>
       </div>
     );
