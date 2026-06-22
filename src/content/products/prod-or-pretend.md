@@ -9,7 +9,7 @@ applicationCategory: "BusinessApplication"
 
 LinkedIn ist zur Echokammer für recycelten Tech-Hype geworden. „An einem Wochenende gebaut", „Game Changer", „KI-gestützt" — gepostet ohne Repository, ohne Tests, ohne Belege. Der Algorithmus belohnt Engagement, nicht Substanz. Wer Software-Budgets verantwortet — CTOs, Gründer, Team-Leads — kann aus einem Hochglanz-Post kaum ablesen, ob produktionsreife Arbeit oder poliertes Theater dahintersteht. Viele haben es teuer gelernt: Projekte, die live gingen und dann abstürzten, gehackt wurden oder nicht skalierten.
 
-## Wie es funktioniert
+## Wie funktioniert Prod-or-Pretend?
 
 1. Prod-or-Pretend erkennt gehypte Beiträge anhand einer festen Zwölf-Punkte-Checkliste — von „an einem Wochenende gebaut" über den fehlenden Repository-Link bis zu „10x schneller" ohne Benchmark.
 2. Gibt es ein öffentliches Repository, wird geprüft, was wirklich zählt: Tests, Sicherheit, Dokumentation, CI/CD und Abhängigkeiten.
@@ -17,11 +17,11 @@ LinkedIn ist zur Echokammer für recycelten Tech-Hype geworden. „An einem Woch
 
 Das Ergebnis ist eine sachliche, öffentliche Einordnung — konstruktiv formuliert, nie als Angriff auf eine Person.
 
-## Die Idee dahinter
+## Was Prod-or-Pretend anders macht
 
 Ein Spiegel, kein Tribunal. Tech-Creator feiern entweder alles (Hype-Verstärker) oder reißen alles nieder (zynische Debunker) — beides hilft Entscheidern nicht weiter. Prod-or-Pretend nimmt die dritte Haltung: dieselben Maßstäbe für jede Behauptung, ruhig und nachvollziehbar angelegt, mit dem Ziel zu zeigen, wie produktionsreif tatsächlich aussieht. Mission vor Reichweite.
 
-## Status & Roadmap
+## Wann kommt Prod-or-Pretend?
 
 In Entwicklung — das Konzept steht, die Umsetzung beginnt. Der geplante Weg: zuerst eine Kalibrierungsphase, in der die Hype-Erkennung gegen echte Beiträge geschärft wird (der Mensch entscheidet, kein automatisches Posten). Danach veröffentlichte Analysen auf LinkedIn unter neckarshore.ai, später ein eigener Kanal auf X mit lockererem Ton. LinkedIn bleibt dauerhaft mensch-final; Automatisierung kommt nur dorthin, wo eine Qualitätsschranke sie trägt.
 

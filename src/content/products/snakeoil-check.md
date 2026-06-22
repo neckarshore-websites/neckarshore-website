@@ -9,7 +9,7 @@ applicationCategory: "BusinessApplication"
 
 Bei Online-Coachings, High-Ticket-Programmen und Masterclasses ist seriös von unseriös oft kaum zu unterscheiden. Hochglanz-Versprechen, künstliche Verknappung und sorgfältig kuratierte Testimonials sehen gleich aus — egal, ob echte Substanz dahintersteht oder nicht. Wer eine vierstellige Summe investiert, hat selten eine neutrale Grundlage für die Entscheidung.
 
-## Wie es funktioniert
+## Wie funktioniert Snakeoil-Check?
 
 1. Du gibst den Link zu einem Angebot an.
 2. Snakeoil-Check liest die öffentliche Verkaufsseite aus und bewertet sie anhand von zwölf festen Kriterien — von der Konkretheit des Versprechens über die Preis-Transparenz bis zu nachprüfbaren Belegen.
@@ -17,11 +17,11 @@ Bei Online-Coachings, High-Ticket-Programmen und Masterclasses ist seriös von u
 
 Kein Pauschalurteil und keine Anschuldigung: eine strukturierte zweite Meinung, die du selbst nachvollziehen kannst.
 
-## Die Idee dahinter
+## Was Snakeoil-Check anders macht
 
 Skepsis als Werkzeug, nicht als Haltung. Snakeoil-Check ersetzt das Bauchgefühl nicht — es gibt ihm eine Struktur: dieselben zwölf Kriterien für jedes Angebot, neutral angewandt. Trocken, nüchtern, nachprüfbar.
 
-## Status & Roadmap
+## Wann kommt Snakeoil-Check?
 
 In Entwicklung. Das Fundament — Scraping, Bewertungs-Engine und Modell-Router — läuft bereits in der Produktion; das öffentliche Frontend folgt in Kürze. Zum Start gibt es einen kostenlosen Check pro Person, weitere Prüfungen lassen sich anschließend als Shot-Pakete dazubuchen. Danach geplant: gespeicherte Historie, der Vergleich mehrerer Angebote und ein Abo für Vielprüfer.
 

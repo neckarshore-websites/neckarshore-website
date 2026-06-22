@@ -425,9 +425,9 @@ test.describe("Content surface — Snakeoil-Check preview MMP", () => {
     await page.goto("/products/snakeoil-check");
     for (const heading of [
       "Das Problem",
-      "Wie es funktioniert",
-      "Die Idee dahinter",
-      "Status & Roadmap",
+      "Wie funktioniert Snakeoil-Check?",
+      "Was Snakeoil-Check anders macht",
+      "Wann kommt Snakeoil-Check?",
       "Wie dieser Text entstand",
     ]) {
       await expect(page.getByRole("heading", { name: heading })).toBeVisible();
@@ -465,10 +465,10 @@ test.describe("Content surface — Phonesis Voicebank preview MMP", () => {
     await page.goto("/products/phonesis");
     for (const heading of [
       "Das Problem",
-      "Wie es funktioniert",
-      "Die Idee dahinter",
+      "Wie funktioniert Phonesis?",
+      "Was Phonesis anders macht",
       "Datenschutz & Ethik",
-      "Status & Roadmap",
+      "Wann kommt Phonesis?",
       "Wie dieser Text entstand",
     ]) {
       await expect(page.getByRole("heading", { name: heading })).toBeVisible();
@@ -506,9 +506,9 @@ test.describe("Content surface — Prod-or-Pretend preview MMP", () => {
     await page.goto("/products/prod-or-pretend");
     for (const heading of [
       "Das Problem",
-      "Wie es funktioniert",
-      "Die Idee dahinter",
-      "Status & Roadmap",
+      "Wie funktioniert Prod-or-Pretend?",
+      "Was Prod-or-Pretend anders macht",
+      "Wann kommt Prod-or-Pretend?",
       "Wie dieser Text entstand",
     ]) {
       await expect(page.getByRole("heading", { name: heading })).toBeVisible();
@@ -546,9 +546,9 @@ test.describe("Content surface — Local-SEO-Hub preview MMP", () => {
     await page.goto("/products/local-seo-hub");
     for (const heading of [
       "Das Problem",
-      "Wie es funktioniert",
-      "Die Idee dahinter",
-      "Status & Roadmap",
+      "Wie funktioniert Local-SEO-Hub?",
+      "Was Local-SEO-Hub anders macht",
+      "Wann kommt Local-SEO-Hub?",
       "Wie dieser Text entstand",
     ]) {
       await expect(page.getByRole("heading", { name: heading })).toBeVisible();
