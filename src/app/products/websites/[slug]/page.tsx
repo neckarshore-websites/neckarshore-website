@@ -72,6 +72,16 @@ export default async function WebsiteCaseStudyPage({
             <h1 className="font-heading text-4xl font-bold text-accent md:text-5xl">
               {entry.headline}
             </h1>
+            {/* Domain as a subtitle that links to the live site (Founder request 2026-06-22). */}
+            <a
+              href={entry.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track={`website_domain_${entry.slug}`}
+              className="mt-3 inline-block font-mono text-base text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
+            >
+              {entry.name} ↗
+            </a>
           </header>
 
           <p className="text-xl leading-relaxed text-primary/90 dark:text-text-primary">
