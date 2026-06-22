@@ -317,7 +317,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
         liveUrl: "https://neckarshore.ai",
       },
       {
-        name: "Ristorante Goldoni",
+        name: "ristorante-goldoni.de",
         slug: "ristorante-goldoni",
         tagline: "Web-Präsenz für ein italienisches Restaurant.",
         status: "external",
@@ -329,7 +329,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
         liveUrl: "https://ristorante-goldoni.de",
       },
       {
-        name: "Oakwood Golf Club",
+        name: "oakwoodgolfclub.de",
         slug: "oakwood-golf-club",
         tagline: "Web-Präsenz für einen Golfclub — Mitglieder-Portal in Arbeit.",
         status: "external",
@@ -341,7 +341,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
         liveUrl: "https://oakwoodgolfclub.de",
       },
       {
-        name: "Rauhut",
+        name: "rauhut.com",
         slug: "rauhut",
         tagline: "Persönliche Web-Präsenz.",
         status: "external",

@@ -1,5 +1,5 @@
 ---
-name: "Rauhut"
+name: "rauhut.com"
 headline: "Persönliche Web-Präsenz für German Rauhut — statischer One-Pager, zweisprachig, DSGVO-by-Design"
 lead: "Statische persönliche Web-Präsenz für German Rauhut: zweisprachiger One-Pager auf Next.js 16, cookieless, DSGVO-by-Design, live auf Vercel."
 liveUrl: "https://rauhut.com"

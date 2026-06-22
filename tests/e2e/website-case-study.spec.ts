@@ -34,9 +34,9 @@ const AXES = [
 
 const WEBSITES = [
   { slug: "neckarshore", name: "neckarshore.ai", liveUrl: "https://neckarshore.ai" },
-  { slug: "ristorante-goldoni", name: "Ristorante Goldoni", liveUrl: "https://ristorante-goldoni.de" },
-  { slug: "oakwood-golf-club", name: "Oakwood Golf Club", liveUrl: "https://oakwoodgolfclub.de" },
-  { slug: "rauhut", name: "Rauhut", liveUrl: "https://rauhut.com" },
+  { slug: "ristorante-goldoni", name: "ristorante-goldoni.de", liveUrl: "https://ristorante-goldoni.de" },
+  { slug: "oakwood-golf-club", name: "oakwoodgolfclub.de", liveUrl: "https://oakwoodgolfclub.de" },
+  { slug: "rauhut", name: "rauhut.com", liveUrl: "https://rauhut.com" },
 ] as const;
 
 test.describe("Content surface — Website case studies", () => {

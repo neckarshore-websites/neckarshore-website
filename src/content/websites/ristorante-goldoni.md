@@ -1,5 +1,5 @@
 ---
-name: "Ristorante Goldoni"
+name: "ristorante-goldoni.de"
 headline: "Statischer Next.js-Relaunch für ein italienisches Restaurant in Stuttgart"
 lead: "Relaunch der Website des Ristorante Goldoni von WordPress auf ein statisches Next.js-Stack — schnell, DSGVO-by-Design und selbst pflegbar."
 liveUrl: "https://ristorante-goldoni.de"
