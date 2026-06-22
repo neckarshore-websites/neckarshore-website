@@ -49,7 +49,10 @@ export default function SkillsPage() {
   return (
     <SubPortal category={category} description={description} wide>
       {/* Overview table — Tool name → detail page (when one exists) or jumps to the
-          matching card below. Spans the full content width (= the two-card grid). */}
+          matching card below. Spans the full content width (= the two-card grid).
+          On phones (<sm) the two narrow pill columns (Code, Status) hide so the wide
+          "Löst" description keeps the rows short instead of wrapping to ~8 lines in a
+          starved column; the Public/Beta pills stay visible on each rich card below. */}
       <section aria-labelledby="skills-overview-heading" className="mt-10">
         <h2
           id="skills-overview-heading"
@@ -75,13 +78,13 @@ export default function SkillsPage() {
                 </th>
                 <th
                   scope="col"
-                  className="w-[20%] px-4 py-2.5 font-heading text-xs font-semibold uppercase tracking-wider text-muted dark:text-text-tertiary sm:w-[14%]"
+                  className="hidden px-4 py-2.5 font-heading text-xs font-semibold uppercase tracking-wider text-muted sm:table-cell sm:w-[14%] dark:text-text-tertiary"
                 >
                   Code
                 </th>
                 <th
                   scope="col"
-                  className="w-[20%] px-4 py-2.5 font-heading text-xs font-semibold uppercase tracking-wider text-muted dark:text-text-tertiary sm:w-[15%]"
+                  className="hidden px-4 py-2.5 font-heading text-xs font-semibold uppercase tracking-wider text-muted sm:table-cell sm:w-[15%] dark:text-text-tertiary"
                 >
                   Status
                 </th>
@@ -107,7 +110,7 @@ export default function SkillsPage() {
                   <td className="px-4 py-3 align-top text-neutral-dark/80 dark:text-text-secondary">
                     {row.summary}
                   </td>
-                  <td className="px-4 py-3 align-top">
+                  <td className="hidden px-4 py-3 align-top sm:table-cell">
                     {row.visibility && (
                       <span
                         className={
@@ -120,7 +123,7 @@ export default function SkillsPage() {
                       </span>
                     )}
                   </td>
-                  <td className="px-4 py-3 align-top">
+                  <td className="hidden px-4 py-3 align-top sm:table-cell">
                     {row.status && (
                       <span className="inline-block whitespace-nowrap rounded-full bg-primary/5 px-2 py-0.5 text-xs font-medium text-muted dark:bg-text-secondary/10 dark:text-text-tertiary">
                         {row.status}

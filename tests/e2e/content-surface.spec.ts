@@ -406,6 +406,28 @@ test.describe("Skills on-page overview table @content", () => {
     // A real detail page loaded: exactly one H1.
     await expect(page.locator("h1")).toHaveCount(1);
   });
+
+  test("TC-CNT-063: overview table drops the Code/Status pill columns on phones, keeps them on desktop", async ({
+    page,
+  }) => {
+    const loest = page.getByRole("columnheader", { name: "Löst" });
+    const code = page.getByRole("columnheader", { name: "Code" });
+    const status = page.getByRole("columnheader", { name: "Status" });
+
+    // Phone (< sm/640px): only Tool + Löst show, so rows stay short instead of the
+    // description wrapping to ~8 lines in a starved column. (Founder request 2026-06-22.)
+    await page.setViewportSize({ width: 393, height: 852 });
+    await page.goto("/products/skills");
+    await expect(loest).toBeVisible();
+    await expect(code).toBeHidden();
+    await expect(status).toBeHidden();
+
+    // Desktop: the full four-column table is back.
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("/products/skills");
+    await expect(code).toBeVisible();
+    await expect(status).toBeVisible();
+  });
 });
 
 test.describe("Content surface — Snakeoil-Check preview MMP", () => {
