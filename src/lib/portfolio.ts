@@ -35,6 +35,13 @@ export interface PortfolioItem {
   /** Placeholder one-liner — refined in the content pass (Schritt 2). */
   tagline: string;
   status: ProductStatus;
+  /**
+   * Override for the bottom-left status pill label. Use ONLY when the derived label
+   * (from `status`) would be dishonest — e.g. omnopsis carries a flagship `status: "live"`
+   * but is pre-launch ("In Entwicklung · MVP Q2 2026" on its page), so the pill must say
+   * "In Entwicklung", not "Live". Most items omit this and let `statusPillLabel` derive it.
+   */
+  statusLabel?: string;
   /** Top-N teaser flag: shown on the /products portal; non-featured live on the sub-portal only. */
   featured?: boolean;
   /** Link target: internal "/products/<slug>" OR an external "https://…". */
@@ -109,6 +116,8 @@ export const PORTFOLIO: PortfolioCategory[] = [
         slug: "omnopsis",
         tagline: "KI-first Documentation Engine für Engineering-Teams — fail-closed, BYOLLM, DSGVO-by-Design.",
         status: "live",
+        // Pre-launch (MVP Q2 2026) — the card pill must match the page, not the flagship status flag.
+        statusLabel: "In Entwicklung",
         featured: true,
         href: "/products/omnopsis",
         isExternal: false,
@@ -385,6 +394,24 @@ export function allInternalDetailSlugs(): string[] {
 /** Look up an item by its slug (across all categories). */
 export function getItemBySlug(slug: string): PortfolioItem | undefined {
   return allItems().find((i) => i.slug === slug);
+}
+
+/**
+ * The bottom-left status-pill label for a product/website card (unified card principle).
+ * Honest per item: `statusLabel` override wins (e.g. omnopsis = "In Entwicklung"), else
+ * derived from `status` — live/external sites are "Live", previews are "In Entwicklung".
+ */
+export function statusPillLabel(item: PortfolioItem): string {
+  if (item.statusLabel) return item.statusLabel;
+  switch (item.status) {
+    case "preview":
+      return "In Entwicklung";
+    case "live":
+    case "external":
+      return "Live";
+    default:
+      return "";
+  }
 }
 
 /**
