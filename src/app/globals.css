@@ -158,3 +158,45 @@ body {
 .dark .prose-content hr {
   border-top-color: rgba(203, 213, 225, 0.15);
 }
+.prose-content table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+.prose-content thead th {
+  text-align: left;
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-weight: 600;
+  color: var(--color-primary);
+  background: rgba(10, 37, 64, 0.04);
+  border-bottom: 2px solid rgba(10, 37, 64, 0.12);
+  padding: 0.55rem 0.85rem;
+}
+.dark .prose-content thead th {
+  color: var(--color-text-primary);
+  background: rgba(203, 213, 225, 0.06);
+  border-bottom-color: rgba(203, 213, 225, 0.18);
+}
+.prose-content td {
+  padding: 0.55rem 0.85rem;
+  border-top: 1px solid rgba(10, 37, 64, 0.08);
+  vertical-align: top;
+  /* Break long code tokens (URLs, `navigator.sendBeacon`) so a 2-col table never
+     forces horizontal overflow on a 393px phone (TC-CNT-051 gate). */
+  overflow-wrap: anywhere;
+}
+.dark .prose-content td {
+  border-top-color: rgba(203, 213, 225, 0.12);
+}
+.prose-content tbody tr:first-child td {
+  border-top: 0;
+}
+.prose-content td:first-child {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+.dark .prose-content td:first-child {
+  color: var(--color-text-primary);
+}

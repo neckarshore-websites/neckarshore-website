@@ -104,6 +104,18 @@ test.describe("Content surface — Website case studies", () => {
       );
       expect(overflow).toBeLessThanOrEqual(1);
     });
+
+    test(`TC-CNT-062 [${site.slug}]: Technik & Architektur renders a "Baustein | Detail" table`, async ({
+      page,
+    }) => {
+      await page.goto(`/products/websites/${site.slug}`);
+      // The case-study body carries exactly one table — the Technik stack breakdown
+      // (Founder request 2026-06-22: prose paragraph → table detailing the pills above).
+      const table = page.locator(".prose-content table");
+      await expect(table).toHaveCount(1);
+      await expect(table.locator("thead th")).toHaveCount(2);
+      expect(await table.locator("tbody tr").count()).toBeGreaterThanOrEqual(4);
+    });
   }
 
   test("TC-CNT-052: websites sub-portal card links internal case study AND shows external Website ↗", async ({

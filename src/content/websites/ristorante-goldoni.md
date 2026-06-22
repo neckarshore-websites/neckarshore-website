@@ -23,7 +23,18 @@ Wir haben die Seite KI-beschleunigt neu gebaut — als statische Next.js-Anwendu
 
 ## Technik & Architektur
 
-Das Stack entspricht den übrigen Neckarshore-Seiten: Next.js 16 (App Router), React 19, Tailwind CSS v4, TypeScript, deployt auf Vercel. Kontakt- und Feier-Formulare laufen über Server Actions mit Versand via Nodemailer; Cloudflare Turnstile schützt die Formulare DSGVO-konform vor Spam (interaction-only, kein Cross-Site-Tracking). Strenge Security-Header (CSP, X-Frame-Options, Referrer-Policy, Permissions-Policy) sind in `next.config.ts` verdrahtet. Für SEO emittiert die Seite Schema.org-JSON-LD (Restaurant, Menu, FAQPage, BreadcrumbList) als natives Server-gerendertes Script; die Migration von WordPress ist über 308-Redirects der Alt-URLs abgesichert, inklusive www→apex-Kanonisierung.
+Die Architektur im Detail — was hinter den Bausteinen oben steckt:
+
+| Baustein | Detail |
+| --- | --- |
+| Framework | Next.js 16 (App Router), React 19, TypeScript — Stack wie die übrigen Neckarshore-Seiten |
+| Styling | Tailwind CSS v4 |
+| Hosting | Vercel |
+| Schriften | Selbst gehostet — kein externer Font-Host, kein Datentransfer in Drittstaaten |
+| Formulare | Kontakt- und Feier-Formulare über Server Actions, Versand via Nodemailer; Cloudflare Turnstile schützt DSGVO-konform vor Spam (interaction-only, kein Cross-Site-Tracking) |
+| Sicherheit | Strenge Security-Header (CSP, X-Frame-Options, Referrer-Policy, Permissions-Policy) in `next.config.ts` verdrahtet |
+| SEO | Schema.org-JSON-LD (Restaurant, Menu, FAQPage, BreadcrumbList) als natives Server-gerendertes Script |
+| Migration | WordPress-Ablösung über 308-Redirects der Alt-URLs abgesichert, inkl. `www`→Apex-Kanonisierung |
 
 ## Laufende Pflege
 
