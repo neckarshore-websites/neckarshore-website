@@ -70,7 +70,7 @@ const faqItems = [
 
 export default function ImapMailboxCleanupPage() {
   return (
-    <SkillDetailPage slug="imap-mailbox-cleanup" softwareSchema={softwareSchema} faqItems={faqItems} repoUrl={REPO}>
+    <SkillDetailPage slug="imap-mailbox-cleanup" softwareSchema={softwareSchema} faqItems={faqItems}>
       <SkillSection heading="Was ist IMAP Mailbox Cleanup?" className="">
         <p className="mt-3 text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
           Ein über Jahre gewachsenes Postfach lässt sich nicht in einer Sitzung von Hand bändigen.

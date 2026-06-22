@@ -23,7 +23,18 @@ Die Seite entstand KI-beschleunigt im selben Multi-Agent-Workflow, mit dem Necka
 
 ## Technik & Architektur
 
-Gebaut auf Next.js 16 (App Router, Turbopack), React 19, Tailwind CSS v4 (PostCSS-only, `@theme`-Tokens) und TypeScript im Strict-Mode. Die Internationalisierung ist statisch gelöst: Deutsch als Default unter `/`, Englisch unter `/en`, mit hreflang-Alternates in Metadata und Sitemap. Das Kontaktformular läuft serverseitig über nodemailer (Cloudflare Turnstile als Spam-Schutz vorgesehen, derzeit dormant). Sicherheitsseitig gelten OWASP-Baseline-Header inklusive einer pragmatischen Content-Security-Policy und ein `www`→Apex-Redirect (308); HSTS liefert Vercel automatisch für die verifizierte Domain. Schema.org `Person` wird als natives JSON-LD direkt ins SSR-HTML gerendert.
+Die Architektur im Detail — was hinter den Bausteinen oben steckt:
+
+| Baustein | Detail |
+| --- | --- |
+| Framework | Next.js 16 (App Router, Turbopack), React 19, TypeScript im Strict-Mode |
+| Styling | Tailwind CSS v4 (PostCSS-only, `@theme`-Tokens) |
+| Hosting | Vercel (inkl. cookieloser Web Analytics); HSTS automatisch für die verifizierte Domain |
+| Internationalisierung | Statisch gelöst: Deutsch als Default unter `/`, Englisch unter `/en` — hreflang-Alternates in Metadata und Sitemap |
+| Kontaktformular | Serverseitig über Nodemailer (Cloudflare Turnstile als Spam-Schutz vorgesehen, derzeit dormant) |
+| Sicherheit | OWASP-Baseline-Header inkl. einer pragmatischen Content-Security-Policy und ein `www`→Apex-Redirect (308) |
+| Tests | Playwright-E2E |
+| SEO | Schema.org `Person` als natives JSON-LD direkt im SSR-HTML |
 
 ## Laufende Pflege
 

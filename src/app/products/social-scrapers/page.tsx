@@ -73,7 +73,7 @@ const faqItems = [
 
 export default function SocialScrapersPage() {
   return (
-    <SkillDetailPage slug="social-scrapers" softwareSchema={softwareSchema} faqItems={faqItems} repoUrl={REPO}>
+    <SkillDetailPage slug="social-scrapers" softwareSchema={softwareSchema} faqItems={faqItems}>
       <SkillSection heading="Was sind die Obsidian Social Scrapers?" className="">
         <p className="mt-3 text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
           Wer Creator, Wettbewerber oder Accounts beobachtet, will den Inhalt — nicht die auf

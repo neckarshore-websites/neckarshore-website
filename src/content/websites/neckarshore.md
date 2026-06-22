@@ -24,7 +24,17 @@ Gebaut wurde die Seite KI-beschleunigt und vom Gründer redigiert — dieselbe A
 
 ## Technik & Architektur
 
-Die Seite läuft auf Next.js 16 (App Router) mit React 19 und TypeScript, gestylt mit Tailwind CSS v4 und auf Vercel gehostet. Die beiden Variable Fonts (Inter, Space Grotesk) sind subgesetzt und selbst ausgeliefert (`next/font/local`) — kein externer Font-Host, kein Datentransfer in Drittstaaten. Eine cookielose First-Party-Analytik sendet per `navigator.sendBeacon` an die eigene Route `/api/track` (persistiert in Upstash Redis); es gibt keinen externen Analytics-Anbieter. Sicherheit kommt über OWASP-Baseline-Header und eine bewusst pragmatische Content-Security-Policy: Die statisch-first-Auslieferung (und damit die Lighthouse-Werte) hat Vorrang vor einer nonce-basierten Strict-CSP, die jede Route aus der statischen Generierung herausnehmen würde. SEO-Strukturdaten (JSON-LD) werden als native Server-gerenderte `<script>`-Tags ausgeliefert, damit der Crawler sie im SSR-HTML sieht.
+Die Architektur im Detail — was hinter den Bausteinen oben steckt:
+
+| Baustein | Detail |
+| --- | --- |
+| Framework | Next.js 16 (App Router), React 19, TypeScript — statisch-first gerendert |
+| Styling | Tailwind CSS v4 |
+| Hosting | Vercel |
+| Schriften | Inter und Space Grotesk als Variable Fonts, subgesetzt und selbst ausgeliefert (`next/font/local`) — kein externer Font-Host, kein Datentransfer in Drittstaaten |
+| Analytik | Cookielos und First-Party: `navigator.sendBeacon` an die eigene Route `/api/track`, persistiert in Upstash Redis — kein externer Analytics-Anbieter |
+| Sicherheit | OWASP-Baseline-Header plus eine bewusst pragmatische Content-Security-Policy: Die statisch-first-Auslieferung (und damit die Lighthouse-Werte) hat Vorrang vor einer nonce-basierten Strict-CSP, die jede Route aus der statischen Generierung herausnehmen würde |
+| SEO | Strukturdaten (JSON-LD) als native, Server-gerenderte `<script>`-Tags — im SSR-HTML für den Crawler sichtbar |
 
 ## Laufende Pflege
 

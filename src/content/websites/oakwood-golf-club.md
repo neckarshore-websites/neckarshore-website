@@ -26,7 +26,18 @@ Wir haben den Auftritt als überwiegend statische Next.js-Site neu gebaut: schne
 
 ## Technik & Architektur
 
-Die Site basiert auf Next.js 16 (App Router), React 19, TypeScript und Tailwind CSS 4, deployt auf Vercel. Der Blog ist Markdown-getrieben (`gray-matter` + `marked`), versioniert im Repo — kein separates CMS als Laufzeit-Abhängigkeit. Die Formulare nutzen Server Actions und `nodemailer` für den E-Mail-Versand; Zod validiert die Eingaben. Sicherheits-Header und Legacy-Redirects sind deklarativ in `next.config.ts` verankert, die Trailing-Slash-Normalisierung läuft über `proxy.ts`, um Redirect-Hops zu sparen. Die gedruckte Mitgliederkarte zeigt einen QR-Code auf `/qr.html`, der per Rewrite ohne Redirect-Hop auf die `/qr`-Route auflöst.
+Die Architektur im Detail — was hinter den Bausteinen oben steckt:
+
+| Baustein | Detail |
+| --- | --- |
+| Framework | Next.js 16 (App Router), React 19, TypeScript |
+| Styling | Tailwind CSS v4 |
+| Hosting | Vercel |
+| Blog | Markdown-getrieben (`gray-matter` + `marked`), im Repo versioniert — kein separates CMS als Laufzeit-Abhängigkeit |
+| Formulare | Server Actions mit `nodemailer` (SMTP) für den Versand, Eingaben per Zod validiert; Cloudflare Turnstile als cookieloser Spam-Schutz |
+| Sicherheit | Sicherheits-Header und Legacy-Redirects deklarativ in `next.config.ts`; Trailing-Slash-Normalisierung über `proxy.ts`, um Redirect-Hops zu sparen |
+| Tests | Playwright-E2E |
+| Mitgliederkarte | Gedruckter QR-Code auf `/qr.html`, der per Rewrite ohne Redirect-Hop auf die `/qr`-Route auflöst |
 
 ## Laufende Pflege
 
