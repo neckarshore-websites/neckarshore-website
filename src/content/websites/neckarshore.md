@@ -38,7 +38,7 @@ Die Architektur im Detail — was hinter den Bausteinen oben steckt:
 
 ## Laufende Pflege
 
-Jeder Push nach `main` löst ein automatisches Vercel-Deploy aus, abgesichert durch mehrere CI-Gates in GitHub Actions: `lint.yml` (ESLint strikt, null Warnungen), `e2e.yml` (Playwright-E2E, nur deterministische Tests des eigenen Codes — `@external`-getaggte Drittanbieter-Checks sind ausgeschlossen), `unit.yml` (Node-Unit-Tests des Test-Scope-Aggregators), `lighthouse.yml` (Lighthouse über Desktop + Mobile; A11y/Best Practices/SEO hart @95, Performance advisory) und ein wöchentlicher `link-check.yml`-Cron, der tote externe Links findet und automatisch ein GitHub-Issue öffnet bzw. schließt. Jeder Testlauf wird in `docs/test-log.md` protokolliert (eine Zeile pro Run), Lighthouse-Läufe in `docs/lighthouse-log.md` — diese Logdisziplin macht Drift über die Zeit sichtbar.
+Die Seite pflegt sich weitgehend selbst. Jede freigegebene Änderung geht automatisch live — einen manuellen Veröffentlichungsschritt gibt es nicht. Davor läuft sie durch automatische Qualitätskontrollen: Der Code wird auf Sauberkeit geprüft, die wichtigsten Abläufe der Seite werden durchgetestet, und Ladezeit, Barrierefreiheit sowie Suchmaschinen-Tauglichkeit werden gemessen. Erst wenn alle Prüfungen bestehen, wird ausgeliefert. Ein wöchentlicher automatischer Check meldet zusätzlich kaputte Links. So bleibt die Seite stabil und aktuell, ohne dass jemand manuell nacharbeiten muss.
 
 ## Status
 
@@ -46,4 +46,4 @@ Live unter [neckarshore.ai](https://neckarshore.ai) (HTTP 200 verifiziert). Die 
 
 ## Ausblick
 
-Im Repo bereits angelegt und auf Aktivierung wartend: Cloudflare Turnstile als Spam-Schutz des Kontaktformulars (dormant, in der CSP bereits freigegeben) sowie eine `www → apex` 308-Weiterleitung, die automatisch greift, sobald DNS für `www.neckarshore.ai` eingerichtet ist (Schutz gegen Duplicate-Host-SEO-Risiko). Ansonsten wächst die Seite iterativ mit dem Portfolio — neue Produkt- und Inhaltsseiten kommen laufend dazu.
+Einige Bausteine liegen fertig im Hintergrund und warten nur auf ihre Aktivierung — ein Spam-Schutz für das Kontaktformular und eine automatische Weiterleitung von der `www`-Adresse auf die Hauptdomain, sobald die Domain-Einstellungen dafür stehen. Ansonsten wächst die Seite Schritt für Schritt mit dem Angebot: Neue Produkt- und Inhaltsseiten kommen laufend dazu.

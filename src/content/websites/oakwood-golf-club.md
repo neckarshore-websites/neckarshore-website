@@ -41,7 +41,7 @@ Die Architektur im Detail — was hinter den Bausteinen oben steckt:
 
 ## Laufende Pflege
 
-Jeder Push auf `main` deployt automatisch nach Production (Vercel-Git-Integration). Mehrere GitHub-Actions-Gates sichern Qualität ab: ein strikter ESLint-Gate ohne Warnings (`lint.yml`), eine Playwright-E2E-Suite per PR und bei jedem Push (`e2e.yml`), ein täglicher Prod-E2E-Lauf gegen das Live-Deploy (`nightly-prod-e2e.yml`) und ein wöchentlicher Lighthouse-Audit (`lighthouse.yml`). Neue oder geänderte Blog-Posts werden bei Push automatisch per IndexNow an Bing und Yandex gemeldet (`indexnow.yml`), damit sie binnen Minuten neu gecrawlt werden. Content — Blog, Bilder, statische Seiten — kann so ohne Deploy-Zeremonie veröffentlicht werden.
+Jede freigegebene Änderung geht automatisch live — ohne manuellen Veröffentlichungsschritt. Davor und danach greifen mehrere automatische Kontrollen: Der Code wird auf Sauberkeit geprüft, die wichtigsten Abläufe werden bei jeder Änderung durchgetestet, einmal täglich läuft zusätzlich ein Test direkt gegen die Live-Seite, und wöchentlich werden Ladezeit, Barrierefreiheit und Suchmaschinen-Tauglichkeit gemessen. Neue oder geänderte Blog-Beiträge werden automatisch bei den Suchmaschinen angemeldet, damit sie innerhalb von Minuten neu erfasst werden. So lassen sich Inhalte — Blog, Bilder, Seiten — ohne technischen Aufwand veröffentlichen.
 
 ## Status
 
@@ -49,4 +49,4 @@ Live auf `oakwoodgolfclub.de` (DNS-Cutover IONOS → Vercel abgeschlossen). Heut
 
 ## Ausblick
 
-Geplant, aber noch nicht gebaut, ist ein Mitglieder-Portal (Login, Scorecards, Handicap-Verwaltung) — der nächste große Block, der noch Scope-Entscheidungen mit dem Betreiber braucht. Offen sind außerdem die Anbindung eines Zahlungs-Gateways (Stripe) sowie die Frage, wie die 16 Jahre WordPress-Blog-Inhalte langfristig verwaltet werden. Termine und Reihenfolge stehen noch nicht fest — sie werden mit dem Betreiber abgestimmt.
+Geplant, aber noch nicht gebaut, ist ein Mitglieder-Portal mit Login, digitalen Scorecards und Handicap-Verwaltung — der nächste große Schritt, dessen Umfang noch mit dem Betreiber abgestimmt wird. Offen sind außerdem eine Online-Bezahlung und die Frage, wie die 16 Jahre an Blog-Inhalten langfristig gepflegt werden. Termine und Reihenfolge stehen noch nicht fest und werden gemeinsam mit dem Betreiber festgelegt.

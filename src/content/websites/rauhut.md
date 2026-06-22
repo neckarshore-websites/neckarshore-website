@@ -38,7 +38,7 @@ Die Architektur im Detail — was hinter den Bausteinen oben steckt:
 
 ## Laufende Pflege
 
-Vier GitHub-Actions-Workflows gaten jeden Push und PR auf `main`: `lint.yml` (strikter ESLint-Gate, zero warnings), `e2e.yml` (Playwright-Suite — Homepage-Inhalte, DE/EN-Toggle, Theme-Persistenz, `/designs`-Galerie), `lighthouse.yml` (Desktop- + Mobile-Audit, zusätzlich wöchentlich montags) und `designs-guard.yml` (nicht-blockierende Drift-Warnung für inline `<script>` in geänderten Designs-HTML). Deploy läuft per Vercel-Auto-Deploy: Branch-Pushes erzeugen Preview-Deploys, der Merge nach `main` geht live — kein manueller Release-Schritt.
+Vor jeder Veröffentlichung laufen automatische Kontrollen: Der Code wird auf Sauberkeit geprüft, die wichtigsten Funktionen werden durchgetestet (Inhalte, der Wechsel zwischen Deutsch und Englisch, das Umschalten zwischen hellem und dunklem Modus) und Ladezeit, Barrierefreiheit sowie Suchmaschinen-Tauglichkeit werden gemessen — wöchentlich und bei jeder Änderung. Die Veröffentlichung selbst läuft automatisch: Jede freigegebene Änderung geht ohne manuellen Schritt live, jede Vorab-Version bekommt vorher eine eigene Test-Adresse zur Abnahme.
 
 ## Status
 
@@ -46,4 +46,4 @@ Live auf Vercel unter `rauhut.com`; der DNS-Cutover von IONOS zu Vercel ist seit
 
 ## Ausblick
 
-Eine Produkt-Roadmap im engeren Sinn gibt es nicht — das Repo führt einen kleinen Visual-Polish-Backlog, dessen Akzent-Items größtenteils bereits umgesetzt sind. Offen bleiben die Aktivierung der vorbereiteten Cloudflare-Turnstile-Absicherung des Kontaktformulars (derzeit dormant) und eine geparkte Google-Search-Console-Domain-Property (heute über eine URL-Prefix-Property plus Sitemap gelöst). Explizit out of scope: Blog/CMS, Third-Party-Analytics und ein Cookie-Banner.
+Eine eigentliche Roadmap gibt es nicht — offen ist nur ein kleiner Feinschliff-Backlog, der größtenteils schon abgearbeitet ist. Vorbereitet und noch zu aktivieren: ein Spam-Schutz für das Kontaktformular. Bewusst nicht geplant sind ein Blog, fremde Analyse-Werkzeuge und ein Cookie-Banner.

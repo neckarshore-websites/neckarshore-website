@@ -38,7 +38,7 @@ Die Architektur im Detail — was hinter den Bausteinen oben steckt:
 
 ## Laufende Pflege
 
-Drei GitHub-Actions-Workflows sichern jeden Push und Pull Request auf `main` ab: `lint.yml` (strenger ESLint-Gate, null Warnungen), `e2e.yml` (Playwright-Suite für die Kontakt- und Feier-Formulare) und `lighthouse.yml` (Desktop- und Mobile-Audit, wöchentlich plus on-demand). Deployment läuft automatisch über Vercel beim Push. Inhaltliche Updates — etwa die wöchentliche Empfehlungskarte — sind ein Ein-Datei-Edit im Repository.
+Jede freigegebene Änderung geht automatisch live. Davor laufen automatische Kontrollen: Der Code wird auf Sauberkeit geprüft, die Kontakt- und Feier-Formulare werden durchgetestet und Ladezeit, Barrierefreiheit sowie Suchmaschinen-Tauglichkeit werden gemessen (wöchentlich und bei Bedarf). Inhaltliche Updates — etwa die wöchentliche Empfehlungskarte — sind mit einer einzigen kleinen Änderung erledigt.
 
 ## Status
 
@@ -46,4 +46,4 @@ Live unter `ristorante-goldoni.de` (Next.js auf Vercel). Online sind die Startse
 
 ## Ausblick
 
-Mehrere Erweiterungen sind offen und in einer dedizierten Session mit dem Kunden zu entscheiden — keine zugesagte Roadmap: ein leichtgewichtiges CMS für die Eigenpflege (Decap oder Sanity, aktuell statisch im Repository), eine Online-Reservierung (heute Telefon und Mail) sowie eine eigene Events-Pipeline (heute statisch). Termine und Umfang sind noch offen und werden mit dem Kunden abgestimmt.
+Mehrere Erweiterungen sind denkbar, aber noch nicht zugesagt — sie werden in einem eigenen Termin mit dem Kunden entschieden: ein einfaches Redaktionssystem zur Eigenpflege der Inhalte (heute liegen sie direkt im Projekt), eine Online-Reservierung (heute über Telefon und E-Mail) sowie eine eigene Verwaltung für Veranstaltungen. Umfang und Zeitpunkt sind offen und werden gemeinsam mit dem Kunden festgelegt.
