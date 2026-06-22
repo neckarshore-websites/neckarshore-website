@@ -672,3 +672,51 @@ test.describe("Content surface — Product FAQ (GEO)", () => {
     });
   }
 });
+
+// Rich/Beides/Skill cards are <div> (they carry a secondary GitHub/Website <a>), but a
+// stretched ::after on their "Mehr erfahren" link makes the WHOLE card clickable to the
+// detail page. Clicking the card body (not a link) must navigate; the secondary button
+// must still reach its own target. (2026-06-22 Founder request.)
+test.describe("Content surface — cards are fully clickable", () => {
+  const CARD_CASES = [
+    { portal: "/products/mmps", detailHref: "/products/snakeoil-check" },
+    { portal: "/products/websites", detailHref: "/products/websites/oakwood-golf-club" },
+    { portal: "/products/skills", detailHref: "/products/obsidian-vault-autopilot" },
+  ] as const;
+
+  for (const c of CARD_CASES) {
+    test(`TC-CNT-057 [${c.portal}]: clicking the card body navigates to the detail page`, async ({
+      page,
+    }) => {
+      await page.goto(c.portal);
+      // The card = the nearest `group` ancestor of its "Mehr erfahren" link. Scope to the
+      // card's "Mehr erfahren" link specifically — /products/skills also has an overview
+      // TABLE whose tool link shares the same href but sits outside any card (no `.group`).
+      const card = page
+        .locator(`a[href="${c.detailHref}"]:has-text("Mehr erfahren")`)
+        .first()
+        .locator(
+          'xpath=ancestor::div[contains(concat(" ", normalize-space(@class), " "), " group ")][1]',
+        );
+      await card.scrollIntoViewIfNeeded();
+      const box = await card.boundingBox();
+      expect(box).not.toBeNull();
+      // Click the left-middle of the card — description/body area, covered by the stretched
+      // overlay, clear of the title (top), badge (top-right) and footer buttons (bottom).
+      await page.mouse.click(box!.x + 24, box!.y + box!.height / 2);
+      await expect(page).toHaveURL(new RegExp(`${c.detailHref.replace(/\//g, "\\/")}$`));
+    });
+  }
+
+  test("TC-CNT-058: a card's secondary GitHub button still reaches GitHub, not the detail page", async ({
+    page,
+  }) => {
+    await page.goto("/products/mmps");
+    // The GitHub button on a rich MMP card carries z-10 above the stretched overlay → it
+    // opens its own external href (new tab), never the detail page.
+    const gh = page.locator('a[data-track="product_card_github_snakeoil-check"]');
+    await expect(gh).toBeVisible();
+    await expect(gh).toHaveAttribute("target", "_blank");
+    await expect(gh).toHaveAttribute("href", /github\.com/);
+  });
+});

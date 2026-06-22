@@ -1,5 +1,5 @@
 ---
-name: "Oakwood Golf Club"
+name: "oakwoodgolfclub.de"
 headline: "WordPress-Ablösung für einen Fernmitgliedschafts-Golfclub — statisch, DSGVO-sauber, auf Vercel live."
 lead: "Wir haben den 16 Jahre alten WordPress-Auftritt des Oakwood Golf Club durch eine statische Next.js-Site mit Anmeldung, Verlängerung, FAQ und Blog ersetzt."
 liveUrl: "https://oakwoodgolfclub.de"
