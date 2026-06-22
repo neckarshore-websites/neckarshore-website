@@ -14,6 +14,29 @@ German Rauhut — former Mercedes-Benz IT, now founder of Neckarshore AI in Stut
 
 Omnopsis Documentor+X — an AI-first documentation engine that automatically generates compliance docs, technical documentation, and persona-aware chatbot responses from Git, Jira, and Confluence. BYOLLM (Bring Your Own LLM), fail-closed architecture, European hosting.
 
+## Products
+
+neckarshore.ai builds across four tiers: one flagship, a handful of MMPs (Minimum Marketable Products), focused open-source skills, and client/own websites. Full tree: https://neckarshore.ai/products
+
+### Flagship
+- Omnopsis Documentor+X — AI-first documentation engine for engineering teams; fail-closed, BYOLLM, DSGVO-by-design. https://neckarshore.ai/products/omnopsis
+
+### MMPs (Minimum Marketable Products)
+- ClearPath — a mental firewall against cognitive bias. https://neckarshore.ai/products/clearpath
+- Snakeoil-Check — neutral reality-check for online coaching and high-ticket offers. https://neckarshore.ai/products/snakeoil-check
+- Phonesis Voicebank — an archive of real human voices for the German market. https://neckarshore.ai/products/phonesis
+- Local-SEO-Hub — AI-first local visibility platform; rankings, reviews and citations in one score. https://neckarshore.ai/products/local-seo-hub
+- Prod-or-Pretend — a quality mirror for tech hype; checks "built-in-a-weekend" claims against real production standards. https://neckarshore.ai/products/prod-or-pretend
+
+### Skills (open source)
+- Obsidian Vault Autopilot — automation for Obsidian knowledge vaults. https://neckarshore.ai/products/obsidian-vault-autopilot
+- AI Phrase Check — detects AI-typical filler phrases in German and English text. https://neckarshore.ai/products/ai-phrase-check
+- Social Scrapers — Obsidian skills for Instagram/LinkedIn/X profiles; neutral Markdown briefings. https://neckarshore.ai/products/social-scrapers
+- IMAP Mailbox Cleanup — hybrid CLI + Claude skill for IMAP mailbox triage; dry-run by default. https://neckarshore.ai/products/imap-mailbox-cleanup
+
+### Websites
+- Real client and own web projects (neckarshore.ai, ristorante-goldoni.de, oakwoodgolfclub.de, rauhut.com). https://neckarshore.ai/products/websites
+
 ## Services
 
 1. AI-Powered Development — NestJS, TypeScript, PostgreSQL production stack
