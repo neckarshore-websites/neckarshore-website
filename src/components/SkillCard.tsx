@@ -36,8 +36,18 @@ export function SkillCard({
   const titleClass = headingLevel === "h1" ? "text-2xl md:text-3xl" : "text-xl";
   const detailTrack = card.track ? `${card.track}_detail` : undefined;
 
+  // When the card has a detail page (`detailHref`), the whole card is clickable via a
+  // stretched ::after on the "Mehr erfahren" link → `group relative` + hover affordance.
+  // The GitHub button + title link carry `relative z-10` to stay above that overlay.
+  // The detail-page hero card (no detailHref) + skeleton skills stay non-clickable.
+  const clickable = !!detailHref;
+  const cardClass = `flex flex-col rounded-xl border border-primary/10 bg-white p-8 shadow-sm dark:border-text-secondary/10 dark:bg-surface${
+    clickable ? " group relative transition-all hover:border-accent/30 hover:shadow-md" : ""
+  }`;
+  const stretchedLink = "after:absolute after:inset-0 after:content-['']";
+
   return (
-    <div id={id} className="flex flex-col rounded-xl border border-primary/10 bg-white p-8 shadow-sm dark:border-text-secondary/10 dark:bg-surface">
+    <div id={id} className={cardClass}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <Icon size={28} className="text-secondary" aria-hidden="true" />
@@ -54,7 +64,7 @@ export function SkillCard({
             href={card.repoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
+            className="relative z-10 inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
             data-track={card.track}
           >
             GitHub
@@ -69,7 +79,7 @@ export function SkillCard({
         {detailHref ? (
           <Link
             href={detailHref}
-            className="transition-colors hover:text-accent dark:hover:text-accent-bright"
+            className="relative z-10 transition-colors hover:text-accent dark:hover:text-accent-bright"
             data-track={detailTrack}
           >
             {card.title}
@@ -121,7 +131,7 @@ export function SkillCard({
           {detailHref ? (
             <Link
               href={detailHref}
-              className="inline-flex items-center gap-1 text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
+              className={`inline-flex items-center gap-1 text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright ${stretchedLink}`}
               data-track={detailTrack}
             >
               Mehr erfahren →

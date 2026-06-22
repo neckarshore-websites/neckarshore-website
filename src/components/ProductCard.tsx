@@ -19,8 +19,16 @@ import type { PortfolioItem } from "@/lib/portfolio";
 const cardClass =
   "group block rounded-xl border border-primary/5 bg-white/50 p-6 transition-all hover:border-accent/30 hover:bg-white dark:border-text-secondary/10 dark:bg-surface/40 dark:hover:bg-surface";
 
+// Rich/Beides cards are <div> (they carry a secondary GitHub/Website <a>, so the card
+// itself can't be an <a>). `group relative` + the stretched "Mehr erfahren" link (see below)
+// make the WHOLE card clickable to the detail page anyway; the hover affordance signals it.
 const richCardClass =
-  "flex h-full flex-col rounded-xl border border-primary/5 bg-white/50 p-6 dark:border-text-secondary/10 dark:bg-surface/40";
+  "group relative flex h-full flex-col rounded-xl border border-primary/5 bg-white/50 p-6 transition-all hover:border-accent/30 hover:bg-white dark:border-text-secondary/10 dark:bg-surface/40 dark:hover:bg-surface";
+
+// The "Mehr erfahren" link gets a stretched ::after overlay → clicking anywhere on the card
+// navigates to the detail page (same as the link). Secondary buttons + the title link carry
+// `relative z-10` to stay above the overlay and remain independently clickable.
+const stretchedLinkClass = "after:absolute after:inset-0 after:content-['']";
 
 function StatusBadge({ item }: { item: PortfolioItem }) {
   if (item.status === "preview") {
@@ -95,7 +103,7 @@ export function ProductCard({
             <Link
               href={item.href}
               data-track={`product_card_${item.slug}`}
-              className="transition-colors hover:text-accent dark:hover:text-accent-bright"
+              className="relative z-10 transition-colors hover:text-accent dark:hover:text-accent-bright"
             >
               {item.name}
             </Link>
@@ -109,7 +117,7 @@ export function ProductCard({
           <Link
             href={item.href}
             data-track={`product_card_more_${item.slug}`}
-            className="inline-flex items-center gap-1 text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
+            className={`inline-flex items-center gap-1 text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright ${stretchedLinkClass}`}
           >
             Mehr erfahren →
           </Link>
@@ -119,7 +127,7 @@ export function ProductCard({
               target="_blank"
               rel="noopener noreferrer"
               data-track={`product_card_github_${item.slug}`}
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
+              className="relative z-10 inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
             >
               GitHub
               <ExternalLink size={14} aria-hidden="true" />
@@ -143,7 +151,7 @@ export function ProductCard({
             <Link
               href={detailHref}
               data-track={`product_card_${item.slug}`}
-              className="transition-colors hover:text-accent dark:hover:text-accent-bright"
+              className="relative z-10 transition-colors hover:text-accent dark:hover:text-accent-bright"
             >
               {item.name}
             </Link>
@@ -157,7 +165,7 @@ export function ProductCard({
           <Link
             href={detailHref}
             data-track={`product_card_more_${item.slug}`}
-            className="inline-flex items-center gap-1 text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
+            className={`inline-flex items-center gap-1 text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright ${stretchedLinkClass}`}
           >
             Mehr erfahren →
           </Link>
@@ -167,7 +175,7 @@ export function ProductCard({
               target="_blank"
               rel="noopener noreferrer"
               data-track={`product_card_live_${item.slug}`}
-              className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
+              className="relative z-10 inline-flex shrink-0 items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-all duration-150 hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
             >
               Website
               <ExternalLink size={14} aria-hidden="true" />
