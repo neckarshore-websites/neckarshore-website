@@ -161,9 +161,8 @@ export const PORTFOLIO: PortfolioCategory[] = [
         schemaType: "SoftwareApplication",
         applicationCategory: "BusinessApplication",
         // Bespoke preview detail page (src/app/products/snakeoil-check) → excluded from the
-        // [slug] skeleton route. Stays noindex (held out of the sitemap) until the public app
-        // launches; the page emits the preview schema (no url/offers) until then.
-        noindex: true,
+        // [slug] skeleton route. Indexable since 2026-06-22 (rich content shipped); the page
+        // emits the honest preview schema (no url/offers) until the public app launches.
         hasOwnPage: true,
       },
       {
@@ -177,8 +176,8 @@ export const PORTFOLIO: PortfolioCategory[] = [
         schemaType: "SoftwareApplication",
         applicationCategory: "MultimediaApplication",
         // Bespoke preview detail page (src/app/products/phonesis) → excluded from the [slug]
-        // skeleton route. Stays noindex (held out of the sitemap) until the public site launches.
-        noindex: true,
+        // skeleton route. Indexable since 2026-06-22; emits the honest preview schema
+        // (no url/offers) until the public site launches.
         hasOwnPage: true,
       },
       {
@@ -191,9 +190,8 @@ export const PORTFOLIO: PortfolioCategory[] = [
         schemaType: "SoftwareApplication",
         applicationCategory: "BusinessApplication",
         // Bespoke preview detail page (src/app/products/local-seo-hub) → excluded from the
-        // [slug] skeleton route. Stays noindex (held out of the sitemap) until the public app
-        // launches; the page emits the preview schema (no url/offers) until then.
-        noindex: true,
+        // [slug] skeleton route. Indexable since 2026-06-22 (rich content shipped); the page
+        // emits the honest preview schema (no url/offers) until the public app launches.
         hasOwnPage: true,
       },
       {
@@ -206,9 +204,8 @@ export const PORTFOLIO: PortfolioCategory[] = [
         schemaType: "SoftwareApplication",
         applicationCategory: "BusinessApplication",
         // Bespoke preview detail page (src/app/products/prod-or-pretend) → excluded from the
-        // [slug] skeleton route. Stays noindex (held out of the sitemap) until the public
-        // launch; the page emits the preview schema (no url/offers) until then.
-        noindex: true,
+        // [slug] skeleton route. Indexable since 2026-06-22; emits the honest preview schema
+        // (no url/offers) until the public launch.
         hasOwnPage: true,
       },
     ],

@@ -48,6 +48,17 @@ test.describe("SEO Basics", () => {
     expect(await response.text()).toContain("<urlset");
   });
 
+  test("TC-SEO-021: robots.txt names OAI-SearchBot", async ({ request }) => {
+    const body = await (await request.get("/robots.txt")).text();
+    expect(body).toContain("OAI-SearchBot");
+  });
+
+  test("TC-SEO-022: llms.txt lists the products surface", async ({ request }) => {
+    const body = await (await request.get("/llms.txt")).text();
+    expect(body).toContain("/products/snakeoil-check");
+    expect(body.toLowerCase()).toContain("products");
+  });
+
   test("TC-SEO-010: homepage has og:image meta tag", async ({ page }) => {
     await page.goto("/");
     const ogImage = page.locator('meta[property="og:image"]');
