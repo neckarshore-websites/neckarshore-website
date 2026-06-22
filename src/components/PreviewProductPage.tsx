@@ -8,7 +8,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { ProductFaq } from "@/components/ProductFaq";
 import { pageMetadata } from "@/lib/seo";
-import { breadcrumbTrailForSlug } from "@/lib/portfolio";
+import { breadcrumbTrailForSlug, getItemBySlug } from "@/lib/portfolio";
 import { getProductEntry } from "@/lib/content/products";
 import { faqForSlug } from "@/lib/product-faqs";
 import { previewSoftwareApplicationSchema } from "@/lib/schema/product";
@@ -42,9 +42,13 @@ export function previewProductMetadata({
 }): Metadata {
   const entry = getProductEntry(slug);
   if (!entry) return {};
+  // Single source of truth: robots derives from the portfolio `noindex` flag, so dropping
+  // `noindex` on a preview item flips robots-meta, sitemap inclusion AND the FAQPage-schema
+  // gate together (AP-1: one flag, all effects). No dual-gate footgun.
+  const noindex = getItemBySlug(slug)?.noindex ?? false;
   return {
     ...pageMetadata({ title, description: entry.definition, path: `/products/${slug}` }),
-    robots: { index: false, follow: true },
+    robots: { index: !noindex, follow: true },
   };
 }
 

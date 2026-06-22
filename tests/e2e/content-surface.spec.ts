@@ -626,6 +626,10 @@ test.describe("Content surface — Product FAQ (GEO)", () => {
   const FAQ_INDEXABLE = [
     "/products/omnopsis",
     "/products/clearpath",
+    "/products/snakeoil-check",
+    "/products/phonesis",
+    "/products/local-seo-hub",
+    "/products/prod-or-pretend",
     "/products/social-scrapers",
     "/products/imap-mailbox-cleanup",
     "/products/websites/neckarshore",
@@ -634,14 +638,9 @@ test.describe("Content surface — Product FAQ (GEO)", () => {
     "/products/websites/rauhut",
   ] as const;
 
-  // noindex pages (preview MMPs + the private restaurant skill): visible FAQ, NO FAQPage schema.
-  const FAQ_NOINDEX = [
-    "/products/snakeoil-check",
-    "/products/phonesis",
-    "/products/local-seo-hub",
-    "/products/prod-or-pretend",
-    "/products/restaurant-menu-update",
-  ] as const;
+  // noindex page (the private restaurant skill only): visible FAQ, NO FAQPage schema.
+  // The 4 preview MMPs moved to FAQ_INDEXABLE on 2026-06-22 (noindex dropped → FAQPage active).
+  const FAQ_NOINDEX = ["/products/restaurant-menu-update"] as const;
 
   for (const path of FAQ_INDEXABLE) {
     test(`TC-CNT-055 [${path}]: visible FAQ + one FAQPage JSON-LD with >= 1 question`, async ({
