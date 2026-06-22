@@ -171,12 +171,13 @@ test.describe("Content surface — Products index", () => {
     }
   });
 
-  // The "Extern" badge was misleading (it labelled a project, not an action). Website-tier
-  // cards now carry a plain "Website" badge; the external link still opens in a new tab.
-  test("TC-CNT-016: website cards are labelled 'Website', not 'Extern'", async ({ page }) => {
+  // Unified card layout (2026-06-22): website cards carry a "Live" status pill (bottom-left)
+  // and a "Website ↗" link (top-right). The old "Extern" badge is gone for good.
+  test("TC-CNT-016: website cards show a 'Live' status pill + a 'Website' link, never 'Extern'", async ({ page }) => {
     await page.goto("/products/websites");
     await expect(page.getByText("Extern", { exact: false })).toHaveCount(0);
     await expect(page.getByText("Website", { exact: true }).first()).toBeVisible();
+    await expect(page.getByText("Live", { exact: true }).first()).toBeVisible();
   });
 });
 
@@ -718,5 +719,27 @@ test.describe("Content surface — cards are fully clickable", () => {
     await expect(gh).toBeVisible();
     await expect(gh).toHaveAttribute("target", "_blank");
     await expect(gh).toHaveAttribute("href", /github\.com/);
+  });
+});
+
+// Unified card principle (2026-06-22): every card across MMP / Skill / Website carries a
+// bottom-left status pill. The exact label is honest per card (Live / In Entwicklung / Beta
+// / Referenz-Beispiel); this locks that the pill is present on every surface.
+test.describe("Content surface — unified status pill", () => {
+  test("TC-CNT-059: every sub-portal card type shows its status pill", async ({ page }) => {
+    // MMPs: a live one (clearpath → "Live") + previews ("In Entwicklung").
+    await page.goto("/products/mmps");
+    await expect(page.getByText("Live", { exact: true }).first()).toBeVisible();
+    await expect(page.getByText("In Entwicklung", { exact: true }).first()).toBeVisible();
+    // Skills: OSS maturity ("Beta") + the private reference skill ("Referenz-Beispiel").
+    await page.goto("/products/skills");
+    await expect(page.getByText("Beta", { exact: true }).first()).toBeVisible();
+    await expect(page.getByText("Referenz-Beispiel", { exact: true }).first()).toBeVisible();
+    // Websites: live external sites ("Live").
+    await page.goto("/products/websites");
+    await expect(page.getByText("Live", { exact: true }).first()).toBeVisible();
+    // Flagship on the portal teaser: omnopsis shows "In Entwicklung" (honest, not "Live").
+    await page.goto("/products");
+    await expect(page.getByText("In Entwicklung", { exact: true }).first()).toBeVisible();
   });
 });
