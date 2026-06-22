@@ -243,20 +243,7 @@ export default function ObsidianVaultAutopilotPage() {
           aus der README und Repo-Dokumentation des Projekts zusammengestellt, vom Gründer redigiert.
         </p>
 
-        <ProductDetailNav
-          slug="obsidian-vault-autopilot"
-          cta={
-            <a
-              href={REPO}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-track="obsidian_vault_autopilot_detail_github"
-              className="text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
-            >
-              Auf GitHub ansehen →
-            </a>
-          }
-        />
+        <ProductDetailNav slug="obsidian-vault-autopilot" />
       </main>
       <Footer />
     </>

@@ -90,6 +90,7 @@ export default async function ProductDetailPage({
 
         <ProductDetailNav
           slug={item.slug}
+          hideCtaOnDesktop
           cta={
             <a
               href="https://calendly.com/rauhut/20min"

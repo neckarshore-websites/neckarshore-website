@@ -143,6 +143,7 @@ export default function OmnopsisPage() {
 
         <ProductDetailNav
           slug="omnopsis"
+          hideCtaOnDesktop
           cta={
             <a
               href="https://calendly.com/rauhut/20min"

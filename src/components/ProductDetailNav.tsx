@@ -19,10 +19,19 @@ import { categoryForSlug, siblingNav } from "@/lib/portfolio";
 export function ProductDetailNav({
   slug,
   cta,
+  hideCtaOnDesktop = false,
 }: {
   slug: string;
   /** Optional page CTA (already-styled link), rendered centered below the row. */
   cta?: ReactNode;
+  /**
+   * Hide the CTA from `lg` upward (≥1024px). The desktop header pins a persistent
+   * "Kennenlerntermin" CTA at exactly this breakpoint, so an end-of-page repeat is a
+   * duplicate on desktop — but the mobile header tucks its CTA inside the hamburger,
+   * so the end-of-page CTA is the only in-flow one there and must stay. Founder
+   * request 2026-06-22.
+   */
+  hideCtaOnDesktop?: boolean;
 }) {
   const category = categoryForSlug(slug);
   const { prev, next } = siblingNav(slug);
@@ -67,7 +76,11 @@ export function ProductDetailNav({
           </Link>
         )}
       </div>
-      {cta && <div className="mt-4 text-center">{cta}</div>}
+      {cta && (
+        <div className={`mt-4 text-center${hideCtaOnDesktop ? " lg:hidden" : ""}`}>
+          {cta}
+        </div>
+      )}
     </nav>
   );
 }

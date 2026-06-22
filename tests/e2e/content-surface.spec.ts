@@ -742,3 +742,56 @@ test.describe("Content surface — unified status pill", () => {
     await expect(page.getByText("In Entwicklung", { exact: true }).first()).toBeVisible();
   });
 });
+
+// Skill detail pages dropped the end-of-page "Auf GitHub ansehen" link (Founder request
+// 2026-06-22). The repo URL still lives in the SoftwareApplication JSON-LD (machine-readable
+// for crawlers), it is just no longer a human CTA. Lock its absence on every skill detail page.
+test.describe("Content surface — skill detail pages carry no GitHub CTA", () => {
+  const SKILL_DETAIL_PAGES = [
+    "/products/ai-phrase-check",
+    "/products/imap-mailbox-cleanup",
+    "/products/obsidian-vault-autopilot",
+    "/products/social-scrapers",
+  ] as const;
+
+  for (const path of SKILL_DETAIL_PAGES) {
+    test(`TC-CNT-060 [${path}]: no end-of-page "Auf GitHub ansehen" link`, async ({ page }) => {
+      const res = await page.goto(path);
+      expect(res?.status()).toBe(200);
+      await expect(page.locator('a[data-track$="_detail_github"]')).toHaveCount(0);
+      await expect(page.getByRole("link", { name: /Auf GitHub ansehen/ })).toHaveCount(0);
+    });
+  }
+});
+
+// The end-of-page "Kennenlerntermin buchen" CTA duplicates the header CTA that the desktop
+// nav pins at lg (1024px), so it is hidden from lg upward. The mobile nav tucks its CTA inside
+// the hamburger, so the end-of-page CTA is the only in-flow booking link there and stays
+// visible. (Founder request 2026-06-22; ProductDetailNav `hideCtaOnDesktop`.) The /products/[slug]
+// skeleton route also sets the flag, but no slug currently renders it (all have bespoke pages),
+// so the two live surfaces are the flagship + the website case studies.
+test.describe("Content surface — end-of-page booking CTA is mobile-only", () => {
+  const CTA_PAGES = [
+    { path: "/products/omnopsis", track: "omnopsis_cta" },
+    { path: "/products/websites/neckarshore", track: "website_detail_cta_neckarshore" },
+  ] as const;
+
+  for (const { path, track } of CTA_PAGES) {
+    test(`TC-CNT-061 [${path}]: end-of-page CTA hidden @desktop, visible @mobile`, async ({
+      page,
+    }) => {
+      const cta = page.locator(`a[data-track="${track}"]`);
+
+      // Desktop (>= lg/1024px): the pinned header CTA covers the need → end-of-page CTA hidden.
+      await page.setViewportSize({ width: 1280, height: 900 });
+      await page.goto(path);
+      await expect(cta).toHaveCount(1); // in the DOM…
+      await expect(cta).toBeHidden(); // …but display:none via lg:hidden
+
+      // Mobile (< lg): header CTA is buried in the hamburger → end-of-page CTA must be visible.
+      await page.setViewportSize({ width: 393, height: 852 });
+      await page.goto(path);
+      await expect(cta).toBeVisible();
+    });
+  }
+});

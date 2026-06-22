@@ -16,11 +16,11 @@ import { SKILL_CARDS } from "@/lib/skill-cards";
  *
  *   Nav · (SoftwareApplication + FAQPage JSON-LD) · 760px main · Breadcrumbs ·
  *   SkillCard hero (H1) · <article> = bespoke sections (children) + the FAQ section ·
- *   "Wie dieser Text entstand" honesty note · ProductDetailNav (sibling browse + CTA) · Footer
+ *   "Wie dieser Text entstand" honesty note · ProductDetailNav (sibling browse) · Footer
  *
  * The bespoke per-skill sections are passed as `children`; everything repeated lives here.
- * Optional props degrade cleanly: a private skill with no public repo omits `repoUrl`
- * (no GitHub CTA), a thin page omits `faqItems` (no FAQ section + no FAQPage schema).
+ * Optional props degrade cleanly: a thin page omits `faqItems` (no FAQ section + no
+ * FAQPage schema).
  *
  * NOTE (deliberate): the two already-accepted bespoke pages (obsidian-vault-autopilot,
  * ai-phrase-check) are NOT migrated onto this template — they were Founder-accepted as-is,
@@ -35,7 +35,6 @@ export function SkillDetailPage({
   slug,
   softwareSchema,
   faqItems,
-  repoUrl,
   textOrigin = "KI-beschleunigt aus der README und Repo-Dokumentation des Projekts zusammengestellt, vom Gründer redigiert.",
   children,
 }: {
@@ -45,8 +44,6 @@ export function SkillDetailPage({
   softwareSchema?: object;
   /** Mini-FAQ — rendered as a visible section AND emitted as FAQPage JSON-LD. Omit to skip both. */
   faqItems?: SkillFaqItem[];
-  /** Public repo URL → a GitHub CTA under the sibling nav. Omit for private skills. */
-  repoUrl?: string;
   /** The "Wie dieser Text entstand" sentence (a sensible default is provided). */
   textOrigin?: string;
   /** The bespoke article sections for this skill (before the FAQ). */
@@ -77,22 +74,7 @@ export function SkillDetailPage({
           <span className="font-medium not-italic">Wie dieser Text entstand:</span> {textOrigin}
         </p>
 
-        <ProductDetailNav
-          slug={slug}
-          cta={
-            repoUrl ? (
-              <a
-                href={repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-track={`${slug}_detail_github`}
-                className="text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
-              >
-                Auf GitHub ansehen →
-              </a>
-            ) : undefined
-          }
-        />
+        <ProductDetailNav slug={slug} />
       </main>
       <Footer />
     </>

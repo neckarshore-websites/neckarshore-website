@@ -220,20 +220,7 @@ export default function AiPhraseCheckPage() {
           aus der README und Repo-Dokumentation des Projekts zusammengestellt, vom Gründer redigiert.
         </p>
 
-        <ProductDetailNav
-          slug="ai-phrase-check"
-          cta={
-            <a
-              href={REPO}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-track="ai_phrase_check_detail_github"
-              className="text-sm font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
-            >
-              Auf GitHub ansehen →
-            </a>
-          }
-        />
+        <ProductDetailNav slug="ai-phrase-check" />
       </main>
       <Footer />
     </>

@@ -131,6 +131,7 @@ export default async function WebsiteCaseStudyPage({
 
         <ProductDetailNav
           slug={slug}
+          hideCtaOnDesktop
           cta={
             <a
               href="https://calendly.com/rauhut/20min"
