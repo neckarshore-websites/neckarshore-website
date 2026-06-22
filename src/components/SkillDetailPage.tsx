@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
+import { ProductFaq, type FaqItem } from "@/components/ProductFaq";
 import { SkillCard } from "@/components/SkillCard";
 import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { SKILL_CARDS } from "@/lib/skill-cards";
@@ -27,10 +28,8 @@ import { SKILL_CARDS } from "@/lib/skill-cards";
  * the NEW pages; the existing two can adopt it later if ever touched.
  */
 
-export interface SkillFaqItem {
-  q: string;
-  a: string;
-}
+/** Re-exported for back-compat; the FAQ shape lives in ProductFaq now. */
+export type SkillFaqItem = FaqItem;
 
 export function SkillDetailPage({
   slug,
@@ -56,26 +55,12 @@ export function SkillDetailPage({
   const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
   const card = SKILL_CARDS[slug];
 
-  const faqSchema =
-    faqItems && faqItems.length > 0
-      ? {
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: faqItems.map((item) => ({
-            "@type": "Question",
-            name: item.q,
-            acceptedAnswer: { "@type": "Answer", text: item.a },
-          })),
-        }
-      : null;
-
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
       {softwareSchema && (
         <JsonLd data={softwareSchema} id={`schema-softwareapplication-${slug}`} />
       )}
-      {faqSchema && <JsonLd data={faqSchema} id={`schema-faqpage-${slug}`} />}
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
         <Breadcrumbs trail={breadcrumbTrailForSlug(slug)} />
 
@@ -85,31 +70,7 @@ export function SkillDetailPage({
         <article className="mt-14">
           {children}
 
-          {faqItems && faqItems.length > 0 && (
-            <section className="mt-10">
-              <h2 className="font-heading text-2xl font-bold text-primary dark:text-text-primary">
-                Häufige Fragen
-              </h2>
-              <div className="mt-5 space-y-4">
-                {faqItems.map((item, i) => (
-                  <details
-                    key={i}
-                    className="group rounded-xl border border-primary/10 bg-white/50 p-5 open:bg-white dark:border-text-secondary/10 dark:bg-surface/40 dark:open:bg-surface"
-                  >
-                    <summary className="flex cursor-pointer list-none items-center justify-between font-heading text-base font-semibold text-primary dark:text-text-primary">
-                      {item.q}
-                      <span className="ml-4 text-accent transition-transform group-open:rotate-45">
-                        +
-                      </span>
-                    </summary>
-                    <p className="mt-3 text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                      {item.a}
-                    </p>
-                  </details>
-                ))}
-              </div>
-            </section>
-          )}
+          <ProductFaq slug={slug} items={faqItems} />
         </article>
 
         <p className="mt-10 text-sm italic text-muted dark:text-text-tertiary">

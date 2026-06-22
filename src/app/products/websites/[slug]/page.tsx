@@ -6,9 +6,11 @@ import { Prose } from "@/components/Prose";
 import { JsonLd } from "@/components/JsonLd";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
+import { ProductFaq } from "@/components/ProductFaq";
 import { pageMetadata } from "@/lib/seo";
 import { getWebsiteEntry } from "@/lib/content/websites";
 import { breadcrumbTrailForSlug, websiteCaseStudySlugs } from "@/lib/portfolio";
+import { faqForSlug } from "@/lib/product-faqs";
 import { websiteCaseStudySchema } from "@/lib/schema/website";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
@@ -107,6 +109,8 @@ export default async function WebsiteCaseStudyPage({
           <div className="mt-10">
             <Prose html={entry.bodyHtml} />
           </div>
+
+          <ProductFaq slug={slug} items={faqForSlug(slug)} />
 
           <p className="mt-10 text-sm italic text-muted dark:text-text-tertiary">
             <span className="font-medium not-italic">Wie dieser Text entstand:</span>{" "}

@@ -6,9 +6,11 @@ import { Prose } from "@/components/Prose";
 import { JsonLd } from "@/components/JsonLd";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
+import { ProductFaq } from "@/components/ProductFaq";
 import { pageMetadata } from "@/lib/seo";
 import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { getProductEntry } from "@/lib/content/products";
+import { faqForSlug } from "@/lib/product-faqs";
 import { previewSoftwareApplicationSchema } from "@/lib/schema/product";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
@@ -105,6 +107,8 @@ export default function PreviewProductPage({ slug, ctaName }: PreviewProductPage
           <div className="mt-10">
             <Prose html={entry.bodyHtml} />
           </div>
+
+          <ProductFaq slug={slug} items={faqForSlug(slug)} />
         </article>
 
         <ProductDetailNav slug={slug} />
