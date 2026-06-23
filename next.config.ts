@@ -100,6 +100,19 @@ const nextConfig: NextConfig = {
         destination: "https://neckarshore.ai/:path*",
         permanent: true,
       },
+      // Retired /glossar surface (2026-06-23): the cognitive-bias content moved to
+      // the ClearPath product page. Permanently redirect the old indexed URLs there
+      // so crawlers and any existing links land on the consolidated content (308).
+      {
+        source: "/glossar",
+        destination: "/products/clearpath",
+        permanent: true,
+      },
+      {
+        source: "/glossar/:slug*",
+        destination: "/products/clearpath",
+        permanent: true,
+      },
     ];
   },
 };

@@ -2,8 +2,8 @@ import Link from "next/link";
 import Logo from "./Logo";
 
 /**
- * Shared site footer for content-surface pages (glossar + products).
- * Carries the internal links that wire the hub-and-spoke graph: Glossar + Produkte
+ * Shared site footer for content-surface pages (products).
+ * Carries the internal links that wire the hub-and-spoke graph: Produkte
  * alongside the legal pages.
  */
 export default function Footer() {
@@ -16,9 +16,6 @@ export default function Footer() {
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
           <Link href="/products" className="transition-colors hover:text-accent">
             Produkte
-          </Link>
-          <Link href="/glossar" className="transition-colors hover:text-accent">
-            Glossar
           </Link>
           <Link href="/impressum" className="transition-colors hover:text-accent">
             Impressum

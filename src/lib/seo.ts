@@ -23,7 +23,7 @@ export function pageMetadata({
 }: {
   title: string;
   description: string;
-  /** Absolute path beginning with `/`, e.g. `/glossar/bestaetigungsfehler`. */
+  /** Absolute path beginning with `/`, e.g. `/products/clearpath`. */
   path: string;
   type?: "website" | "article";
 }): Metadata {

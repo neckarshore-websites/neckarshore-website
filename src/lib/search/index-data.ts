@@ -1,35 +1,27 @@
 /**
  * Builds the full searchable document set for the Cmd+K palette.
  *
- * SERVER-ONLY: reads the glossar markdown collection via node:fs (through
- * `@/lib/content/glossar`). NEVER import this from a client component — the
- * client must import only `./types`. The force-static `/api/search-index` route
- * is the single consumer; it runs this at build time and serves the JSON from
- * the CDN, so there is no runtime compute.
+ * Build-time only: keep this out of client components — the client must import
+ * only `./types`. The force-static `/api/search-index` route is the single
+ * consumer; it runs this at build time and serves the JSON from the CDN, so there
+ * is no runtime compute.
  *
  * Coverage contract ("alle Seiten indiziert, nach Inhalt suchbar, Tiefe egal"):
  *   - Products  → one doc per portfolio item (live + preview skeletons + external
  *                 link-outs), derived from PORTFOLIO so a new product is indexed
  *                 automatically (AP-1). On-site search ≠ robots index: the noindex
  *                 preview skeletons ARE searchable on purpose.
- *   - Glossar   → one doc per entry, full text (definition + aliases + body prose).
  *   - Pages     → every route + the stable home sections (#services / #why-nearshore
  *                 / #founder / #faq) as deep-link docs, with curated leads mirroring
  *                 the on-page copy (no fragile JSX scraping). #open-source is NOT
  *                 indexed — it is conditionally rendered (OSS_LAUNCH_VISIBLE).
+ *
+ * The standalone /glossar surface was retired 2026-06-23 (its cognitive-bias topic
+ * is ClearPath's domain, not neckarshore's) — the biases now live as a table on
+ * /products/clearpath, covered by that product's doc.
  */
 import { allCategories } from "@/lib/portfolio";
-import { getAllGlossarEntries, getGlossarEntry } from "@/lib/content/glossar";
 import type { SearchDoc } from "./types";
-
-/** Sanitised glossar HTML → plain search text. */
-function htmlToText(html: string): string {
-  return html
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&[a-z]+;/gi, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
 
 // Curated page index — every route + the stable home sections. Mirrors each page's
 // real copy / metadata description so "search by content" hits without scraping JSX.
@@ -77,13 +69,6 @@ const PAGES: { id: string; title: string; text: string; category: string; url: s
     url: "/products",
   },
   {
-    id: "page:/glossar",
-    title: "Glossar",
-    text: "Ein kuratiertes Glossar kognitiver Verzerrungen — jeder Denkfehler in einem Satz erklärt, mit Kontext und Bezug zu ClearPath, der mentalen Firewall gegen Verzerrungen.",
-    category: "Seite",
-    url: "/glossar",
-  },
-  {
     id: "page:/impressum",
     title: "Impressum",
     text: "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart. Angaben gemäß § 5 TMG.",
@@ -99,7 +84,7 @@ const PAGES: { id: string; title: string; text: string; category: string; url: s
   },
 ];
 
-/** Build the full searchable document set across pages, products and the glossar. */
+/** Build the full searchable document set across pages and products. */
 export function buildSearchDocs(): SearchDoc[] {
   const docs: SearchDoc[] = [];
 
@@ -137,20 +122,6 @@ export function buildSearchDocs(): SearchDoc[] {
         ...(isExternalLink ? { external: true } : {}),
       });
     }
-  }
-
-  // 3) Glossar — full text (definition + aliases + body prose).
-  for (const meta of getAllGlossarEntries()) {
-    const entry = getGlossarEntry(meta.slug);
-    const body = entry ? htmlToText(entry.bodyHtml) : "";
-    docs.push({
-      id: `glossar:${meta.slug}`,
-      type: "glossar",
-      title: meta.term,
-      text: [meta.definition, meta.aliases, body].filter(Boolean).join(" "),
-      category: "Glossar",
-      url: `/glossar/${meta.slug}`,
-    });
   }
 
   return docs;

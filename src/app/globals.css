@@ -74,7 +74,7 @@ body {
   box-shadow: 0 0 0 4px rgba(14, 116, 144, 0.25);
 }
 
-/* ===== Content prose (glossar + product pages) =====
+/* ===== Content prose (product pages) =====
    Hand-written, intentionally NOT @tailwindcss/typography — keeps Lighthouse 95+
    by avoiding ~20kB of opinionated prose CSS. Renders sanitised Markdown HTML
    from renderMarkdown() via the Prose component. */

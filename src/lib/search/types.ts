@@ -6,17 +6,17 @@
  * import the shape without dragging fs into the client bundle.
  */
 
-export type SearchType = "page" | "product" | "glossar";
+export type SearchType = "page" | "product";
 
 export interface SearchDoc {
-  /** Stable unique id, e.g. `glossar:bestaetigungsfehler` | `product:mmps:phonesis` | `page:/#services`. */
+  /** Stable unique id, e.g. `product:mmps:phonesis` | `page:/#services`. */
   id: string;
   type: SearchType;
-  /** Term / product name / page or section heading. */
+  /** Product name / page or section heading. */
   title: string;
-  /** Searchable plaintext body (definition + context, tagline, curated page lead). */
+  /** Searchable plaintext body (tagline, curated page lead). */
   text: string;
-  /** Human-readable group label shown under the title, e.g. "Glossar", "MMPs", "Startseite". */
+  /** Human-readable group label shown under the title, e.g. "MMPs", "Startseite". */
   category: string;
   /** Target URL — page, deep-linked section hash, or an external https:// product site. */
   url: string;

@@ -10,7 +10,6 @@ type Hit = SearchDoc;
 const TYPE_LABEL: Record<SearchType, string> = {
   page: "Seite",
   product: "Produkt",
-  glossar: "Glossar",
 };
 
 /**
@@ -123,19 +122,19 @@ function SearchPalette({
           role="combobox"
           aria-expanded="true"
           aria-controls="search-results"
-          aria-label="Produkte, Glossar und Seiten durchsuchen"
+          aria-label="Produkte und Seiten durchsuchen"
           value={q}
           onChange={(e) => {
             setQ(e.target.value);
             setActive(0);
           }}
-          placeholder="Produkte, Glossar, Seiten …"
+          placeholder="Produkte, Seiten …"
           className="w-full border-b border-primary/10 bg-transparent px-5 py-4 text-base text-primary outline-none placeholder:text-muted dark:border-text-secondary/15 dark:text-text-primary dark:placeholder:text-text-tertiary"
         />
         <ul id="search-results" role="listbox" className="max-h-[55vh] overflow-y-auto">
           {!q && (
             <li className="px-5 py-6 text-sm text-muted dark:text-text-tertiary">
-              Tippe, um Produkte, Glossar &amp; Seiten zu durchsuchen.
+              Tippe, um Produkte &amp; Seiten zu durchsuchen.
             </li>
           )}
           {q && results.length === 0 && mini && (

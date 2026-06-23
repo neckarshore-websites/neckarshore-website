@@ -3,12 +3,12 @@
  *
  * Run: `npm run test:search:unit` (tsx, node:assert — neckarshore has no vitest).
  *
- * The coverage checks derive expectations from the SAME sources the builder reads
- * (portfolio.ts + the glossar collection), so a newly-added product or glossar
- * entry that silently fell out of the index fails this test — "alle Seiten
- * indiziert" is an enforced invariant, not a one-time effort. We deliberately do
- * NOT test against the sitemap: allProductRoutes() excludes the noindex preview
- * skeletons, which ARE in the search index on purpose.
+ * The coverage checks derive expectations from the SAME source the builder reads
+ * (portfolio.ts), so a newly-added product that silently fell out of the index
+ * fails this test — "alle Seiten indiziert" is an enforced invariant, not a
+ * one-time effort. We deliberately do NOT test against the sitemap:
+ * allProductRoutes() excludes the noindex preview skeletons, which ARE in the
+ * search index on purpose. (The /glossar surface was retired 2026-06-23.)
  */
 import assert from "node:assert/strict";
 import { readdirSync } from "node:fs";
@@ -16,11 +16,10 @@ import { fileURLToPath } from "node:url";
 import MiniSearch from "minisearch";
 import { buildSearchDocs } from "../../src/lib/search/index-data";
 import { allItems } from "../../src/lib/portfolio";
-import { getAllGlossarEntries } from "../../src/lib/content/glossar";
 import type { SearchDoc } from "../../src/lib/search/types";
 
 /** Every STATIC app route (src/app/**​/page.tsx), excluding dynamic [slug] segments
- *  and /api — those are covered by the per-item product/glossar doc checks. */
+ *  and /api — those are covered by the per-item product doc checks. */
 function staticAppRoutes(): string[] {
   const APP_DIR = fileURLToPath(new URL("../../src/app", import.meta.url));
   const routes: string[] = [];
@@ -60,7 +59,7 @@ mini.addAll(docs);
 const find = (q: string) => mini.search(q) as unknown as SearchDoc[];
 
 check("covers every SearchType", () => {
-  for (const t of ["page", "product", "glossar"]) {
+  for (const t of ["page", "product"]) {
     assert.ok(docs.some((d) => d.type === t), `missing type ${t}`);
   }
 });
@@ -76,12 +75,12 @@ check("EVERY portfolio item has a product doc (coverage invariant)", () => {
   }
 });
 
-check("EVERY glossar entry has a glossar doc with its definition (Volltext)", () => {
-  for (const entry of getAllGlossarEntries()) {
-    const doc = docs.find((d) => d.type === "glossar" && d.url === `/glossar/${entry.slug}`);
-    assert.ok(doc, `no search doc for glossar '${entry.term}'`);
-    assert.ok(doc!.text.includes(entry.definition), `glossar '${entry.term}' doc missing its definition`);
-  }
+check("no glossar docs remain (the surface was retired 2026-06-23)", () => {
+  assert.equal(
+    docs.filter((d) => d.url.startsWith("/glossar")).length,
+    0,
+    "a /glossar doc is still in the search index after retirement",
+  );
 });
 
 check("EVERY static app route is indexed (literal 'alle Seiten indiziert')", () => {
@@ -101,7 +100,6 @@ check("the static + section pages are all indexed", () => {
     "/#founder",
     "/#faq",
     "/products",
-    "/glossar",
     "/impressum",
     "/datenschutz",
   ]) {
@@ -134,10 +132,6 @@ check("all ids are unique", () => {
 check("section deep-links use the on-page anchors", () => {
   const services = docs.find((d) => d.url === "/#services");
   assert.ok(services && /^\/#[a-z-]+$/.test(services.url), services?.url);
-});
-
-check("minisearch finds a glossar entry by topic ('verzerrung')", () => {
-  assert.ok(find("verzerrung").some((h) => h.type === "glossar"), "no glossar hit for 'verzerrung'");
 });
 
 check("minisearch finds a preview product by name ('phonesis')", () => {

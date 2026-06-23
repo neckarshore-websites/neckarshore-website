@@ -6,7 +6,7 @@
  * carries the seven content axes as `##` headings in their authored order:
  *   Ausgangslage · Ansatz · Technik & Architektur · Laufende Pflege · Status · Ausblick
  * (the Hero axis = the frontmatter headline + lead). Sits on the generic content
- * collection (collection.ts + markdown.ts), exactly like products.ts / glossar.ts.
+ * collection (collection.ts + markdown.ts), exactly like products.ts.
  *
  * Build-time, server-only, repo-controlled — never user input.
  */
