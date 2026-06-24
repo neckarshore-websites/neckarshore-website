@@ -1,6 +1,6 @@
 {
   "byType": {
-    "e2e": 255,
+    "e2e": 259,
     "integration": 27,
     "unit": 302
   },
@@ -10,18 +10,18 @@
   "reporting": 1,
   "repos": [
     {
-      "audited_sha": "d2dc2ed2c32ef4e872e79a889dd2f2b3f55bf34f",
+      "audited_sha": "2f8a721a4537429fafb43b2a84c5c59497bc160f",
       "byType": {
-        "e2e": 255,
+        "e2e": 259,
         "integration": 27,
         "unit": 302
       },
       "endpoints": 96,
       "lenses": {},
       "repo": "omnopsis-ai/omnopsis-backend",
-      "total": 584
+      "total": 588
     }
   ],
-  "total": 584,
-  "updatedAt": "2026-06-23T07:39:46Z"
+  "total": 588,
+  "updatedAt": "2026-06-24T07:32:48Z"
 }
