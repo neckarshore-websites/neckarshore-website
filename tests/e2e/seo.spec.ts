@@ -59,6 +59,24 @@ test.describe("SEO Basics", () => {
     expect(body.toLowerCase()).toContain("products");
   });
 
+  test("TC-SEO-025: robots.txt names Bingbot", async ({ request }) => {
+    const body = await (await request.get("/robots.txt")).text();
+    expect(body).toContain("Bingbot");
+  });
+
+  test("TC-SEO-026: llms.txt lists the website case studies", async ({ request }) => {
+    const body = await (await request.get("/llms.txt")).text();
+    // G1: the 4 internal case-study URLs must be discoverable, not just the sub-portal.
+    for (const slug of [
+      "/products/websites/neckarshore",
+      "/products/websites/ristorante-goldoni",
+      "/products/websites/oakwood-golf-club",
+      "/products/websites/rauhut",
+    ]) {
+      expect(body).toContain(slug);
+    }
+  });
+
   test("TC-SEO-010: homepage has og:image meta tag", async ({ page }) => {
     await page.goto("/");
     const ogImage = page.locator('meta[property="og:image"]');
