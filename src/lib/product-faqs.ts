@@ -34,7 +34,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
     },
     {
       q: "Wann ist Omnopsis verfügbar?",
-      a: "Omnopsis ist in Entwicklung — MVP für Q2 2026 geplant, Live für Q3 2026. Für einen frühen Austausch oder eine Pilot-Anfrage lässt sich ein Kennenlerntermin buchen.",
+      a: "Omnopsis ist in Entwicklung — der Launch ist für Q3 2026 geplant. Für einen frühen Austausch oder eine Pilot-Anfrage lässt sich ein Kennenlerntermin buchen.",
     },
   ],
 

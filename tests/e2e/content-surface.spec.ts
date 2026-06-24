@@ -699,6 +699,20 @@ test.describe("Content surface — unified status pill", () => {
   });
 });
 
+// C1 (SEO/GEO audit 2026-06-24): the Omnopsis flagship hardcoded "MVP Q2 2026" in three
+// places (pill, Conceived/Born block, and the "Wann verfügbar?" FAQ answer — the last one
+// also in the FAQPage JSON-LD). Q2 expires 2026-06-30 → the date goes stale. Decoupled to
+// "Launch geplant Q3 2026" (Founder decision). page.content() covers the collapsed FAQ
+// <details> + the JSON-LD, so this guards all three against the stale-quarter regressing.
+test.describe("Content surface — Omnopsis milestone honesty", () => {
+  test("TC-CNT-066: /products/omnopsis carries no expired Q2-2026 claim", async ({ page }) => {
+    await page.goto("/products/omnopsis");
+    const html = await page.content();
+    expect(html).not.toContain("Q2 2026");
+    expect(html).toContain("Launch geplant Q3 2026");
+  });
+});
+
 // Skill detail pages dropped the end-of-page "Auf GitHub ansehen" link (Founder request
 // 2026-06-22). The repo URL still lives in the SoftwareApplication JSON-LD (machine-readable
 // for crawlers), it is just no longer a human CTA. Lock its absence on every skill detail page.
