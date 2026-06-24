@@ -38,7 +38,7 @@ export interface PortfolioItem {
   /**
    * Override for the bottom-left status pill label. Use ONLY when the derived label
    * (from `status`) would be dishonest — e.g. omnopsis carries a flagship `status: "live"`
-   * but is pre-launch ("In Entwicklung · MVP Q2 2026" on its page), so the pill must say
+   * but is pre-launch ("In Entwicklung · Launch geplant Q3 2026" on its page), so the pill must say
    * "In Entwicklung", not "Live". Most items omit this and let `statusPillLabel` derive it.
    */
   statusLabel?: string;
@@ -116,7 +116,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
         slug: "omnopsis",
         tagline: "KI-first Documentation Engine für Engineering-Teams — fail-closed, BYOLLM, DSGVO-by-Design.",
         status: "live",
-        // Pre-launch (MVP Q2 2026) — the card pill must match the page, not the flagship status flag.
+        // Pre-launch (Launch geplant Q3 2026) — the card pill must match the page, not the flagship status flag.
         statusLabel: "In Entwicklung",
         featured: true,
         href: "/products/omnopsis",
