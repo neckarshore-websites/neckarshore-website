@@ -42,7 +42,7 @@ Die Seite pflegt sich weitgehend selbst. Jede freigegebene Änderung geht automa
 
 ## Status
 
-Live unter [neckarshore.ai](https://neckarshore.ai) (HTTP 200 verifiziert). Die Seite umfasst die Landing Page, ein Produkt-Portfolio mit Detailseiten, ein Glossar sowie rechtliche Seiten (Impressum, Datenschutz). Die E2E-Suite läuft grün; die jeweils aktuelle, belastbare Testzahl steht in `docs/test-log.md` (Stand zuletzt rund 190 Tests pro Lauf) — bewusst keine fest verdrahtete Zahl im Fließtext, da sie sonst veraltet. Keine erfundenen Konversions- oder Traffic-Zahlen.
+Live unter [neckarshore.ai](https://neckarshore.ai) (HTTP 200 verifiziert). Die Seite umfasst die Landing Page, ein Produkt-Portfolio mit Detailseiten sowie rechtliche Seiten (Impressum, Datenschutz). Die E2E-Suite läuft grün; die jeweils aktuelle, belastbare Testzahl steht in `docs/test-log.md` (Stand zuletzt rund 190 Tests pro Lauf) — bewusst keine fest verdrahtete Zahl im Fließtext, da sie sonst veraltet. Keine erfundenen Konversions- oder Traffic-Zahlen.
 
 ## Ausblick
 

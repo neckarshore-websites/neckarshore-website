@@ -12,6 +12,7 @@ import { getProductEntry } from "@/lib/content/products";
 import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { faqForSlug } from "@/lib/product-faqs";
 import { softwareApplicationSchema } from "@/lib/schema/product";
+import { CLEARPATH_BIASES } from "@/lib/clearpath-biases";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
 const SLUG = "clearpath";
@@ -72,6 +73,80 @@ export default function ClearPathPage() {
           <div className="mt-10">
             <Prose html={entry.bodyHtml} />
           </div>
+
+          <section className="mt-12" aria-labelledby="biases-heading">
+            <h2
+              id="biases-heading"
+              className="font-heading text-2xl font-bold text-primary dark:text-text-primary"
+            >
+              Die wichtigsten Denkfehler
+            </h2>
+            <p className="mt-3 text-base leading-relaxed text-muted dark:text-text-tertiary">
+              Rund 52 kognitive Verzerrungen sind dokumentiert — für eine konkrete
+              Entscheidung zählen meist nur wenige. Genau dort setzt ClearPath an. Die
+              häufigsten in einem Satz, mit Link zur Vertiefung.
+            </p>
+            <div className="mt-6 overflow-x-auto">
+              <table
+                aria-labelledby="biases-heading"
+                className="w-full border-collapse text-left text-sm"
+              >
+                <thead>
+                  <tr className="border-b border-primary/15 dark:border-text-secondary/25">
+                    <th
+                      scope="col"
+                      className="py-2 pr-4 font-heading font-semibold text-primary dark:text-text-primary"
+                    >
+                      Denkfehler
+                    </th>
+                    <th
+                      scope="col"
+                      className="py-2 pr-4 font-heading font-semibold text-primary dark:text-text-primary"
+                    >
+                      In einem Satz
+                    </th>
+                    <th
+                      scope="col"
+                      className="py-2 font-heading font-semibold text-primary dark:text-text-primary"
+                    >
+                      Mehr
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {CLEARPATH_BIASES.map((bias) => (
+                    <tr
+                      key={bias.term}
+                      className="border-b border-primary/10 dark:border-text-secondary/15"
+                    >
+                      <th
+                        scope="row"
+                        className="py-3 pr-4 align-top font-medium text-primary dark:text-text-primary"
+                      >
+                        {bias.term}
+                        <span className="mt-0.5 block text-xs font-normal text-muted dark:text-text-tertiary">
+                          {bias.alias}
+                        </span>
+                      </th>
+                      <td className="py-3 pr-4 align-top leading-relaxed text-primary/80 dark:text-text-secondary">
+                        {bias.definition}
+                      </td>
+                      <td className="py-3 align-top">
+                        <a
+                          href={bias.wikipediaUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="whitespace-nowrap text-accent transition-colors hover:underline"
+                        >
+                          Wikipedia ↗
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
 
           <ProductFaq slug={SLUG} items={faqForSlug(SLUG)} />
         </article>

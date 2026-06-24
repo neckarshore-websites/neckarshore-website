@@ -689,9 +689,6 @@ export default function Home() {
             <Link href="/products" className="transition-colors hover:text-accent">
               Produkte
             </Link>
-            <Link href="/glossar" className="transition-colors hover:text-accent">
-              Glossar
-            </Link>
             <Link href="/impressum" className="transition-colors hover:text-accent">
               Impressum
             </Link>

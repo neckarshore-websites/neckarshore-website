@@ -26,12 +26,12 @@ test.describe("Cmd+K Search @search", () => {
     await page.route("**/api/track", (route) => route.abort());
   });
 
-  test("TC-SRCH-001: Cmd+K opens, finds a glossar entry, Enter deep-links to /glossar", async ({ page }) => {
+  test("TC-SRCH-001: Cmd+K opens, finds a page, Enter navigates to it", async ({ page }) => {
     await openWithShortcut(page, "Meta+k");
-    await combo(page).fill("verzerrung");
+    await combo(page).fill("datenschutz");
     await expect(page.getByRole("option").first()).toBeVisible();
     await page.keyboard.press("Enter");
-    await expect(page).toHaveURL(/\/glossar\//, { timeout: 15_000 });
+    await expect(page).toHaveURL(/\/datenschutz/, { timeout: 15_000 });
   });
 
   test("TC-SRCH-002: Ctrl+K opens, Escape closes", async ({ page }) => {

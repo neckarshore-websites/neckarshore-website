@@ -28,10 +28,6 @@ Reibung als Feature. Statt schneller zu entscheiden, baut ClearPath eine bewusst
 
 v0.1-Prototyp (18 Verzerrungen, anonym, kein Tracking). Geplant: Decision-Cemetery (v0.2), Strategic Deep-Dive (v0.3), Pre-Mortem-Generator (v0.4).
 
-## Verwandte Verzerrungen
-
-[Bestätigungsfehler](/glossar/bestaetigungsfehler) · [Überlebenden-Verzerrung](/glossar/ueberlebenden-verzerrung) · [Versunkene-Kosten-Falle](/glossar/versunkene-kosten-falle)
-
 ## Wie dieser Text entstand
 
 KI-beschleunigt entworfen, vom Gründer redigiert — dieselbe Arbeitsweise, die Neckarshore baut.

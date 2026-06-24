@@ -5,7 +5,7 @@
  * They are repo-controlled (never user input) and resolved at build time, so the
  * file-system reads run in Server Components only and the result is statically baked.
  *
- * This is the generic substrate; per-collection typed loaders (glossar.ts, products.ts)
+ * This is the generic substrate; per-collection typed loaders (products.ts, websites.ts)
  * sit on top and validate/shape the frontmatter into their own entry types.
  */
 import fs from "node:fs";

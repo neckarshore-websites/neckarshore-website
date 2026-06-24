@@ -1,12 +1,11 @@
 import type { MetadataRoute } from "next";
-import { getAllGlossarEntries } from "@/lib/content/glossar";
 import { allProductRoutes } from "@/lib/portfolio";
 import { SITE_UPDATED, SITE_URL } from "@/lib/site-config";
 
 /**
- * Dynamic sitemap — route set auto-regenerates on every build. Glossary entry
- * routes are derived from the content collection so the sitemap stays in sync as
- * entries are added. Replaces static public/sitemap.xml (deleted 2026-04-10).
+ * Dynamic sitemap — the route set is derived from the portfolio config
+ * (allProductRoutes) so it stays in sync as products are added. Replaces static
+ * public/sitemap.xml (deleted 2026-04-10).
  *
  * `lastModified` carries the STABLE, content-derived SITE_UPDATED date — NOT a
  * build-time `new Date()`. A per-build timestamp stamped every url as "changed
@@ -24,11 +23,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     "/impressum",
     "/datenschutz",
-    "/glossar",
     // /products, the 4 sub-portals, and the bespoke own-page details (omnopsis, clearpath).
     // External sites + noindex preview skeletons are excluded by allProductRoutes().
     ...allProductRoutes(),
-    ...getAllGlossarEntries().map((entry) => `/glossar/${entry.slug}`),
   ].sort((a, b) => a.localeCompare(b));
 
   return [
