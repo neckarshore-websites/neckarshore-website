@@ -112,7 +112,11 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
 
   return (
     <nav className="fixed top-0 z-50 w-full border-b border-primary/5 bg-neutral-light/80 backdrop-blur-md dark:border-text-secondary/10 dark:bg-deep-space/80">
-      {/* ===== ANNOUNCEMENT STRIP — bordeaux, conditional, remove ~3 weeks after Vault Autopilot launch ===== */}
+      {/* ===== ANNOUNCEMENT STRIP — bordeaux, conditional.
+          REVIEW 2026-07-25 (German Rauhut, 2026-06-25): 30-day Wiedervorlage — at review,
+          switch off OSS_LAUNCH_VISIBLE / retire this strip OR replace its content with
+          something new. Links to the Vault Autopilot product page (homepage OSS section
+          was removed 2026-06-25). ===== */}
       {showOssLaunch && (
         <div className="bg-[#5C1A2A] px-4 py-2.5 md:px-6">
           <div className="mx-auto flex max-w-[1200px] items-center justify-center gap-2 text-[13px] text-[#F5C6D0] md:gap-3 md:text-sm">
@@ -124,7 +128,7 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
               <span className="hidden md:inline"> — unser erstes Open-Source-Projekt ist live.</span>
             </span>
             <Link
-              href="/#open-source"
+              href="/products/obsidian-vault-autopilot"
               className="shrink-0 font-medium text-white underline-offset-4 transition-colors hover:underline hover:text-[#F5C6D0]"
               data-track="hero_teaser_oss"
             >

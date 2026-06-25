@@ -10,9 +10,6 @@ import {
   Clock,
   Globe,
   TrendingUp,
-  Terminal,
-  Layers,
-  ExternalLink,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -158,7 +155,37 @@ export default function Home() {
           />
         </section>
 
-        {/* OSS section now lives at end of <main>, just above the footer. See further down. */}
+        {/* ===== PORTFOLIO / FLAGSHIP — reframed 2026-06-17 (was Omnopsis-only teaser).
+            Moved above "Warum Nearshore?" 2026-06-25 (German Rauhut) — portfolio leads.
+            Omnopsis story (engine copy + Conceived/Born photos + timeline) relocating to
+            /products/omnopsis. id kept so existing /#omnopsis anchors still land here. ===== */}
+        <section id={BRAND.SECTION_ID} className="bg-primary px-4 py-20 md:px-6 md:py-24">
+          <div className="mx-auto max-w-[1200px]">
+            <div className="grid items-center gap-12 md:grid-cols-2">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-widest text-secondary">
+                  Unser Portfolio
+                </p>
+                <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
+                  Ein Flagship. Mehrere Produkte. Skills. Eine Bauweise.
+                </h2>
+                <p className="mt-6 text-lg leading-relaxed text-text-secondary">
+                  Strukturiert gebaut — KI-beschleunigt, DSGVO-by-Design, Made in Germany:
+                  Flagships, MMPs, Skills (&amp; Websites).
+                </p>
+                <Link
+                  href="/products"
+                  className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-secondary transition-colors hover:text-text-primary"
+                >
+                  Alle Produkte ansehen →
+                </Link>
+              </div>
+
+              {/* Stats grid — renders instantly with fallback, fetches live data in background */}
+              <StatsGrid stats={stats} devDays={devDays} />
+            </div>
+          </div>
+        </section>
 
         {/* ===== WHY NEARSHORE ===== */}
         <section id="why-nearshore" className="bg-white px-4 py-20 md:px-6 md:py-24 dark:bg-surface">
@@ -262,37 +289,6 @@ export default function Home() {
                   </p>
                 </div>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ===== PORTFOLIO / FLAGSHIP — reframed 2026-06-17 (was Omnopsis-only teaser).
-            Omnopsis story (engine copy + Conceived/Born photos + timeline) relocating to
-            /products/omnopsis. id kept so existing /#omnopsis anchors still land here. ===== */}
-        <section id={BRAND.SECTION_ID} className="bg-primary px-4 py-20 md:px-6 md:py-24">
-          <div className="mx-auto max-w-[1200px]">
-            <div className="grid items-center gap-12 md:grid-cols-2">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-widest text-secondary">
-                  Unser Portfolio
-                </p>
-                <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
-                  Ein Flagship. Mehrere Produkte. Skills. Eine Bauweise.
-                </h2>
-                <p className="mt-6 text-lg leading-relaxed text-text-secondary">
-                  Strukturiert gebaut — KI-beschleunigt, DSGVO-by-Design, Made in Germany:
-                  Flagships, MMPs, Skills (&amp; Websites).
-                </p>
-                <Link
-                  href="/products"
-                  className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-secondary transition-colors hover:text-text-primary"
-                >
-                  Alle Produkte ansehen →
-                </Link>
-              </div>
-
-              {/* Stats grid — renders instantly with fallback, fetches live data in background */}
-              <StatsGrid stats={stats} devDays={devDays} />
             </div>
           </div>
         </section>
@@ -506,175 +502,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ===== OPEN SOURCE — end-of-page placement (above footer), launch-flag-gated ===== */}
-        {showOssLaunch && (
-        <section id="open-source" className="bg-neutral-light px-4 py-16 md:px-6 md:py-20 dark:bg-deep-space">
-          <div className="mx-auto max-w-[1200px]">
-            <p className="text-center text-sm font-semibold uppercase tracking-widest text-accent-hover dark:text-accent-bright">
-              Open Source
-            </p>
-            <h2 className="mt-3 text-center font-heading text-2xl font-semibold tracking-tight text-primary md:text-3xl dark:text-text-primary">
-              Tools die wir selbst benutzen. Jetzt auch für euch.
-            </h2>
-
-            <div className="mt-10 grid gap-6 md:grid-cols-2">
-              {/* ───── Card 1: Obsidian Vault Autopilot ───── */}
-              <div className="flex flex-col rounded-xl border border-primary/10 bg-white p-8 shadow-sm dark:border-text-secondary/10 dark:bg-surface">
-                <div className="flex items-center gap-3">
-                  <Terminal size={28} className="text-secondary" />
-                  <span className="rounded-full bg-accent/10 px-3 py-0.5 text-xs font-semibold text-accent-hover dark:bg-accent/20 dark:text-accent-bright">
-                    Beta
-                  </span>
-                </div>
-                <h3 className="mt-4 font-heading text-xl font-semibold text-primary dark:text-text-primary">
-                  Obsidian Vault Autopilot
-                </h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                  AI-Vault-Automation für Obsidian × Claude Code. Sortiert die
-                  Inbox, benennt Notes um, füllt Frontmatter — vier Skills halten
-                  deinen Second Brain im Hintergrund auf Linie.
-                </p>
-
-                <div className="mt-5 space-y-2.5">
-                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
-                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
-                      property-enrich
-                    </code>
-                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
-                      Füllt fehlende Frontmatter automatisch — title, dates, source, priority.
-                      Fundament für alle anderen Skills.
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
-                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
-                      inbox-sort
-                    </code>
-                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
-                      Verschiebt neue Notes aus dem Inbox-Root in den passenden Subfolder.
-                      Kein manuelles Filing mehr.
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
-                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
-                      note-rename
-                    </code>
-                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
-                      Vergibt sinnvolle Filenames und fixt parallel sämtliche Wikilinks im Vault.
-                      Unauffällig im Hintergrund.
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
-                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
-                      property-describe
-                    </code>
-                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
-                      Erzeugt knappe `description`-Frontmatter aus dem Inhalt.
-                      Beta — usable today, Polish-Loop läuft.
-                    </span>
-                  </div>
-                </div>
-
-                <p className="mt-4 text-xs italic text-muted dark:text-text-tertiary">
-                  … weitere in Entwicklung
-                </p>
-
-                <div className="mt-auto flex items-center justify-between pt-6">
-                  <span className="text-xs font-medium text-muted dark:text-text-tertiary">
-                    MIT License
-                  </span>
-                  <a
-                    href="https://github.com/neckarshore-skills/obsidian-vault-autopilot"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
-                    data-track="oss_vault_autopilot"
-                  >
-                    GitHub
-                    <ExternalLink size={14} />
-                  </a>
-                </div>
-              </div>
-
-              {/* ───── Card 2: Obsidian Social Scrapers (Shared Core) ───── */}
-              <div className="flex flex-col rounded-xl border border-primary/10 bg-white p-8 shadow-sm dark:border-text-secondary/10 dark:bg-surface">
-                <div className="flex items-center gap-3">
-                  <Layers size={28} className="text-secondary" />
-                  <span className="rounded-full bg-accent/10 px-3 py-0.5 text-xs font-semibold text-accent-hover dark:bg-accent/20 dark:text-accent-bright">
-                    Beta
-                  </span>
-                </div>
-                <h3 className="mt-4 font-heading text-xl font-semibold text-primary dark:text-text-primary">
-                  Obsidian Social Scrapers
-                </h3>
-                <p className="mt-2 text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                  Shared Core für drei Scraper-Plugins. Profile + Posts von
-                  Instagram, LinkedIn und X direkt in deinen Vault. Apify-Wrappers,
-                  AI-Polishing und Markdown-Rendering — Lego-Blocks, keine Duplikation.
-                </p>
-
-                <div className="mt-5 space-y-2.5">
-                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
-                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
-                      shared core
-                    </code>
-                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
-                      TypeScript-Lego für die drei Scraper-Plugins.
-                      Apify-Wrapper, AI-Polish, Markdown-Rendering.
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
-                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
-                      linkedin-scraper
-                    </code>
-                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
-                      Profile + Posts mit Engagement-Daten und neutralisiertem
-                      Briefing-Text statt Engagement-Bait.
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
-                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
-                      x-scraper
-                    </code>
-                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
-                      Profile + Tweets, Threads und Quote-Tweets via offizielle
-                      X API v2 — ToS-konform, kein Web-Scrape.
-                    </span>
-                  </div>
-                  <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:gap-3">
-                    <code className="inline-block w-[140px] shrink-0 rounded bg-primary/5 px-2 py-0.5 text-center text-xs font-semibold text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright">
-                      instagram-scraper
-                    </code>
-                    <span className="text-sm leading-snug text-neutral-dark/75 dark:text-text-secondary/80">
-                      Profile + Posts inklusive Reels-Transkription via lokalem
-                      Whisper.cpp — kein Cloud-Audio.
-                    </span>
-                  </div>
-                </div>
-
-                <p className="mt-4 text-xs italic text-muted dark:text-text-tertiary">
-                  … weitere in Entwicklung
-                </p>
-
-                <div className="mt-auto flex items-center justify-between pt-6">
-                  <span className="text-xs font-medium text-muted dark:text-text-tertiary">
-                    MIT License
-                  </span>
-                  <a
-                    href="https://github.com/neckarshore-skills/obsidian-social-scrapers-common"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:bg-primary/90 hover:scale-[1.02] active:scale-[0.98] dark:bg-text-primary dark:text-deep-space dark:hover:bg-text-primary/90"
-                    data-track="oss_social_scrapers"
-                  >
-                    GitHub
-                    <ExternalLink size={14} />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        )}
       </main>
 
       {/* ===== FOOTER ===== */}
