@@ -14,7 +14,6 @@ import {
   Layers,
   ExternalLink,
 } from "lucide-react";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/Nav";
@@ -24,9 +23,6 @@ import StatsGrid, { type StatsData } from "@/components/StatsGrid";
 import FounderImage from "@/components/FounderImage";
 import LiveTicker from "@/components/LiveTicker";
 import { BRAND } from "@/lib/brand";
-
-/* Code-split client components — separate chunks, not in main bundle */
-const CookieBanner = dynamic(() => import("@/components/CookieBanner"));
 
 /* ---------- constants ---------- */
 
@@ -707,8 +703,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      <CookieBanner />
     </>
   );
 }

@@ -116,6 +116,12 @@ export default function Datenschutz() {
               EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).
             </p>
             <p className="mt-2">
+              Für die Webanalyse (siehe § 4) leitet Vercel aus der Client-IP-Adresse
+              geografische Metadaten (Land, Region) ab und stellt sie als
+              Request-Header bereit. Die IP-Adresse selbst verbleibt dabei in der
+              Infrastruktur von Vercel und wird von uns nicht gespeichert.
+            </p>
+            <p className="mt-2">
               Weitere Informationen:{" "}
               <a
                 href="https://vercel.com/legal/privacy-policy"
@@ -131,18 +137,43 @@ export default function Datenschutz() {
           <section>
             <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">4. Webanalyse</h2>
             <p className="mt-3">
-              Wir nutzen ein eigenes, selbst entwickeltes Tracking-System auf dieser Website. Die Analyse
-              erfolgt vollständig auf unserer eigenen Infrastruktur. Es werden{" "}
-              <strong>keine Daten an Dritte übermittelt</strong>.
+              Wir betreiben auf dieser Website ein eigenes, cookiefreies
+              Webanalyse-System. Erfasst werden: aufgerufene Seite, Referrer,
+              Gerätetyp (grob: mobil/Desktop), Scrolltiefe, Zeitpunkt des Aufrufs
+              sowie aggregierte Core-Web-Vitals-Metriken.
             </p>
             <p className="mt-2">
-              Erfasst werden: aufgerufene Seite, Referrer, Gerätetyp, Scrolltiefe, Zeitpunkt. Es werden{" "}
-              <strong>keine Cookies</strong> gesetzt und <strong>keine personenbezogenen Daten</strong>{" "}
-              gespeichert. IP-Adressen werden nicht erhoben.
+              Zur Unterscheidung von Sitzungen innerhalb eines Tages bilden wir
+              serverseitig einen tagesrotierenden Kurzbezeichner (anonymisierten
+              Zählschlüssel) durch Verknüpfung von IP-Adresse, User-Agent-String
+              und Kalendertag mittels SHA-256. Dieser Schlüssel (16 Hexzeichen)
+              ist nicht auf IP-Adresse oder Person rückführbar. Die IP-Adresse
+              selbst wird nicht gespeichert; sie fließt ausschließlich transient
+              in die Hash-Berechnung ein und wird anschließend verworfen.
             </p>
             <p className="mt-2">
-              Rechtsgrundlage: Berechtigtes Interesse an der anonymen Nutzungsanalyse zur Verbesserung
-              unseres Angebots (Art. 6 Abs. 1 lit. f DSGVO).
+              Zur geografischen Zuordnung (Land/Region) werten wir Geo-Header aus,
+              die Vercel als Infrastrukturanbieter aus der Client-IP ableitet und
+              als anonymisierte Metadaten weiterreicht (Header:{" "}
+              <code>x-vercel-ip-country</code>,{" "}
+              <code>x-vercel-ip-country-region</code>); die IP-Adresse selbst
+              verlässt Vercels Infrastruktur für diesen Zweck nicht.
+            </p>
+            <p className="mt-2">
+              Es werden keine Daten an Dritte übermittelt. Es werden{" "}
+              <strong>keine Cookies</strong> gesetzt und kein Speicherzugriff auf
+              Ihr Endgerät vorgenommen.
+            </p>
+            <p className="mt-2">
+              <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO
+              (berechtigtes Interesse an anonymer Nutzungsanalyse zur Verbesserung
+              unseres Angebots).
+            </p>
+            <p className="mt-2">
+              <strong>Widerspruchsrecht:</strong> Sie können der Verarbeitung
+              jederzeit widersprechen (info@neckarshore.ai). Da kein
+              personenbezogenes Datum persistiert wird, besteht nach Ablauf des
+              Tages keine weitere Möglichkeit der Zuordnung.
             </p>
           </section>
 
@@ -215,17 +246,26 @@ export default function Datenschutz() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">8. Cookies</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">
+              8. Speicherung im Browser
+            </h2>
             <p className="mt-3">
-              Diese Website verwendet ausschließlich <strong>technisch notwendige Cookies</strong>, die für
-              den Betrieb der Website erforderlich sind. Es werden keine Tracking-Cookies oder
-              Marketing-Cookies eingesetzt.
+              Diese Website setzt <strong>keine Cookies</strong> (weder technisch
+              notwendige noch Tracking- oder Marketing-Cookies). Es erscheint kein
+              Cookie-Banner, weil kein Speicherzugriff auf Ihr Endgerät erfolgt, der
+              einer Einwilligung nach § 25 TDDDG bedürfte.
             </p>
             <p className="mt-2">
-              Ein Cookie-Banner informiert Sie beim ersten Besuch über die Verwendung dieser Cookies.
+              Für die von Ihnen aktiv gewählte Designvariante (hell/dunkel) speichert
+              die Website Ihre Auswahl im lokalen Speicher Ihres Browsers
+              (»localStorage«). Diese Auswahl verbleibt ausschließlich auf Ihrem
+              Gerät und wird nicht an uns oder Dritte übermittelt. Sie können diese
+              Information jederzeit über die Browser-Einstellungen löschen.
             </p>
             <p className="mt-2">
-              Rechtsgrundlage: Berechtigtes Interesse (Art. 6 Abs. 1 lit. f DSGVO).
+              <strong>Rechtsgrundlage:</strong> § 25 Abs. 2 Nr. 2 TDDDG (technisch
+              unbedingt erforderlich für die vom Nutzer ausdrücklich gewünschte
+              Funktion — Darkmode-Persistenz).
             </p>
           </section>
 
