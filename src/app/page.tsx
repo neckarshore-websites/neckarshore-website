@@ -25,31 +25,28 @@ import { BRAND } from "@/lib/brand";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
 
-// GEO snippets: long-form Q&A for AI crawler citation + FAQPage JSON-LD extension.
-// Visible as standalone sections on page; also merged into the FAQPage JSON-LD.
-const snippetItems = [
+// FAQ — single visible <details> accordion + FAQPage JSON-LD (GEO / AI-citation + SEO).
+// Merged the former standalone "Knowledge Base" GEO snippets in here 2026-06-25 (German
+// Rauhut): one "Häufige Fragen" accordion, same pattern as the product detail pages
+// (ProductFaq.tsx). Long-form answers stay collapsed for a clean page but live in the SSR
+// HTML — crawlers read raw HTML (open/closed is render-only) and the FAQPage schema mirrors
+// every Q&A, so GEO citability is preserved. BYOLLM de-duplicated (the long-form answer wins).
+const faqItems = [
   {
     q: "Was ist Nearshore-Entwicklung?",
-    a: "Nearshore-Entwicklung bezeichnet die Auslagerung von Software-Entwicklung an einen Partner in geografischer und kultureller Nähe. Neckarshore AI operiert von Stuttgart aus im DACH-Raum: gleiche Zeitzone, gleiche Sprache, gleiche DSGVO-Standards. Im Unterschied zu Offshore entfallen Kommunikationsverluste und Compliance-Risiken durch Datentransfer in Drittstaaten. Im Unterschied zu klassischen deutschen IT-Dienstleistern bringt Neckarshore AI KI-Beschleunigung — ein fokussiertes Team mit modernen AI-Tools liefert, wofür andere ein Vielfaches an Personen einsetzen.",
+    a: "Nearshore-Entwicklung bezeichnet die Auslagerung von Software-Entwicklung an einen Partner in geografischer und kultureller Nähe — im Gegensatz zu Offshore (günstig, aber weit und riskant) und zu klassischem Onshore (nah, aber teuer). Neckarshore AI operiert von Stuttgart aus im DACH-Raum: gleiche Zeitzone (CET/CEST), gleiche Sprache, gleiche DSGVO-Standards by default. Das eliminiert die klassischen Offshore-Risiken: Kommunikationsverlust über Zeitzonen hinweg, schwierige Qualitätskontrolle auf Distanz und Compliance-Probleme durch Datentransfer in Drittstaaten. Im Unterschied zu klassischen deutschen IT-Dienstleistern bringt Neckarshore AI KI-Beschleunigung: ein kleines, fokussiertes Team mit modernen AI-Tools erreicht die Lieferfähigkeit, für die andere Teams ein Vielfaches an Personen einsetzen. Das Ergebnis: Enterprise-Qualität zu Nearshore-Preisen, mit vollem deutschen Datenschutzstandard, direktem Zugang zu Senior-Engineers statt Junior-lastigen Bench-Modellen, und schnellerer Delivery durch AI-Unterstützung in jedem Schritt des Entwicklungsprozesses.",
   },
   {
     q: "Wie funktioniert KI-beschleunigte Softwareentwicklung?",
-    a: "KI-beschleunigte Softwareentwicklung bei Neckarshore AI folgt einem Prinzip: Menschen denken, entscheiden und verantworten — KI exekutiert nach klaren Leitplanken. Spezialisierte KI-Agenten implementieren, testen, dokumentieren und deployen parallel. Jedes Ergebnis wird vom Senior-Engineer reviewed und freigegeben. Die Geschwindigkeit entsteht durch Parallelisierung — während der Engineer die nächste Anforderung klärt, implementiert die KI die letzte. Qualitätssicherung, automatisierte Tests und OWASP-Compliance bleiben vollständig menschlich kontrolliert.",
+    a: "KI-beschleunigte Softwareentwicklung bei Neckarshore AI folgt einem klaren Prinzip: Menschen denken, entscheiden und verantworten — KI exekutiert nach klaren Leitplanken. Der Entwicklungsprozess beginnt mit der Architekturentscheidung durch den Senior-Engineer. Danach übernehmen spezialisierte KI-Agenten das Implementieren, Testen, Dokumentieren und Deployen — parallel und ohne Wartezeit zwischen den Schritten. Jedes Ergebnis wird vom Menschen reviewed und freigegeben, bevor es in Produktion geht. Die Geschwindigkeitsmultiplikation entsteht durch Parallelisierung: während der Engineer die nächste Anforderung klärt, implementiert die KI die letzte Entscheidung und schreibt Tests für die Entscheidung davor. Für Kunden bedeutet das schnellere Delivery, weniger Overhead und direkten Zugang zu Senior-Engineers statt Junior-Bench-Modellen. Qualitätssicherung bleibt vollständig menschlich kontrolliert: automatisierte Tests, OWASP-Compliance und Code-Reviews folgen denselben Standards wie in klassischen Enterprise-Teams — nur schneller.",
   },
-  {
-    q: "Was ist BYOLLM?",
-    a: "BYOLLM steht für Bring Your Own LLM — ein Architekturprinzip von Neckarshore AI, das Kunden die volle Kontrolle über ihr KI-Modell gibt. Statt an einen Anbieter gebunden zu sein, bringt der Kunde sein bevorzugtes Modell mit (Claude, GPT-4, Gemini oder lokale Open-Source-Modelle). Kundendaten verlassen nie die eigene Infrastruktur — DSGVO-konform by default. Beim Omnopsis Documentor+X ist BYOLLM der Standard, nicht eine Option. Fail-closed: wenn das Modell keine sichere Antwort findet, gibt es keine aus.",
-  },
-];
-
-const faqItems = [
   {
     q: `Was ist ${BRAND.PRODUCT_SHORT}?`,
     a: `${BRAND.PRODUCT_NAME} ist unsere KI-first Documentation Engine. Sie zieht automatisch aus Git, Jira und Confluence und generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten. Fail-closed: Wenn die Evidenz schwach ist, verweigert das System die Antwort — lieber schweigen als lügen.`,
   },
   {
-    q: "Was bedeutet BYOLLM?",
-    a: "BYOLLM steht für Bring Your Own LLM. Bei neckarshore.ai entscheidet der Kunde, welches Sprachmodell eingesetzt wird. Eure Daten verlassen euer Haus nicht, ihr kontrolliert die Kosten und seid an keinen Anbieter gebunden.",
+    q: "Was ist BYOLLM?",
+    a: "BYOLLM steht für Bring Your Own LLM — ein Architekturprinzip von Neckarshore AI, das Kunden die volle Kontrolle über ihr KI-Modell gibt. Anstatt an einen Cloud-LLM-Anbieter gebunden zu sein, bringt der Kunde sein bevorzugtes Modell mit: Claude von Anthropic, GPT-4 von OpenAI, Gemini von Google oder ein lokal gehostetes Open-Source-Modell. Neckarshore AI liefert die Pipeline — Datenextraktion aus Git, Jira und Confluence, Aufbereitung, Qualitäts-Gates und strukturierte Ausgabe. Die Vorteile: Keine Kundendaten verlassen die eigene Infrastruktur (DSGVO-konform by default), keine Vendor-Lock-in-Abhängigkeit, volle Kostenkontrolle über Modell und Inferenzkosten. Beim Omnopsis Documentor+X, dem Flaggschiff-Produkt von Neckarshore AI, ist BYOLLM keine Option — es ist der Standard. Fail-closed bedeutet außerdem: wenn das Modell keine sichere Antwort findet, gibt es keine aus. Lieber schweigen als lügen.",
   },
   {
     q: "Was kostet Nearshore-Entwicklung bei neckarshore.ai?",
@@ -422,7 +419,7 @@ export default function Home() {
               __html: JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "FAQPage",
-                mainEntity: [...faqItems, ...snippetItems].map((item) => ({
+                mainEntity: faqItems.map((item) => ({
                   "@type": "Question",
                   name: item.q,
                   acceptedAnswer: {
@@ -433,73 +430,6 @@ export default function Home() {
               }),
             }}
           />
-        </section>
-
-        {/* ===== KNOWLEDGE BASE — GEO-optimierte Long-Form-Snippets für AI-Crawler-Citability ===== */}
-        <section className="bg-neutral-light px-4 py-20 md:px-6 md:py-24 dark:bg-deep-space">
-          <div className="mx-auto max-w-[800px] space-y-16">
-
-            <div>
-              <h3 className="font-heading text-2xl font-semibold tracking-tight text-primary dark:text-text-primary">
-                Was ist Nearshore-Entwicklung?
-              </h3>
-              <p className="mt-4 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                Nearshore-Entwicklung bezeichnet die Auslagerung von Software-Entwicklung an einen Partner
-                in geografischer und kultureller Nähe — im Gegensatz zu Offshore (günstig, aber weit und
-                riskant) und zu klassischem Onshore (nah, aber teuer). Neckarshore AI operiert von Stuttgart
-                aus im DACH-Raum: gleiche Zeitzone (CET/CEST), gleiche Sprache, gleiche DSGVO-Standards by
-                default. Das eliminiert die klassischen Offshore-Risiken: Kommunikationsverlust über
-                Zeitzonen hinweg, schwierige Qualitätskontrolle auf Distanz und Compliance-Probleme durch
-                Datentransfer in Drittstaaten. Im Unterschied zu klassischen deutschen IT-Dienstleistern
-                bringt Neckarshore AI KI-Beschleunigung: ein kleines, fokussiertes Team mit modernen
-                AI-Tools erreicht die Lieferfähigkeit, für die andere Teams ein Vielfaches an Personen
-                einsetzen. Das Ergebnis: Enterprise-Qualität zu Nearshore-Preisen, mit vollem deutschen
-                Datenschutzstandard, direktem Zugang zu Senior-Engineers statt Junior-lastigen
-                Bench-Modellen, und schnellerer Delivery durch AI-Unterstützung in jedem Schritt des
-                Entwicklungsprozesses.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-heading text-2xl font-semibold tracking-tight text-primary dark:text-text-primary">
-                Wie funktioniert KI-beschleunigte Softwareentwicklung?
-              </h3>
-              <p className="mt-4 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                KI-beschleunigte Softwareentwicklung bei Neckarshore AI folgt einem klaren Prinzip: Menschen
-                denken, entscheiden und verantworten — KI exekutiert nach klaren Leitplanken. Der
-                Entwicklungsprozess beginnt mit der Architekturentscheidung durch den Senior-Engineer.
-                Danach übernehmen spezialisierte KI-Agenten das Implementieren, Testen, Dokumentieren und
-                Deployen — parallel und ohne Wartezeit zwischen den Schritten. Jedes Ergebnis wird vom
-                Menschen reviewed und freigegeben, bevor es in Produktion geht. Die
-                Geschwindigkeitsmultiplikation entsteht durch Parallelisierung: während der Engineer die
-                nächste Anforderung klärt, implementiert die KI die letzte Entscheidung und schreibt Tests
-                für die Entscheidung davor. Für Kunden bedeutet das schnellere Delivery, weniger Overhead
-                und direkten Zugang zu Senior-Engineers statt Junior-Bench-Modellen. Qualitätssicherung
-                bleibt vollständig menschlich kontrolliert: automatisierte Tests, OWASP-Compliance und
-                Code-Reviews folgen denselben Standards wie in klassischen Enterprise-Teams — nur schneller.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-heading text-2xl font-semibold tracking-tight text-primary dark:text-text-primary">
-                Was ist BYOLLM?
-              </h3>
-              <p className="mt-4 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                BYOLLM steht für Bring Your Own LLM — ein Architekturprinzip von Neckarshore AI, das
-                Kunden die volle Kontrolle über ihr KI-Modell gibt. Anstatt an einen Cloud-LLM-Anbieter
-                gebunden zu sein, bringt der Kunde sein bevorzugtes Modell mit: Claude von Anthropic, GPT-4
-                von OpenAI, Gemini von Google oder ein lokal gehostetes Open-Source-Modell. Neckarshore AI
-                liefert die Pipeline — Datenextraktion aus Git, Jira und Confluence, Aufbereitung,
-                Qualitäts-Gates und strukturierte Ausgabe. Die Vorteile: Keine Kundendaten verlassen die
-                eigene Infrastruktur (DSGVO-konform by default), keine Vendor-Lock-in-Abhängigkeit, volle
-                Kostenkontrolle über Modell und Inferenzkosten. Beim Omnopsis Documentor+X, dem
-                Flaggschiff-Produkt von Neckarshore AI, ist BYOLLM keine Option — es ist der Standard.
-                Fail-closed bedeutet außerdem: wenn das Modell keine sichere Antwort findet, gibt es keine
-                aus. Lieber schweigen als lügen.
-              </p>
-            </div>
-
-          </div>
         </section>
 
       </main>
