@@ -30,6 +30,7 @@ export default function MmpsPage() {
               headingLevel="h2"
               description={rich?.description}
               repoUrl={rich?.repoUrl}
+              liveUrl={rich?.liveUrl}
             />
           );
         })}

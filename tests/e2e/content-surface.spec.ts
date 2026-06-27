@@ -685,6 +685,25 @@ test.describe("Content surface — cards are fully clickable", () => {
     await expect(gh).toHaveAttribute("target", "_blank");
     await expect(gh).toHaveAttribute("href", /github\.com/);
   });
+
+  test("TC-CNT-058a: live MMP cards carry a 'Live ↗' button to their subdomain (alongside GitHub)", async ({
+    page,
+  }) => {
+    await page.goto("/products/mmps");
+    for (const [slug, host] of [
+      ["clearpath", "clearpath.neckarshore.ai"],
+      ["snakeoil-check", "snakeoil.neckarshore.ai"],
+    ]) {
+      const live = page.locator(`a[data-track="product_card_live_${slug}"]`);
+      await expect(live).toBeVisible();
+      await expect(live).toHaveAttribute("target", "_blank");
+      await expect(live).toHaveAttribute("href", new RegExp(host.replace(/\./g, "\\.")));
+      // GitHub stays present on the same card (Founder parity decision, additive live link).
+      await expect(
+        page.locator(`a[data-track="product_card_github_${slug}"]`),
+      ).toBeVisible();
+    }
+  });
 });
 
 // Unified card principle (2026-06-22): every card across MMP / Skill / Website carries a

@@ -23,6 +23,13 @@ export interface MmpCardData {
   description: string;
   /** Repository URL — renders the GitHub button. PRIVATE today (see module note). */
   repoUrl: string;
+  /**
+   * Live-app subdomain — renders a "Live ↗" button alongside GitHub on the card. Kept here
+   * (server-only) rather than on the client-imported `portfolio.ts`, so the URL never ships in
+   * the client bundle (same routing-data vs. rich-content split this module already follows).
+   * Only set for MMPs with a functional public app (ClearPath, Snakeoil-Check).
+   */
+  liveUrl?: string;
 }
 
 export const MMP_CARDS: Record<string, MmpCardData> = {
@@ -30,11 +37,13 @@ export const MMP_CARDS: Record<string, MmpCardData> = {
     description:
       "Eine mentale Firewall gegen kognitive Verzerrungen. Du beschreibst eine anstehende Entscheidung — ClearPath spiegelt sie strukturiert zurück, benennt die Denkfallen darin und liefert eine zweite, nüchterne Perspektive, bevor du dich festlegst.",
     repoUrl: "https://github.com/neckarshore-mmps/clearpath-52",
+    liveUrl: "https://clearpath.neckarshore.ai",
   },
   "snakeoil-check": {
     description:
       "Neutraler KI-Reality-Check für Online-Coachings und High-Ticket-Angebote. Zwölf Kriterien, ein ehrliches Urteil: Go, Vorsicht oder Lieber lassen. Prüft das Versprechen gegen nachvollziehbare Substanz statt gegen Marketing — bevor du investierst.",
     repoUrl: "https://github.com/neckarshore-mmps/snakeoil-check",
+    liveUrl: "https://snakeoil.neckarshore.ai",
   },
   phonesis: {
     description:
