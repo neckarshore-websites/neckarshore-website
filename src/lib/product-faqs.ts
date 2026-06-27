@@ -72,8 +72,8 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
       a: "Nein. Kein Pauschalurteil und keine Anschuldigung — Skepsis als Werkzeug, nicht als Haltung. Dieselben zwölf Kriterien werden neutral auf jedes Angebot angewandt; die Entscheidung bleibt bei dir.",
     },
     {
-      q: "Was kostet es, und wann ist es verfügbar?",
-      a: "Snakeoil-Check ist in Entwicklung — die Bewertungs-Engine läuft bereits in der Produktion, das öffentliche Frontend folgt. Zum Start ist ein kostenloser Check pro Person vorgesehen; weitere Prüfungen lassen sich als Pakete dazubuchen.",
+      q: "Was kostet es, und wo finde ich es?",
+      a: "Snakeoil-Check ist live unter snakeoil.neckarshore.ai. Zum Start gibt es einen kostenlosen Check pro Person; weitere Prüfungen lassen sich als Shot-Pakete dazubuchen.",
     },
   ],
 

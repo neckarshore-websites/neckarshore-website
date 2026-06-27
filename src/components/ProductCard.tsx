@@ -46,6 +46,7 @@ export function ProductCard({
   headingLevel = "h3",
   description,
   repoUrl,
+  liveUrl,
 }: {
   item: PortfolioItem;
   headingLevel?: "h2" | "h3";
@@ -53,6 +54,8 @@ export function ProductCard({
   description?: string;
   /** MMP mode: repository URL → renders the GitHub button (top-right). */
   repoUrl?: string;
+  /** MMP mode: live-app subdomain → renders a "Live ↗" button alongside GitHub (top-right). */
+  liveUrl?: string;
 }) {
   const Heading = headingLevel;
   const isWebsite = !!item.caseStudySlug;
@@ -61,12 +64,29 @@ export function ProductCard({
   const ctaHref = isWebsite ? `/products/websites/${item.caseStudySlug}` : item.href;
   const ctaLabel = externalCta ? "Website öffnen ↗" : "Mehr erfahren →";
 
-  // Top-right secondary link: GitHub (MMP) or "Website ↗" (website tier); none otherwise.
-  const topRight = repoUrl
-    ? { href: repoUrl, label: "GitHub", track: `product_card_github_${item.slug}` }
-    : isWebsite && item.liveUrl
-      ? { href: item.liveUrl, label: "Website", track: `product_card_live_${item.slug}` }
-      : null;
+  // Top-right secondary buttons: GitHub + "Live ↗" (MMP), or "Website ↗" (website tier).
+  // MMPs may carry BOTH (GitHub repo + live app); a website carries only its live "Website ↗".
+  const topRightLinks: { href: string; label: string; track: string }[] = [];
+  if (repoUrl) {
+    topRightLinks.push({
+      href: repoUrl,
+      label: "GitHub",
+      track: `product_card_github_${item.slug}`,
+    });
+  }
+  if (liveUrl) {
+    topRightLinks.push({
+      href: liveUrl,
+      label: "Live",
+      track: `product_card_live_${item.slug}`,
+    });
+  } else if (isWebsite && item.liveUrl) {
+    topRightLinks.push({
+      href: item.liveUrl,
+      label: "Website",
+      track: `product_card_live_${item.slug}`,
+    });
+  }
 
   const pill = statusPillLabel(item);
 
@@ -91,17 +111,22 @@ export function ProductCard({
             </Link>
           )}
         </Heading>
-        {topRight && (
-          <a
-            href={topRight.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-track={topRight.track}
-            className={secondaryButtonClass}
-          >
-            {topRight.label}
-            <ExternalLink size={14} aria-hidden="true" />
-          </a>
+        {topRightLinks.length > 0 && (
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            {topRightLinks.map((link) => (
+              <a
+                key={link.track}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track={link.track}
+                className={secondaryButtonClass}
+              >
+                {link.label}
+                <ExternalLink size={14} aria-hidden="true" />
+              </a>
+            ))}
+          </div>
         )}
       </div>
 
