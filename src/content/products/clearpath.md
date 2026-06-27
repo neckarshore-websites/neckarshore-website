@@ -2,7 +2,7 @@
 name: "ClearPath"
 headline: "ClearPath — eine mentale Firewall gegen kognitive Verzerrungen."
 definition: "Beschreibe eine Entscheidung, und ClearPath benennt die drei Denkfehler, die dein Urteil am wahrscheinlichsten verzerren — und erzwingt eine 60-Sekunden-Pause, bevor du handelst."
-liveUrl: "https://clearpath-52.vercel.app"
+liveUrl: "https://clearpath.neckarshore.ai"
 applicationCategory: "BusinessApplication"
 ---
 
@@ -18,7 +18,7 @@ Die meisten Fehlentscheidungen entstehen nicht aus fehlendem Wissen, sondern aus
 
 ## Live ausprobieren
 
-[clearpath-52.vercel.app](https://clearpath-52.vercel.app) — anonym, ohne Anmeldung.
+[clearpath.neckarshore.ai](https://clearpath.neckarshore.ai) — anonym, ohne Anmeldung.
 
 ## Die Idee dahinter
 

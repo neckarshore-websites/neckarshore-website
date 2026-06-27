@@ -36,6 +36,38 @@ export function softwareApplicationSchema({
 }
 
 /**
+ * Live variant for products that ARE reachable but are NOT fully free — freemium or paid
+ * (e.g. Snakeoil-Check: one free check, then paid Shot packages). Emits the live `url` but
+ * deliberately OMITS `offers` + `isAccessibleForFree`: claiming `price: "0"` / free for a
+ * product with paid tiers would be a false structured-data claim (fail-closed; AD-19). Use
+ * `softwareApplicationSchema` (with the free Offer) only for genuinely free apps (ClearPath).
+ */
+interface LiveSoftwareApplicationInput {
+  name: string;
+  definition: string;
+  liveUrl: string;
+  applicationCategory: string;
+}
+
+export function liveSoftwareApplicationSchema({
+  name,
+  definition,
+  liveUrl,
+  applicationCategory,
+}: LiveSoftwareApplicationInput) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name,
+    description: definition,
+    applicationCategory,
+    operatingSystem: "Web",
+    url: liveUrl,
+    author: { "@type": "Organization", name: "neckarshore.ai" },
+  } as const;
+}
+
+/**
  * Preview variant for products that are in development. Deliberately OMITS `url`,
  * `offers`, and `isAccessibleForFree` — emitting a live URL or a free Offer for a
  * product that is neither would be a false structured-data claim (fail-closed; AD-19).

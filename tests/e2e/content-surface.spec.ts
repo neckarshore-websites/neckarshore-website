@@ -134,7 +134,7 @@ test.describe("Content surface — ClearPath product", () => {
 
   test("TC-CNT-021: live-app link present and rel-correct", async ({ page }) => {
     await page.goto("/products/clearpath");
-    const live = page.locator('a[href="https://clearpath-52.vercel.app"]').first();
+    const live = page.locator('a[href="https://clearpath.neckarshore.ai"]').first();
     await expect(live).toBeVisible();
     await expect(live).toHaveAttribute("target", "_blank");
     await expect(live).toHaveAttribute("rel", /noopener/);
@@ -170,7 +170,7 @@ test.describe("Content surface — ClearPath product", () => {
     expect(apps[0].name).toBe("ClearPath");
     expect(apps[0].operatingSystem).toBe("Web");
     expect(apps[0].offers).toBeTruthy();
-    expect(String(apps[0].url)).toContain("clearpath-52.vercel.app");
+    expect(String(apps[0].url)).toContain("clearpath.neckarshore.ai");
   });
 
   test('TC-CNT-024: carries the "Wie dieser Text entstand" note', async ({ page }) => {
@@ -364,7 +364,7 @@ test.describe("Skills on-page overview table @content", () => {
   });
 });
 
-test.describe("Content surface — Snakeoil-Check preview MMP", () => {
+test.describe("Content surface — Snakeoil-Check live MMP", () => {
   test("TC-CNT-035: 200, single H1 contains the name, citable definition is the lead paragraph", async ({
     page,
   }) => {
@@ -377,20 +377,29 @@ test.describe("Content surface — Snakeoil-Check preview MMP", () => {
     );
   });
 
-  test("TC-CNT-036: renders the five MMP content axes as headings", async ({ page }) => {
+  test("TC-CNT-036: renders the six MMP content axes as headings", async ({ page }) => {
     await page.goto("/products/snakeoil-check");
     for (const heading of [
       "Das Problem",
       "Wie funktioniert Snakeoil-Check?",
       "Was Snakeoil-Check anders macht",
-      "Wann kommt Snakeoil-Check?",
+      "Live ausprobieren",
+      "Status & Roadmap",
       "Wie dieser Text entstand",
     ]) {
       await expect(page.getByRole("heading", { name: heading })).toBeVisible();
     }
   });
 
-  test("TC-CNT-037: one preview SoftwareApplication block — no url, no offers (AD-19 fail-closed)", async ({
+  test("TC-CNT-035a: live-app link present and rel-correct", async ({ page }) => {
+    await page.goto("/products/snakeoil-check");
+    const live = page.locator('a[href="https://snakeoil.neckarshore.ai"]').first();
+    await expect(live).toBeVisible();
+    await expect(live).toHaveAttribute("target", "_blank");
+    await expect(live).toHaveAttribute("rel", /noopener/);
+  });
+
+  test("TC-CNT-037: one live SoftwareApplication block — live url, NO offers (freemium, AD-19 fail-closed)", async ({
     page,
   }) => {
     await page.goto("/products/snakeoil-check");
@@ -398,7 +407,8 @@ test.describe("Content surface — Snakeoil-Check preview MMP", () => {
     expect(apps).toHaveLength(1);
     expect(apps[0].name).toBe("Snakeoil-Check");
     expect(apps[0].operatingSystem).toBe("Web");
-    expect(apps[0].url).toBeUndefined();
+    expect(String(apps[0].url)).toContain("snakeoil.neckarshore.ai");
+    // Freemium (one free check, then paid Shot packages) → NO free Offer claim.
     expect(apps[0].offers).toBeUndefined();
     expect(String(apps[0].description)).toContain("zwölf neutralen Kriterien");
   });
@@ -682,7 +692,7 @@ test.describe("Content surface — cards are fully clickable", () => {
 // / Referenz-Beispiel); this locks that the pill is present on every surface.
 test.describe("Content surface — unified status pill", () => {
   test("TC-CNT-059: every sub-portal card type shows its status pill", async ({ page }) => {
-    // MMPs: a live one (clearpath → "Live") + previews ("In Entwicklung").
+    // MMPs: live ones (clearpath + snakeoil-check → "Live") + previews ("In Entwicklung").
     await page.goto("/products/mmps");
     await expect(page.getByText("Live", { exact: true }).first()).toBeVisible();
     await expect(page.getByText("In Entwicklung", { exact: true }).first()).toBeVisible();

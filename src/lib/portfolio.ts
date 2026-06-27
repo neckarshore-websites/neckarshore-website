@@ -154,15 +154,16 @@ export const PORTFOLIO: PortfolioCategory[] = [
         name: "Snakeoil-Check",
         slug: "snakeoil-check",
         tagline: "Neutraler KI-Reality-Check für Online-Coachings und High-Ticket-Angebote.",
-        status: "preview",
+        status: "live",
         featured: true,
         href: "/products/snakeoil-check",
         isExternal: false,
         schemaType: "SoftwareApplication",
         applicationCategory: "BusinessApplication",
-        // Bespoke preview detail page (src/app/products/snakeoil-check) → excluded from the
-        // [slug] skeleton route. Indexable since 2026-06-22 (rich content shipped); the page
-        // emits the honest preview schema (no url/offers) until the public app launches.
+        // LIVE since 2026-06-27 at snakeoil.neckarshore.ai. Bespoke detail page
+        // (src/app/products/snakeoil-check, via the shared PreviewProductPage live branch) →
+        // excluded from the [slug] skeleton route. Indexable; emits liveSoftwareApplicationSchema
+        // (live url, NO free Offer — freemium, AD-19 fail-closed).
         hasOwnPage: true,
       },
       {

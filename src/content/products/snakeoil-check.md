@@ -2,6 +2,7 @@
 name: "Snakeoil-Check"
 headline: "Snakeoil-Check — der neutrale Reality-Check für Coaching- und High-Ticket-Angebote."
 definition: "Snakeoil-Check prüft ein Online-Coaching, High-Ticket-Programm oder eine Masterclass anhand von zwölf neutralen Kriterien und gibt eine belastbare Tendenz: Go, Vorsicht oder Lieber lassen."
+liveUrl: "https://snakeoil.neckarshore.ai"
 applicationCategory: "BusinessApplication"
 ---
 
@@ -21,9 +22,13 @@ Kein Pauschalurteil und keine Anschuldigung: eine strukturierte zweite Meinung, 
 
 Skepsis als Werkzeug, nicht als Haltung. Snakeoil-Check ersetzt das Bauchgefühl nicht — es gibt ihm eine Struktur: dieselben zwölf Kriterien für jedes Angebot, neutral angewandt. Trocken, nüchtern, nachprüfbar.
 
-## Wann kommt Snakeoil-Check?
+## Live ausprobieren
 
-In Entwicklung. Das Fundament — Scraping, Bewertungs-Engine und Modell-Router — läuft bereits in der Produktion; das öffentliche Frontend folgt in Kürze. Zum Start gibt es einen kostenlosen Check pro Person, weitere Prüfungen lassen sich anschließend als Shot-Pakete dazubuchen. Danach geplant: gespeicherte Historie, der Vergleich mehrerer Angebote und ein Abo für Vielprüfer.
+[snakeoil.neckarshore.ai](https://snakeoil.neckarshore.ai) — zum Start ein kostenloser Check pro Person, weitere Prüfungen als Shot-Pakete.
+
+## Status & Roadmap
+
+Live. Das Fundament — Scraping, Bewertungs-Engine und Modell-Router — läuft in der Produktion, das öffentliche Frontend ist erreichbar. Geplant: gespeicherte Historie, der Vergleich mehrerer Angebote und ein Abo für Vielprüfer.
 
 ## Wie dieser Text entstand
 

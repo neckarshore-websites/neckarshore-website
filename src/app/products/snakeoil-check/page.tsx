@@ -14,5 +14,10 @@ export function generateMetadata(): Metadata {
 }
 
 export default function SnakeoilCheckPage() {
-  return <PreviewProductPage slug={SLUG} />;
+  return (
+    <PreviewProductPage
+      slug={SLUG}
+      liveCtaNote="Ein kostenloser Check zum Start — weitere als Shot-Paket."
+    />
+  );
 }
