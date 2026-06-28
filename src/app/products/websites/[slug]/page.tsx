@@ -36,8 +36,14 @@ export async function generateMetadata({
   const { slug } = await params;
   const entry = getWebsiteEntry(slug);
   if (!entry) return {};
+  // The case-study NAME is the site's domain. For neckarshore.ai that collides with the
+  // "| neckarshore.ai" brand suffix (double-branding); drop the suffix only there.
+  const isOwnSite = entry.name === "neckarshore.ai";
+  const title = isOwnSite
+    ? "neckarshore.ai — diese Website als Case Study"
+    : `${entry.name} — Website-Projekt | neckarshore.ai`;
   return pageMetadata({
-    title: `${entry.name} — Website-Projekt | neckarshore.ai`,
+    title,
     description: entry.lead,
     path: `/products/websites/${slug}`,
   });

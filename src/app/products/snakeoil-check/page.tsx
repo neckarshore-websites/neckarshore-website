@@ -9,7 +9,7 @@ export function generateMetadata(): Metadata {
   return previewProductMetadata({
     slug: SLUG,
     title:
-      "Snakeoil-Check — neutraler Reality-Check für Coaching-Angebote | neckarshore.ai",
+      "Snakeoil-Check — Reality-Check für Coaching-Angebote | neckarshore.ai",
   });
 }
 

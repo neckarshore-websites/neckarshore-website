@@ -8,6 +8,7 @@ import { pageMetadata } from "@/lib/seo";
 import { PORTFOLIO, featuredItems, hiddenItemCount } from "@/lib/portfolio";
 import { cardDescription } from "@/lib/card-descriptions";
 import { collectionPageSchema } from "@/lib/schema/product";
+import { breadcrumbListSchema } from "@/lib/schema/breadcrumb";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
 
@@ -26,11 +27,19 @@ const portalSchema = collectionPageSchema({
   url: "https://neckarshore.ai/products",
 });
 
+// Every sub-portal (flagships/mmps/skills/websites) emits a BreadcrumbList; the portal
+// itself was the one listing page without one. Trail: Start › Produkte (current = no item).
+const breadcrumbSchema = breadcrumbListSchema([
+  { name: "Start", href: "/" },
+  { name: "Produkte" },
+]);
+
 export default function ProductsIndex() {
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
       <JsonLd data={portalSchema} id="schema-collectionpage-products" />
+      <JsonLd data={breadcrumbSchema} id="schema-breadcrumb-products" />
       <main className="mx-auto max-w-[960px] px-4 pt-40 pb-20 md:px-6">
         <header className="max-w-[640px]">
           <p className="font-heading text-sm font-semibold uppercase tracking-wider text-accent">

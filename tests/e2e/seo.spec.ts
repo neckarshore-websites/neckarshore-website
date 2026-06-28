@@ -177,4 +177,82 @@ test.describe("SEO Basics", () => {
       );
     });
   }
+
+  // --- /products surface hygiene (SEO/GEO audit 2026-06-28, Gate-3 mechanical fixes) ---
+
+  // Helper: collect every JSON-LD @type rendered on a page (handles @graph + standalone nodes).
+  async function ldTypes(page: import("@playwright/test").Page): Promise<string[]> {
+    const blocks = await page.locator('script[type="application/ld+json"]').allTextContents();
+    return blocks.flatMap((b) => {
+      const parsed = JSON.parse(b);
+      const nodes = parsed["@graph"] ?? [parsed];
+      return nodes.map((n: { "@type"?: string }) => n["@type"]).filter(Boolean);
+    });
+  }
+
+  // TC-SEO-027: title ≤ 70 chars on every /products surface page (SERP-truncation guard).
+  const PRODUCT_TITLE_PATHS = [
+    "/products",
+    "/products/flagships",
+    "/products/mmps",
+    "/products/skills",
+    "/products/websites",
+    "/products/omnopsis",
+    "/products/clearpath",
+    "/products/snakeoil-check",
+    "/products/phonesis",
+    "/products/local-seo-hub",
+    "/products/prod-or-pretend",
+    "/products/obsidian-vault-autopilot",
+    "/products/ai-phrase-check",
+    "/products/social-scrapers",
+    "/products/imap-mailbox-cleanup",
+    "/products/restaurant-menu-update",
+    "/products/websites/neckarshore",
+    "/products/websites/ristorante-goldoni",
+    "/products/websites/oakwood-golf-club",
+    "/products/websites/rauhut",
+  ];
+
+  for (const path of PRODUCT_TITLE_PATHS) {
+    test(`TC-SEO-027: ${path} title is ≤ 70 chars`, async ({ page }) => {
+      await page.goto(path);
+      const title = await page.title();
+      expect(title.length, `title too long (${title.length}): "${title}"`).toBeLessThanOrEqual(70);
+    });
+  }
+
+  // TC-SEO-028: /products portal emits a BreadcrumbList (sibling sub-portals all do).
+  test("TC-SEO-028: /products has a BreadcrumbList JSON-LD node", async ({ page }) => {
+    await page.goto("/products");
+    expect(await ldTypes(page)).toContain("BreadcrumbList");
+  });
+
+  // TC-SEO-029: social-scrapers is a PRIVATE product — its SoftwareApplication must not
+  // claim a `url` (the marketing-page URL is not where the software is accessible).
+  test("TC-SEO-029: social-scrapers SoftwareApplication has no url", async ({ page }) => {
+    await page.goto("/products/social-scrapers");
+    const blocks = await page
+      .locator('script[type="application/ld+json"]')
+      .allTextContents();
+    const softwareNodes = blocks
+      .flatMap((b) => {
+        const parsed = JSON.parse(b);
+        return parsed["@graph"] ?? [parsed];
+      })
+      .filter((n: { "@type"?: string }) => n["@type"] === "SoftwareApplication");
+    expect(softwareNodes.length).toBeGreaterThan(0);
+    for (const node of softwareNodes) {
+      expect(node.url, "private-product SoftwareApplication must omit url").toBeUndefined();
+    }
+  });
+
+  // TC-SEO-030: the neckarshore.ai case-study title must name the brand exactly once
+  // (the generic "<name> — Website-Projekt | neckarshore.ai" template double-brands here).
+  test("TC-SEO-030: websites/neckarshore title has no double-branding", async ({ page }) => {
+    await page.goto("/products/websites/neckarshore");
+    const title = await page.title();
+    const count = (title.match(/neckarshore\.ai/g) ?? []).length;
+    expect(count, `brand appears ${count}× in "${title}"`).toBe(1);
+  });
 });
