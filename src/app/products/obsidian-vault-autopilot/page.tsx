@@ -17,7 +17,7 @@ const DEFINITION =
   "Obsidian Vault Autopilot ist eine kostenlose Open-Source-Automatisierung für Obsidian-Vaults: vier Claude-Code-Skills sortieren die Inbox, benennen Notizen um und pflegen die Frontmatter — sicher by Design, MIT-lizenziert.";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Obsidian Vault Autopilot — Open-Source Vault-Automation für Obsidian | neckarshore.ai",
+  title: "Obsidian Vault Autopilot — Open-Source-Automation | neckarshore.ai",
   description: DEFINITION,
   path: "/products/obsidian-vault-autopilot",
 });

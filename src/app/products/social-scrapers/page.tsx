@@ -6,7 +6,7 @@ const DEFINITION =
   "Obsidian Social Scrapers ist eine Familie von drei Claude-Skills, die öffentliche Profile und Posts von Instagram, LinkedIn und X als neutrale Markdown-Briefings in einen Obsidian-Vault holt — getragen von einem geteilten, stdlib-only Python-Core. Privat in Weiterentwicklung.";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Obsidian Social Scrapers — Profile & Posts als Vault-Briefings | neckarshore.ai",
+  title: "Obsidian Social Scrapers — Profile als Briefings | neckarshore.ai",
   description: DEFINITION,
   path: "/products/social-scrapers",
 });
@@ -34,9 +34,11 @@ const coreParts = [
 ];
 
 // Honest SoftwareApplication entity — the skills are privately developed and the repos are
-// NOT public, so no free Offer, no MIT license claim, and no public-repo url (a private repo
-// 404s for anonymous crawlers). `url` points at this product page; applicationCategory mirrors
-// the portfolio item. The page stays indexable as a content/GEO surface, not as a free download.
+// NOT public, so no free Offer, no MIT license claim, and NO `url`: schema.org `url` means
+// "where the software is accessible", but there is no public app or repo (a private repo 404s
+// for anonymous crawlers). Pointing it at this marketing page would misuse the property and is
+// inconsistent with every other preview/private product (all omit `url`). The page's own URL is
+// carried by the WebPage entity; the page stays indexable as a content/GEO surface, not a download.
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -45,7 +47,6 @@ const softwareSchema = {
   applicationCategory: "UtilitiesApplication",
   operatingSystem: "macOS, Windows, Linux",
   softwareRequirements: "Claude Code, Python 3, Apify-Token",
-  url: "https://neckarshore.ai/products/social-scrapers",
   author: { "@type": "Organization", name: "neckarshore.ai", url: "https://neckarshore.ai" },
 } as const;
 

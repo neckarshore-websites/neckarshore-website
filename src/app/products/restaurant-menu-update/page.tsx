@@ -11,7 +11,7 @@ const DEFINITION =
 // (portfolio.ts keeps `noindex: true`); the robots meta here matches that posture.
 export const metadata: Metadata = {
   ...pageMetadata({
-    title: "Restaurant-Menüpflege — Menü-Update als reproduzierbarer Workflow | neckarshore.ai",
+    title: "Restaurant-Menüpflege — Menü-Update als Workflow | neckarshore.ai",
     description: DEFINITION,
     path: "/products/restaurant-menu-update",
   }),

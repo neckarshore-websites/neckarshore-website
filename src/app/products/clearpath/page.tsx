@@ -22,7 +22,7 @@ export function generateMetadata(): Metadata {
   const entry = getProductEntry(SLUG);
   if (!entry) return {};
   return pageMetadata({
-    title: "ClearPath — Mentale Firewall gegen kognitive Verzerrungen | neckarshore.ai",
+    title: "ClearPath — Mentale Firewall gegen Verzerrungen | neckarshore.ai",
     description: entry.definition,
     path: `/products/${SLUG}`,
   });

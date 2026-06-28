@@ -9,7 +9,7 @@ export function generateMetadata(): Metadata {
   return previewProductMetadata({
     slug: SLUG,
     title:
-      "Phonesis Voicebank — Stimmenarchiv für Familien & Institutionen | neckarshore.ai",
+      "Phonesis Voicebank — Stimmenarchiv für Familien | neckarshore.ai",
   });
 }
 
