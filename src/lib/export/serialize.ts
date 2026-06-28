@@ -46,6 +46,19 @@ export function faqToMarkdown(items: { q: string; a: string }[]): string {
   return items.map((item) => `### ${item.q}\n\n${item.a}`).join("\n\n");
 }
 
+/** Escape a single GFM table cell: collapse newlines, escape the pipe, trim. */
+function escapeCell(cell: string): string {
+  return cell.replace(/\r?\n/g, " ").replace(/\|/g, "\\|").trim();
+}
+
+/** Render a GFM (pipe) table from a header row and data rows. */
+export function tableToMarkdown(headers: string[], rows: string[][]): string {
+  const headerLine = `| ${headers.map(escapeCell).join(" | ")} |`;
+  const separator = `| ${headers.map(() => "---").join(" | ")} |`;
+  const bodyLines = rows.map((row) => `| ${row.map(escapeCell).join(" | ")} |`);
+  return [headerLine, separator, ...bodyLines].join("\n");
+}
+
 /** Assemble a complete Markdown document from structured input. Ends with a single newline. */
 export function buildMarkdownDocument(input: MarkdownDocumentInput): string {
   const parts: string[] = [yamlFrontmatter(input.frontmatter), `# ${input.title}`];

@@ -37,6 +37,9 @@ test.describe("Markdown export (TC-EXP)", () => {
     expect(body).toContain('source: "https://neckarshore.ai/products/clearpath"');
     expect(body).toContain('site: "neckarshore.ai"');
     expect(body).toContain("## Das Problem"); // raw body from clearpath.md
+    expect(body).toContain("## Die wichtigsten Denkfehler"); // product-specific table section
+    expect(body).toContain("| Denkfehler | In einem Satz | Mehr |"); // GFM table header
+    expect(body).toContain("Bestätigungsfehler (Confirmation Bias)");
     expect(body).toContain("## Häufige Fragen"); // data-driven FAQ section
     expect(body).toContain("### Was macht ClearPath?");
   });

@@ -11,6 +11,7 @@ import { readEntry } from "@/lib/content/collection";
 import { faqForSlug } from "@/lib/product-faqs";
 import { SITE_URL } from "@/lib/site-config";
 import { buildMarkdownDocument, faqToMarkdown } from "../serialize";
+import { extraSectionsForSlug } from "../product-sections";
 
 interface ProductFrontmatter {
   name: string;
@@ -41,9 +42,11 @@ export function buildProductMarkdown(slug: string, opts: ExportOptions): ExportR
   if (!entry) return null;
 
   const fm = entry.data;
+
+  // Order mirrors the rendered page: body → product-specific tables → FAQ.
+  const sections = [...extraSectionsForSlug(slug)];
   const faq = faqForSlug(slug);
-  const sections =
-    faq.length > 0 ? [{ heading: "Häufige Fragen", body: faqToMarkdown(faq) }] : [];
+  if (faq.length > 0) sections.push({ heading: "Häufige Fragen", body: faqToMarkdown(faq) });
 
   const markdown = buildMarkdownDocument({
     frontmatter: {

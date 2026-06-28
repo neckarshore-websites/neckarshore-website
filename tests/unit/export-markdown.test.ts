@@ -13,8 +13,9 @@
  */
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { buildMarkdownDocument, faqToMarkdown } from "../../src/lib/export/serialize.ts";
+import { buildMarkdownDocument, faqToMarkdown, tableToMarkdown } from "../../src/lib/export/serialize.ts";
 import { buildProductMarkdown } from "../../src/lib/export/builders/product.ts";
+import { extraSectionsForSlug } from "../../src/lib/export/product-sections.ts";
 import { resolveExport } from "../../src/lib/export/resolve.ts";
 
 const OPTS = { baseUrl: "https://neckarshore.ai", exportedAt: "2026-06-28" };
@@ -82,6 +83,34 @@ test("TC-EXP-U04: faqToMarkdown renders each Q as H3 and the answer below it", (
   assert.equal(out, "### Was macht es?\n\nEs exportiert.\n\n### Wie?\n\nServer-seitig.");
 });
 
+test("TC-EXP-U09: tableToMarkdown renders a GFM table and escapes pipes in cells", () => {
+  const out = tableToMarkdown(
+    ["A", "B"],
+    [
+      ["1", "2"],
+      ["x|y", "z"],
+    ],
+  );
+  assert.equal(out, "| A | B |\n| --- | --- |\n| 1 | 2 |\n| x\\|y | z |");
+});
+
+// ── product-sections.ts (per-slug tables, extensible) ────────────────────────
+
+test("TC-EXP-U10: extraSectionsForSlug('clearpath') returns the biases table with terms + wikipedia links", () => {
+  const sections = extraSectionsForSlug("clearpath");
+  assert.equal(sections.length, 1);
+  assert.equal(sections[0].heading, "Die wichtigsten Denkfehler");
+  const body = sections[0].body;
+  assert.match(body, /\| Denkfehler \| In einem Satz \| Mehr \|/);
+  assert.match(body, /\| --- \| --- \| --- \|/);
+  assert.match(body, /Bestätigungsfehler \(Confirmation Bias\)/);
+  assert.match(body, /\[Wikipedia ↗\]\(https:\/\/de\.wikipedia\.org\/wiki\//);
+});
+
+test("TC-EXP-U11: extraSectionsForSlug returns [] for a product without a table", () => {
+  assert.deepEqual(extraSectionsForSlug("snakeoil-check"), []);
+});
+
 // ── builders/product.ts ──────────────────────────────────────────────────────
 
 test("TC-EXP-U05: buildProductMarkdown assembles a real product (clearpath) from its .md source + FAQ", () => {
@@ -103,6 +132,16 @@ test("TC-EXP-U05: buildProductMarkdown assembles a real product (clearpath) from
 
 test("TC-EXP-U06: buildProductMarkdown returns null for a slug with no .md source", () => {
   assert.equal(buildProductMarkdown("does-not-exist", OPTS), null);
+});
+
+test("TC-EXP-U12: buildProductMarkdown('clearpath') includes the biases table, ordered before the FAQ", () => {
+  const md = buildProductMarkdown("clearpath", OPTS)!.markdown;
+  assert.match(md, /## Die wichtigsten Denkfehler/);
+  assert.match(md, /\| Denkfehler \| In einem Satz \| Mehr \|/);
+  assert.match(md, /Bestätigungsfehler \(Confirmation Bias\)/);
+  const table = md.indexOf("## Die wichtigsten Denkfehler");
+  const faq = md.indexOf("## Häufige Fragen");
+  assert.ok(table > 0 && faq > 0 && table < faq, "biases table must come before the FAQ (mirrors the page)");
 });
 
 // ── resolve.ts ───────────────────────────────────────────────────────────────

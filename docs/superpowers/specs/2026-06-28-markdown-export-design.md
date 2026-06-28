@@ -31,8 +31,9 @@ is a server-rendered `<a download>`. No provider/overlay (unlike Cmd+K search).
 
 | File | Role | Portability |
 |------|------|-------------|
-| `src/lib/export/serialize.ts` | Generic serializer: YAML frontmatter, `buildMarkdownDocument()`, `faqToMarkdown()` | **Copy verbatim** across sites |
-| `src/lib/export/builders/product.ts` | `buildProductMarkdown(slug, opts)` — reads source `.md` + FAQ, calls serializer | Per-repo |
+| `src/lib/export/serialize.ts` | Generic serializer: YAML frontmatter, `buildMarkdownDocument()`, `faqToMarkdown()`, `tableToMarkdown()` | **Copy verbatim** across sites |
+| `src/lib/export/builders/product.ts` | `buildProductMarkdown(slug, opts)` — reads source `.md` + tables + FAQ, calls serializer | Per-repo |
+| `src/lib/export/product-sections.ts` | `extraSectionsForSlug(slug)` — slug-keyed registry of product-specific tables (e.g. ClearPath biases). One entry per table. | Per-repo |
 | `src/lib/export/resolve.ts` | `resolveExport(path, opts)` — path → builder; `null` for non-exportable | Per-repo |
 | `src/app/api/export/route.ts` | `GET ?path=` → resolve → markdown attachment (200/404/400) | Near-identical |
 | `src/components/export/ExportButton.tsx` | `<a download>` + lucide `Download` | Near-identical (Tailwind tokens differ) |
@@ -61,6 +62,11 @@ exported: "2026-06-28"
 
 ## Das Problem
 …(raw body, 1:1 from clearpath.md)…
+
+## Die wichtigsten Denkfehler
+| Denkfehler | In einem Satz | Mehr |
+| --- | --- | --- |
+| Bestätigungsfehler (Confirmation Bias) | … | [Wikipedia ↗](…) |
 
 ## Häufige Fragen
 ### Was macht ClearPath?
@@ -103,6 +109,6 @@ document (dev-server alone would mask a missing-file regression).
 
 ## Out of scope / follow-ups
 
-1. Product-specific structured blocks (e.g. the ClearPath biases table) — currently NOT in the export (header + body + FAQ only). Add per-product if the value justifies it.
+1. ~~Product-specific structured blocks (e.g. the ClearPath biases table) — currently NOT in the export.~~ **Done (2026-06-28):** product tables are now included via the `product-sections.ts` slug-keyed registry, serialized with `tableToMarkdown()` and ordered before the FAQ (mirrors the page). Adding the next product's table is one registry entry. Note: tables are serialized from their **data source** (`CLEARPATH_BIASES` etc.), so a table that only exists as hand-written JSX (no data module) would still need a small extraction first.
 2. Home/legal export — would need the DOM/hybrid path (rejected). Alternative: move legal content from JSX into `.md`, then it becomes exportable.
 3. Promote the serializer core to a shared package once it has proven stable across ≥2 sites.
