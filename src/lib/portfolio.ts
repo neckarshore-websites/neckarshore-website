@@ -248,8 +248,9 @@ export const PORTFOLIO: PortfolioCategory[] = [
         schemaType: "SoftwareApplication",
         applicationCategory: "UtilitiesApplication",
         // Bespoke indexable detail page (src/app/products/social-scrapers) → excluded from the
-        // [slug] skeleton route, enters the sitemap. Public MIT OSS shared core (like OVA), so
-        // NOT noindex; the page emits SoftwareApplication (real url + free Offer) + FAQPage.
+        // [slug] skeleton route, enters the sitemap. The skills are privately developed (repos NOT
+        // public), so the page stays indexable as a content/GEO surface — NOT as a free download:
+        // the SoftwareApplication schema is honest (no free Offer / MIT / public-repo url).
         hasOwnPage: true,
       },
       {

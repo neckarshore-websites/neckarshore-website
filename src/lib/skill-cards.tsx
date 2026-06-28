@@ -100,7 +100,7 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
   // 2 — reproduced 1:1 from the former landing-page OSS section.
   "social-scrapers": {
     icon: Layers,
-    badge: "Beta",
+    badge: "In Entwicklung",
     title: "Obsidian Social Scrapers",
     summary: "Instagram-, LinkedIn- und X-Profile als neutrale Vault-Briefings.",
     description:
@@ -124,10 +124,9 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
       },
     ],
     moreNote: "… weitere in Entwicklung",
-    license: "MIT License",
     repoUrl: "https://github.com/neckarshore-skills/obsidian-social-scrapers-common",
     track: "oss_social_scrapers",
-    visibility: "public",
+    visibility: "private",
   },
 
   // 3 — NEW (first content draft, refine in the detail pass).

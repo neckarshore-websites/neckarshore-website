@@ -2,10 +2,8 @@ import type { Metadata } from "next";
 import { SkillDetailPage, SkillSection, SkillChipRow } from "@/components/SkillDetailPage";
 import { pageMetadata } from "@/lib/seo";
 
-const REPO = "https://github.com/neckarshore-skills/obsidian-social-scrapers-common";
-
 const DEFINITION =
-  "Obsidian Social Scrapers ist eine Open-Source-Familie von Claude-Skills, die öffentliche Profile und Posts von Instagram, LinkedIn und X als neutrale Markdown-Briefings direkt in einen Obsidian-Vault holt — getragen von einem geteilten, stdlib-only Python-Core. MIT-lizenziert.";
+  "Obsidian Social Scrapers ist eine Familie von drei Claude-Skills, die öffentliche Profile und Posts von Instagram, LinkedIn und X als neutrale Markdown-Briefings in einen Obsidian-Vault holt — getragen von einem geteilten, stdlib-only Python-Core. Privat in Weiterentwicklung.";
 
 export const metadata: Metadata = pageMetadata({
   title: "Obsidian Social Scrapers — Profile & Posts als Vault-Briefings | neckarshore.ai",
@@ -16,11 +14,11 @@ export const metadata: Metadata = pageMetadata({
 const scrapers = [
   {
     code: "linkedin-scraper",
-    text: "Profile samt letzter Posts mit Engagement-Daten (Reaktionen, Kommentare, Reposts) — der reißerische Engagement-Bait-Ton wird zu einem nüchternen Briefing neutralisiert. Public.",
+    text: "Profile samt letzter Posts mit Engagement-Daten (Reaktionen, Kommentare, Reposts) — der reißerische Engagement-Bait-Ton wird zu einem nüchternen Briefing neutralisiert. Privates Repo.",
   },
   {
     code: "instagram-scraper",
-    text: "Profile und Posts inklusive Reels-Transkription via lokalem Whisper.cpp — kein Cloud-Audio, die Tonspur verlässt deine Maschine nicht. Public.",
+    text: "Profile und Posts inklusive Reels-Transkription via lokalem Whisper.cpp — kein Cloud-Audio, die Tonspur verlässt deine Maschine nicht. Privates Repo.",
   },
   {
     code: "x-scraper",
@@ -35,8 +33,10 @@ const coreParts = [
   ["timestamps", "Einheitliche Zeitstempel-Auflösung für Frontmatter, Logs und Datei-Sortierung."],
 ];
 
-// Honest SoftwareApplication entity — free MIT OSS, real repo URL, free Offer. The shared
-// core is the public, downloadable surface; applicationCategory mirrors the portfolio item.
+// Honest SoftwareApplication entity — the skills are privately developed and the repos are
+// NOT public, so no free Offer, no MIT license claim, and no public-repo url (a private repo
+// 404s for anonymous crawlers). `url` points at this product page; applicationCategory mirrors
+// the portfolio item. The page stays indexable as a content/GEO surface, not as a free download.
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -45,29 +45,26 @@ const softwareSchema = {
   applicationCategory: "UtilitiesApplication",
   operatingSystem: "macOS, Windows, Linux",
   softwareRequirements: "Claude Code, Python 3, Apify-Token",
-  url: REPO,
-  isAccessibleForFree: true,
-  offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
-  license: "https://opensource.org/licenses/MIT",
+  url: "https://neckarshore.ai/products/social-scrapers",
   author: { "@type": "Organization", name: "neckarshore.ai", url: "https://neckarshore.ai" },
 } as const;
 
 const faqItems = [
   {
     q: "Was sind die Obsidian Social Scrapers?",
-    a: "Eine Familie von drei Claude-Code-Skills, die öffentliche Profile und Posts von Instagram, LinkedIn und X einlesen und als neutrale Markdown-Notizen in deinen Obsidian-Vault schreiben. Statt Engagement-Bait bekommst du ein nüchternes Briefing pro Post. Sie teilen sich einen gemeinsamen, MIT-lizenzierten Python-Core.",
+    a: "Eine Familie von drei Claude-Code-Skills, die öffentliche Profile und Posts von Instagram, LinkedIn und X einlesen und als neutrale Markdown-Notizen in deinen Obsidian-Vault schreiben. Statt Engagement-Bait bekommst du ein nüchternes Briefing pro Post. Sie teilen sich einen gemeinsamen, stdlib-only Python-Core und werden privat weiterentwickelt.",
   },
   {
     q: "Welche Plattformen werden unterstützt?",
-    a: "Instagram (inkl. Reels-Transkription via lokalem Whisper.cpp), LinkedIn (Profile + Posts mit Engagement-Daten) und X / Twitter (über die offizielle X API v2, ToS-konform). Instagram- und LinkedIn-Scraper sind öffentlich, der X-Scraper liegt in einem privaten Repo.",
+    a: "Instagram (inkl. Reels-Transkription via lokalem Whisper.cpp), LinkedIn (Profile + Posts mit Engagement-Daten) und X / Twitter (über die offizielle X API v2, ToS-konform). Alle drei Scraper liegen aktuell in privaten Repositories.",
   },
   {
     q: "Warum ein geteilter Core?",
     a: "Token-Handling, Markdown-Rendering, Zeitstempel und das LLM-Polishing waren in allen drei Scrapern identisch. Der geteilte Python-Core (_social_common) zieht diese Logik in eine Quelle — stdlib-only, byte-identisch extrahiert, mit eigener Smoke-Test-Suite. Die Plugins vendoren eine Kopie; einen separaten Klon brauchen Endnutzer nicht.",
   },
   {
-    q: "Was kostet es?",
-    a: "Der geteilte Core ist Open Source unter MIT-Lizenz. Laufende Kosten entstehen nur durch die genutzten Drittdienste: ein Apify-Token für das Abrufen der Profile und — optional — ein LLM-Schlüssel für das Briefing-Polishing (oder lokal via Ollama).",
+    q: "Welche laufenden Kosten entstehen?",
+    a: "Die Skills selbst werden privat entwickelt und genutzt. Laufende Kosten entstehen nur durch die genutzten Drittdienste: ein Apify-Token für das Abrufen der Profile und — optional — ein LLM-Schlüssel für das Briefing-Polishing (oder lokal via Ollama).",
   },
 ];
 
@@ -123,10 +120,9 @@ export default function SocialScrapersPage() {
       <SkillSection heading="Datenschutz & Verfügbarkeit">
         <p className="mt-3 text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
           Gelesen werden nur öffentliche Profile. Die Instagram-Reels-Transkription läuft lokal über
-          Whisper.cpp — die Tonspur verlässt deine Maschine nicht. Der geteilte Core ist Open Source
-          unter MIT-Lizenz auf GitHub; Instagram- und LinkedIn-Scraper sind öffentlich, der X-Scraper
-          liegt in einem privaten Repo. Für den Abruf wird ein Apify-Token benötigt, fürs Polishing
-          optional ein LLM-Schlüssel.
+          Whisper.cpp — die Tonspur verlässt deine Maschine nicht. Die Scraper werden privat
+          weiterentwickelt; alle Repositories liegen aktuell privat auf GitHub. Für den Abruf wird ein
+          Apify-Token benötigt, fürs Polishing optional ein LLM-Schlüssel.
         </p>
       </SkillSection>
     </SkillDetailPage>
