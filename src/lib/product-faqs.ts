@@ -22,7 +22,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
   omnopsis: [
     {
       q: "Was ist Omnopsis?",
-      a: "Eine KI-first Documentation Engine: Omnopsis zieht automatisch aus euren Quellen — Git, Jira, Confluence — und generiert daraus Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten. Jede Aussage wird gegen die Evidenz in euren Systemen geprüft, bevor sie ausgegeben wird.",
+      a: "Omnopsis ist eine KI-first Documentation Engine für Engineering-Teams im anspruchsvollen Mittelstand. Omnopsis zieht automatisch aus euren bestehenden Quellen — Git, Jira und Confluence — und generiert daraus Compliance-Dokumentation, technische Dokumentation und rollenbasierte Chatbot-Antworten, die sich aus dem Code heraus aktuell halten. Der entscheidende Unterschied ist die Verlässlichkeit: Jede Aussage wird gegen die Evidenz in euren eigenen Systemen geprüft, bevor sie ausgegeben wird, und das System arbeitet fail-closed — ist die Evidenz schwach, verweigert Omnopsis die Antwort, statt zu raten. Dazu kommt BYOLLM (Bring Your Own LLM): Ihr entscheidet, welches Modell läuft — Claude, GPT, Gemini oder ein lokales Open-Source-Modell — und eure Daten verlassen eure Infrastruktur nie, DSGVO-konform by default und ohne Vendor-Lock-in.",
     },
     {
       q: "Was bedeutet „fail-closed“?",
@@ -41,7 +41,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
   clearpath: [
     {
       q: "Was macht ClearPath?",
-      a: "Du beschreibst eine Entscheidung in einem Satz, und ClearPath benennt die drei kognitiven Verzerrungen, die dein Urteil am wahrscheinlichsten verzerren — und erzwingt eine 60-Sekunden-Pause, in der du gegen diese Denkfehler prüfst, bevor du handelst.",
+      a: "ClearPath ist eine mentale Firewall gegen kognitive Verzerrungen — ein Werkzeug für bessere Entscheidungen. Der Ausgangspunkt: Die meisten Fehlentscheidungen entstehen nicht aus fehlendem Wissen, sondern aus vorhersehbaren Denkfehlern, die im Moment der Entscheidung unsichtbar sind. Du beschreibst eine Entscheidung in einem Satz, und ClearPath benennt die drei kognitiven Verzerrungen, die dein Urteil am wahrscheinlichsten trüben. Der eigentliche Hebel ist Friction by Design: Statt schneller zu entscheiden, erzwingt ClearPath eine bewusste 60-Sekunden-Pause, in der du gegen genau diese Denkfehler prüfst, bevor du handelst — die kurze Reibung, in der ein Fehler auffällt, bevor er teuer wird. Die Bias-Bibliothek folgt Rolf Dobellis Katalog der Denkfehler; der anonyme v0.1-Prototyp deckt 18 Verzerrungen ab, ohne Anmeldung und ohne Tracking.",
     },
     {
       q: "Was bedeutet „Friction by Design“?",
@@ -61,7 +61,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
   "snakeoil-check": [
     {
       q: "Was prüft Snakeoil-Check?",
-      a: "Ein Online-Coaching, High-Ticket-Programm oder eine Masterclass — anhand von zwölf festen, neutralen Kriterien, von der Konkretheit des Versprechens über die Preis-Transparenz bis zu nachprüfbaren Belegen. Heraus kommt eine belastbare Tendenz: Go, Vorsicht oder Lieber lassen.",
+      a: "Snakeoil-Check ist ein neutraler Reality-Check für Online-Coachings, High-Ticket-Programme und Masterclasses. Das Problem, das Snakeoil-Check löst: Seriöse und unseriöse Angebote sehen oft identisch aus — Hochglanz-Versprechen, künstliche Verknappung und kuratierte Testimonials, egal ob echte Substanz dahintersteht. Du gibst den Link zu einem Angebot an, Snakeoil-Check liest die öffentliche Verkaufsseite aus und bewertet sie anhand von zwölf festen, neutralen Kriterien — von der Konkretheit des Versprechens über die Preis-Transparenz bis zu nachprüfbaren Belegen. Heraus kommt ein belastbarer Score mit klarer Tendenz: Go, Vorsicht oder Lieber lassen, samt Begründung pro Kriterium. Der Unterschied ist die Haltung — Skepsis als Werkzeug, nicht als Pauschalurteil: dieselben zwölf Kriterien werden neutral auf jedes Angebot angewandt, die Entscheidung bleibt am Ende bei dir.",
     },
     {
       q: "Wie läuft eine Prüfung ab?",
@@ -80,7 +80,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
   phonesis: [
     {
       q: "Was ist die Phonesis Voicebank?",
-      a: "Ein Archiv echter menschlicher Stimmen — professionell aufgenommen, verschlüsselt gespeichert und für kommende Generationen lebendig gehalten. Eine bewahrte Stimme ist eine erhaltene Gegenwart.",
+      a: "Die Phonesis Voicebank ist ein Archiv echter menschlicher Stimmen — professionell aufgenommen, verschlüsselt gespeichert und für kommende Generationen lebendig gehalten. Eine Stimme verschwindet, wenn ein Mensch geht, und Fotos tragen sie nicht; Phonesis schafft dafür den sicheren, dauerhaften Ort, den es heute kaum gibt. Du nimmst direkt im Browser auf — geführt durch vorbereitete Prompts, ohne App — und jede Aufnahme wird verschlüsselt gespeichert, automatisch transkribiert und einer verifizierten Identität zugeordnet. Phonesis ist für Familien gedacht, die Gutenacht-Geschichten in Omas eigener Stimme behalten wollen, für Hospize, in denen Menschen ihre Stimme sichern, und für Institutionen, die bedeutende Stimmen für Biografie und kulturelles Erbe archivieren. Das Fundament ist Ethik, kein Feature: DSGVO-konform, Ende-zu-Ende-verschlüsselt und kein Stimm-Klon ohne ausdrückliche Einwilligung — die Hoheit bleibt jederzeit bei Sprecher und benannten Erben.",
     },
     {
       q: "Für wen ist Phonesis gedacht?",
@@ -99,7 +99,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
   "local-seo-hub": [
     {
       q: "Was macht der Local-SEO-Hub?",
-      a: "Er bündelt die drei Sichtbarkeits-Signale eines lokalen Unternehmens — Rankings, Bewertungen und Verzeichnis-Einträge — in einen einzigen Score von 0 bis 100 und leitet daraus priorisierte Empfehlungen ab: eine Zahl statt eines Dutzends unverbundener Kennzahlen.",
+      a: "Der Local-SEO-Hub ist eine Plattform, die lokale Online-Sichtbarkeit in einer einzigen, KI-gestützten Zahl bündelt. Lokale Betriebe — Restaurant, Praxis, Handwerk — werden über drei Signale gefunden oder übersehen: Rankings in der lokalen Suche, Bewertungen und Verzeichnis-Einträge, verstreut über Dutzende Plattformen mit je eigenem Dashboard. Der Local-SEO-Hub sammelt diese Signale an einem Ort und verdichtet sie zu einem Sichtbarkeits-Score von 0 bis 100 — eine Zahl statt eines Dutzends unverbundener Kennzahlen. KI wertet Bewertungen nach Stimmung aus, erkennt Auffälligkeiten früh und leitet priorisierte Empfehlungen ab. Der Unterschied ist die Haltung: KI als Co-Pilot, nicht als Autopilot — man sieht, woraus Score und Empfehlungen entstehen, und entscheidet selbst. Für Agenturen läuft derselbe Überblick über mehrere Standorte hinweg, ein Dashboard statt vieler Logins.",
     },
     {
       q: "Für wen ist die Plattform gedacht?",
@@ -118,7 +118,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
   "prod-or-pretend": [
     {
       q: "Was macht Prod-or-Pretend?",
-      a: "Es prüft gehypte Tech-Behauptungen auf LinkedIn und X gegen echte Produktionsstandards und hilft Entscheidern, Substanz von heißer Luft zu unterscheiden — kein Debunker, sondern ein Spiegel.",
+      a: "Prod-or-Pretend ist ein konstruktiver Qualitäts-Spiegel für Tech-Hype. LinkedIn und X sind zur Echokammer für recycelten Hype geworden — „an einem Wochenende gebaut“, „Game Changer“, „KI-gestützt“, gepostet ohne Repository, ohne Tests, ohne Belege; wer Software-Budgets verantwortet, kann Substanz kaum von poliertem Theater unterscheiden. Prod-or-Pretend prüft solche Behauptungen gegen echte Produktionsstandards anhand einer festen Zwölf-Punkte-Checkliste. Gibt es ein öffentliches Repository, wird geprüft, was wirklich zählt — Tests, Sicherheit, Dokumentation, CI/CD und Abhängigkeiten; gibt es keines, spiegelt ein neutrales Beraterraster die Behauptung gegen die Fragen, die in der Produktion entscheiden. Der Unterschied ist die Haltung: ein Spiegel, kein Tribunal — dieselben Maßstäbe für jede Behauptung, ruhig und nachvollziehbar angelegt, konstruktiv formuliert und nie als Angriff auf eine Person.",
     },
     {
       q: "Wie wird geprüft?",
@@ -138,7 +138,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
   "restaurant-menu-update": [
     {
       q: "Was macht die Restaurant-Menüpflege?",
-      a: "Sie verwandelt das wiederkehrende Menü-Update eines Restaurants in einen geprüften, reproduzierbaren Vorgang — von der Rohkarte als PDF, Foto oder Text bis zum fertigen Pull Request mit Vorschau-Deploy zur Abnahme.",
+      a: "Die Restaurant-Menüpflege ist ein Skill, der das wiederkehrende Menü-Update eines Restaurants in einen geprüften, reproduzierbaren Vorgang verwandelt. Der Inhaber liefert die neue Karte, wie sie anfällt — als PDF, Foto oder Freitext — und die Restaurant-Menüpflege macht daraus publikationsreife Website-Inhalte: Sie zerlegt die Karte in einzelne Gerichte und Weine, gleicht jeden Allergen- und Zusatzstoff-Code gegen die zentrale LMIV-/ZZulV-Referenz ab (unbekannte Codes werden gemeldet, nie geraten) und korrigiert ASCII-Schreibweisen aus alten Word-Vorlagen zu echten Umlauten, während italienische Gerichtnamen im Original bleiben. Der entscheidende Unterschied ist die Absicherung: Build, Lint und Konsistenz-Check laufen automatisch, und am Ende steht ein Pull Request mit Test-Plan und Vercel-Vorschau — nichts geht ohne menschliche Abnahme online.",
     },
     {
       q: "Wie funktioniert die Allergen-Prüfung?",
