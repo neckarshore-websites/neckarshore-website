@@ -7,6 +7,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { ProductFaq } from "@/components/ProductFaq";
+import { ExportButton } from "@/components/export/ExportButton";
 import { pageMetadata } from "@/lib/seo";
 import { breadcrumbTrailForSlug, getItemBySlug } from "@/lib/portfolio";
 import { getProductEntry } from "@/lib/content/products";
@@ -105,6 +106,9 @@ export default function PreviewProductPage({
         <Breadcrumbs trail={breadcrumbTrailForSlug(slug)} />
 
         <article>
+          <div className="mb-4 flex justify-end">
+            <ExportButton path={`/products/${slug}`} />
+          </div>
           <header className="mb-6">
             <h1 className="font-heading text-4xl font-bold text-accent md:text-5xl">
               {entry.headline}

@@ -59,6 +59,9 @@ See `CLAUDE.md` → "Lighthouse Device Matrix" for profile definitions and gate 
 | 38 | 2026-06-22 | linus/detail-page-review-fixes | desktop | 100 | 96 | 100 | 100 | 469ms | 0ms | 0.001 | ad-hoc (/products/skills — flatter mobile table) |
 | 39 | 2026-06-22 | linus/detail-page-review-fixes | mobile-5g | 100 | 96 | 100 | 100 | 309ms | 16ms | 0.002 | ad-hoc (/products/skills — flatter mobile table) |
 | 40 | 2026-06-22 | linus/detail-page-review-fixes | mobile-4g | 96 | 96 | 100 | 100 | 2.8s | 17ms | 0.002 | ad-hoc (/products/skills — flatter mobile table) |
+| 41 | 2026-06-28 | linus/markdown-export | desktop | 100 | 96 | 100 | 100 | 642ms | 0ms | 0.002 | ad-hoc (homepage; MD-export feature lives on /products/* — the `<a>` a11y is covered by e2e accessibility across all pages) |
+| 42 | 2026-06-28 | linus/markdown-export | mobile-5g | 100 | 96 | 100 | 100 | 290ms | 11ms | 0.002 | ad-hoc (homepage) |
+| 43 | 2026-06-28 | linus/markdown-export | mobile-4g | 96 | 96 | 100 | 100 | 2.8s | 10ms | 0.002 | ad-hoc (homepage) |
 
 > **Baseline established 2026-04-10 (local, rows 1/3).** Mobile Slow (Edge-5G) reveals the blind spot: Perf 70-71, LCP 9.6s. This is the scenario a colleague reported from France on weak 5G. CI vs local delta is minimal (±1 point).
 
