@@ -81,6 +81,14 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },
+  // The /api/export route handler reads product source `.md` at REQUEST time (it serves
+  // the clean source markdown). Next's file-tracing can't see the dynamic slug, so
+  // force-include the content dir into the serverless bundle — otherwise the files are
+  // present in dev/build but ENOENT on Vercel at runtime. Keys are route globs; values
+  // are globs from the project root (Next 16 outputFileTracingIncludes).
+  outputFileTracingIncludes: {
+    "/api/export": ["src/content/products/**/*.md"],
+  },
   async headers() {
     return [
       {
