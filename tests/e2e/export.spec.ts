@@ -57,4 +57,16 @@ test.describe("Markdown export (TC-EXP)", () => {
     const btn = page.locator(`a[href="/api/export?path=${encodeURIComponent(path)}"]`);
     await expect(btn).toBeVisible();
   });
+
+  test("TC-EXP-007: clicking the button downloads the .md (analytics click does not swallow it)", async ({ page }) => {
+    // Guards the core path: the site-wide TrackerScript click handler must NOT
+    // preventDefault() the download. Asserts the browser download actually fires
+    // with the right filename when the button is clicked.
+    await page.goto(PRODUCT_PATH);
+    const [download] = await Promise.all([
+      page.waitForEvent("download"),
+      page.locator(`a[href="${EXPORT_HREF}"]`).click(),
+    ]);
+    expect(download.suggestedFilename()).toBe("clearpath.md");
+  });
 });
