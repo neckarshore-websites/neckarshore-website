@@ -59,7 +59,11 @@ export function previewProductMetadata({
   // gate together (AP-1: one flag, all effects). No dual-gate footgun.
   const noindex = getItemBySlug(slug)?.noindex ?? false;
   return {
-    ...pageMetadata({ title, description: entry.definition, path: `/products/${slug}` }),
+    ...pageMetadata({
+      title,
+      description: entry.metaDescription ?? entry.definition,
+      path: `/products/${slug}`,
+    }),
     robots: { index: !noindex, follow: true },
   };
 }

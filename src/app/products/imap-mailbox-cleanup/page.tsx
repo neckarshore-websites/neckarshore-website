@@ -8,9 +8,14 @@ const REPO = "https://github.com/neckarshore-skills/imap-mailbox-cleanup";
 const DEFINITION =
   "IMAP Mailbox Cleanup ist ein kostenloser Open-Source-Hybrid aus CLI und Claude-Skill, der ein großes IMAP-Postfach nach klaren Regeln aufräumt — Dry-run als Default, jede Aktion audit-logged, ausschließlich Soft-Delete. MIT-lizenziert.";
 
+// Short SERP pitch (≤155, audit P2-2). DEFINITION stays long for the SoftwareApplication schema
+// description (GEO citation surface). AI-draft → Rauhut-edit.
+const META_DESCRIPTION =
+  "IMAP Mailbox Cleanup räumt große Postfächer regelbasiert auf — Dry-run als Default, jede Aktion audit-logged, nur Soft-Delete. Open Source, MIT-lizenziert.";
+
 export const metadata: Metadata = pageMetadata({
   title: "IMAP Mailbox Cleanup — regelbasierte Postfach-Triage | neckarshore.ai",
-  description: DEFINITION,
+  description: META_DESCRIPTION,
   path: "/products/imap-mailbox-cleanup",
 });
 

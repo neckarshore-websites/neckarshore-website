@@ -369,6 +369,10 @@ test.describe("SEO — per-route WebPage entity", () => {
     page,
     request,
   }) => {
+    // Sequentially navigates EVERY sitemap route; each first hit triggers an on-demand
+    // dev-server compile, and under Playwright's multi-worker contention the default 30s
+    // is too tight (a heavy markdown route can stall). Wall-time only — assertions unchanged.
+    test.setTimeout(120_000);
     const xml = await (await request.get("/sitemap.xml")).text();
     const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
     expect(locs.length, "sitemap yields a non-trivial route set").toBeGreaterThan(5);
@@ -430,5 +434,79 @@ test.describe("SEO — per-route WebPage entity", () => {
       satisfied,
       "a single @graph block holds the WebPage + its mainEntity target",
     ).toBe(true);
+  });
+});
+
+// --- Meta-description length guard (audit P2-2, 2026-06-28) -----------------------
+// Google truncates meta descriptions at ~155 chars: the differentiator at the end of a
+// German sentence is dropped, and og:description mirrors it → degraded Slack/LinkedIn/
+// WhatsApp previews too. The on-page first passage + the SoftwareApplication/CollectionPage
+// schema `description` stay long (GEO citation surface); only `<meta name=description>` is
+// decoupled to a short SERP pitch. Routes are DERIVED from the sitemap (authoritative for
+// indexable pages — same pattern as TC-SEO-035) plus the noindex detail pages that still
+// emit a description we own; never a hand-kept list (that reproduces the blind spot this
+// guard exists to catch).
+test.describe("SEO — meta description length", () => {
+  const MAX = 155;
+  // noindex (held out of the sitemap) but still emits a meta/og description we control.
+  const EXTRA_NOINDEX = ["/products/restaurant-menu-update"];
+
+  // TC-SEO-037: every indexable + owned route keeps its meta description ≤155 chars. ONE
+  // test that COLLECTS all offenders so a failure enumerates the full red set in a single
+  // run (TDD: drives the P2-2 rewrite, then guards against regression).
+  test("TC-SEO-037: meta description ≤155 chars on every owned route", async ({
+    page,
+    request,
+  }) => {
+    // Sequentially navigates every owned route; like TC-SEO-035 the first hit per route
+    // compiles on demand in dev, so the default 30s is too tight under worker contention.
+    // Wall-time only — the ≤155 assertion is unchanged.
+    test.setTimeout(120_000);
+    const xml = await (await request.get("/sitemap.xml")).text();
+    const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
+      (m) => m[1].replace(BASE, "") || "/",
+    );
+    const routes = [...new Set([...locs, ...EXTRA_NOINDEX])];
+    expect(routes.length, "route set is non-trivial").toBeGreaterThan(5);
+
+    const offenders: string[] = [];
+    for (const path of routes) {
+      await page.goto(path);
+      const content = await page
+        .locator('meta[name="description"]')
+        .getAttribute("content");
+      expect(content, `${path} has a meta description`).toBeTruthy();
+      if (content && content.length > MAX) offenders.push(`${path} → ${content.length}`);
+    }
+    expect(
+      offenders,
+      `meta descriptions over ${MAX} chars:\n  ${offenders.join("\n  ")}`,
+    ).toEqual([]);
+  });
+
+  // TC-SEO-038: the decouple INVARIANT — the long citation text (SoftwareApplication schema
+  // `description` = the unshortened DEFINITION) must stay LONGER than the short meta pitch. A
+  // green TC-SEO-037 alone cannot tell clean decoupling from an accidental shorten-everywhere
+  // (both look identical at the meta level); this asserts the OTHER half, so a future regression
+  // that routes the short pitch into the schema is caught. Sample page: omnopsis.
+  test("TC-SEO-038: schema citation description stays longer than the meta pitch (decouple invariant)", async ({
+    page,
+  }) => {
+    await page.goto("/products/omnopsis");
+    const meta = await page
+      .locator('meta[name="description"]')
+      .getAttribute("content");
+    const app = (await ldNodes(page)).find(
+      (n) => n["@type"] === "SoftwareApplication",
+    ) as Record<string, unknown> | undefined;
+    expect(app, "SoftwareApplication node present").toBeTruthy();
+    const schemaDesc = String(app!.description ?? "");
+    expect(meta, "meta description present").toBeTruthy();
+    expect(meta!.length, "meta pitch ≤155").toBeLessThanOrEqual(MAX);
+    expect(schemaDesc.length, "schema citation text is non-trivial").toBeGreaterThan(180);
+    expect(
+      schemaDesc.length,
+      "schema citation text must stay LONGER than the meta pitch (decouple, not shorten)",
+    ).toBeGreaterThan(meta!.length);
   });
 });

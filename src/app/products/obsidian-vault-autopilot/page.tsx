@@ -18,9 +18,14 @@ const card = SKILL_CARDS["obsidian-vault-autopilot"];
 const DEFINITION =
   "Obsidian Vault Autopilot ist eine kostenlose Open-Source-Automatisierung für Obsidian-Vaults: vier Claude-Code-Skills sortieren die Inbox, benennen Notizen um und pflegen die Frontmatter — sicher by Design, MIT-lizenziert.";
 
+// Short SERP pitch (≤155, audit P2-2). DEFINITION stays long for the SoftwareApplication schema
+// description (GEO citation surface). AI-draft → Rauhut-edit.
+const META_DESCRIPTION =
+  "Obsidian Vault Autopilot sortiert, benennt und taggt Notizen in Obsidian-Vaults automatisch — vier Claude-Code-Skills, sicher by Design. Open Source, MIT.";
+
 export const metadata: Metadata = pageMetadata({
   title: "Obsidian Vault Autopilot — Open-Source-Automation | neckarshore.ai",
-  description: DEFINITION,
+  description: META_DESCRIPTION,
   path: "/products/obsidian-vault-autopilot",
 });
 

@@ -7,12 +7,17 @@ import { faqForSlug } from "@/lib/product-faqs";
 const DEFINITION =
   "Restaurant-Menüpflege verwandelt das wiederkehrende Menü-Update eines Restaurants in einen geprüften, reproduzierbaren Vorgang — von der Rohkarte bis zum fertigen Pull Request mit Vorschau-Deploy. Ein bespoke Kundenprojekt, hier anonymisiert als Referenz.";
 
+// Short SERP pitch (≤155, audit P2-2). DEFINITION stays long for the SoftwareApplication schema
+// description (GEO citation surface). AI-draft → Rauhut-edit.
+const META_DESCRIPTION =
+  "Restaurant-Menüpflege macht das wöchentliche Menü-Update zum geprüften, reproduzierbaren Vorgang — inkl. Allergen-Validierung nach LMIV/ZZulV.";
+
 // noindex: a PRIVATE, genericized client skill (no public repo). Held out of the sitemap
 // (portfolio.ts keeps `noindex: true`); the robots meta here matches that posture.
 export const metadata: Metadata = {
   ...pageMetadata({
     title: "Restaurant-Menüpflege — Menü-Update als Workflow | neckarshore.ai",
-    description: DEFINITION,
+    description: META_DESCRIPTION,
     path: "/products/restaurant-menu-update",
   }),
   robots: { index: false, follow: true },

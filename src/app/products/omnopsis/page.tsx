@@ -17,9 +17,14 @@ const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
 const DEFINITION =
   "Omnopsis ist unsere KI-first Documentation Engine: Sie zieht automatisch aus Git, Jira und Confluence und generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten — fail-closed, also lieber schweigend als falsch.";
 
+// Short SERP pitch (≤155, audit P2-2 — Google truncates at ~155). DEFINITION stays long for the
+// on-page first passage + the SoftwareApplication schema description (GEO). AI-draft → Rauhut-edit.
+const META_DESCRIPTION =
+  "Omnopsis ist unsere KI-first Documentation Engine: zieht aus Git, Jira und Confluence und generiert Compliance- und Technik-Doku — fail-closed by Design.";
+
 export const metadata: Metadata = pageMetadata({
   title: `${BRAND.PRODUCT_NAME} — KI-first Documentation Engine | neckarshore.ai`,
-  description: DEFINITION,
+  description: META_DESCRIPTION,
   path: "/products/omnopsis",
 });
 

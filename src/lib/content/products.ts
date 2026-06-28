@@ -15,6 +15,13 @@ interface ProductFrontmatter {
   name: string;
   headline: string;
   definition: string;
+  /**
+   * Short SERP pitch (≤155 chars) for `<meta name=description>` / og:description ONLY.
+   * Decoupled from `definition` because the definition doubles as the on-page first-passage
+   * + schema citation text (kept long for GEO); Google truncates descriptions at ~155 (audit
+   * P2-2). Consumers fall back to `definition` when this is absent. AI-draft → Rauhut-edit.
+   */
+  metaDescription?: string;
   /** Live-app URL. Omitted for preview products with no public app yet (→ preview schema, no live CTA). */
   liveUrl?: string;
   applicationCategory: string;

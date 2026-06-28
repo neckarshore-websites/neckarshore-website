@@ -24,7 +24,7 @@ const inter = localFont({
 export const metadata: Metadata = {
   title: "neckarshore.ai — Software Development. Closer to Home.",
   description:
-    "KI-beschleunigte Softwareentwicklung aus Stuttgart. Gleiche Zeitzone, gleiche Sprache, gleiche Datenschutzstandards — ohne Offshore-Risiko, ohne Big-4-Preise.",
+    "KI-beschleunigte Softwareentwicklung aus Stuttgart. Gleiche Zeitzone, gleiche Sprache, DSGVO-Standard — ohne Offshore-Risiko, ohne Big-4-Preise.",
   metadataBase: new URL("https://neckarshore.ai"),
   openGraph: {
     title: "neckarshore.ai — Software Development. Closer to Home.",

@@ -18,6 +18,11 @@ const card = SKILL_CARDS["ai-phrase-check"];
 const DEFINITION =
   "AI Phrase Check ist ein kostenloses Open-Source-Schreibwerkzeug, das KI-typische Floskeln in deutschem und englischem Text erkennt — „delve into\", „tapestry\", „tauchen wir ein in\", „im Bereich der\" — und menschlichere Alternativen vorschlägt. Dreistufig nach dem Prinzip „KI schlägt vor, der Mensch entscheidet\". MIT-lizenziert.";
 
+// Short SERP pitch (≤155, audit P2-2). DEFINITION stays long for the SoftwareApplication schema
+// description (GEO citation surface). AI-draft → Rauhut-edit.
+const META_DESCRIPTION =
+  "AI Phrase Check erkennt KI-typische Floskeln in deutschem und englischem Text und schlägt menschlichere Alternativen vor — Open Source, MIT-lizenziert.";
+
 // Quoted runs kept in JS string literals (curly quotes are not string delimiters here) so they
 // do not trip react/no-unescaped-entities in JSX text — same pattern as the OVA detail page.
 const EXAMPLE_TELLS =
@@ -26,7 +31,7 @@ const MOTTO = '„KI schlägt vor, der Mensch entscheidet"';
 
 export const metadata: Metadata = pageMetadata({
   title: "AI Phrase Check — KI-Floskeln in DE & EN erkennen | neckarshore.ai",
-  description: DEFINITION,
+  description: META_DESCRIPTION,
   path: "/products/ai-phrase-check",
 });
 

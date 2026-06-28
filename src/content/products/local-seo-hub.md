@@ -2,6 +2,7 @@
 name: "Local-SEO-Hub"
 headline: "Local-SEO-Hub — lokale Sichtbarkeit als ein einziger, KI-gestützter Score."
 definition: "Local-SEO-Hub bündelt Rankings, Bewertungen und Verzeichnis-Einträge eines lokalen Unternehmens in einem einzigen Sichtbarkeits-Score von 0 bis 100 — mit KI-gestützten Empfehlungen, die zeigen, wo der nächste Schritt die größte Wirkung hat."
+metaDescription: "Local-SEO-Hub bündelt Rankings, Bewertungen und Verzeichnis-Einträge lokaler Unternehmen in einem KI-first Sichtbarkeits-Score. In Entwicklung."
 applicationCategory: "BusinessApplication"
 ---
 

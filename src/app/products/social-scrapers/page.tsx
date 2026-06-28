@@ -6,9 +6,14 @@ import { entityId } from "@/lib/schema/webpage";
 const DEFINITION =
   "Obsidian Social Scrapers ist eine Familie von drei Claude-Skills, die öffentliche Profile und Posts von Instagram, LinkedIn und X als neutrale Markdown-Briefings in einen Obsidian-Vault holt — getragen von einem geteilten, stdlib-only Python-Core. Privat in Weiterentwicklung.";
 
+// Short SERP pitch (≤155, audit P2-2). DEFINITION stays long for the SoftwareApplication schema
+// description (GEO citation surface). AI-draft → Rauhut-edit.
+const META_DESCRIPTION =
+  "Obsidian Social Scrapers holt öffentliche Profile von Instagram, LinkedIn und X als neutrale Markdown-Briefings in deinen Vault — statt Engagement-Bait.";
+
 export const metadata: Metadata = pageMetadata({
   title: "Obsidian Social Scrapers — Profile als Briefings | neckarshore.ai",
-  description: DEFINITION,
+  description: META_DESCRIPTION,
   path: "/products/social-scrapers",
 });
 
