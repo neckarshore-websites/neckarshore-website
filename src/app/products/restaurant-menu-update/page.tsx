@@ -33,6 +33,7 @@ const softwareSchema = previewSoftwareApplicationSchema({
   name: "Restaurant-Menüpflege",
   definition: DEFINITION,
   applicationCategory: "DeveloperApplication",
+  path: "/products/restaurant-menu-update",
 });
 
 export default function RestaurantMenuUpdatePage() {

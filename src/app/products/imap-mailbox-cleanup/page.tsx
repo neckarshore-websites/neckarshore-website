@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SkillDetailPage, SkillSection, SkillChipRow } from "@/components/SkillDetailPage";
 import { pageMetadata } from "@/lib/seo";
+import { entityId } from "@/lib/schema/webpage";
 
 const REPO = "https://github.com/neckarshore-skills/imap-mailbox-cleanup";
 
@@ -37,6 +38,7 @@ const safety = [
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
+  "@id": entityId("/products/imap-mailbox-cleanup", "software"),
   name: "IMAP Mailbox Cleanup",
   description: DEFINITION,
   applicationCategory: "UtilitiesApplication",

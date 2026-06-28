@@ -18,6 +18,8 @@ interface WebsiteCaseStudyInput {
   liveUrl: string;
 }
 
+import { entityId } from "@/lib/schema/webpage";
+
 export function websiteCaseStudySchema({
   name,
   description,
@@ -27,6 +29,7 @@ export function websiteCaseStudySchema({
   return {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
+    "@id": entityId(`/products/websites/${slug}`, "creativework"),
     name,
     description,
     url: `https://neckarshore.ai/products/websites/${slug}`,

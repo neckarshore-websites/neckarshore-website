@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
+import { PageSchema } from "@/components/PageSchema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { SkillCard } from "@/components/SkillCard";
 import { pageMetadata } from "@/lib/seo";
+import { entityId } from "@/lib/schema/webpage";
 import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { SKILL_CARDS } from "@/lib/skill-cards";
 
@@ -85,6 +87,7 @@ const faqItems = [
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
+  "@id": entityId("/products/obsidian-vault-autopilot", "software"),
   name: "Obsidian Vault Autopilot",
   description: DEFINITION,
   applicationCategory: "DeveloperApplication",
@@ -111,7 +114,11 @@ export default function ObsidianVaultAutopilotPage() {
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
-      <JsonLd data={softwareSchema} id="schema-softwareapplication-obsidian-vault-autopilot" />
+      <PageSchema
+        path="/products/obsidian-vault-autopilot"
+        name="Obsidian Vault Autopilot"
+        primaryEntity={softwareSchema}
+      />
       <JsonLd data={faqSchema} id="schema-faqpage-obsidian-vault-autopilot" />
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
         <Breadcrumbs trail={breadcrumbTrailForSlug("obsidian-vault-autopilot")} />

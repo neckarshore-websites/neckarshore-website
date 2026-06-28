@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import { JsonLd } from "@/components/JsonLd";
+import { PageSchema } from "@/components/PageSchema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { ProductFaq, type FaqItem } from "@/components/ProductFaq";
 import { SkillCard } from "@/components/SkillCard";
-import { breadcrumbTrailForSlug } from "@/lib/portfolio";
+import { breadcrumbTrailForSlug, getItemBySlug } from "@/lib/portfolio";
 import { SKILL_CARDS } from "@/lib/skill-cards";
 
 /**
@@ -40,8 +40,11 @@ export function SkillDetailPage({
 }: {
   /** Portfolio slug — drives the breadcrumb trail, the SkillCard lookup, and the sibling nav. */
   slug: string;
-  /** SoftwareApplication JSON-LD object (real for OSS, preview/no-url for private). Omit for none. */
-  softwareSchema?: object;
+  /**
+   * SoftwareApplication JSON-LD object (real for OSS, preview/no-url for private). MUST carry
+   * its own `@id` (via `entityId`) so the page's WebPage.mainEntity wires to it. Omit for none.
+   */
+  softwareSchema?: Record<string, unknown>;
   /** Mini-FAQ — rendered as a visible section AND emitted as FAQPage JSON-LD. Omit to skip both. */
   faqItems?: SkillFaqItem[];
   /** The "Wie dieser Text entstand" sentence (a sensible default is provided). */
@@ -51,13 +54,16 @@ export function SkillDetailPage({
 }) {
   const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
   const card = SKILL_CARDS[slug];
+  const pageName = getItemBySlug(slug)?.name ?? slug;
 
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
-      {softwareSchema && (
-        <JsonLd data={softwareSchema} id={`schema-softwareapplication-${slug}`} />
-      )}
+      <PageSchema
+        path={`/products/${slug}`}
+        name={pageName}
+        primaryEntity={softwareSchema}
+      />
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
         <Breadcrumbs trail={breadcrumbTrailForSlug(slug)} />
 

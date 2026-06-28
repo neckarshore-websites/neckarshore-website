@@ -15,6 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Logo from "@/components/Logo";
+import { PageSchema } from "@/components/PageSchema";
 import ContactForm from "@/components/ContactForm";
 import StatsGrid, { type StatsData } from "@/components/StatsGrid";
 import FounderImage from "@/components/FounderImage";
@@ -93,6 +94,10 @@ export default function Home() {
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
+      <PageSchema
+        path="/"
+        name="neckarshore.ai — Software Development. Closer to Home."
+      />
       <main>
         {/* ===== HERO ===== */}
         <section className="relative overflow-hidden bg-neutral-light px-4 pt-40 pb-20 md:px-6 md:pt-44 md:pb-24 dark:bg-deep-space">

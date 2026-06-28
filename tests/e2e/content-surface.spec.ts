@@ -1,6 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 
-// JSON-LD helper: collect all parsed ld+json blocks on the current page.
+// JSON-LD helper: collect all parsed ld+json blocks on the current page (one entry per
+// <script> block — used where the per-block wrapper matters, e.g. the @context check).
 async function ldJson(page: Page): Promise<Record<string, unknown>[]> {
   const blocks = page.locator('script[type="application/ld+json"]');
   const count = await blocks.count();
@@ -10,6 +11,16 @@ async function ldJson(page: Page): Promise<Record<string, unknown>[]> {
     if (txt) parsed.push(JSON.parse(txt));
   }
   return parsed;
+}
+
+// JSON-LD node helper: flatten every node across all blocks (expands @graph). A product
+// page's primary entity (SoftwareApplication/CreativeWork) is co-located with its WebPage
+// inside ONE per-route @graph, so @type filters must look inside the graph, not only at
+// top-level blocks. Backward-compatible: a standalone block (no @graph) yields itself.
+async function ldNodes(page: Page): Promise<Record<string, unknown>[]> {
+  return (await ldJson(page)).flatMap(
+    (b) => (b["@graph"] ?? [b]) as Record<string, unknown>[],
+  );
 }
 
 test.describe("Content surface — retired /glossar → ClearPath", () => {
@@ -165,7 +176,7 @@ test.describe("Content surface — ClearPath product", () => {
 
   test("TC-CNT-023: emits exactly one SoftwareApplication JSON-LD block", async ({ page }) => {
     await page.goto("/products/clearpath");
-    const apps = (await ldJson(page)).filter((b) => b["@type"] === "SoftwareApplication");
+    const apps = (await ldNodes(page)).filter((b) => b["@type"] === "SoftwareApplication");
     expect(apps).toHaveLength(1);
     expect(apps[0].name).toBe("ClearPath");
     expect(apps[0].operatingSystem).toBe("Web");
@@ -403,7 +414,7 @@ test.describe("Content surface — Snakeoil-Check live MMP", () => {
     page,
   }) => {
     await page.goto("/products/snakeoil-check");
-    const apps = (await ldJson(page)).filter((b) => b["@type"] === "SoftwareApplication");
+    const apps = (await ldNodes(page)).filter((b) => b["@type"] === "SoftwareApplication");
     expect(apps).toHaveLength(1);
     expect(apps[0].name).toBe("Snakeoil-Check");
     expect(apps[0].operatingSystem).toBe("Web");
@@ -445,7 +456,7 @@ test.describe("Content surface — Phonesis Voicebank preview MMP", () => {
     page,
   }) => {
     await page.goto("/products/phonesis");
-    const apps = (await ldJson(page)).filter((b) => b["@type"] === "SoftwareApplication");
+    const apps = (await ldNodes(page)).filter((b) => b["@type"] === "SoftwareApplication");
     expect(apps).toHaveLength(1);
     expect(apps[0].name).toBe("Phonesis Voicebank");
     expect(apps[0].operatingSystem).toBe("Web");
@@ -485,7 +496,7 @@ test.describe("Content surface — Prod-or-Pretend preview MMP", () => {
     page,
   }) => {
     await page.goto("/products/prod-or-pretend");
-    const apps = (await ldJson(page)).filter((b) => b["@type"] === "SoftwareApplication");
+    const apps = (await ldNodes(page)).filter((b) => b["@type"] === "SoftwareApplication");
     expect(apps).toHaveLength(1);
     expect(apps[0].name).toBe("Prod-or-Pretend");
     expect(apps[0].operatingSystem).toBe("Web");
@@ -525,7 +536,7 @@ test.describe("Content surface — Local-SEO-Hub preview MMP", () => {
     page,
   }) => {
     await page.goto("/products/local-seo-hub");
-    const apps = (await ldJson(page)).filter((b) => b["@type"] === "SoftwareApplication");
+    const apps = (await ldNodes(page)).filter((b) => b["@type"] === "SoftwareApplication");
     expect(apps).toHaveLength(1);
     expect(apps[0].name).toBe("Local-SEO-Hub");
     expect(apps[0].operatingSystem).toBe("Web");
@@ -566,7 +577,7 @@ test.describe("Content surface — AI Phrase Check skill detail", () => {
     page,
   }) => {
     await page.goto("/products/ai-phrase-check");
-    const blocks = await ldJson(page);
+    const blocks = await ldNodes(page);
     const apps = blocks.filter((b) => b["@type"] === "SoftwareApplication");
     expect(apps).toHaveLength(1);
     expect(apps[0].name).toBe("AI Phrase Check");

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import { JsonLd } from "@/components/JsonLd";
+import { PageSchema } from "@/components/PageSchema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { pageMetadata } from "@/lib/seo";
@@ -50,20 +50,21 @@ export default async function ProductDetailPage({
   const { slug } = await params;
   const item = getItemBySlug(slug);
   if (!item || item.isExternal) notFound();
+  const path = `/products/${item.slug}`;
+  const primaryEntity =
+    item.schemaType === "SoftwareApplication"
+      ? previewSoftwareApplicationSchema({
+          name: item.name,
+          definition: item.tagline,
+          applicationCategory: item.applicationCategory ?? "BusinessApplication",
+          path,
+        })
+      : undefined;
 
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
-      {item.schemaType === "SoftwareApplication" && (
-        <JsonLd
-          data={previewSoftwareApplicationSchema({
-            name: item.name,
-            definition: item.tagline,
-            applicationCategory: item.applicationCategory ?? "BusinessApplication",
-          })}
-          id={`schema-softwareapplication-${item.slug}`}
-        />
-      )}
+      <PageSchema path={path} name={item.name} primaryEntity={primaryEntity} />
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
         <Breadcrumbs trail={breadcrumbTrailForSlug(item.slug)} />
 

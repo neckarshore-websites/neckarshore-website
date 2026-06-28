@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { Prose } from "@/components/Prose";
-import { JsonLd } from "@/components/JsonLd";
+import { PageSchema } from "@/components/PageSchema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { ProductFaq } from "@/components/ProductFaq";
@@ -38,9 +38,14 @@ export default function ClearPathPage() {
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
-      <JsonLd
-        data={softwareApplicationSchema({ ...entry, liveUrl })}
-        id="schema-softwareapplication-clearpath"
+      <PageSchema
+        path={`/products/${SLUG}`}
+        name={entry.name}
+        primaryEntity={softwareApplicationSchema({
+          ...entry,
+          liveUrl,
+          path: `/products/${SLUG}`,
+        })}
       />
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
         <Breadcrumbs trail={breadcrumbTrailForSlug(SLUG)} />

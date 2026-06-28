@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Logo from "@/components/Logo";
+import { PageSchema } from "@/components/PageSchema";
 
 export const metadata: Metadata = {
   title: "Datenschutzerklärung — neckarshore.ai",
@@ -43,6 +44,7 @@ export default function Datenschutz() {
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
+      <PageSchema path="/datenschutz" name="Datenschutzerklärung — neckarshore.ai" />
       <main className="mx-auto max-w-[800px] px-4 pt-40 pb-20 md:px-6">
         <h1 className="font-heading text-3xl font-bold text-accent md:text-5xl">Datenschutzerklärung</h1>
         <p className="mt-2 text-sm text-muted dark:text-text-secondary/60">Stand: März 2026</p>

@@ -3,7 +3,7 @@ import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
-import { JsonLd } from "@/components/JsonLd";
+import { PageSchema } from "@/components/PageSchema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { collectionPageSchema } from "@/lib/schema/product";
 import { breadcrumbTrailForCategory, type PortfolioCategory } from "@/lib/portfolio";
@@ -29,16 +29,18 @@ export default function SubPortal({
   /** Widen the main column from 960px to 1200px (for the richer SkillCard grid). */
   wide?: boolean;
 }) {
+  const collectionName = `${category.title} — neckarshore.ai`;
   const schema = collectionPageSchema({
-    name: `${category.title} — neckarshore.ai`,
+    name: collectionName,
     description,
     url: `https://neckarshore.ai${category.href}`,
+    path: category.href,
   });
 
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
-      <JsonLd data={schema} id={`schema-collectionpage-${category.id}`} />
+      <PageSchema path={category.href} name={collectionName} primaryEntity={schema} />
       <main
         className={`mx-auto px-4 pt-40 pb-20 md:px-6 ${wide ? "max-w-[1200px]" : "max-w-[960px]"}`}
       >
