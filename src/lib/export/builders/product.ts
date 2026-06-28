@@ -22,7 +22,7 @@ interface ProductFrontmatter {
 }
 
 export interface ExportResult {
-  /** Download filename, e.g. `clearpath.md`. */
+  /** Download filename, site-prefixed, e.g. `neckarshore.ai - clearpath.md`. */
   filename: string;
   /** The assembled Markdown document. */
   markdown: string;
@@ -61,5 +61,7 @@ export function buildProductMarkdown(slug: string, opts: ExportOptions): ExportR
     sections,
   });
 
-  return { filename: `${slug}.md`, markdown };
+  // Filename leads with the site host so exports are self-identifying when many
+  // sites' .md files land in one Obsidian vault / LLM context (Founder, 2026-06-28).
+  return { filename: `${SITE_NAME} - ${slug}.md`, markdown };
 }

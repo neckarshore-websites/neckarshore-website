@@ -116,7 +116,7 @@ test("TC-EXP-U11: extraSectionsForSlug returns [] for a product without a table"
 test("TC-EXP-U05: buildProductMarkdown assembles a real product (clearpath) from its .md source + FAQ", () => {
   const result = buildProductMarkdown("clearpath", OPTS);
   assert.ok(result, "clearpath has a .md source → must export");
-  assert.equal(result.filename, "clearpath.md");
+  assert.equal(result.filename, "neckarshore.ai - clearpath.md");
 
   const md = result.markdown;
   // Frontmatter from clearpath.md frontmatter
@@ -144,12 +144,21 @@ test("TC-EXP-U12: buildProductMarkdown('clearpath') includes the biases table, o
   assert.ok(table > 0 && faq > 0 && table < faq, "biases table must come before the FAQ (mirrors the page)");
 });
 
+test("TC-EXP-U13: buildProductMarkdown filename leads with the site host (self-identifying across vaults)", () => {
+  // Founder convention 2026-06-28: many sites' exports may land in one Obsidian vault /
+  // LLM context, so the download filename carries the site host: "<host> - <slug>.md".
+  const result = buildProductMarkdown("clearpath", OPTS)!;
+  assert.equal(result.filename, "neckarshore.ai - clearpath.md");
+  assert.ok(result.filename.startsWith("neckarshore.ai - "), "filename leads with the site host + separator");
+  assert.ok(result.filename.endsWith("clearpath.md"), "slug + .md extension preserved at the end");
+});
+
 // ── resolve.ts ───────────────────────────────────────────────────────────────
 
 test("TC-EXP-U07: resolveExport maps a product path (with or without trailing slash) to the product builder", () => {
   const a = resolveExport("/products/clearpath", OPTS);
   assert.ok(a, "/products/clearpath must resolve");
-  assert.equal(a.filename, "clearpath.md");
+  assert.equal(a.filename, "neckarshore.ai - clearpath.md");
 
   const b = resolveExport("/products/clearpath/", OPTS);
   assert.ok(b, "trailing slash must still resolve");
