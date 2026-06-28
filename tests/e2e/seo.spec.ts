@@ -383,4 +383,52 @@ test.describe("SEO — per-route WebPage entity", () => {
       );
     }
   });
+
+  // TC-SEO-036: CO-LOCATION (load-bearing rule 3d) — the WebPage and its mainEntity target
+  // must ship in ONE @graph block with a SINGLE @context. This is the lever's whole point:
+  // cross-block node merging is an unverifiable Google assumption, so the safe convention is
+  // one graph per page. The flatten-everything helpers (TC-SEO-034, validator) would stay
+  // green even if the two split into separate <script> blocks — this guards against exactly
+  // that regression. Non-vacuous: pre-fix the WebPage carried no mainEntity and the
+  // SoftwareApplication was a SEPARATE block → no single @graph block satisfies this.
+  test("TC-SEO-036: WebPage + its mainEntity are co-located in one @graph block", async ({
+    page,
+  }) => {
+    await page.goto("/products/clearpath");
+    const blocks = await page
+      .locator('script[type="application/ld+json"]')
+      .allTextContents();
+
+    let satisfied = false;
+    for (const raw of blocks) {
+      const parsed = JSON.parse(raw) as Record<string, unknown>;
+      const graph = parsed["@graph"];
+      if (!Array.isArray(graph)) continue;
+      const wp = graph.find(
+        (n: Record<string, unknown>) => n["@type"] === "WebPage",
+      ) as Record<string, unknown> | undefined;
+      const mainId = (wp?.mainEntity as Record<string, unknown>)?.["@id"];
+      if (!mainId) continue;
+
+      // The mainEntity target must be a node IN THIS SAME @graph (intra-block, not cross-block).
+      const target = graph.find(
+        (n: Record<string, unknown>) => n["@id"] === mainId,
+      ) as Record<string, unknown> | undefined;
+      expect(target, "mainEntity target co-located in the same @graph block").toBeTruthy();
+      expect(target!["@type"]).toBe("SoftwareApplication");
+
+      // Single @context: the wrapper owns it; the folded nodes must NOT carry their own.
+      expect(parsed["@context"]).toBe("https://schema.org");
+      expect(wp!["@context"], "WebPage node drops its inner @context").toBeUndefined();
+      expect(
+        target!["@context"],
+        "primary-entity node drops its inner @context",
+      ).toBeUndefined();
+      satisfied = true;
+    }
+    expect(
+      satisfied,
+      "a single @graph block holds the WebPage + its mainEntity target",
+    ).toBe(true);
+  });
 });

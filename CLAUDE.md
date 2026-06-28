@@ -175,8 +175,17 @@ curl -s https://neckarshore.ai/ | python3 -c "import sys,re,json; [print(n.get('
 
 Expected `@types`: `['Organization','ProfessionalService']`, `Person`, `WebSite`, `WebPage`, `FAQPage`.
 
+> **Note (per-route WebPage, 2026-06-28 — L-NECK-ENTITY-WEBPAGE-ID):** the `WebPage` node no
+> longer lives in the layout's Organization `@graph`. The route-invariant `Organization` /
+> `Person` / `WebSite` stay in `organization.ts`; the `WebPage` is emitted **per-route** via
+> `<PageSchema>` (`lib/schema/webpage.ts`), co-located with its primary entity
+> (`SoftwareApplication` / `CollectionPage` / `CreativeWork`) in ONE per-route `@graph` with a
+> single `@context`. `@id` = `${canonical}#webpage`, `mainEntity` wired from the entity's own
+> `@id`. Only `isPartOf`→WebSite + `about`→Org stay cross-block. The verification commands above
+> still hold — the homepage's set of `@types` is unchanged (WebPage now ships in its own block).
+
 ### Related
 
-- Schema source of truth: `lib/schema/organization.ts`
+- Schema source of truth: `lib/schema/organization.ts` (Organization/Person/WebSite) + `lib/schema/webpage.ts` (per-route WebPage + `entityId`); composed by `components/PageSchema.tsx`
 - Planning decision: AD-19 — JsonLd via Native Script Tag (omnopsis-planning/docs/decisions/)
 - Incident reports: Linus Session B + C (omnopsis-planning/docs/reports/2026-04-10-linus-fe-{b,c}.md)
