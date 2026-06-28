@@ -2,6 +2,7 @@
 name: "Snakeoil-Check"
 headline: "Snakeoil-Check — der neutrale Reality-Check für Coaching- und High-Ticket-Angebote."
 definition: "Snakeoil-Check prüft ein Online-Coaching, High-Ticket-Programm oder eine Masterclass anhand von zwölf neutralen Kriterien und gibt eine belastbare Tendenz: Go, Vorsicht oder Lieber lassen."
+metaDescription: "Snakeoil-Check ist ein neutraler KI-Reality-Check für Online-Coachings und High-Ticket-Angebote — prüft Versprechen gegen nachvollziehbare Kriterien."
 liveUrl: "https://snakeoil.neckarshore.ai"
 applicationCategory: "BusinessApplication"
 ---

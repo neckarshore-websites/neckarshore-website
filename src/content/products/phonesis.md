@@ -2,6 +2,7 @@
 name: "Phonesis Voicebank"
 headline: "Phonesis Voicebank — das Stimmenarchiv für Familien und Institutionen."
 definition: "Phonesis archiviert echte menschliche Stimmen — professionell aufgenommen, verschlüsselt gespeichert und für kommende Generationen lebendig gehalten: eine bewahrte Stimme ist eine erhaltene Gegenwart."
+metaDescription: "Phonesis archiviert echte menschliche Stimmen für den deutschen Markt — professionell aufbereitet und dauerhaft verfügbar. In Entwicklung."
 applicationCategory: "MultimediaApplication"
 ---
 

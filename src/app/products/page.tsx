@@ -16,9 +16,14 @@ const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
 const PORTAL_DESCRIPTION =
   "Das Produkt-Portfolio von neckarshore.ai — vom Flagship Omnopsis über Minimum Marketable Products und fokussierte Open-Source-Skills bis zu Web-Präsenzen. Made in Germany, DSGVO-by-Design.";
 
+// Short SERP pitch (≤155, audit P2-2). PORTAL_DESCRIPTION stays long for the CollectionPage
+// schema description (GEO citation surface). AI-draft → Rauhut-edit.
+const META_DESCRIPTION =
+  "Das Produkt-Portfolio von neckarshore.ai: Flagship Omnopsis, Minimum Marketable Products, Open-Source-Skills und Web-Präsenzen. Made in Germany, DSGVO.";
+
 export const metadata: Metadata = pageMetadata({
   title: "Produkte — neckarshore.ai",
-  description: PORTAL_DESCRIPTION,
+  description: META_DESCRIPTION,
   path: "/products",
 });
 

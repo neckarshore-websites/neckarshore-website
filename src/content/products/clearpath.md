@@ -2,6 +2,7 @@
 name: "ClearPath"
 headline: "ClearPath — eine mentale Firewall gegen kognitive Verzerrungen."
 definition: "Beschreibe eine Entscheidung, und ClearPath benennt die drei Denkfehler, die dein Urteil am wahrscheinlichsten verzerren — und erzwingt eine 60-Sekunden-Pause, bevor du handelst."
+metaDescription: "ClearPath ist eine mentale Firewall gegen kognitive Verzerrungen: beschreibe eine Entscheidung, und ClearPath benennt die drei größten Denkfehler darin."
 liveUrl: "https://clearpath.neckarshore.ai"
 applicationCategory: "BusinessApplication"
 ---
