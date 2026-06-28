@@ -27,7 +27,7 @@ test.describe("Markdown export (TC-EXP)", () => {
     const res = await page.request.get(EXPORT_HREF);
     expect(res.status()).toBe(200);
     expect(res.headers()["content-type"]).toContain("text/markdown");
-    expect(res.headers()["content-disposition"]).toContain('attachment; filename="clearpath.md"');
+    expect(res.headers()["content-disposition"]).toContain('attachment; filename="neckarshore.ai - clearpath.md"');
   });
 
   test("TC-EXP-003: exported markdown carries frontmatter, the body and the data-driven FAQ", async ({ page }) => {
@@ -70,6 +70,6 @@ test.describe("Markdown export (TC-EXP)", () => {
       page.waitForEvent("download"),
       page.locator(`a[href="${EXPORT_HREF}"]`).click(),
     ]);
-    expect(download.suggestedFilename()).toBe("clearpath.md");
+    expect(download.suggestedFilename()).toBe("neckarshore.ai - clearpath.md");
   });
 });
