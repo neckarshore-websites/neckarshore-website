@@ -483,4 +483,30 @@ test.describe("SEO — meta description length", () => {
       `meta descriptions over ${MAX} chars:\n  ${offenders.join("\n  ")}`,
     ).toEqual([]);
   });
+
+  // TC-SEO-038: the decouple INVARIANT — the long citation text (SoftwareApplication schema
+  // `description` = the unshortened DEFINITION) must stay LONGER than the short meta pitch. A
+  // green TC-SEO-037 alone cannot tell clean decoupling from an accidental shorten-everywhere
+  // (both look identical at the meta level); this asserts the OTHER half, so a future regression
+  // that routes the short pitch into the schema is caught. Sample page: omnopsis.
+  test("TC-SEO-038: schema citation description stays longer than the meta pitch (decouple invariant)", async ({
+    page,
+  }) => {
+    await page.goto("/products/omnopsis");
+    const meta = await page
+      .locator('meta[name="description"]')
+      .getAttribute("content");
+    const app = (await ldNodes(page)).find(
+      (n) => n["@type"] === "SoftwareApplication",
+    ) as Record<string, unknown> | undefined;
+    expect(app, "SoftwareApplication node present").toBeTruthy();
+    const schemaDesc = String(app!.description ?? "");
+    expect(meta, "meta description present").toBeTruthy();
+    expect(meta!.length, "meta pitch ≤155").toBeLessThanOrEqual(MAX);
+    expect(schemaDesc.length, "schema citation text is non-trivial").toBeGreaterThan(180);
+    expect(
+      schemaDesc.length,
+      "schema citation text must stay LONGER than the meta pitch (decouple, not shorten)",
+    ).toBeGreaterThan(meta!.length);
+  });
 });
