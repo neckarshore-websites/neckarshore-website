@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { JsonLd } from "@/components/JsonLd";
+import { PageSchema } from "@/components/PageSchema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { SkillCard } from "@/components/SkillCard";
 import { pageMetadata } from "@/lib/seo";
+import { entityId } from "@/lib/schema/webpage";
 import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { SKILL_CARDS } from "@/lib/skill-cards";
 
@@ -75,6 +77,7 @@ const faqItems = [
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
+  "@id": entityId("/products/ai-phrase-check", "software"),
   name: "AI Phrase Check",
   description: DEFINITION,
   applicationCategory: "DeveloperApplication",
@@ -101,7 +104,11 @@ export default function AiPhraseCheckPage() {
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
-      <JsonLd data={softwareSchema} id="schema-softwareapplication-ai-phrase-check" />
+      <PageSchema
+        path="/products/ai-phrase-check"
+        name="AI Phrase Check"
+        primaryEntity={softwareSchema}
+      />
       <JsonLd data={faqSchema} id="schema-faqpage-ai-phrase-check" />
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
         <Breadcrumbs trail={breadcrumbTrailForSlug("ai-phrase-check")} />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SkillDetailPage, SkillSection, SkillChipRow } from "@/components/SkillDetailPage";
 import { pageMetadata } from "@/lib/seo";
+import { entityId } from "@/lib/schema/webpage";
 
 const DEFINITION =
   "Obsidian Social Scrapers ist eine Familie von drei Claude-Skills, die öffentliche Profile und Posts von Instagram, LinkedIn und X als neutrale Markdown-Briefings in einen Obsidian-Vault holt — getragen von einem geteilten, stdlib-only Python-Core. Privat in Weiterentwicklung.";
@@ -42,6 +43,7 @@ const coreParts = [
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
+  "@id": entityId("/products/social-scrapers", "software"),
   name: "Obsidian Social Scrapers",
   description: DEFINITION,
   applicationCategory: "UtilitiesApplication",

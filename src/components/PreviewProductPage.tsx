@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { Prose } from "@/components/Prose";
-import { JsonLd } from "@/components/JsonLd";
+import { PageSchema } from "@/components/PageSchema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { ProductFaq } from "@/components/ProductFaq";
@@ -81,27 +81,26 @@ export default function PreviewProductPage({
   if (!entry) notFound();
   const cta = ctaName ?? entry.name;
   const liveUrl = entry.liveUrl;
+  const path = `/products/${slug}`;
+  const softwareSchema = liveUrl
+    ? liveSoftwareApplicationSchema({
+        name: entry.name,
+        definition: entry.definition,
+        liveUrl,
+        applicationCategory: entry.applicationCategory,
+        path,
+      })
+    : previewSoftwareApplicationSchema({
+        name: entry.name,
+        definition: entry.definition,
+        applicationCategory: entry.applicationCategory,
+        path,
+      });
 
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
-      <JsonLd
-        data={
-          liveUrl
-            ? liveSoftwareApplicationSchema({
-                name: entry.name,
-                definition: entry.definition,
-                liveUrl,
-                applicationCategory: entry.applicationCategory,
-              })
-            : previewSoftwareApplicationSchema({
-                name: entry.name,
-                definition: entry.definition,
-                applicationCategory: entry.applicationCategory,
-              })
-        }
-        id={`schema-softwareapplication-${slug}`}
-      />
+      <PageSchema path={path} name={entry.name} primaryEntity={softwareSchema} />
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
         <Breadcrumbs trail={breadcrumbTrailForSlug(slug)} />
 

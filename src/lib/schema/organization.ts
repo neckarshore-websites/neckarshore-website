@@ -1,11 +1,14 @@
 /**
  * Schema.org JSON-LD graph for neckarshore.ai
  *
- * Structure (per seo-schema audit 2026-04-10):
+ * Structure (per seo-schema audit 2026-04-10; WebPage split out 2026-06-28):
  * - Organization + ProfessionalService (merged @type) — primary entity
  * - Person (founder, standalone node with own sameAs)
  * - WebSite — for sitelinks search box eligibility
- * - WebPage — root page, references Organization + Person
+ *
+ * The WebPage node is NO LONGER here — it is emitted PER-ROUTE via <PageSchema>
+ * (lib/schema/webpage.ts) so each page carries its own canonical WebPage @id instead of
+ * the homepage-pinned one this @graph used to ship on every route.
  *
  * All nodes use @id references for entity graph consolidation.
  * This is the single source of truth for brand identity signals to Google.
@@ -20,10 +23,13 @@
  */
 
 const BASE_URL = "https://neckarshore.ai";
-const ORG_ID = `${BASE_URL}/#organization`;
+// ORG_ID + WEBSITE_ID are exported as the cross-block brand-identity anchors: every
+// per-route WebPage (lib/schema/webpage.ts) references them via `about`/`isPartOf`.
+// These two are the ONE accepted cross-`<script>`-block reference class (AD per
+// L-NECK-ENTITY-WEBPAGE-ID 3d) — the route-invariant Organization/Person/WebSite stay here.
+export const ORG_ID = `${BASE_URL}/#organization`;
 const PERSON_ID = `${BASE_URL}/#founder`;
-const WEBSITE_ID = `${BASE_URL}/#website`;
-const WEBPAGE_ID = `${BASE_URL}/#webpage`;
+export const WEBSITE_ID = `${BASE_URL}/#website`;
 
 export const organizationSchema = {
   "@context": "https://schema.org",
@@ -101,19 +107,9 @@ export const organizationSchema = {
       publisher: { "@id": ORG_ID },
       inLanguage: "de-DE",
     },
-    {
-      "@type": "WebPage",
-      "@id": WEBPAGE_ID,
-      url: `${BASE_URL}/`,
-      name: "neckarshore.ai — Software Development. Closer to Home.",
-      isPartOf: { "@id": WEBSITE_ID },
-      about: { "@id": ORG_ID },
-      primaryImageOfPage: {
-        "@type": "ImageObject",
-        url: `${BASE_URL}/icon.svg`,
-      },
-      inLanguage: "de-DE",
-    },
+    // NOTE: the WebPage node moved OUT of this route-invariant @graph (it was homepage-pinned
+    // and shipped on every route). It is now emitted per-route via <PageSchema> →
+    // lib/schema/webpage.ts, so each page asserts its own canonical WebPage @id.
   ],
 } as const;
 

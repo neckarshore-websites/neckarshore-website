@@ -11,16 +11,22 @@ import { test, expect, type Page } from "@playwright/test";
  *   - the sitemap carries the 4 case-study routes, never the bare external domains.
  */
 
-// JSON-LD helper: collect all parsed ld+json blocks on the current page.
-async function ldJson(page: Page): Promise<Record<string, unknown>[]> {
+// JSON-LD node helper: flatten every node across all blocks (expands @graph). The
+// case-study CreativeWork is co-located with its WebPage inside one per-route @graph, so
+// @type filters must look inside the graph. Backward-compatible: a standalone block
+// (no @graph) yields itself.
+async function ldNodes(page: Page): Promise<Record<string, unknown>[]> {
   const blocks = page.locator('script[type="application/ld+json"]');
   const count = await blocks.count();
-  const parsed: Record<string, unknown>[] = [];
+  const nodes: Record<string, unknown>[] = [];
   for (let i = 0; i < count; i++) {
     const txt = await blocks.nth(i).textContent();
-    if (txt) parsed.push(JSON.parse(txt));
+    if (txt) {
+      const parsed = JSON.parse(txt);
+      nodes.push(...((parsed["@graph"] ?? [parsed]) as Record<string, unknown>[]));
+    }
   }
-  return parsed;
+  return nodes;
 }
 
 const AXES = [
@@ -55,7 +61,7 @@ test.describe("Content surface — Website case studies", () => {
         `https://neckarshore.ai/products/websites/${site.slug}`,
       );
 
-      const creativeWorks = (await ldJson(page)).filter(
+      const creativeWorks = (await ldNodes(page)).filter(
         (b) => b["@type"] === "CreativeWork",
       );
       expect(creativeWorks).toHaveLength(1);

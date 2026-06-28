@@ -4,6 +4,7 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
 import { JsonLd } from "@/components/JsonLd";
+import { PageSchema } from "@/components/PageSchema";
 import { pageMetadata } from "@/lib/seo";
 import { PORTFOLIO, featuredItems, hiddenItemCount } from "@/lib/portfolio";
 import { cardDescription } from "@/lib/card-descriptions";
@@ -25,6 +26,7 @@ const portalSchema = collectionPageSchema({
   name: "Produkte — neckarshore.ai",
   description: PORTAL_DESCRIPTION,
   url: "https://neckarshore.ai/products",
+  path: "/products",
 });
 
 // Every sub-portal (flagships/mmps/skills/websites) emits a BreadcrumbList; the portal
@@ -38,7 +40,11 @@ export default function ProductsIndex() {
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
-      <JsonLd data={portalSchema} id="schema-collectionpage-products" />
+      <PageSchema
+        path="/products"
+        name="Produkte — neckarshore.ai"
+        primaryEntity={portalSchema}
+      />
       <JsonLd data={breadcrumbSchema} id="schema-breadcrumb-products" />
       <main className="mx-auto max-w-[960px] px-4 pt-40 pb-20 md:px-6">
         <header className="max-w-[640px]">

@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import ImageModal from "@/components/ImageModal";
-import { JsonLd } from "@/components/JsonLd";
+import { PageSchema } from "@/components/PageSchema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { ProductFaq } from "@/components/ProductFaq";
 import { pageMetadata } from "@/lib/seo";
+import { entityId } from "@/lib/schema/webpage";
 import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { faqForSlug } from "@/lib/product-faqs";
 import { BRAND } from "@/lib/brand";
@@ -23,10 +24,12 @@ export const metadata: Metadata = pageMetadata({
 });
 
 // Commercial product, in development — a valid SoftwareApplication entity without
-// a free Offer or a live URL (both would be false claims pre-launch).
+// a free Offer or a live URL (both would be false claims pre-launch). `@id` IS emitted
+// (identity, not a claim) so the WebPage.mainEntity can wire to it.
 const omnopsisSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
+  "@id": entityId("/products/omnopsis", "software"),
   name: BRAND.PRODUCT_NAME,
   description: DEFINITION,
   applicationCategory: "BusinessApplication",
@@ -38,7 +41,11 @@ export default function OmnopsisPage() {
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
-      <JsonLd data={omnopsisSchema} id="schema-softwareapplication-omnopsis" />
+      <PageSchema
+        path="/products/omnopsis"
+        name={`${BRAND.PRODUCT_NAME} — KI-first Documentation Engine | neckarshore.ai`}
+        primaryEntity={omnopsisSchema}
+      />
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
         <Breadcrumbs trail={breadcrumbTrailForSlug("omnopsis", BRAND.PRODUCT_SHORT)} />
 

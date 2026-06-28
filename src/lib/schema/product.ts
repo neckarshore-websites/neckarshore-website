@@ -1,15 +1,20 @@
+import { entityId } from "@/lib/schema/webpage";
+
 /**
  * SoftwareApplication JSON-LD for product hubs (closes audit Finding #4).
  *
  * Marks the product as a free, web-based application so search + AI engines can
  * surface it as software, not just a marketing page. `description` is the citable
- * one-sentence definition; `url` points at the live app.
+ * one-sentence definition; `url` points at the live app. `@id` (derived from the route
+ * `path`) lets the page's WebPage.mainEntity reference resolve to THIS node intra-@graph.
  */
 interface SoftwareApplicationInput {
   name: string;
   definition: string;
   liveUrl: string;
   applicationCategory: string;
+  /** Route path (e.g. `/products/clearpath`) → the entity `@id` via `entityId`. */
+  path: string;
 }
 
 export function softwareApplicationSchema({
@@ -17,10 +22,12 @@ export function softwareApplicationSchema({
   definition,
   liveUrl,
   applicationCategory,
+  path,
 }: SoftwareApplicationInput) {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
+    "@id": entityId(path, "software"),
     name,
     description: definition,
     applicationCategory,
@@ -47,6 +54,8 @@ interface LiveSoftwareApplicationInput {
   definition: string;
   liveUrl: string;
   applicationCategory: string;
+  /** Route path (e.g. `/products/snakeoil-check`) → the entity `@id` via `entityId`. */
+  path: string;
 }
 
 export function liveSoftwareApplicationSchema({
@@ -54,10 +63,12 @@ export function liveSoftwareApplicationSchema({
   definition,
   liveUrl,
   applicationCategory,
+  path,
 }: LiveSoftwareApplicationInput) {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
+    "@id": entityId(path, "software"),
     name,
     description: definition,
     applicationCategory,
@@ -72,21 +83,28 @@ export function liveSoftwareApplicationSchema({
  * `offers`, and `isAccessibleForFree` — emitting a live URL or a free Offer for a
  * product that is neither would be a false structured-data claim (fail-closed; AD-19).
  * Mirrors the hand-written pre-launch entity on the Omnopsis page.
+ *
+ * `@id` IS emitted (identity, not a commercial claim) so a noindex preview's WebPage can
+ * still wire `mainEntity` to it — `@id` is safe on previews, `url`/`offers` are not.
  */
 interface PreviewSoftwareApplicationInput {
   name: string;
   definition: string;
   applicationCategory: string;
+  /** Route path (e.g. `/products/phonesis`) → the entity `@id` via `entityId`. */
+  path: string;
 }
 
 export function previewSoftwareApplicationSchema({
   name,
   definition,
   applicationCategory,
+  path,
 }: PreviewSoftwareApplicationInput) {
   return {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
+    "@id": entityId(path, "software"),
     name,
     description: definition,
     applicationCategory,
@@ -104,12 +122,15 @@ interface CollectionPageInput {
   name: string;
   description: string;
   url: string;
+  /** Route path (e.g. `/products/skills`) → the entity `@id` via `entityId`. */
+  path: string;
 }
 
-export function collectionPageSchema({ name, description, url }: CollectionPageInput) {
+export function collectionPageSchema({ name, description, url, path }: CollectionPageInput) {
   return {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
+    "@id": entityId(path, "collection"),
     name,
     description,
     url,

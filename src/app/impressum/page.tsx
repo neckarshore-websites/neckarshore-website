@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/Nav";
 import Logo from "@/components/Logo";
+import { PageSchema } from "@/components/PageSchema";
 
 export const metadata: Metadata = {
   title: "Impressum — neckarshore.ai",
@@ -43,6 +44,7 @@ export default function Impressum() {
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
+      <PageSchema path="/impressum" name="Impressum — neckarshore.ai" />
       <main className="mx-auto max-w-[800px] px-4 pt-40 pb-20 md:px-6">
         <h1 className="font-heading text-4xl font-bold text-accent md:text-5xl">Impressum</h1>
 

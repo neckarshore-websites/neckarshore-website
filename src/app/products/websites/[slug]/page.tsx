@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { Prose } from "@/components/Prose";
-import { JsonLd } from "@/components/JsonLd";
+import { PageSchema } from "@/components/PageSchema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { ProductFaq } from "@/components/ProductFaq";
@@ -61,14 +61,15 @@ export default async function WebsiteCaseStudyPage({
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
-      <JsonLd
-        data={websiteCaseStudySchema({
+      <PageSchema
+        path={`/products/websites/${entry.slug}`}
+        name={entry.name}
+        primaryEntity={websiteCaseStudySchema({
           name: entry.name,
           description: entry.lead,
           slug: entry.slug,
           liveUrl: entry.liveUrl,
         })}
-        id={`schema-creativework-${entry.slug}`}
       />
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
         <Breadcrumbs trail={breadcrumbTrailForSlug(slug)} />
