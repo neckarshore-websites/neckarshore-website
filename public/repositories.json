@@ -1,0 +1,191 @@
+{
+  "updatedAt": "2026-06-30T08:18:55Z",
+  "repos": [
+    {
+      "owner": "neckarshore-agents",
+      "name": "marvin-hq",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "neckarshore-ai",
+      "name": "dev-environment",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "neckarshore-ai",
+      "name": "neckarshore-easter-eggs",
+      "visibility": "public",
+      "description": "Session artifacts from an AI-orchestration team — songs, films, posters, quotes. Auto-synced from session Easter Eggs."
+    },
+    {
+      "owner": "neckarshore-ai",
+      "name": "neckarshore-history",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "neckarshore-ai",
+      "name": "neckarshore-planning",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "neckarshore-ai",
+      "name": "observatory",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "neckarshore-mmps",
+      "name": "clearpath-52",
+      "visibility": "public",
+      "description": "ClearPath — a mental firewall against cognitive bias: describe a decision and get a structured second opinion before you commit."
+    },
+    {
+      "owner": "neckarshore-mmps",
+      "name": "mmp-local-seo-performance-hub",
+      "visibility": "public",
+      "description": "A visibility platform for local businesses: rankings, reviews, and citations in one Visibility Score (0–100). Built for small businesses and the agencies that manage them."
+    },
+    {
+      "owner": "neckarshore-mmps",
+      "name": "mmp-prod-or-pretend",
+      "visibility": "public",
+      "description": "A constructive quality mirror for tech hype — checks 'built it in a weekend' claims against real production standards (tests, security, scalability, docs). Not a debunker; it helps decision-makers tell substance from air."
+    },
+    {
+      "owner": "neckarshore-mmps",
+      "name": "phonesis-voicebank",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "neckarshore-mmps",
+      "name": "snakeoil-check",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "neckarshore-skills",
+      "name": "ai-phrase-check",
+      "visibility": "public",
+      "description": "Spot AI-typical phrasing in German and English writing so your text reads human. Includes a quick web demo."
+    },
+    {
+      "owner": "neckarshore-skills",
+      "name": "imap-mailbox-cleanup",
+      "visibility": "public",
+      "description": "Safely tidy an overflowing email mailbox — preview every change first, keep an audit trail, and nothing is deleted for good."
+    },
+    {
+      "owner": "neckarshore-skills",
+      "name": "neckarshore-easter-eggs-skills",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "neckarshore-skills",
+      "name": "obsidian-instagram-scraper",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "neckarshore-skills",
+      "name": "obsidian-linkedin-scraper",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "neckarshore-skills",
+      "name": "obsidian-social-scrapers-common",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "neckarshore-skills",
+      "name": "obsidian-vault-autopilot",
+      "visibility": "public",
+      "description": "Keeps an Obsidian vault tidy on its own — sorts, renames, tags, and enriches your notes automatically."
+    },
+    {
+      "owner": "neckarshore-skills",
+      "name": "obsidian-x-scraper",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "neckarshore-skills",
+      "name": "tools-claude-plugins",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "neckarshore-websites",
+      "name": "goldoni-website",
+      "visibility": "public",
+      "description": "Ristorante Goldoni, Stuttgart — website for the family-run Italian restaurant: menu, wine list, recommendations, and reservations."
+    },
+    {
+      "owner": "neckarshore-websites",
+      "name": "neckarshore-website",
+      "visibility": "public",
+      "description": "Web presence and landing page for Neckarshore AI — AI products built in Germany, privacy-first and enterprise-grade."
+    },
+    {
+      "owner": "neckarshore-websites",
+      "name": "oakwoodgolfclub-website",
+      "visibility": "public",
+      "description": "Oakwood Golf Club — fully digital remote membership for golfers: keep an official handicap and stay tournament-eligible without a home club."
+    },
+    {
+      "owner": "neckarshore-websites",
+      "name": "rauhut-website",
+      "visibility": "public",
+      "description": "Personal site of German Rauhut — Technical Product Owner and AI product builder."
+    },
+    {
+      "owner": "neckarshore-websites",
+      "name": "site-quality",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "omnopsis-ai",
+      "name": "omnopsis-backend",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "omnopsis-ai",
+      "name": "omnopsis-contracts",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "omnopsis-ai",
+      "name": "omnopsis-document-importer",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "omnopsis-ai",
+      "name": "omnopsis-frontend",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "omnopsis-ai",
+      "name": "omnopsis-planning",
+      "visibility": "private",
+      "description": ""
+    },
+    {
+      "owner": "omnopsis-ai",
+      "name": "omnopsis-test-management",
+      "visibility": "private",
+      "description": ""
+    }
+  ]
+}

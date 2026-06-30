@@ -24,6 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/impressum",
     "/datenschutz",
     "/test-management", // the "Wie wir testen" detail surface (#245) — a citable GEO target
+    "/repositories", // the public repository inventory (#7), auto-synced from GitHub
     // /products, the 4 sub-portals, and the bespoke own-page details (omnopsis, clearpath).
     // External sites + noindex preview skeletons are excluded by allProductRoutes().
     ...allProductRoutes(),
