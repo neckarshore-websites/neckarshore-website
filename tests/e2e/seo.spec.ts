@@ -77,10 +77,11 @@ test.describe("SEO Basics", () => {
     }
   });
 
-  // llms-full.txt (TC-SEO-039..042) — the expanded companion to the curated llms.txt.
-  // Inlines the FULL Markdown of every md-backed indexable product so an AI crawler can
-  // ingest the substance in one fetch. Built from allProductRoutes() ∩ exportable .md
-  // via the existing export pipeline (single source — cannot drift from sitemap/llms.txt).
+  // llms-full.txt (TC-SEO-039..042 + 044) — the expanded companion to the curated llms.txt.
+  // Inlines the FULL Markdown of every md-backed indexable page (product detail pages AND
+  // website case studies) so an AI crawler can ingest the substance in one fetch. Built
+  // from allProductRoutes() ∩ exportable .md via the existing export pipeline (single
+  // source — cannot drift from sitemap/llms.txt).
   test("TC-SEO-039: llms-full.txt is served as plain text", async ({ request }) => {
     const res = await request.get("/llms-full.txt");
     expect(res.status()).toBe(200);
@@ -114,8 +115,25 @@ test.describe("SEO Basics", () => {
   test("TC-SEO-042: llms-full.txt is substantially larger than the llms.txt index", async ({ request }) => {
     const index = await (await request.get("/llms.txt")).text();
     const full = await (await request.get("/llms-full.txt")).text();
-    // "full" must EXPAND the index (5 product bodies inlined), not duplicate it.
+    // "full" must EXPAND the index (product + case-study bodies inlined), not duplicate it.
     expect(full.length).toBeGreaterThan(index.length * 1.5);
+  });
+
+  test("TC-SEO-044: llms-full.txt also inlines the website case studies (export pipeline extension)", async ({ request }) => {
+    const body = await (await request.get("/llms-full.txt")).text();
+    // Adding the website matcher to resolveExport() pulls the 4 indexable case studies into
+    // the same single-source pipeline (allProductRoutes() ∩ exportable .md), so they are
+    // AI-ingestable in one fetch like the products — no separate list to drift.
+    for (const slug of [
+      "neckarshore",
+      "ristorante-goldoni",
+      "oakwood-golf-club",
+      "rauhut",
+    ]) {
+      expect(body).toContain(`/products/websites/${slug}`);
+    }
+    // A distinctive website export field proves the case-study BODY is inlined, not just linked.
+    expect(body).toContain('status: "Live"');
   });
 
   test("TC-SEO-010: homepage has og:image meta tag", async ({ page }) => {

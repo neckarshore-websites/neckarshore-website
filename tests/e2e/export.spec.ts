@@ -61,6 +61,28 @@ test.describe("Markdown export (TC-EXP)", () => {
     await expect(btn).toBeVisible();
   });
 
+  test("TC-EXP-008: a website case-study page shows the export button, and /api/export serves its source markdown", async ({ page }) => {
+    const path = "/products/websites/neckarshore";
+    const href = `/api/export?path=${encodeURIComponent(path)}`;
+
+    await page.goto(path);
+    const btn = page.locator(`a[href="${href}"]`);
+    await expect(btn).toBeVisible();
+    await expect(btn).toHaveAttribute("download", "");
+
+    const res = await page.request.get(href);
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toContain("text/markdown");
+    expect(res.headers()["content-disposition"]).toContain('attachment; filename="neckarshore.ai - neckarshore.md"');
+
+    const body = await res.text();
+    expect(body.startsWith("---\n")).toBeTruthy();
+    expect(body).toContain('source: "https://neckarshore.ai/products/websites/neckarshore"');
+    expect(body).toContain('status: "Live"'); // distinctive website frontmatter
+    expect(body).toContain("## Was war die Ausgangslage?"); // raw body from the case-study .md
+    expect(body).toContain("## Häufige Fragen"); // data-driven FAQ section
+  });
+
   test("TC-EXP-007: clicking the button downloads the .md (analytics click does not swallow it)", async ({ page }) => {
     // Guards the core path: the site-wide TrackerScript click handler must NOT
     // preventDefault() the download. Asserts the browser download actually fires
