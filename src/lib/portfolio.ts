@@ -73,6 +73,13 @@ export interface PortfolioCategory {
   id: CategoryId;
   /** Section heading + sub-portal H1. */
   title: string;
+  /**
+   * Optional keyword-rich SEO <title> for the sub-portal page (used by `categoryMetaTitle`).
+   * The bare `title` ("Flagships") is a weak SERP signal; this carries the search keywords.
+   * Must stay ≤70 chars incl. the brand suffix (TC-SEO-027). When absent, the page falls
+   * back to `${title} — neckarshore.ai`. AI-draft → Founder-edit.
+   */
+  metaTitle?: string;
   /** Dropdown sub-label / portal section subtitle. */
   subtitle: string;
   /** Short framing shown on the /products portal between the heading and the cards. */
@@ -97,6 +104,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
   {
     id: "flagships",
     title: "Flagships",
+    metaTitle: "Flagships — KI-Software made in Germany | neckarshore.ai",
     subtitle: "Unsere Hauptprodukte",
     intro:
       "Produkte, die einen Markt gewinnen sollen. Omnopsis ist das erste — weitere folgen.",
@@ -130,6 +138,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
   {
     id: "mmps",
     title: "MMPs",
+    metaTitle: "MMPs — fokussierte KI-Tools & Web-Apps | neckarshore.ai",
     subtitle: "Minimum Marketable Products",
     intro:
       "Marktreife Produkte mit klarem Fokus — jedes löst ein konkretes Problem. Schlägt eines durch, wird es zum Hauptprodukt.",
@@ -214,6 +223,11 @@ export const PORTFOLIO: PortfolioCategory[] = [
   {
     id: "skills",
     title: "Skills",
+    // No "Open-Source" in the SEO title on purpose: the category is mixed (OVA / IMAP /
+    // AI-Phrase-Check are public OSS, but Social-Scrapers + Restaurant-Menüpflege are
+    // private), so an "Open-Source" headline would over-claim. (The existing subtitle/intro
+    // still say "Open-Source-Werkzeuge" — flagged for Founder copy-redaction, not changed here.)
+    metaTitle: "Claude Code & Obsidian Skills | neckarshore.ai",
     subtitle: "Fokussierte Open-Source-Werkzeuge",
     intro:
       "Kleine, scharf geschnittene Open-Source-Werkzeuge — die Tools, die wir selbst täglich benutzen. Jetzt auch für euch.",
@@ -304,6 +318,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
   {
     id: "websites",
     title: "Websites",
+    metaTitle: "Web-Projekte & Case Studies aus Stuttgart | neckarshore.ai",
     subtitle: "Web-Präsenz & Kundenprojekte",
     intro:
       "Echte Kundenprojekte, nebenbei entstanden — dieselbe Bauweise wie alles andere: KI-beschleunigt, DSGVO-by-Design.",
@@ -366,6 +381,15 @@ export const PORTFOLIO: PortfolioCategory[] = [
 /** All categories, in nav/portal order. */
 export function allCategories(): PortfolioCategory[] {
   return PORTFOLIO;
+}
+
+/**
+ * SEO <title> for a category sub-portal page: the keyword-rich `metaTitle` override when
+ * set, else the bare-name fallback `${title} — neckarshore.ai`. One source so the four
+ * sub-portal pages can't drift from each other.
+ */
+export function categoryMetaTitle(category: PortfolioCategory): string {
+  return category.metaTitle ?? `${category.title} — neckarshore.ai`;
 }
 
 /** Flat list of all items across every category. */

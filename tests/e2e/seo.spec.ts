@@ -263,6 +263,23 @@ test.describe("SEO Basics", () => {
     });
   }
 
+  // TC-SEO-043: the four category sub-portals carry their keyword-rich SEO title (from
+  // `categoryMetaTitle`), not the bare "<Category> — neckarshore.ai" fallback. Locks both
+  // the metaTitle→page wiring AND the copy (so a drift fails CI, not just SERP quietly).
+  const CATEGORY_TITLES = [
+    { path: "/products/flagships", title: "Flagships — KI-Software made in Germany | neckarshore.ai" },
+    { path: "/products/mmps", title: "MMPs — fokussierte KI-Tools & Web-Apps | neckarshore.ai" },
+    { path: "/products/skills", title: "Claude Code & Obsidian Skills | neckarshore.ai" },
+    { path: "/products/websites", title: "Web-Projekte & Case Studies aus Stuttgart | neckarshore.ai" },
+  ];
+
+  for (const { path, title } of CATEGORY_TITLES) {
+    test(`TC-SEO-043: ${path} carries its keyword-rich title`, async ({ page }) => {
+      await page.goto(path);
+      expect(await page.title()).toBe(title);
+    });
+  }
+
   // TC-SEO-028: /products portal emits a BreadcrumbList (sibling sub-portals all do).
   test("TC-SEO-028: /products has a BreadcrumbList JSON-LD node", async ({ page }) => {
     await page.goto("/products");
