@@ -805,3 +805,29 @@ test.describe("Content surface — end-of-page booking CTA is mobile-only", () =
     });
   }
 });
+
+// The website case-study pages add a desktop-only conversion close — the inverse of the
+// mobile-only nav CTA above. On desktop the header CTA is pinned but the end-of-read close
+// was missing, so this block fills that gap at ≥lg and stays hidden on mobile, where the
+// ProductDetailNav CTA already closes the page. The two never both show (no duplicate).
+test.describe("Content surface — website case-study desktop close CTA", () => {
+  test("TC-CNT-067 [/products/websites/neckarshore]: close CTA visible @desktop, hidden @mobile", async ({
+    page,
+  }) => {
+    const cta = page.locator('a[data-track="website_close_cta_neckarshore"]');
+
+    // Desktop (>= lg/1024px): the end-of-read conversion close is visible.
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("/products/websites/neckarshore");
+    await expect(cta).toBeVisible();
+    await expect(cta).toHaveAttribute("href", "https://calendly.com/rauhut/20min");
+    await expect(cta).toHaveAttribute("target", "_blank");
+    await expect(cta).toHaveAttribute("rel", /noopener/);
+
+    // Mobile (< lg): the ProductDetailNav CTA closes the page → desktop block hidden.
+    await page.setViewportSize({ width: 393, height: 852 });
+    await page.goto("/products/websites/neckarshore");
+    await expect(cta).toHaveCount(1); // in the DOM…
+    await expect(cta).toBeHidden(); // …but display:none via the `hidden` base class
+  });
+});
