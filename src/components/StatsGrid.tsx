@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ComponentType } from "react";
+import Link from "next/link";
 import {
   GitCommit,
   FlaskConical,
@@ -101,6 +102,8 @@ export default function StatsGrid({
     value: string;
     label: string;
     sub?: string | null;
+    /** When set, the whole tile is a link (the Tests tile → /tests detail surface, #245). */
+    href?: string;
   }[] = [
     { icon: CalendarDays, value: String(devDays), label: "Days since First Commit" },
     { icon: GitCommit, value: formatDE(commits), label: "Commits" },
@@ -109,6 +112,7 @@ export default function StatsGrid({
       value: formatDE(tests) + testsSuffix,
       label: "Automatisierte Tests",
       sub: testReposLine,
+      href: "/tests",
     },
     { icon: Layers, value: String(endpoints), label: "REST Endpoints" },
     { icon: Code2, value: formatDE(linesOfCode), label: "Zeilen Code" },
@@ -118,24 +122,40 @@ export default function StatsGrid({
   return (
     <div>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-        {tiles.map((stat) => (
-          <div key={stat.label} className="rounded-xl bg-surface p-5 text-center">
-            <stat.icon size={20} className="mx-auto text-accent" />
-            <p className="mt-2 font-heading text-2xl font-bold text-text-primary md:text-3xl">
-              {stat.value}
-            </p>
-            <p className="mt-1 text-xs text-text-secondary">{stat.label}</p>
-            {/* sub-line only ever set on the Tests tile → the testid is tile-specific */}
-            {stat.sub && (
-              <p
-                data-testid="tests-subline"
-                className="mt-1 text-[10px] leading-tight text-text-secondary/70"
-              >
-                {stat.sub}
+        {tiles.map((stat) => {
+          const inner = (
+            <>
+              <stat.icon size={20} className="mx-auto text-accent" />
+              <p className="mt-2 font-heading text-2xl font-bold text-text-primary md:text-3xl">
+                {stat.value}
               </p>
-            )}
-          </div>
-        ))}
+              <p className="mt-1 text-xs text-text-secondary">{stat.label}</p>
+              {/* sub-line only ever set on the Tests tile → the testid is tile-specific */}
+              {stat.sub && (
+                <p
+                  data-testid="tests-subline"
+                  className="mt-1 text-[10px] leading-tight text-text-secondary/70"
+                >
+                  {stat.sub}
+                </p>
+              )}
+            </>
+          );
+          return stat.href ? (
+            <Link
+              key={stat.label}
+              href={stat.href}
+              data-track="stats_tests_detail"
+              className="rounded-xl bg-surface p-5 text-center transition-all duration-150 hover:bg-surface/80 hover:scale-[1.02] focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent"
+            >
+              {inner}
+            </Link>
+          ) : (
+            <div key={stat.label} className="rounded-xl bg-surface p-5 text-center">
+              {inner}
+            </div>
+          );
+        })}
       </div>
       {stats.updatedAt && (
         <p className="mt-3 text-right text-[10px] font-mono text-text-secondary/60">
