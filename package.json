@@ -19,7 +19,7 @@
     "lighthouse:mobile": "node scripts/lighthouse.mjs --quick --profile=mobile-4g",
     "lighthouse:5g": "node scripts/lighthouse.mjs --quick --profile=mobile-5g",
     "test:lighthouse:unit": "node --test scripts/lighthouse-profiles.test.mjs",
-    "test:unit": "node --import tsx --test tests/unit/aggregate-test-scope.test.mjs tests/unit/export-markdown.test.ts tests/unit/repo-types.test.ts tests/unit/sitemap.test.ts tests/unit/stats-breakdown.test.ts",
+    "test:unit": "node --import tsx --test tests/unit/aggregate-test-scope.test.mjs tests/unit/export-markdown.test.ts tests/unit/repo-types.test.ts tests/unit/sitemap.test.ts tests/unit/stats-breakdown.test.ts tests/unit/withhold-private-repos.test.mjs",
     "crawl": "node scripts/link-crawler.mjs",
     "crawl:internal": "node scripts/link-crawler.mjs --no-external",
     "crawl:test": "node scripts/link-crawler.mjs --self-test",

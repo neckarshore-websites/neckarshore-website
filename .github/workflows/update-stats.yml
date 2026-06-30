@@ -40,6 +40,7 @@ jobs:
           mkdir -p /tmp/repos
           mkdir -p /tmp/stats
           : > /tmp/repos_meta.jsonl   # repository-inventory accumulator (#7 /repositories) — PUBLIC repos only
+          : > /tmp/public_slugs.txt   # owner/name of every LIVE-public repo — feeds the test-scope withholder (#525)
           PRIVATE_COUNT=0            # private repos contribute to an aggregate count, never by name
 
           for i in $(seq 0 $((REPO_COUNT - 1))); do
@@ -113,6 +114,7 @@ jobs:
               DESC=$(echo "$META" | jq -r '.description // ""')
               jq -cn --arg o "$OWNER" --arg n "$NAME" --arg d "$DESC" \
                 '{owner:$o, name:$n, visibility:"public", description:$d}' >> /tmp/repos_meta.jsonl
+              printf '%s\n' "$REPO" >> /tmp/public_slugs.txt   # same LIVE-public signal → test-scope withholder (#525)
             else
               PRIVATE_COUNT=$((PRIVATE_COUNT + 1))
             fi
@@ -130,7 +132,19 @@ jobs:
           # Live producers win by slug → no double-count; the number auto-corrects as repos
           # self-report. Estate floor today = 588 live (omnopsis-backend) + 2.023 seed = 2.611.
           TEST_SCOPE=$(bash scripts/aggregate-test-scope.sh stats-config.json /tmp/stats estate-test-scope-seed.json)
-          echo "--- estate test-scope ---"
+
+          # Withhold private repo names at the SOURCE (#525, the #94 pattern one surface over).
+          # The aggregator keeps real owner/name slugs so its live-wins-by-slug dedup works; here
+          # we anonymize every slug-bearing field (per_repo[].repo + missing[]) whose repo is NOT
+          # in the LIVE public set accumulated above. Done BEFORE any echo/use of $TEST_SCOPE so no
+          # private name reaches the (publicly viewable) Actions log, the committed
+          # public/estate-test-scope.json, OR public/stats.json (which carries .missing via the
+          # subset). Fail-safe: a slug not confirmed live-public is withheld. Counts/byType + the
+          # top-level total are untouched → the honest headline math is preserved.
+          PUBLIC_SLUGS_JSON=$(sort -u /tmp/public_slugs.txt | jq -R . | jq -s -c .)
+          TEST_SCOPE=$(printf '%s' "$TEST_SCOPE" | bash scripts/withhold-private-repos.sh "$PUBLIC_SLUGS_JSON")
+
+          echo "--- estate test-scope (private names withheld) ---"
           echo "$TEST_SCOPE" | jq .
 
           TESTS=$(echo "$TEST_SCOPE" | jq '.total')

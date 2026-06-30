@@ -31,7 +31,9 @@ interface EstateScope {
   total: number;
   repos: number;
   floor: boolean;
-  per_repo: { repo: string; total: number }[];
+  // `private: true` marks a withheld entry — the data pipeline (scripts/withhold-private-repos.sh)
+  // replaced a private repo's slug with "privates Repo" at the source. The count stays real.
+  per_repo: { repo: string; total: number; private?: boolean }[];
 }
 
 function loadEstateScope(): EstateScope {
@@ -85,12 +87,23 @@ export default function TestManagementPage() {
 
   // Per-repo: the individual runner-reported counts, Top-N + rest-rollup (brief §5b). The rest
   // bucket folds the 0-test scaffold repo and the known-red repo (#257) out of individual view.
+  // Withheld entries (private repos, anonymized at the source) keep their count + ranked slot but
+  // show no name/Typ — the number is the point of the page (#525 stopgap).
   const ranked = [...scope.per_repo].sort((a, b) => b.total - a.total);
-  const top = ranked.slice(0, TOP_N).map((r) => ({
-    name: r.repo.includes("/") ? r.repo.split("/").pop()! : r.repo,
-    type: repoType(r.repo),
-    total: r.total,
-  }));
+  const top = ranked.slice(0, TOP_N).map((r, i) => {
+    const withheld = r.private === true;
+    return {
+      key: withheld ? `private-${i}` : r.repo,
+      name: withheld
+        ? "privates Repo"
+        : r.repo.includes("/")
+          ? r.repo.split("/").pop()!
+          : r.repo,
+      type: withheld ? null : repoType(r.repo),
+      total: r.total,
+      withheld,
+    };
+  });
   const restCount = Math.max(0, repos - top.length);
 
   return (
@@ -217,14 +230,20 @@ export default function TestManagementPage() {
                   <tbody>
                     {top.map((r) => (
                       <tr
-                        key={r.name}
+                        key={r.key}
                         className="border-t border-primary/10 dark:border-text-secondary/10"
                       >
-                        <td className="px-4 py-3 font-mono text-neutral-dark/80 dark:text-text-secondary">
+                        <td
+                          className={
+                            r.withheld
+                              ? "px-4 py-3 italic text-muted dark:text-text-tertiary"
+                              : "px-4 py-3 font-mono text-neutral-dark/80 dark:text-text-secondary"
+                          }
+                        >
                           {r.name}
                         </td>
                         <td className="px-4 py-3 text-muted dark:text-text-tertiary">
-                          {r.type}
+                          {r.type ?? "—"}
                         </td>
                         <td className="px-4 py-3 text-right tabular-nums text-primary dark:text-text-primary">
                           {r.total.toLocaleString("de-DE")}
