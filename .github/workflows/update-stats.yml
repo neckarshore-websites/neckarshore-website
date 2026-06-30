@@ -39,7 +39,8 @@ jobs:
 
           mkdir -p /tmp/repos
           mkdir -p /tmp/stats
-          : > /tmp/repos_meta.jsonl   # repository-inventory accumulator (#7 /repositories)
+          : > /tmp/repos_meta.jsonl   # repository-inventory accumulator (#7 /repositories) — PUBLIC repos only
+          PRIVATE_COUNT=0            # private repos contribute to an aggregate count, never by name
 
           for i in $(seq 0 $((REPO_COUNT - 1))); do
             OWNER=$(echo "$CONFIG" | jq -r ".repos[$i].owner")
@@ -95,22 +96,26 @@ jobs:
               fi
             fi
 
-            # Repository inventory (#7 /repositories): capture visibility + description for the
-            # public inventory page. PUBLIC-SAFE by construction: a PRIVATE repo contributes its
-            # name + visibility ONLY — never its description. public/repositories.json is itself a
-            # public file, so a private description there would leak regardless of how the page
-            # renders it. Fail-safe: a failed/empty fetch yields visibility=private + no description.
+            # Repository inventory (#7 /repositories) — PUBLIC-ONLY at the source (Founder
+            # 2026-06-30, overrides the earlier hybrid that named private repos). public/
+            # repositories.json is itself a PUBLIC asset, so a private repo's NAME there leaks
+            # regardless of how the page renders it — "withhold at the source, not the render"
+            # (the same lesson already applied to descriptions). A PRIVATE repo therefore
+            # contributes ONLY to an aggregate count; its name/visibility/description never
+            # enter the file. Visibility is the LIVE GitHub value (not the stats-config flag,
+            # which is only for clone auth and can be stale). Fail-safe: a failed/empty fetch
+            # has .private != "false" → counted private, name withheld (never a named leak).
             META=$(curl -sfL \
               -H "Authorization: Bearer ${STATS_PAT}" \
               -H "Accept: application/vnd.github+json" \
               "https://api.github.com/repos/${REPO}" 2>/dev/null || echo '{}')
             if [ "$(echo "$META" | jq -r '.private')" = "false" ]; then
-              VIS="public"; DESC=$(echo "$META" | jq -r '.description // ""')
+              DESC=$(echo "$META" | jq -r '.description // ""')
+              jq -cn --arg o "$OWNER" --arg n "$NAME" --arg d "$DESC" \
+                '{owner:$o, name:$n, visibility:"public", description:$d}' >> /tmp/repos_meta.jsonl
             else
-              VIS="private"; DESC=""
+              PRIVATE_COUNT=$((PRIVATE_COUNT + 1))
             fi
-            jq -cn --arg o "$OWNER" --arg n "$NAME" --arg v "$VIS" --arg d "$DESC" \
-              '{owner:$o, name:$n, visibility:$v, description:$d}' >> /tmp/repos_meta.jsonl
           done
 
           # --- Estate test-scope rollup ---
@@ -184,9 +189,11 @@ jobs:
           printf '%s\n' "$ESTATE_OUT" > public/estate-test-scope.json
 
           # Write public/repositories.json — the inventory for the public /repositories page (#7).
-          # Public-safe by construction (private repos carry no description; see the loop above).
-          # Sorted owner/name so the daily diff is stable (only real status/description changes commit).
-          jq -s --arg u "$NOW" '{updatedAt: $u, repos: (sort_by(.owner + "/" + .name))}' \
+          # PUBLIC-ONLY by construction: the accumulator holds only public repos (see the loop);
+          # private repos are represented solely by the aggregate `privateCount`, never by name.
+          # Sorted owner/name so the daily diff is stable (only real public-repo changes commit).
+          jq -s --arg u "$NOW" --argjson pc "$PRIVATE_COUNT" \
+            '{updatedAt: $u, privateCount: $pc, repos: (sort_by(.owner + "/" + .name))}' \
             /tmp/repos_meta.jsonl > public/repositories.json
 
           echo ""

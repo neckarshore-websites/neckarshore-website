@@ -1,41 +1,12 @@
 {
   "updatedAt": "2026-06-30T08:18:55Z",
+  "privateCount": 20,
   "repos": [
-    {
-      "owner": "neckarshore-agents",
-      "name": "marvin-hq",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "neckarshore-ai",
-      "name": "dev-environment",
-      "visibility": "private",
-      "description": ""
-    },
     {
       "owner": "neckarshore-ai",
       "name": "neckarshore-easter-eggs",
       "visibility": "public",
       "description": "Session artifacts from an AI-orchestration team — songs, films, posters, quotes. Auto-synced from session Easter Eggs."
-    },
-    {
-      "owner": "neckarshore-ai",
-      "name": "neckarshore-history",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "neckarshore-ai",
-      "name": "neckarshore-planning",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "neckarshore-ai",
-      "name": "observatory",
-      "visibility": "private",
-      "description": ""
     },
     {
       "owner": "neckarshore-mmps",
@@ -56,18 +27,6 @@
       "description": "A constructive quality mirror for tech hype — checks 'built it in a weekend' claims against real production standards (tests, security, scalability, docs). Not a debunker; it helps decision-makers tell substance from air."
     },
     {
-      "owner": "neckarshore-mmps",
-      "name": "phonesis-voicebank",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "neckarshore-mmps",
-      "name": "snakeoil-check",
-      "visibility": "private",
-      "description": ""
-    },
-    {
       "owner": "neckarshore-skills",
       "name": "ai-phrase-check",
       "visibility": "public",
@@ -81,45 +40,9 @@
     },
     {
       "owner": "neckarshore-skills",
-      "name": "neckarshore-easter-eggs-skills",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "neckarshore-skills",
-      "name": "obsidian-instagram-scraper",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "neckarshore-skills",
-      "name": "obsidian-linkedin-scraper",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "neckarshore-skills",
-      "name": "obsidian-social-scrapers-common",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "neckarshore-skills",
       "name": "obsidian-vault-autopilot",
       "visibility": "public",
       "description": "Keeps an Obsidian vault tidy on its own — sorts, renames, tags, and enriches your notes automatically."
-    },
-    {
-      "owner": "neckarshore-skills",
-      "name": "obsidian-x-scraper",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "neckarshore-skills",
-      "name": "tools-claude-plugins",
-      "visibility": "private",
-      "description": ""
     },
     {
       "owner": "neckarshore-websites",
@@ -144,48 +67,6 @@
       "name": "rauhut-website",
       "visibility": "public",
       "description": "Personal site of German Rauhut — Technical Product Owner and AI product builder."
-    },
-    {
-      "owner": "neckarshore-websites",
-      "name": "site-quality",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "omnopsis-ai",
-      "name": "omnopsis-backend",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "omnopsis-ai",
-      "name": "omnopsis-contracts",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "omnopsis-ai",
-      "name": "omnopsis-document-importer",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "omnopsis-ai",
-      "name": "omnopsis-frontend",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "omnopsis-ai",
-      "name": "omnopsis-planning",
-      "visibility": "private",
-      "description": ""
-    },
-    {
-      "owner": "omnopsis-ai",
-      "name": "omnopsis-test-management",
-      "visibility": "private",
-      "description": ""
     }
   ]
 }
