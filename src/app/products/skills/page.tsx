@@ -3,7 +3,7 @@ import SubPortal from "@/components/SubPortal";
 import { SkillCard } from "@/components/SkillCard";
 import { ProductCard } from "@/components/ProductCard";
 import { pageMetadata } from "@/lib/seo";
-import { PORTFOLIO } from "@/lib/portfolio";
+import { PORTFOLIO, categoryMetaTitle } from "@/lib/portfolio";
 import { SKILL_CARDS } from "@/lib/skill-cards";
 
 const category = PORTFOLIO.find((c) => c.id === "skills")!;
@@ -11,7 +11,7 @@ const description =
   "Fokussierte Open-Source-Werkzeuge — Claude-Skills und kleine Apps, die genau ein Problem gut lösen.";
 
 export const metadata: Metadata = pageMetadata({
-  title: `${category.title} — neckarshore.ai`,
+  title: categoryMetaTitle(category),
   description,
   path: category.href,
 });

@@ -207,7 +207,7 @@ const NEW_PAGES = [
   { path: "/products/flagships", title: "Flagships", canonical: "https://neckarshore.ai/products/flagships" },
   { path: "/products/mmps", title: "MMPs", canonical: "https://neckarshore.ai/products/mmps" },
   { path: "/products/skills", title: "Skills", canonical: "https://neckarshore.ai/products/skills" },
-  { path: "/products/websites", title: "Websites", canonical: "https://neckarshore.ai/products/websites" },
+  { path: "/products/websites", title: "Web-Projekte", canonical: "https://neckarshore.ai/products/websites" },
   // Product detail pages (all bespoke now). Reachable + structured; the preview MMPs + the
   // private restaurant skill are noindex, the OSS skills are indexable — TC-CNT-030 checks the
   // shared surface (title/H1/canonical/JSON-LD), not the robots flag.
