@@ -4,7 +4,7 @@ import { test, expect } from "@playwright/test";
  * Markdown export (TC-EXP-*) — the "Als Markdown" download on content pages.
  *
  * Asserts the button is present on product pages (bespoke clearpath + the shared
- * PreviewProductPage template) and that /api/export serves clean source markdown as a
+ * ProductDetailPage template) and that /api/export serves clean source markdown as a
  * downloadable attachment, with the right 404/400 contract for non-exportable paths.
  *
  * NOTE: this suite runs against the dev server, so it does NOT exercise the Vercel

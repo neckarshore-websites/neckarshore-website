@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import PreviewProductPage, {
-  previewProductMetadata,
-} from "@/components/PreviewProductPage";
+import ProductDetailPage, {
+  productDetailMetadata,
+} from "@/components/ProductDetailPage";
 
 const SLUG = "phonesis";
 
 export function generateMetadata(): Metadata {
-  return previewProductMetadata({
+  return productDetailMetadata({
     slug: SLUG,
     title:
       "Phonesis Voicebank — Stimmenarchiv für Familien | neckarshore.ai",
@@ -14,5 +14,5 @@ export function generateMetadata(): Metadata {
 }
 
 export default function PhonesisPage() {
-  return <PreviewProductPage slug={SLUG} ctaName="Phonesis" />;
+  return <ProductDetailPage slug={SLUG} ctaName="Phonesis" />;
 }

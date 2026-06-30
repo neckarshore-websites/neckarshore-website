@@ -108,7 +108,7 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
     capabilities: [
       {
         code: "shared core",
-        text: "TypeScript-Lego für die drei Scraper-Plugins. Apify-Wrapper, AI-Polish, Markdown-Rendering.",
+        text: "Python-Lego für die drei Scraper-Plugins. Apify-Wrapper, AI-Polish, Markdown-Rendering.",
       },
       {
         code: "linkedin-scraper",

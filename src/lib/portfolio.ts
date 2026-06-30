@@ -161,7 +161,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
         schemaType: "SoftwareApplication",
         applicationCategory: "BusinessApplication",
         // LIVE since 2026-06-27 at snakeoil.neckarshore.ai. Bespoke detail page
-        // (src/app/products/snakeoil-check, via the shared PreviewProductPage live branch) →
+        // (src/app/products/snakeoil-check, via the shared ProductDetailPage live branch) →
         // excluded from the [slug] skeleton route. Indexable; emits liveSoftwareApplicationSchema
         // (live url, NO free Offer — freemium, AD-19 fail-closed).
         hasOwnPage: true,

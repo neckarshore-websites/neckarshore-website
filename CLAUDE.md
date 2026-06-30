@@ -87,10 +87,11 @@ At every session start, **before any feature work**, run:
 ```bash
 gh run list --workflow=lighthouse.yml --limit=3 --json conclusion,createdAt,headBranch
 gh run list --workflow=lint.yml --limit=3 --json conclusion,createdAt,headBranch
+gh run list --workflow=e2e.yml --limit=3 --json conclusion,createdAt,headBranch
 gh run list --workflow=update-stats.yml --limit=3 --json conclusion,createdAt,headBranch
 ```
 
-(No dedicated `e2e.yml` workflow — E2E suite runs locally via `npm run test:e2e`. CI-side E2E is a backlog item.)
+E2E **gates CI**: `e2e.yml` runs `npm run test:e2e:ci` (`playwright test --grep-invert @external`) on every PR and push to `main`. The `@external` tests (EU-ODR link, Calendly — bot-blocked from datacenter IPs) are excluded from the gate and covered by the `link-check.yml` cron; the full local `npm run test:e2e` still runs them.
 
 - If any run shows `"conclusion": "failure"` → investigate and fix **before** starting new work
 - Report CI status in session greeting: "CI: ✅ grün" or "CI: ❌ Lighthouse failing since [date]"
