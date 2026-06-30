@@ -30,7 +30,7 @@ export interface StatsData {
     reporting?: number;
     expected?: number;
     missing?: string[];
-    /** Estate repo span (count) — drives the tile's "über N Repositories" sub-line (#244). */
+    /** Estate repo span (count). Read by the /test-management page; no longer shown on the tile. */
     repos?: number;
     /** Floor-framed total: render the headline rounded down to 100 + a load-bearing "+". */
     floor?: boolean;
@@ -90,19 +90,19 @@ export default function StatsGrid({
   const linesOfCode = useAnimatedNumber(stats.linesOfCode);
   const repos = useAnimatedNumber(stats.repos);
 
-  // Tests-tile sub-line = the estate repo span ("über 20 Repositories"). NO numeric per-type
-  // split: an estate-wide byType breakdown is only partially available (most repos report
-  // totals-only), so a numeric split would be incomplete/dishonest. (Charter §7 / brief §4.)
-  const testReposLine = stats.testScope?.repos
-    ? `über ${stats.testScope.repos} Repositories`
-    : null;
+  // Tests-tile sub-line = a "mehr →" affordance into the /test-management detail page. The
+  // repo SPAN was deliberately dropped from the tile (#245 follow-up): the test-estate count
+  // (repos-with-tests) differs from the "Repositories" tile (all repos), and two repo counts
+  // on one screen read as a contradiction. The whole tile is already the link; "mehr →" is
+  // only the visual cue that there is more behind it. No per-type split either.
+  const testsMoreCue = "mehr →";
 
   const tiles: {
     icon: ComponentType<{ size?: number; className?: string }>;
     value: string;
     label: string;
     sub?: string | null;
-    /** When set, the whole tile is a link (the Tests tile → /tests detail surface, #245). */
+    /** When set, the whole tile is a link (the Tests tile → /test-management detail, #245). */
     href?: string;
   }[] = [
     { icon: CalendarDays, value: String(devDays), label: "Days since First Commit" },
@@ -111,8 +111,8 @@ export default function StatsGrid({
       icon: FlaskConical,
       value: formatDE(tests) + testsSuffix,
       label: "Automatisierte Tests",
-      sub: testReposLine,
-      href: "/tests",
+      sub: testsMoreCue,
+      href: "/test-management",
     },
     { icon: Layers, value: String(endpoints), label: "REST Endpoints" },
     { icon: Code2, value: formatDE(linesOfCode), label: "Zeilen Code" },
@@ -130,11 +130,12 @@ export default function StatsGrid({
                 {stat.value}
               </p>
               <p className="mt-1 text-xs text-text-secondary">{stat.label}</p>
-              {/* sub-line only ever set on the Tests tile → the testid is tile-specific */}
+              {/* sub-line only ever set on the Tests tile → the testid is tile-specific.
+                  Accent-coloured so the "mehr →" reads as a link cue (the whole tile links). */}
               {stat.sub && (
                 <p
                   data-testid="tests-subline"
-                  className="mt-1 text-[10px] leading-tight text-text-secondary/70"
+                  className="mt-1 text-xs font-medium leading-tight text-accent"
                 >
                   {stat.sub}
                 </p>
