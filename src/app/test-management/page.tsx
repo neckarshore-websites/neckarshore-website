@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
+import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { PageSchema } from "@/components/PageSchema";
@@ -243,6 +244,17 @@ export default function TestManagementPage() {
                   </tbody>
                 </table>
               </div>
+              {/* No count in the link text on purpose: this page's repo span is "repos with
+                  tests" (20); /repositories lists ALL repos (31) — a number here would mismatch. */}
+              <p className="mt-4 text-sm">
+                <Link
+                  href="/repositories"
+                  data-track="testmgmt_all_repositories"
+                  className="font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
+                >
+                  Alle Repositories ansehen →
+                </Link>
+              </p>
             </section>
           )}
 

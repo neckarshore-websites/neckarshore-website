@@ -39,6 +39,7 @@ jobs:
 
           mkdir -p /tmp/repos
           mkdir -p /tmp/stats
+          : > /tmp/repos_meta.jsonl   # repository-inventory accumulator (#7 /repositories)
 
           for i in $(seq 0 $((REPO_COUNT - 1))); do
             OWNER=$(echo "$CONFIG" | jq -r ".repos[$i].owner")
@@ -93,6 +94,23 @@ jobs:
                 echo "  WARN: ${REPO} statsPath ${STATS_PATH} fetch failed — counts as a missing producer"
               fi
             fi
+
+            # Repository inventory (#7 /repositories): capture visibility + description for the
+            # public inventory page. PUBLIC-SAFE by construction: a PRIVATE repo contributes its
+            # name + visibility ONLY — never its description. public/repositories.json is itself a
+            # public file, so a private description there would leak regardless of how the page
+            # renders it. Fail-safe: a failed/empty fetch yields visibility=private + no description.
+            META=$(curl -sfL \
+              -H "Authorization: Bearer ${STATS_PAT}" \
+              -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/${REPO}" 2>/dev/null || echo '{}')
+            if [ "$(echo "$META" | jq -r '.private')" = "false" ]; then
+              VIS="public"; DESC=$(echo "$META" | jq -r '.description // ""')
+            else
+              VIS="private"; DESC=""
+            fi
+            jq -cn --arg o "$OWNER" --arg n "$NAME" --arg v "$VIS" --arg d "$DESC" \
+              '{owner:$o, name:$n, visibility:$v, description:$d}' >> /tmp/repos_meta.jsonl
           done
 
           # --- Estate test-scope rollup ---
@@ -165,18 +183,27 @@ jobs:
           # breakdown + lenses) consumed by Plan 2's Obsidian renderer.
           printf '%s\n' "$ESTATE_OUT" > public/estate-test-scope.json
 
+          # Write public/repositories.json — the inventory for the public /repositories page (#7).
+          # Public-safe by construction (private repos carry no description; see the loop above).
+          # Sorted owner/name so the daily diff is stable (only real status/description changes commit).
+          jq -s --arg u "$NOW" '{updatedAt: $u, repos: (sort_by(.owner + "/" + .name))}' \
+            /tmp/repos_meta.jsonl > public/repositories.json
+
           echo ""
           echo "=== public/stats.json ==="
           cat public/stats.json
           echo ""
           echo "=== public/estate-test-scope.json ==="
           cat public/estate-test-scope.json
+          echo ""
+          echo "=== public/repositories.json ==="
+          cat public/repositories.json
 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/stats.json public/estate-test-scope.json
+          git add public/stats.json public/estate-test-scope.json public/repositories.json
           if git diff --staged --quiet; then
             echo "No changes to stats — skipping commit"
           else
