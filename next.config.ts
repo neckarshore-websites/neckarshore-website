@@ -121,6 +121,14 @@ const nextConfig: NextConfig = {
         destination: "/products/clearpath",
         permanent: true,
       },
+      // The "Wie wir testen" surface shipped briefly at /tests (#245) before the rename to
+      // the more descriptive /test-management. Permanently redirect the short-lived old URL
+      // so the just-indexed link + sitemap entry land on the canonical route (308).
+      {
+        source: "/tests",
+        destination: "/test-management",
+        permanent: true,
+      },
     ];
   },
 };

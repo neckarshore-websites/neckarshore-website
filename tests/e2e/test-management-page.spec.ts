@@ -3,13 +3,16 @@ import fs from "node:fs";
 import path from "node:path";
 
 /**
- * /tests — "Wie wir testen" detail surface (backlog #245, UD5 Front-10).
+ * /test-management — "Wie wir testen" detail surface (backlog #245, UD5 Front-10).
  *
  * Verifies the page is DATA-BOUND to the same single source as the homepage tile
  * (public/estate-test-scope.json) — never a second hardcoded figure that can drift — and
- * holds the honesty guardrails (phonesis absent; floor-framed aggregate; Top-N + rest-rollup
- * so the 0-test scaffold repo and the known-red repo are not individually spotlighted).
+ * holds the honesty guardrails (phonesis absent; rounded-down aggregate; Top-N + rest-rollup
+ * so the 0-test scaffold repo and the known-red repo are not individually spotlighted). Also
+ * checks the 13-test-type scope, the per-repo Typ column, and the /tests→/test-management 308.
  */
+
+const ROUTE = "/test-management";
 
 function loadScope() {
   const raw = JSON.parse(
@@ -37,21 +40,23 @@ async function ldNodes(page: Page): Promise<Record<string, unknown>[]> {
   return nodes;
 }
 
-test.describe("Content surface — /tests (KI-Testen detail)", () => {
+test.describe("Content surface — /test-management (KI-Testen detail)", () => {
   test("TC-CNT-068: 200, single H1, canonical, WebPage JSON-LD with its own @id", async ({
     page,
   }) => {
-    const res = await page.goto("/tests");
+    const res = await page.goto(ROUTE);
     expect(res?.status()).toBe(200);
     await expect(page.locator("h1")).toHaveCount(1);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
-      "https://neckarshore.ai/tests",
+      "https://neckarshore.ai/test-management",
     );
     const webpages = (await ldNodes(page)).filter((n) => n["@type"] === "WebPage");
     expect(webpages.length).toBeGreaterThanOrEqual(1);
     expect(
-      webpages.some((w) => w["@id"] === "https://neckarshore.ai/tests#webpage"),
+      webpages.some(
+        (w) => w["@id"] === "https://neckarshore.ai/test-management#webpage",
+      ),
     ).toBe(true);
   });
 
@@ -62,50 +67,84 @@ test.describe("Content surface — /tests (KI-Testen detail)", () => {
     const floored = scope.floor ? Math.floor(scope.total / 100) * 100 : scope.total;
     const expected = floored.toLocaleString("de-DE") + (scope.floor ? "+" : "");
 
-    await page.goto("/tests");
+    await page.goto(ROUTE);
     const main = page.locator("main");
     // Same single source as the tile → no second literal that can drift.
     await expect(main).toContainText(`${expected} automatisierte Tests`);
-    await expect(main).toContainText(`${scope.repos} Repositories`);
+    await expect(main).toContainText(`${scope.repos} unserer Repositories`);
   });
 
-  test("TC-CNT-070: public-safe — phonesis absent; runner-counted + adversarial-verify passage present", async ({
+  test("TC-CNT-070: public-safe — phonesis absent; runner-counted + re-check passage present", async ({
     page,
   }) => {
-    await page.goto("/tests");
+    await page.goto(ROUTE);
     const body = (await page.locator("main").textContent()) ?? "";
     // Hard guardrail: the BLOCKED clone is never on the public surface.
     expect(body.toLowerCase()).not.toContain("phonesis");
     // The GEO-citable method passage (the lever #246 points at).
     expect(body).toContain("Test-Runner");
     expect(body).toContain("grep");
-    expect(body).toContain("herausgefordert"); // the adversarial-verify method, framed generically
+    expect(body).toContain("gegengeprüft"); // the re-check method, framed generically
   });
 
-  test("TC-CNT-071: per-repo table is Top-N + a rest-rollup (no 0-row / no red-test spotlight)", async ({
+  test("TC-CNT-071: per-repo table has a Typ column, Top-N + rest-rollup (no 0-row / no red-test spotlight)", async ({
     page,
   }) => {
-    await page.goto("/tests");
+    await page.goto(ROUTE);
     const table = page.locator("main table");
     await expect(table).toBeVisible();
+    // Three columns now: Repository · Typ · Tests.
+    await expect(table.locator("thead th")).toHaveCount(3);
+    await expect(table.locator("thead")).toContainText("Typ");
     // Top-6 + at most one rollup row.
     expect(await table.locator("tbody tr").count()).toBeLessThanOrEqual(7);
     await expect(table).toContainText("weitere Repositories");
     const tableText = (await table.textContent()) ?? "";
+    // Typ classification surfaces (omnopsis-backend → Produkt, neckarshore-website → Webseite).
+    expect(tableText).toContain("Produkt");
+    expect(tableText).toContain("Webseite");
     // §5b: the 0-test scaffold repo and the known-red repo (#257) stay in the rollup, not spotlit.
     expect(tableText).not.toContain("clearpath-52");
     expect(tableText).not.toContain("oakwoodgolfclub-website");
   });
 
-  test("TC-CNT-072: sitemap lists /tests", async ({ request }) => {
-    const xml = await (await request.get("/sitemap.xml")).text();
-    expect(xml).toContain("https://neckarshore.ai/tests");
+  test("TC-CNT-074: 'Was abgedeckt ist' lists the full 13-test-type scope (no per-type numbers)", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    const main = page.locator("main");
+    await expect(main).toContainText("13 Testarten");
+    const types = page.locator('ul[aria-label="Abgedeckte Testarten"] li');
+    await expect(types).toHaveCount(13);
+    // A representative span of the 13 is present.
+    for (const t of ["Unit", "End-to-End", "Security", "Accessibility", "AI-Eval"]) {
+      await expect(types.filter({ hasText: t }).first()).toBeVisible();
+    }
   });
 
-  test("TC-CNT-073: homepage Tests tile links to /tests", async ({ page }) => {
+  test("TC-CNT-072: sitemap lists /test-management", async ({ request }) => {
+    const xml = await (await request.get("/sitemap.xml")).text();
+    expect(xml).toContain("https://neckarshore.ai/test-management");
+    // the short-lived old path must NOT be a sitemap entry.
+    expect(xml).not.toContain("<loc>https://neckarshore.ai/tests</loc>");
+  });
+
+  test("TC-CNT-075: /tests permanently redirects to /test-management (308)", async ({
+    request,
+  }) => {
+    const res = await request.get("/tests", { maxRedirects: 0 });
+    expect([301, 308]).toContain(res.status());
+    expect(res.headers()["location"]).toBe("/test-management");
+  });
+
+  test("TC-CNT-073: homepage Tests tile links to /test-management with a 'mehr' cue", async ({
+    page,
+  }) => {
     await page.goto("/");
     const link = page.locator('a[data-track="stats_tests_detail"]');
-    await expect(link).toHaveAttribute("href", "/tests");
+    await expect(link).toHaveAttribute("href", "/test-management");
     await expect(link).toContainText("Automatisierte Tests");
+    // The repo count was removed from the tile; a "mehr" cue signals the detail page.
+    await expect(page.getByTestId("tests-subline")).toContainText("mehr");
   });
 });

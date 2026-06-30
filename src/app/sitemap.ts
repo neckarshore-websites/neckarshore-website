@@ -23,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     "/impressum",
     "/datenschutz",
-    "/tests", // the "Wie wir testen" detail surface (#245) — a citable GEO target
+    "/test-management", // the "Wie wir testen" detail surface (#245) — a citable GEO target
     // /products, the 4 sub-portals, and the bespoke own-page details (omnopsis, clearpath).
     // External sites + noindex preview skeletons are excluded by allProductRoutes().
     ...allProductRoutes(),

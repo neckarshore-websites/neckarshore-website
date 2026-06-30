@@ -7,8 +7,8 @@ test.describe("Stats Tiles @smoke", () => {
     page: import("@playwright/test").Page,
     label: string,
   ): Promise<string> {
-    // Exact match: the Tests-tile sub-line "über N Repositories" contains the word
-    // "Repositories", so a substring locator would also hit the Repositories tile label.
+    // Exact match (defensive): keeps each label locator from accidentally matching another
+    // tile's text — e.g. a sub-line that shares a word with a tile label.
     const tile = page.getByText(label, { exact: true }).locator("..");
     return (await tile.locator("p.font-heading").textContent())?.trim() || "";
   }
@@ -79,11 +79,13 @@ test.describe("Stats Tiles @smoke", () => {
     }
   });
 
-  // TC-STAT-009 (#244): the Tests tile is DATA-DRIVEN off public/stats.json — never a hardcoded
-  // literal. Reads the JSON, derives the expected floor-framed display + repo sub-line, and
-  // asserts the rendered tile matches. If anyone hardcodes "2.600+"/"über 20 Repositories", a
-  // change to stats.json.testScope would make this fail → the regression guard the brief asks for.
-  test("TC-STAT-009: Tests tile renders the floor-framed estate total + repo span from stats.json (no literal)", async ({
+  // TC-STAT-009 (#244): the Tests tile big number is DATA-DRIVEN off public/stats.json — never a
+  // hardcoded literal. Reads the JSON, derives the expected rounded-down display, and asserts the
+  // rendered tile matches. If anyone hardcodes "2.600+", a change to stats.json.testScope would
+  // make this fail → the regression guard the brief asks for. (#245 follow-up: the sub-line is no
+  // longer the repo count — that was dropped to avoid the 20-vs-31 contradiction — but a "mehr"
+  // cue into /test-management.)
+  test("TC-STAT-009: Tests tile renders the rounded-down estate total from stats.json (no literal)", async ({
     page,
   }) => {
     const stats = JSON.parse(
@@ -91,7 +93,6 @@ test.describe("Stats Tiles @smoke", () => {
     );
     const total: number = stats.testScope?.total ?? stats.tests;
     const isFloor: boolean = stats.testScope?.floor ?? false;
-    const repos: number | undefined = stats.testScope?.repos;
 
     // Mirror src/lib/stats-breakdown.ts flooredTotal: round down to 100 when floor-framed.
     const flooredDisplay = isFloor ? Math.floor(total / 100) * 100 : total;
@@ -103,14 +104,11 @@ test.describe("Stats Tiles @smoke", () => {
     const value = await getStatValue(page, "Automatisierte Tests");
     expect(value).toBe(expectedValue); // e.g. "2.600+" — exact, derived from JSON not a literal
 
-    // Sub-line = the repo span ("über N Repositories"), never a numeric per-type split.
+    // Sub-line is now the "mehr" cue into the detail page (no repo count, no per-type split).
     const subline = page.getByTestId("tests-subline");
-    if (repos) {
-      await expect(subline).toBeVisible();
-      await expect(subline).toHaveText(`über ${repos} Repositories`);
-    } else {
-      await expect(subline).toHaveCount(0);
-    }
+    await expect(subline).toBeVisible();
+    await expect(subline).toContainText("mehr");
+    await expect(subline).not.toContainText("Repositories");
   });
 
   test("TC-STAT-008: No API call to /api/github-stats", async ({ page }) => {
