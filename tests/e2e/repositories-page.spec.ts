@@ -3,12 +3,13 @@ import fs from "node:fs";
 import path from "node:path";
 
 /**
- * /repositories — the public repository inventory (backlog #7, hybrid + auto-synced).
+ * /repositories — the public repository inventory (backlog #7, PUBLIC-ONLY + auto-synced).
  *
- * Verifies the page is DATA-BOUND to public/repositories.json (public repos detailed, private
- * rudimentary, grouped by Typ) and — most importantly — holds the PRIVACY INVARIANT: the
- * committed public JSON carries NO description for any private repo, so a private repo's detail
- * can never reach the public surface regardless of how the page renders.
+ * Verifies the page is DATA-BOUND to public/repositories.json (public repos detailed + grouped
+ * by Typ, private repos as an aggregate count only) and — most importantly — holds the hardened
+ * PRIVACY INVARIANT (Founder 2026-06-30): the committed public JSON names ZERO private repos
+ * (not just "no description") and the rendered page surfaces no private name — only the count.
+ * The fix is at the SOURCE (the workflow withholds private names); these tests guard the artifact.
  */
 
 function loadRepos() {
@@ -17,6 +18,7 @@ function loadRepos() {
   );
   return {
     updatedAt: raw.updatedAt as string,
+    privateCount: (raw.privateCount ?? 0) as number,
     repos: (raw.repos ?? []) as {
       owner: string;
       name: string;
@@ -25,6 +27,27 @@ function loadRepos() {
     }[],
   };
 }
+
+/** Total repos under stats management = the source-of-truth denominator (named-public + counted-private). */
+function configRepoTotal(): number {
+  const raw = JSON.parse(fs.readFileSync(path.join(process.cwd(), "stats-config.json"), "utf-8"));
+  return (raw.repos ?? []).length;
+}
+
+/**
+ * High-sensitivity private repo names that must NEVER appear on the public surface (the crown
+ * jewels — product backend/frontend, the importer, agent infra, the voicebank). A curated canary,
+ * deliberately NOT the full private set: if one of THESE shows up in the public file or the
+ * rendered page, it is a real privacy regression. A repo legitimately going public is a deliberate
+ * review trigger — update this list when that happens.
+ */
+const PRIVATE_CANARIES = [
+  "omnopsis-backend",
+  "omnopsis-frontend",
+  "omnopsis-document-importer",
+  "marvin-hq",
+  "phonesis-voicebank",
+];
 
 async function ldNodes(page: Page): Promise<Record<string, unknown>[]> {
   const blocks = page.locator('script[type="application/ld+json"]');
@@ -41,16 +64,34 @@ async function ldNodes(page: Page): Promise<Record<string, unknown>[]> {
 }
 
 test.describe("Content surface — /repositories (inventory)", () => {
-  test("TC-CNT-078: PRIVACY INVARIANT — the public JSON carries no private-repo description", () => {
-    const { repos } = loadRepos();
-    const leaks = repos.filter((r) => r.visibility === "private" && r.description !== "");
+  test("TC-CNT-078: PRIVACY INVARIANT — repositories.json names ZERO private repos", () => {
+    const { repos, privateCount } = loadRepos();
+    const raw = fs.readFileSync(
+      path.join(process.cwd(), "public", "repositories.json"),
+      "utf-8",
+    );
+
+    // Structural (self-maintaining): the public file carries ONLY public entries — no private
+    // repo can be named because none is present. Private repos exist solely as a count.
+    const privateEntries = repos.filter((r) => r.visibility !== "public");
     expect(
-      leaks.map((r) => `${r.owner}/${r.name}`),
-      "private repos must never carry a description in the public file",
+      privateEntries.map((r) => `${r.owner}/${r.name}`),
+      "repositories.json must contain zero private entries",
     ).toEqual([]);
-    // Sanity: the data is non-trivial (both buckets populated).
-    expect(repos.filter((r) => r.visibility === "public").length).toBeGreaterThan(0);
-    expect(repos.filter((r) => r.visibility === "private").length).toBeGreaterThan(0);
+    expect(repos.length, "public repos must be present").toBeGreaterThan(0);
+    expect(
+      privateCount,
+      "private repos must be represented by a positive aggregate count",
+    ).toBeGreaterThan(0);
+    // Denominator: every managed repo is accounted for as named-public OR counted-private.
+    expect(repos.length + privateCount).toBe(configRepoTotal());
+
+    // Named canary: no high-sensitivity private name may appear anywhere in the raw file.
+    for (const name of PRIVATE_CANARIES) {
+      expect(raw, `private repo "${name}" must not appear in repositories.json`).not.toContain(
+        name,
+      );
+    }
   });
 
   test("TC-CNT-076: 200, single H1, canonical, WebPage JSON-LD with its own @id", async ({
@@ -69,16 +110,17 @@ test.describe("Content surface — /repositories (inventory)", () => {
     ).toBe(true);
   });
 
-  test("TC-CNT-077: data-bound — total count + a public repo's name AND description render", async ({
+  test("TC-CNT-077: data-bound — total count (public + private) + a public repo's name AND description render", async ({
     page,
   }) => {
-    const { repos } = loadRepos();
+    const { repos, privateCount } = loadRepos();
+    const total = repos.length + privateCount;
     const firstPublic = repos.find((r) => r.visibility === "public" && r.description);
     expect(firstPublic, "fixture needs at least one public repo with a description").toBeTruthy();
 
     await page.goto("/repositories");
     const main = page.locator("main");
-    await expect(main).toContainText(`${repos.length} Repositories`);
+    await expect(main).toContainText(`${total} Repositories`);
     await expect(main).toContainText(firstPublic!.name);
     await expect(main).toContainText(firstPublic!.description);
   });
@@ -96,6 +138,22 @@ test.describe("Content surface — /repositories (inventory)", () => {
     // Typ subheadings (h3) — at least the ones we know are populated.
     await expect(page.getByRole("heading", { level: 3, name: "Webseite" }).first()).toBeVisible();
     await expect(page.getByRole("heading", { level: 3, name: "Plugin/Skill" }).first()).toBeVisible();
+  });
+
+  test("TC-CNT-082: PRIVACY INVARIANT — the rendered page names no private repo, only the count", async ({
+    page,
+  }) => {
+    const { privateCount } = loadRepos();
+    await page.goto("/repositories");
+    const mainText = (await page.locator("main").textContent()) ?? "";
+    for (const name of PRIVATE_CANARIES) {
+      expect(
+        mainText,
+        `private repo "${name}" must not render on the public /repositories page`,
+      ).not.toContain(name);
+    }
+    // The private bucket appears ONLY as an aggregate count line — no names, no rows.
+    await expect(page.locator("main")).toContainText(`${privateCount} private Repositories`);
   });
 
   test("TC-CNT-080: sitemap lists /repositories", async ({ request }) => {
