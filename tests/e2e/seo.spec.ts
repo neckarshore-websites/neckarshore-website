@@ -77,6 +77,47 @@ test.describe("SEO Basics", () => {
     }
   });
 
+  // llms-full.txt (TC-SEO-039..042) — the expanded companion to the curated llms.txt.
+  // Inlines the FULL Markdown of every md-backed indexable product so an AI crawler can
+  // ingest the substance in one fetch. Built from allProductRoutes() ∩ exportable .md
+  // via the existing export pipeline (single source — cannot drift from sitemap/llms.txt).
+  test("TC-SEO-039: llms-full.txt is served as plain text", async ({ request }) => {
+    const res = await request.get("/llms-full.txt");
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toContain("text/plain");
+  });
+
+  test("TC-SEO-040: llms-full.txt opens with the curated overview", async ({ request }) => {
+    const body = await (await request.get("/llms-full.txt")).text();
+    // The expanded file embeds the same overview as the curated llms.txt index.
+    expect(body).toContain("Neckarshore AI");
+    expect(body).toContain("German Rauhut");
+  });
+
+  test("TC-SEO-041: llms-full.txt inlines the full markdown of every md-backed indexable product", async ({ request }) => {
+    const body = await (await request.get("/llms-full.txt")).text();
+    // The 5 indexable products that carry a source .md must appear in full, each
+    // with its export `source:` line (proves the body is inlined, not just linked).
+    for (const slug of [
+      "clearpath",
+      "snakeoil-check",
+      "phonesis",
+      "local-seo-hub",
+      "prod-or-pretend",
+    ]) {
+      expect(body).toContain(`/products/${slug}`);
+    }
+    // Export-builder frontmatter marker → confirms real page bodies, not just URLs.
+    expect(body).toContain("exported:");
+  });
+
+  test("TC-SEO-042: llms-full.txt is substantially larger than the llms.txt index", async ({ request }) => {
+    const index = await (await request.get("/llms.txt")).text();
+    const full = await (await request.get("/llms-full.txt")).text();
+    // "full" must EXPAND the index (5 product bodies inlined), not duplicate it.
+    expect(full.length).toBeGreaterThan(index.length * 1.5);
+  });
+
   test("TC-SEO-010: homepage has og:image meta tag", async ({ page }) => {
     await page.goto("/");
     const ogImage = page.locator('meta[property="og:image"]');
