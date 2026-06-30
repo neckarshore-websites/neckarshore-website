@@ -7,6 +7,7 @@ import { PageSchema } from "@/components/PageSchema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { ProductFaq } from "@/components/ProductFaq";
+import { ExportButton } from "@/components/export/ExportButton";
 import { pageMetadata } from "@/lib/seo";
 import { getWebsiteEntry } from "@/lib/content/websites";
 import { breadcrumbTrailForSlug, websiteCaseStudySlugs } from "@/lib/portfolio";
@@ -75,6 +76,9 @@ export default async function WebsiteCaseStudyPage({
         <Breadcrumbs trail={breadcrumbTrailForSlug(slug)} />
 
         <article>
+          <div className="mb-4 flex justify-end">
+            <ExportButton path={`/products/websites/${entry.slug}`} />
+          </div>
           <header className="mb-6">
             <h1 className="font-heading text-4xl font-bold text-accent md:text-5xl">
               {entry.headline}

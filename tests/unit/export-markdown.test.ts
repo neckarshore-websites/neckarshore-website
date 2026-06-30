@@ -15,6 +15,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { buildMarkdownDocument, faqToMarkdown, tableToMarkdown } from "../../src/lib/export/serialize.ts";
 import { buildProductMarkdown } from "../../src/lib/export/builders/product.ts";
+import { buildWebsiteMarkdown } from "../../src/lib/export/builders/website.ts";
 import { extraSectionsForSlug } from "../../src/lib/export/product-sections.ts";
 import { resolveExport } from "../../src/lib/export/resolve.ts";
 
@@ -153,6 +154,32 @@ test("TC-EXP-U13: buildProductMarkdown filename leads with the site host (self-i
   assert.ok(result.filename.endsWith("clearpath.md"), "slug + .md extension preserved at the end");
 });
 
+// ── builders/website.ts ──────────────────────────────────────────────────────
+
+test("TC-EXP-U14: buildWebsiteMarkdown assembles a real case study (neckarshore) from its .md source + FAQ", () => {
+  const result = buildWebsiteMarkdown("neckarshore", OPTS);
+  assert.ok(result, "the neckarshore case study has a .md source → must export");
+  assert.equal(result.filename, "neckarshore.ai - neckarshore.md");
+
+  const md = result.markdown;
+  // Frontmatter from websites/neckarshore.md, with the export header fields.
+  assert.match(md, /\nsource: "https:\/\/neckarshore\.ai\/products\/websites\/neckarshore"\n/);
+  assert.match(md, /\nsite: "neckarshore\.ai"\n/);
+  assert.match(md, /\nexported: "2026-06-28"\n/);
+  // Distinctive website frontmatter: status + the tech-stack chips as a machine list.
+  assert.match(md, /\nstatus: "Live"\n/);
+  assert.match(md, /\nstack: ".*Next\.js.*"\n/);
+  // Raw body content from the source file (a known case-study heading).
+  assert.match(md, /## Was war die Ausgangslage\?/);
+  // Data-driven FAQ section, pulled from product-faqs.ts (a known question).
+  assert.match(md, /## Häufige Fragen/);
+  assert.match(md, /### Wie ist neckarshore\.ai gebaut\?/);
+});
+
+test("TC-EXP-U15: buildWebsiteMarkdown returns null for a slug with no .md source", () => {
+  assert.equal(buildWebsiteMarkdown("does-not-exist", OPTS), null);
+});
+
 // ── resolve.ts ───────────────────────────────────────────────────────────────
 
 test("TC-EXP-U07: resolveExport maps a product path (with or without trailing slash) to the product builder", () => {
@@ -164,10 +191,25 @@ test("TC-EXP-U07: resolveExport maps a product path (with or without trailing sl
   assert.ok(b, "trailing slash must still resolve");
 });
 
+test("TC-EXP-U16: resolveExport maps a two-segment website path to the website builder, not the product one", () => {
+  const a = resolveExport("/products/websites/neckarshore", OPTS);
+  assert.ok(a, "/products/websites/neckarshore must resolve");
+  assert.equal(a.filename, "neckarshore.ai - neckarshore.md");
+  // The two-segment website route must NOT be swallowed by the single-segment product
+  // pattern — that would read products/websites.md (which doesn't exist) and 404.
+  assert.match(a.markdown, /\/products\/websites\/neckarshore/);
+
+  const b = resolveExport("/products/websites/neckarshore/", OPTS);
+  assert.ok(b, "trailing slash must still resolve");
+});
+
 test("TC-EXP-U08: resolveExport returns null for non-exportable or malicious paths", () => {
   assert.equal(resolveExport("/", OPTS), null, "home has no source");
   assert.equal(resolveExport("/products/", OPTS), null, "products index has no slug");
+  assert.equal(resolveExport("/products/websites", OPTS), null, "websites sub-portal index has no products/.md");
+  assert.equal(resolveExport("/products/websites/", OPTS), null, "websites index trailing slash has no slug");
   assert.equal(resolveExport("/datenschutz", OPTS), null, "legal is hand-written JSX");
   assert.equal(resolveExport("/products/../../etc/passwd", OPTS), null, "no path traversal");
+  assert.equal(resolveExport("/products/websites/../../etc/passwd", OPTS), null, "no path traversal on the website route");
   assert.equal(resolveExport("/products/Clearpath", OPTS), null, "slug charset is lowercase a-z0-9-");
 });
