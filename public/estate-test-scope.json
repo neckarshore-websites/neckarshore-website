@@ -6,9 +6,9 @@
   },
   "endpoints": 96,
   "expected": 1,
+  "floor": true,
   "missing": [],
-  "reporting": 1,
-  "repos": [
+  "per_repo": [
     {
       "audited_sha": "2f8a721a4537429fafb43b2a84c5c59497bc160f",
       "byType": {
@@ -20,8 +20,181 @@
       "lenses": {},
       "repo": "omnopsis-ai/omnopsis-backend",
       "total": 588
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-skills/obsidian-vault-autopilot",
+      "seeded": true,
+      "total": 496
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-websites/neckarshore-website",
+      "seeded": true,
+      "total": 308
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-mmps/snakeoil-check",
+      "seeded": true,
+      "total": 241
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "omnopsis-ai/omnopsis-frontend",
+      "seeded": true,
+      "total": 232
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-skills/imap-mailbox-cleanup",
+      "seeded": true,
+      "total": 171
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-websites/oakwoodgolfclub-website",
+      "seeded": true,
+      "total": 129
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-ai/dev-environment",
+      "seeded": true,
+      "total": 126
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "omnopsis-ai/omnopsis-contracts",
+      "seeded": true,
+      "total": 85
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-skills/neckarshore-easter-eggs-skills",
+      "seeded": true,
+      "total": 35
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-skills/ai-phrase-check",
+      "seeded": true,
+      "total": 34
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-websites/goldoni-website",
+      "seeded": true,
+      "total": 32
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-websites/site-quality",
+      "seeded": true,
+      "total": 32
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-ai/observatory",
+      "seeded": true,
+      "total": 30
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-skills/social-scrapers",
+      "seeded": true,
+      "total": 19
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-skills/test-stats-action",
+      "seeded": true,
+      "total": 18
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-websites/rauhut-website",
+      "seeded": true,
+      "total": 17
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-websites/grafowerk-website",
+      "seeded": true,
+      "total": 9
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-ai/neckarshore-planning",
+      "seeded": true,
+      "total": 9
+    },
+    {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-mmps/clearpath-52",
+      "seeded": true,
+      "total": 0
     }
   ],
-  "total": 588,
-  "updatedAt": "2026-06-29T08:50:22Z"
+  "reporting": 1,
+  "repos": 20,
+  "total": 2611,
+  "updatedAt": "2026-06-30T05:34:05Z"
 }

@@ -9,7 +9,7 @@ import {
   FolderGit2,
   CalendarDays,
 } from "lucide-react";
-import { breakdownLine } from "@/lib/stats-breakdown";
+import { flooredTotal } from "@/lib/stats-breakdown";
 
 export interface StatsData {
   days: number;
@@ -29,6 +29,10 @@ export interface StatsData {
     reporting?: number;
     expected?: number;
     missing?: string[];
+    /** Estate repo span (count) — drives the tile's "über N Repositories" sub-line (#244). */
+    repos?: number;
+    /** Floor-framed total: render the headline rounded down to 100 + a load-bearing "+". */
+    floor?: boolean;
   };
 }
 
@@ -75,13 +79,22 @@ export default function StatsGrid({
 }) {
   const commits = useAnimatedNumber(stats.commits);
   // Big number = decomposed estate total when present; flat `tests` otherwise (backward-compat).
-  const tests = useAnimatedNumber(stats.testScope?.total ?? stats.tests);
+  // Floor-framed (#244): the public number is rounded down to 100 + a load-bearing "+", so it
+  // always under-states the true estate count (two repos are themselves floors). Honest by design.
+  const rawTestTotal = stats.testScope?.total ?? stats.tests;
+  const testsFloored = stats.testScope?.floor ?? false;
+  const tests = useAnimatedNumber(testsFloored ? flooredTotal(rawTestTotal) : rawTestTotal);
+  const testsSuffix = testsFloored ? "+" : "";
   const endpoints = useAnimatedNumber(stats.endpoints);
   const linesOfCode = useAnimatedNumber(stats.linesOfCode);
   const repos = useAnimatedNumber(stats.repos);
 
-  // e.g. "255 e2e · 296 unit" (A→Z, zero-types hidden); null until a producer publishes byType.
-  const testsBreakdown = breakdownLine(stats.testScope?.byType);
+  // Tests-tile sub-line = the estate repo span ("über 20 Repositories"). NO numeric per-type
+  // split: an estate-wide byType breakdown is only partially available (most repos report
+  // totals-only), so a numeric split would be incomplete/dishonest. (Charter §7 / brief §4.)
+  const testReposLine = stats.testScope?.repos
+    ? `über ${stats.testScope.repos} Repositories`
+    : null;
 
   const tiles: {
     icon: ComponentType<{ size?: number; className?: string }>;
@@ -93,9 +106,9 @@ export default function StatsGrid({
     { icon: GitCommit, value: formatDE(commits), label: "Commits" },
     {
       icon: FlaskConical,
-      value: formatDE(tests),
+      value: formatDE(tests) + testsSuffix,
       label: "Automatisierte Tests",
-      sub: testsBreakdown,
+      sub: testReposLine,
     },
     { icon: Layers, value: String(endpoints), label: "REST Endpoints" },
     { icon: Code2, value: formatDE(linesOfCode), label: "Zeilen Code" },
@@ -115,7 +128,7 @@ export default function StatsGrid({
             {/* sub-line only ever set on the Tests tile → the testid is tile-specific */}
             {stat.sub && (
               <p
-                data-testid="tests-breakdown"
+                data-testid="tests-subline"
                 className="mt-1 text-[10px] leading-tight text-text-secondary/70"
               >
                 {stat.sub}

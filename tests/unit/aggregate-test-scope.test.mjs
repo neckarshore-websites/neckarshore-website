@@ -33,9 +33,11 @@ function statsFileName(owner, name) {
  * Build an isolated fixture tree and run the aggregator against it.
  * @param repos  [{ owner, name, statsPath, stats }] — `stats` written to the dir
  *               (object → JSON, string → verbatim, undefined → file omitted = missing).
+ * @param seed   optional floor-seed object ({ floor, repos:[{repo,total}] }) → written to
+ *               seed.json and passed as the aggregator's 3rd arg (backlog #244).
  * @returns { json, stdout, stderr, status }
  */
-function runAggregator(repos) {
+function runAggregator(repos, seed) {
   const root = mkdtempSync(path.join(tmpdir(), "agg-test-scope-"));
   try {
     const statsDir = path.join(root, "stats");
@@ -57,7 +59,14 @@ function runAggregator(repos) {
       writeFileSync(file, typeof stats === "string" ? stats : JSON.stringify(stats));
     }
 
-    const result = spawnSync("bash", [SCRIPT, configPath, statsDir], {
+    const args = [SCRIPT, configPath, statsDir];
+    if (seed !== undefined) {
+      const seedPath = path.join(root, "seed.json");
+      writeFileSync(seedPath, JSON.stringify(seed));
+      args.push(seedPath);
+    }
+
+    const result = spawnSync("bash", args, {
       encoding: "utf8",
     });
     let json;
@@ -181,4 +190,58 @@ test("missing[] is sorted A→Z", () => {
     { owner: "m", name: "m", statsPath: "s.json", stats: undefined },
   ]);
   assert.deepEqual(json.missing, ["a/a", "m/m", "z/z"]);
+});
+
+// ── Floor-seed merge (backlog #244) ───────────────────────────────────────────
+
+test("no seed → floor:false, repos = live count, per_repo = the live array (back-compat)", () => {
+  const { json, status } = runAggregator([
+    { owner: "fix", name: "a", statsPath: "s.json", stats: { repo: "fix/a", tests: { total: 7, byType: { unit: 7 } } } },
+  ]);
+  assert.equal(status, 0);
+  assert.equal(json.total, 7);
+  assert.equal(json.floor, false, "no seed → not a floor");
+  assert.equal(json.repos, 1, "repos is the merged COUNT");
+  assert.equal(json.per_repo.length, 1, "per_repo carries the array");
+  assert.equal(json.per_repo[0].repo, "fix/a");
+});
+
+test("seed adds non-reporting repos to total + repos count; floor propagates; reporting stays live-only", () => {
+  const { json, status } = runAggregator(
+    [
+      { owner: "omnopsis-ai", name: "omnopsis-backend", statsPath: "backend/stats.json", stats: { repo: "omnopsis-ai/omnopsis-backend", tests: { total: 588, byType: { e2e: 259, integration: 27, unit: 302 } }, endpoints: 96 } },
+    ],
+    {
+      floor: true,
+      repos: [
+        { repo: "neckarshore-websites/neckarshore-website", total: 308 },
+        { repo: "neckarshore-mmps/clearpath-52", total: 0 },
+      ],
+    },
+  );
+  assert.equal(status, 0);
+  assert.equal(json.total, 896, "588 live + 308 + 0 seed");
+  assert.equal(json.floor, true, "seed floor flag propagates");
+  assert.equal(json.repos, 3, "1 live + 2 seed = 3 repos (count, incl. the 0-test repo)");
+  assert.equal(json.reporting, 1, "reporting counts LIVE producers only — a seed entry is not a producer");
+  assert.equal(json.expected, 1);
+  // byType is the LIVE breakdown only (seed is totals-only) — never a partial/dishonest estate split.
+  assert.deepEqual(json.byType, { e2e: 259, integration: 27, unit: 302 });
+  assert.ok(json.per_repo.some((r) => r.repo === "neckarshore-mmps/clearpath-52" && r.total === 0), "0-test seed repo is kept (so the count is complete)");
+});
+
+test("live producer WINS over a same-slug seed entry (no double-count)", () => {
+  const { json } = runAggregator(
+    [
+      { owner: "neckarshore-websites", name: "neckarshore-website", statsPath: "s.json", stats: { repo: "neckarshore-websites/neckarshore-website", tests: { total: 308, byType: { e2e: 100, unit: 208 } } } },
+    ],
+    {
+      floor: true,
+      // Same slug as the live producer above — must be DROPPED (live wins), with a stale count.
+      repos: [{ repo: "neckarshore-websites/neckarshore-website", total: 999 }],
+    },
+  );
+  assert.equal(json.total, 308, "live 308 wins; the stale 999 seed entry is dropped");
+  assert.equal(json.repos, 1, "the repo is counted once, not twice");
+  assert.equal(json.per_repo.filter((r) => r.repo === "neckarshore-websites/neckarshore-website").length, 1, "no duplicate entry");
 });

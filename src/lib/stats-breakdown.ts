@@ -20,3 +20,17 @@ export function breakdownLine(
     .map(([type, n]) => `${n.toLocaleString("de-DE")} ${type}`);
   return parts.length ? parts.join(" · ") : null;
 }
+
+/**
+ * Floor a test total to the nearest 100 below — the PUBLIC estate count is published as a
+ * round, floor-framed number (e.g. `2.611 → 2.600`), never the over-precise figure (backlog
+ * #244). Paired with the load-bearing "+" the tile appends when `testScope.floor` is set, so
+ * the rendered "2.600+" always under-states the true count: honest by construction, and never
+ * above the floor. Totals < 100 are returned truncated (no zeroing of a small real count);
+ * non-positive / non-finite → 0.
+ */
+export function flooredTotal(total: number): number {
+  if (!Number.isFinite(total) || total <= 0) return 0;
+  if (total < 100) return Math.trunc(total);
+  return Math.floor(total / 100) * 100;
+}

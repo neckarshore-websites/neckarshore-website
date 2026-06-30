@@ -12,7 +12,7 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { breakdownLine } from "../../src/lib/stats-breakdown.ts";
+import { breakdownLine, flooredTotal } from "../../src/lib/stats-breakdown.ts";
 
 test("null / undefined / empty byType → null (no sub-line)", () => {
   assert.equal(breakdownLine(null), null);
@@ -38,4 +38,20 @@ test("hides zero-valued types but keeps positive ones", () => {
 
 test("formats numbers in de-DE (thousands dot)", () => {
   assert.equal(breakdownLine({ unit: 1296 }), "1.296 unit");
+});
+
+// flooredTotal (#244) — the public estate count is floor-framed (round down to 100) + "+".
+test("flooredTotal rounds the estate total down to the nearest 100", () => {
+  assert.equal(flooredTotal(2611), 2600); // the live estate floor
+  assert.equal(flooredTotal(2600), 2600); // exact multiple stays
+  assert.equal(flooredTotal(2699), 2600);
+  assert.equal(flooredTotal(2700), 2700);
+});
+
+test("flooredTotal never zeroes a small real count, and guards non-positive/non-finite", () => {
+  assert.equal(flooredTotal(99), 99, "< 100 returns the truncated count, not 0");
+  assert.equal(flooredTotal(0), 0);
+  assert.equal(flooredTotal(-5), 0);
+  assert.equal(flooredTotal(NaN), 0);
+  assert.equal(flooredTotal(2611.9), 2600, "fractional total floors to 100");
 });
