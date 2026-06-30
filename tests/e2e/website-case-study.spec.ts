@@ -29,13 +29,15 @@ async function ldNodes(page: Page): Promise<Record<string, unknown>[]> {
   return nodes;
 }
 
+// Question-form H2s (GEO / AI-citation — passages keyed to a question read better in
+// AI Overviews). All four case studies share the identical six-axis question set.
 const AXES = [
-  "Ausgangslage",
-  "Ansatz",
-  "Technik & Architektur",
-  "Laufende Pflege",
-  "Status",
-  "Ausblick",
+  "Was war die Ausgangslage?",
+  "Wie sind wir vorgegangen?",
+  "Wie ist die Website technisch gebaut?",
+  "Wie läuft die Pflege im Betrieb?",
+  "Was ist heute live?",
+  "Was kommt als Nächstes?",
 ] as const;
 
 const WEBSITES = [
@@ -111,7 +113,7 @@ test.describe("Content surface — Website case studies", () => {
       expect(overflow).toBeLessThanOrEqual(1);
     });
 
-    test(`TC-CNT-062 [${site.slug}]: Technik & Architektur renders a "Baustein | Detail" table`, async ({
+    test(`TC-CNT-062 [${site.slug}]: the technik axis renders a "Baustein | Detail" table`, async ({
       page,
     }) => {
       await page.goto(`/products/websites/${site.slug}`);

@@ -13,15 +13,15 @@ techStack:
 status: "Live"
 ---
 
-## Ausgangslage
+## Was war die Ausgangslage?
 
 `rauhut.com` ist die persönliche Web-Präsenz des Gründers — die Person, nicht die Firma (`neckarshore.ai` ist das Unternehmen). Gebraucht wurde ein schlanker, schneller One-Pager als Proof of Work: Profil, Kernkompetenzen, Projekte und Kontakt, zweisprachig in Deutsch und Englisch. Anspruch: kein Cookie-Banner, keine Third-Party-Tracker, voll DSGVO-konform — eine Visitenkarte, die in Sekunden lädt und nichts an Dritte abgibt.
 
-## Ansatz
+## Wie sind wir vorgegangen?
 
 Die Seite entstand KI-beschleunigt im selben Multi-Agent-Workflow, mit dem Neckarshore arbeitet. Architektonisch konsequent statisch: ein vorab gerenderter One-Pager ohne CMS, Dark Mode als Default mit Light-Toggle. Datenschutz ist by Design eingebaut — Schrift (Inter Variable) self-hosted statt über ein CDN, Analytics ausschließlich über die cookielose Vercel Web Analytics, daher kein Banner nötig. Das Impressum (§5 TMG) liegt auf `noindex`.
 
-## Technik & Architektur
+## Wie ist die Website technisch gebaut?
 
 Die Architektur im Detail — was hinter den Bausteinen oben steckt:
 
@@ -36,14 +36,14 @@ Die Architektur im Detail — was hinter den Bausteinen oben steckt:
 | Tests | Playwright-E2E |
 | SEO | Schema.org `Person` als natives JSON-LD direkt im SSR-HTML |
 
-## Laufende Pflege
+## Wie läuft die Pflege im Betrieb?
 
 Vor jeder Veröffentlichung laufen automatische Kontrollen: Der Code wird auf Sauberkeit geprüft, die wichtigsten Funktionen werden durchgetestet (Inhalte, der Wechsel zwischen Deutsch und Englisch, das Umschalten zwischen hellem und dunklem Modus) und Ladezeit, Barrierefreiheit sowie Suchmaschinen-Tauglichkeit werden gemessen — wöchentlich und bei jeder Änderung. Die Veröffentlichung selbst läuft automatisch: Jede freigegebene Änderung geht ohne manuellen Schritt live, jede Vorab-Version bekommt vorher eine eigene Test-Adresse zur Abnahme.
 
-## Status
+## Was ist heute live?
 
 Live auf Vercel unter `rauhut.com`; der DNS-Cutover von IONOS zu Vercel ist seit 2026-04-17 abgeschlossen (MX bleibt bei IONOS, Mail-Empfang separat geregelt). Online sind der zweisprachige One-Pager (Zusammenfassung, Kernkompetenzen, Projekte, Kontakt), das Impressum und die `/designs`-Galerie. Lighthouse-Baseline laut Repo: Accessibility, Best Practices und SEO bei 100 (Desktop + Mobile), Performance 100 Desktop / 97 Mobile.
 
-## Ausblick
+## Was kommt als Nächstes?
 
 Eine eigentliche Roadmap gibt es nicht — offen ist nur ein kleiner Feinschliff-Backlog, der größtenteils schon abgearbeitet ist. Vorbereitet und noch zu aktivieren: ein Spam-Schutz für das Kontaktformular. Bewusst nicht geplant sind ein Blog, fremde Analyse-Werkzeuge und ein Cookie-Banner.

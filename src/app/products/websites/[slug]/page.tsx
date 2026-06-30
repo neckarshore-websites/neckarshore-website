@@ -136,6 +136,31 @@ export default async function WebsiteCaseStudyPage({
           </p>
         </article>
 
+        {/* Desktop-only conversion close. The mobile end-of-page "Kennenlerntermin"
+            CTA lives in <ProductDetailNav> (Founder 2026-06-22, hideCtaOnDesktop); on
+            desktop that link is hidden because the header pins one — leaving no in-flow
+            close at the end of the read. This fills exactly that desktop gap (≥lg), so
+            neither viewport shows a duplicate booking CTA. */}
+        <aside className="mt-12 hidden rounded-xl border border-primary/10 bg-primary/[0.03] p-8 text-center lg:block dark:border-text-secondary/10 dark:bg-text-secondary/[0.04]">
+          <p className="font-heading text-2xl font-bold text-primary dark:text-text-primary">
+            Sie planen ein ähnliches Projekt?
+          </p>
+          <p className="mx-auto mt-2 max-w-md text-base text-muted dark:text-text-tertiary">
+            Im 20-minütigen Kennenlerntermin klären wir unverbindlich, ob und wie wir
+            helfen können — gleiche Zeitzone, gleiche Sprache, gleiche
+            Datenschutzstandards.
+          </p>
+          <a
+            href="https://calendly.com/rauhut/20min"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track={`website_close_cta_${entry.slug}`}
+            className="mt-6 inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-base font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
+          >
+            Kennenlerntermin buchen →
+          </a>
+        </aside>
+
         <ProductDetailNav
           slug={slug}
           hideCtaOnDesktop
