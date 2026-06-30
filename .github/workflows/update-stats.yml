@@ -102,7 +102,11 @@ jobs:
           NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
           PREV=$(cat public/stats.json 2>/dev/null || echo '{}')
 
-          TEST_SCOPE=$(bash scripts/aggregate-test-scope.sh stats-config.json /tmp/stats)
+          # Pass the committed floor seed (estate-test-scope-seed.json) as the 3rd arg so repos
+          # that don't yet self-report still contribute to the PUBLIC estate count (backlog #244).
+          # Live producers win by slug → no double-count; the number auto-corrects as repos
+          # self-report. Estate floor today = 588 live (omnopsis-backend) + 2.023 seed = 2.611.
+          TEST_SCOPE=$(bash scripts/aggregate-test-scope.sh stats-config.json /tmp/stats estate-test-scope-seed.json)
           echo "--- estate test-scope ---"
           echo "$TEST_SCOPE" | jq .
 
@@ -110,7 +114,9 @@ jobs:
           ENDPOINTS=$(echo "$TEST_SCOPE" | jq '.endpoints')
           REPORTING=$(echo "$TEST_SCOPE" | jq '.reporting')
           EXPECTED=$(echo "$TEST_SCOPE" | jq '.expected')
-          TEST_SCOPE_SUBSET=$(echo "$TEST_SCOPE" | jq '{total, byType, reporting, expected, missing}')
+          # repos (estate count) + floor drive the public tile (#244); kept alongside the
+          # internal reporting/expected provenance fields.
+          TEST_SCOPE_SUBSET=$(echo "$TEST_SCOPE" | jq '{total, byType, reporting, expected, missing, repos, floor}')
           ESTATE_OUT=$(echo "$TEST_SCOPE" | jq --arg u "$NOW" '. + {updatedAt: $u}')
 
           if [ "$REPORTING" -lt "$EXPECTED" ]; then
@@ -120,11 +126,14 @@ jobs:
           # Last-known-good floor: if the rollup totally collapses to 0 (an infra/token failure,
           # not a real "estate has 0 tests"), keep the previously published numbers + artifact
           # rather than zeroing the live homepage tile. Per-producer misses still surface above.
+          # NOTE (#244): with the committed floor seed always contributing (≥2.023), TESTS can no
+          # longer reach 0, so this branch is effectively dead — kept as defence in depth. A live
+          # backend-fetch failure now degrades to the seed floor (2.611→2.023), still floor-honest.
           if [ "$TESTS" -eq 0 ]; then
             echo "WARN: estate test-scope rolled up to 0 — keeping last-known-good for both JSON outputs."
             TESTS=$(echo "$PREV" | jq '.tests // 0')
             ENDPOINTS=$(echo "$PREV" | jq '.endpoints // 0')
-            TEST_SCOPE_SUBSET=$(echo "$PREV" | jq 'if .testScope then .testScope else {total: (.tests // 0), byType: {}, reporting: 0, expected: 0, missing: []} end')
+            TEST_SCOPE_SUBSET=$(echo "$PREV" | jq 'if .testScope then .testScope else {total: (.tests // 0), byType: {}, reporting: 0, expected: 0, missing: [], repos: 0, floor: false} end')
             if [ -f public/estate-test-scope.json ]; then ESTATE_OUT=$(cat public/estate-test-scope.json); fi
           fi
 

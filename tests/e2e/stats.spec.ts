@@ -7,12 +7,15 @@ test.describe("Stats Tiles @smoke", () => {
     page: import("@playwright/test").Page,
     label: string,
   ): Promise<string> {
-    const tile = page.locator(`text=${label}`).locator("..");
+    // Exact match: the Tests-tile sub-line "über N Repositories" contains the word
+    // "Repositories", so a substring locator would also hit the Repositories tile label.
+    const tile = page.getByText(label, { exact: true }).locator("..");
     return (await tile.locator("p.font-heading").textContent())?.trim() || "";
   }
 
   function parseDE(value: string): number {
-    return Number(value.replace(/\./g, ""));
+    // Strip the de-DE thousands dot AND the load-bearing "+" the floor-framed Tests tile appends.
+    return Number(value.replace(/[.+]/g, ""));
   }
 
   test("TC-STAT-001: Days since First Commit is plausible", async ({
@@ -76,33 +79,37 @@ test.describe("Stats Tiles @smoke", () => {
     }
   });
 
-  test("TC-STAT-009: Tests tile reflects testScope.total + byType breakdown", async ({
+  // TC-STAT-009 (#244): the Tests tile is DATA-DRIVEN off public/stats.json — never a hardcoded
+  // literal. Reads the JSON, derives the expected floor-framed display + repo sub-line, and
+  // asserts the rendered tile matches. If anyone hardcodes "2.600+"/"über 20 Repositories", a
+  // change to stats.json.testScope would make this fail → the regression guard the brief asks for.
+  test("TC-STAT-009: Tests tile renders the floor-framed estate total + repo span from stats.json (no literal)", async ({
     page,
   }) => {
     const stats = JSON.parse(
       fs.readFileSync(path.join(process.cwd(), "public", "stats.json"), "utf-8"),
     );
-    const expectedTotal: number = stats.testScope?.total ?? stats.tests;
+    const total: number = stats.testScope?.total ?? stats.tests;
+    const isFloor: boolean = stats.testScope?.floor ?? false;
+    const repos: number | undefined = stats.testScope?.repos;
+
+    // Mirror src/lib/stats-breakdown.ts flooredTotal: round down to 100 when floor-framed.
+    const flooredDisplay = isFloor ? Math.floor(total / 100) * 100 : total;
+    const expectedValue = flooredDisplay.toLocaleString("de-DE") + (isFloor ? "+" : "");
 
     await page.goto("/");
     await page.waitForTimeout(1500); // animation settles on the target
-    const value = await getStatValue(page, "Automatisierte Tests");
-    expect(parseDE(value)).toBe(expectedTotal);
 
-    // The breakdown sub-line is present iff byType has positive entries. Structural on purpose:
-    // the test stays green whether or not a backend producer has published a decomposition yet
-    // (byType is {} until Bob's Task-1 producer lands — then the sub-line appears automatically).
-    const byType: Record<string, number> = stats.testScope?.byType ?? {};
-    const positiveTypes = Object.entries(byType).filter(([, n]) => Number(n) > 0);
-    const breakdown = page.getByTestId("tests-breakdown");
-    if (positiveTypes.length > 0) {
-      await expect(breakdown).toBeVisible();
-      const text = (await breakdown.textContent()) ?? "";
-      for (const [type] of positiveTypes) {
-        expect(text).toContain(type);
-      }
+    const value = await getStatValue(page, "Automatisierte Tests");
+    expect(value).toBe(expectedValue); // e.g. "2.600+" — exact, derived from JSON not a literal
+
+    // Sub-line = the repo span ("über N Repositories"), never a numeric per-type split.
+    const subline = page.getByTestId("tests-subline");
+    if (repos) {
+      await expect(subline).toBeVisible();
+      await expect(subline).toHaveText(`über ${repos} Repositories`);
     } else {
-      await expect(breakdown).toHaveCount(0);
+      await expect(subline).toHaveCount(0);
     }
   });
 

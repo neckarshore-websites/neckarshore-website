@@ -20,13 +20,23 @@
 #   - a producer with a numeric .tests.total but no .tests.byType (the live omnopsis-backend
 #     OLD shape, before the Task-1 producer lands) still contributes its total; byType → {}.
 #
-# Usage:  aggregate-test-scope.sh <stats-config.json> <stats-dir>
+# Floor seed (optional 3rd arg — backlog #244):
+#   A repo that does NOT yet self-report a stats.json (Plan 3 rollout pending) can still
+#   contribute its audited test count via a committed seed file ({floor, repos:[{repo,total}]}).
+#   Seed repos are ADDED to the live rollup, but a LIVE producer with the same `repo` slug WINS
+#   (the seed entry is dropped) → no double-count; the number auto-corrects toward live data as
+#   repos start self-reporting. `reporting`/`expected`/`missing` stay LIVE-ONLY (a seed entry is
+#   not a "producer"). `floor:true` from the seed propagates to the output (→ the public tile's
+#   load-bearing "+"). Without a seed arg the behaviour is unchanged (floor:false, per_repo=live).
+#
+# Usage:  aggregate-test-scope.sh <stats-config.json> <stats-dir> [seed.json]
 #   stats-dir holds one file per fetched producer, named "<owner>__<name>.json".
 # Output: estate test-scope JSON on stdout (no updatedAt — the caller stamps that).
 set -euo pipefail
 
-CONFIG="${1:?usage: aggregate-test-scope.sh <stats-config.json> <stats-dir>}"
-STATS_DIR="${2:?usage: aggregate-test-scope.sh <stats-config.json> <stats-dir>}"
+CONFIG="${1:?usage: aggregate-test-scope.sh <stats-config.json> <stats-dir> [seed.json]}"
+STATS_DIR="${2:?usage: aggregate-test-scope.sh <stats-config.json> <stats-dir> [seed.json]}"
+SEED="${3:-}"
 
 # Expected producers = repos that declare a statsPath. A repo with no statsPath is simply not
 # yet a producer (expected during the Plan 3 rollout) and is not counted in `expected`.
@@ -60,18 +70,44 @@ done < <(jq -r '.repos[] | select(.statsPath != null) | [.owner, .name, (.owner 
 
 MISSING_JSON=$(sort "$MISSING_FILE" | jq -R . | jq -s .)
 
-# Aggregate: total = Σ .total; byType = merge-add per key; endpoints = Σ .endpoints.
-# lenses are intentionally NOT aggregated (they overlap and would double-count) — they remain
-# per-repo, display-only, inside repos[] for Plan 2's Obsidian per-repo breakdown.
+# Floor-seed contribution (backlog #244): seed repos NOT already covered by a live producer.
+# Live wins by `repo` slug → a repo that starts self-reporting drops out of the seed (no
+# double-count). Seed entries carry no byType/endpoints (totals-only floor) and `seeded:true`.
+LIVE_SLUGS=$(jq -s -c '[.[].repo]' "$PER_REPO_FILE")
+SEED_FLOOR=false
+SEED_JSON='[]'
+if [ -n "$SEED" ]; then
+  if [ ! -f "$SEED" ]; then
+    echo "ERROR: seed file '$SEED' not found" >&2
+    exit 1
+  fi
+  SEED_FLOOR=$(jq '.floor // false' "$SEED")
+  SEED_JSON=$(jq -c --argjson live "$LIVE_SLUGS" '
+    [ .repos[]
+      | select((.repo as $r | $live | index($r)) | not)
+      | { repo: .repo, audited_sha: null, total: (.total // 0), byType: {}, lenses: {}, endpoints: 0, seeded: true } ]
+  ' "$SEED")
+fi
+
+# Aggregate over the MERGED set (live + seed). total = Σ .total; byType = merge-add per key
+# (live only — seed is totals-only); endpoints = Σ. lenses are intentionally NOT aggregated
+# (they overlap and would double-count). `reporting`/`expected`/`missing` stay LIVE-ONLY.
+# Output shape (#244): repos = MERGED count, floor = seed flag, per_repo = the merged array.
 jq -s -S \
   --argjson expected "$EXPECTED" \
   --argjson missing "$MISSING_JSON" \
-  '{
-    total: ([.[].total] | add // 0),
-    byType: (reduce .[].byType as $b ({}; reduce ($b | to_entries[]) as $e (.; .[$e.key] = ((.[$e.key] // 0) + $e.value)))),
-    endpoints: ([.[].endpoints] | add // 0),
-    reporting: length,
+  --argjson seed "$SEED_JSON" \
+  --argjson floor "$SEED_FLOOR" \
+  '. as $live
+  | ($live + $seed) as $merged
+  | {
+    total: ([$merged[].total] | add // 0),
+    byType: (reduce $live[].byType as $b ({}; reduce ($b | to_entries[]) as $e (.; .[$e.key] = ((.[$e.key] // 0) + $e.value)))),
+    endpoints: ([$merged[].endpoints] | add // 0),
+    reporting: ($live | length),
     expected: $expected,
     missing: $missing,
-    repos: .
+    floor: $floor,
+    repos: ($merged | length),
+    per_repo: $merged
   }' "$PER_REPO_FILE"
