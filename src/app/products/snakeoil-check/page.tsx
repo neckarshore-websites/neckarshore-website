@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import PreviewProductPage, {
-  previewProductMetadata,
-} from "@/components/PreviewProductPage";
+import ProductDetailPage, {
+  productDetailMetadata,
+} from "@/components/ProductDetailPage";
 
 const SLUG = "snakeoil-check";
 
 export function generateMetadata(): Metadata {
-  return previewProductMetadata({
+  return productDetailMetadata({
     slug: SLUG,
     title:
       "Snakeoil-Check — Reality-Check für Coaching-Angebote | neckarshore.ai",
@@ -15,7 +15,7 @@ export function generateMetadata(): Metadata {
 
 export default function SnakeoilCheckPage() {
   return (
-    <PreviewProductPage
+    <ProductDetailPage
       slug={SLUG}
       liveCtaNote="Ein kostenloser Check zum Start — weitere als Shot-Paket."
     />

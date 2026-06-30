@@ -39,13 +39,10 @@ const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
  *    like ClearPath's bespoke page). AD-19 fail-closed preserved.
  *  - "Live ausprobieren →" CTA to the live app + an honest, product-specific `liveCtaNote`.
  *  - Indexable once `noindex` is also dropped on the portfolio item.
- *
- * NOTE: the file is still named PreviewProductPage for historical reasons — it now serves both
- * states. A rename to ProductDetailPage is a low-risk follow-up (touches the 4 wrapper imports).
  */
 
-/** Shared `generateMetadata` for a preview MMP page. `title` is the bespoke SEO `<title>`. */
-export function previewProductMetadata({
+/** Shared `generateMetadata` for an MMP detail page (preview or live). `title` is the bespoke SEO `<title>`. */
+export function productDetailMetadata({
   slug,
   title,
 }: {
@@ -68,7 +65,7 @@ export function previewProductMetadata({
   };
 }
 
-interface PreviewProductPageProps {
+interface ProductDetailPageProps {
   slug: string;
   /** Discovery-CTA noun (preview state). Defaults to the product name; Phonesis uses a short form. */
   ctaName?: string;
@@ -76,11 +73,11 @@ interface PreviewProductPageProps {
   liveCtaNote?: string;
 }
 
-export default function PreviewProductPage({
+export default function ProductDetailPage({
   slug,
   ctaName,
   liveCtaNote,
-}: PreviewProductPageProps) {
+}: ProductDetailPageProps) {
   const entry = getProductEntry(slug);
   if (!entry) notFound();
   const cta = ctaName ?? entry.name;
