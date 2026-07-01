@@ -133,16 +133,26 @@ jobs:
           # self-report. Estate floor today = 588 live (omnopsis-backend) + 2.023 seed = 2.611.
           TEST_SCOPE=$(bash scripts/aggregate-test-scope.sh stats-config.json /tmp/stats estate-test-scope-seed.json)
 
-          # Withhold private repo names at the SOURCE (#525, the #94 pattern one surface over).
-          # The aggregator keeps real owner/name slugs so its live-wins-by-slug dedup works; here
-          # we anonymize every slug-bearing field (per_repo[].repo + missing[]) whose repo is NOT
-          # in the LIVE public set accumulated above. Done BEFORE any echo/use of $TEST_SCOPE so no
-          # private name reaches the (publicly viewable) Actions log, the committed
-          # public/estate-test-scope.json, OR public/stats.json (which carries .missing via the
-          # subset). Fail-safe: a slug not confirmed live-public is withheld. Counts/byType + the
+          # Apply the disclosure allow-list at the SOURCE (#525 → Pass-2a disclosure-config wiring).
+          # The aggregator keeps real owner/name slugs so its live-wins-by-slug dedup works; here the
+          # 3-way withhold decides each slug-bearing field (per_repo[].repo + missing[]): approved
+          # private products → product name, public repos → their slug, everything else private →
+          # "privates Repo". Done BEFORE any echo/use of $TEST_SCOPE so no withheld private name
+          # reaches the (publicly viewable) Actions log, the committed public/estate-test-scope.json,
+          # OR public/stats.json (which carries .missing via the subset). Counts/byType + the
           # top-level total are untouched → the honest headline math is preserved.
-          PUBLIC_SLUGS_JSON=$(sort -u /tmp/public_slugs.txt | jq -R . | jq -s -c .)
-          TEST_SCOPE=$(printf '%s' "$TEST_SCOPE" | bash scripts/withhold-private-repos.sh "$PUBLIC_SLUGS_JSON")
+          #
+          # named_set = LIVE public ∪ named_private (public stays named by default per the Founder
+          # decision; named_private is the ONLY private addition). Fail-safe: a private slug NOT in
+          # named_private never enters the named set → stays "privates Repo". disclosure-config.json
+          # is the review-gated, committed copy of the private planning matrix `disclosure` block
+          # (planning is private → never read cross-repo at CI time). Regen: npm run sync:disclosure-config.
+          LIVE_PUBLIC_JSON=$(sort -u /tmp/public_slugs.txt | jq -R . | jq -s -c .)
+          NAMED_PRIVATE_JSON=$(jq -c '.named_private' disclosure-config.json)
+          DISPLAY_OVERRIDES_JSON=$(jq -c '.display_overrides' disclosure-config.json)
+          NAMED_SET_JSON=$(jq -cn --argjson pub "$LIVE_PUBLIC_JSON" --argjson np "$NAMED_PRIVATE_JSON" '($pub + $np) | unique')
+          TEST_SCOPE=$(printf '%s' "$TEST_SCOPE" \
+            | bash scripts/withhold-private-repos.sh "$NAMED_SET_JSON" "$DISPLAY_OVERRIDES_JSON" "$NAMED_PRIVATE_JSON")
 
           echo "--- estate test-scope (private names withheld) ---"
           echo "$TEST_SCOPE" | jq .

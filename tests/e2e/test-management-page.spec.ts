@@ -37,10 +37,11 @@ function publicRepoSet(): Set<string> {
 }
 
 /**
- * High-sensitivity private repos that must NEVER reach the public /test-management surface — the
- * 4 R2-confirmed leakers the withhold STOPGAP (PR #525 / work-order) targets. A curated canary,
- * not the full private set: a hit here is a real privacy regression. A repo legitimately going
- * public is a deliberate review trigger — update this list then.
+ * High-sensitivity private repo SLUGS that must NEVER reach the public /test-management surface.
+ * Post disclosure-config (Pass-2a): the 4 approved private products are DISCLOSED by product name
+ * (Omnopsis/Phonesis) but their raw slug is still forbidden — omnopsis-backend/-frontend render as
+ * "Omnopsis", never "omnopsis-backend". A curated canary, not the full private set: a hit here is a
+ * real privacy regression. A repo legitimately going public is a deliberate review trigger.
  */
 const PRIVATE_CANARIES = [
   "omnopsis-backend",
@@ -48,6 +49,16 @@ const PRIVATE_CANARIES = [
   "omnopsis-frontend",
   "observatory",
 ];
+
+/** The disclosure allow-list: named_private slugs + slug→product-name display map (Pass-2a). */
+function loadDisclosureConfig(): {
+  named_private: string[];
+  display_overrides: Record<string, string>;
+} {
+  return JSON.parse(
+    fs.readFileSync(path.join(process.cwd(), "disclosure-config.json"), "utf-8"),
+  );
+}
 
 async function ldNodes(page: Page): Promise<Record<string, unknown>[]> {
   const blocks = page.locator('script[type="application/ld+json"]');
@@ -102,8 +113,10 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
   }) => {
     await page.goto(ROUTE);
     const body = (await page.locator("main").textContent()) ?? "";
-    // Hard guardrail: the BLOCKED clone is never on the public surface.
-    expect(body.toLowerCase()).not.toContain("phonesis");
+    // Hard guardrail: the private SLUG never reaches the public surface. Post disclosure-config the
+    // PRODUCT name "Phonesis" is Founder-approved (it would render by name IF phonesis-voicebank
+    // ever gains test-scope data — it has none today), so the privacy line is the slug, not the word.
+    expect(body).not.toContain("phonesis-voicebank");
     // The GEO-citable method passage (the lever #246 points at).
     expect(body).toContain("Test-Runner");
     expect(body).toContain("grep");
@@ -123,14 +136,15 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     expect(await table.locator("tbody tr").count()).toBeLessThanOrEqual(7);
     await expect(table).toContainText("weitere Repositories");
     const tableText = (await table.textContent()) ?? "";
-    // Typ classification surfaces for the PUBLIC rows (neckarshore-website → Webseite,
-    // obsidian-vault-autopilot/imap → Plugin/Skill). Note: post-withhold (#525) no "Produkt"
-    // row is visible — every omnopsis-* Produkt repo in the Top-N is private → anonymized.
+    // Post-disclosure-config (Pass-2a): the top rows carry product/slug names per the allow-list.
+    // Public non-product rows keep their slug + a real Typ (neckarshore-website → Webseite). Rows
+    // rewritten to a product display-name (approved-private OR public product) show Typ "—" — the
+    // raw slug is gone, so the type is not guessed.
     expect(tableText).toContain("Webseite");
-    expect(tableText).toContain("Plugin/Skill");
-    // Withheld private repos surface as anonymized rows (count kept, no name/Typ).
+    // Withheld private repos (NOT in named_private) surface as anonymized rows (count kept, no name/Typ).
     expect(tableText).toContain("privates Repo");
     // §5b: the 0-test scaffold repo and the known-red repo (#257) stay in the rollup, not spotlit.
+    // Their RAW slugs must never appear (clearpath-52 is now rendered "ClearPath" and lives in the rollup).
     expect(tableText).not.toContain("clearpath-52");
     expect(tableText).not.toContain("oakwoodgolfclub-website");
   });
@@ -175,7 +189,7 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     await expect(page.getByTestId("tests-subline")).toContainText("mehr");
   });
 
-  test("TC-CNT-083: PRIVACY INVARIANT — estate-test-scope.json names zero private repos (per_repo + missing)", () => {
+  test("TC-CNT-083: PRIVACY INVARIANT — estate-test-scope.json leaks zero private repo SLUGs (per_repo + missing)", () => {
     const file = path.join(process.cwd(), "public", "estate-test-scope.json");
     const raw = fs.readFileSync(file, "utf-8");
     const scope = JSON.parse(raw);
@@ -230,8 +244,47 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
   test("TC-CNT-085: HONESTY INVARIANT — Σ per_repo.total still equals the headline total", () => {
     const scope = loadScope();
     const sum = scope.per_repo.reduce((s, r) => s + r.total, 0);
-    // Anonymization renames slugs only — it must never touch a count, so the per-repo rows still
+    // Disclosure renames slugs only — it must never touch a count, so the per-repo rows still
     // sum to the headline (2.611). Guards against a transform that drops/alters entries.
     expect(sum).toBe(scope.total);
+  });
+
+  test("TC-CNT-086: DISCLOSURE INVARIANT — approved-private products by product name, slug never raw", async ({
+    page,
+  }) => {
+    const cfg = loadDisclosureConfig();
+    const rawEstate = fs.readFileSync(
+      path.join(process.cwd(), "public", "estate-test-scope.json"),
+      "utf-8",
+    );
+    const scope = loadScope();
+
+    // HARD RULE (data-driven, always holds): no named_private SLUG in the committed public file …
+    for (const slug of cfg.named_private) {
+      expect(rawEstate, `named_private slug leaked raw in estate-test-scope.json: ${slug}`).not.toContain(
+        slug,
+      );
+    }
+
+    await page.goto(ROUTE);
+    const mainText = (await page.locator("main").textContent()) ?? "";
+    // … nor on the rendered page.
+    for (const slug of cfg.named_private) {
+      expect(mainText, `named_private slug leaked raw on the page: ${slug}`).not.toContain(slug);
+    }
+
+    // POSITIVE (drift-safe): whichever approved-private products are present in the data are shown
+    // by their product name (Omnopsis today — backend/frontend/contracts). If none are in the data,
+    // the loop is empty and only the HARD RULE above is asserted.
+    const privateProductNames = new Set(cfg.named_private.map((s) => cfg.display_overrides[s]));
+    const rendered = new Set(
+      scope.per_repo.map((r) => r.repo).filter((name) => privateProductNames.has(name)),
+    );
+    for (const name of rendered) {
+      expect(
+        mainText,
+        `approved-private product "${name}" is in the data but not rendered by name`,
+      ).toContain(name);
+    }
   });
 });

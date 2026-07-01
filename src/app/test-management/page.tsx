@@ -31,8 +31,11 @@ interface EstateScope {
   total: number;
   repos: number;
   floor: boolean;
-  // `private: true` marks a withheld entry — the data pipeline (scripts/withhold-private-repos.sh)
-  // replaced a private repo's slug with "privates Repo" at the source. The count stays real.
+  // `repo` is already disclosure-processed at the source (scripts/withhold-private-repos.sh):
+  // "privates Repo" (anonymized), a product display-name (approved-private OR public product), or
+  // a raw owner/name slug (public non-product). `private: true` flags a private repo (withheld OR
+  // shown by product name) — it is NOT the anonymized signal (the literal "privates Repo" is).
+  // The count is always real, whichever shape the name takes.
   per_repo: { repo: string; total: number; private?: boolean }[];
 }
 
@@ -87,19 +90,24 @@ export default function TestManagementPage() {
 
   // Per-repo: the individual runner-reported counts, Top-N + rest-rollup (brief §5b). The rest
   // bucket folds the 0-test scaffold repo and the known-red repo (#257) out of individual view.
-  // Withheld entries (private repos, anonymized at the source) keep their count + ranked slot but
-  // show no name/Typ — the number is the point of the page (#525 stopgap).
+  //
+  // Disclosure (Pass-2a, scripts/withhold-private-repos.sh at the source): three shapes reach here
+  //   · withheld  — `.repo === "privates Repo"` (+ private:true): anonymized, no name/Typ.
+  //   · product   — a display name with NO "/" (e.g. "Omnopsis"): an approved-private product shown
+  //                 by name (private:true kept) OR a public product renamed for board consistency.
+  //                 The raw slug is gone, so the Typ can't be derived → "—" (honest, not guessed).
+  //   · slug      — a raw "owner/name" (public non-product, Founder named all public): last segment
+  //                 as the name, repoType() for the Typ.
+  // The anonymized signal is the LITERAL name, not `private:true` — a named_private product keeps
+  // private:true yet must still render its product name.
   const ranked = [...scope.per_repo].sort((a, b) => b.total - a.total);
   const top = ranked.slice(0, TOP_N).map((r, i) => {
-    const withheld = r.private === true;
+    const withheld = r.repo === "privates Repo";
+    const isSlug = !withheld && r.repo.includes("/");
     return {
-      key: withheld ? `private-${i}` : r.repo,
-      name: withheld
-        ? "privates Repo"
-        : r.repo.includes("/")
-          ? r.repo.split("/").pop()!
-          : r.repo,
-      type: withheld ? null : repoType(r.repo),
+      key: withheld ? `private-${i}` : `${r.repo}-${i}`,
+      name: withheld ? "privates Repo" : isSlug ? r.repo.split("/").pop()! : r.repo,
+      type: isSlug ? repoType(r.repo) : null,
       total: r.total,
       withheld,
     };
