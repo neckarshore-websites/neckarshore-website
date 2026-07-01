@@ -145,6 +145,38 @@ Log every run in `docs/lighthouse-log.md` — one row per run per profile:
 - **Trigger:** `session-start`, `session-end`, `ad-hoc`, `ci`
 - **Cleanup:** delete rows older than 14 days
 
+## Privacy — Disclosure Config & Leak Gate
+
+The public estate surfaces (`/test-management`, `/repositories`) disclose repo data. A private
+repo's raw slug must never reach a **served** artifact. Two layers enforce this:
+
+1. **Disclosure config (`disclosure-config.json`)** — the Founder-signed allow-list (`named_private`
+   + `display_overrides`). Public repos are named; the 4 approved private products (Omnopsis ×3 +
+   Phonesis) render by **product name, never their raw slug**; every other private repo →
+   `"privates Repo"`. Wired at the data source via `scripts/withhold-private-repos.sh` (3-way) in
+   `update-stats.yml`. Regenerate the config from the private planning matrix with
+   `npm run sync:disclosure-config`. **HARD RULE:** every `named_private` slug MUST have a
+   `display_overrides` entry — the generator AND the withhold script fail-close otherwise.
+
+2. **Durable leak gate (`scripts/check-private-slug-leak.sh`, `npm run check:privacy`)** — backlog
+   #267. Fails a PR if a private slug appears raw in any **served** file under `public/`. Runs in
+   `unit.yml` via `npm run test:unit`. Known-private = `(stats-config − repositories.json live-public)
+   ∪ named_private`, fail-closed; **no `stats-config.private==true` union** (that false-reds
+   `clearpath-52`, which is stale-private but live-public).
+
+### Served-vs-config boundary (Founder decision 2026-07-01: **accept + document**)
+
+The gate scans the **served surface** (`public/*` — crawlable/fetchable, where #94/#95 leaked). It
+does **not** scan the build-config SOURCES (`stats-config.json` · `disclosure-config.json` ·
+`estate-test-scope-seed.json`): they list private slugs **by design** (clone discovery / the
+private→product-name map / the floor) and are the gate's known-private SOURCE — **git-source only,
+never served/crawlable**. Private repo NAMES in that public build-config source are an **accepted,
+structural boundary** (existence-disclosure to a narrow technical audience — not secrets/credentials/
+customer-data; no crawler/search/visitor path touches it). Scrubbing one source (e.g. the seed)
+while `stats-config.json` lists the same slugs buys zero git-source privacy and breaks
+live-wins-by-slug dedup — so we don't. If this boundary is ever revisited, the fix is infra (move
+discovery config to private storage), not a code tweak.
+
 ## SEO — Structured Data (JSON-LD)
 
 > **Important:** Render JSON-LD via a **native HTML `<script type="application/ld+json">` tag**, NOT via `next/script`.
