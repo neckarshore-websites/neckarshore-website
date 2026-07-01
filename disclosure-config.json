@@ -1,0 +1,20 @@
+{
+  "display_overrides": {
+    "neckarshore-mmps/clearpath-52": "ClearPath",
+    "neckarshore-mmps/mmp-local-seo-performance-hub": "Local SEO Hub",
+    "neckarshore-mmps/mmp-prod-or-pretend": "Prod or Pretend",
+    "neckarshore-mmps/phonesis-voicebank": "Phonesis",
+    "neckarshore-skills/ai-phrase-check": "AI Phrase Check",
+    "neckarshore-skills/imap-mailbox-cleanup": "IMAP Mailbox Cleanup",
+    "neckarshore-skills/obsidian-vault-autopilot": "Obsidian Vault Autopilot",
+    "omnopsis-ai/omnopsis-backend": "Omnopsis",
+    "omnopsis-ai/omnopsis-contracts": "Omnopsis",
+    "omnopsis-ai/omnopsis-frontend": "Omnopsis"
+  },
+  "named_private": [
+    "neckarshore-mmps/phonesis-voicebank",
+    "omnopsis-ai/omnopsis-backend",
+    "omnopsis-ai/omnopsis-contracts",
+    "omnopsis-ai/omnopsis-frontend"
+  ]
+}

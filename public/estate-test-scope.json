@@ -19,7 +19,7 @@
       "endpoints": 96,
       "lenses": {},
       "private": true,
-      "repo": "privates Repo",
+      "repo": "Omnopsis",
       "total": 588
     },
     {
@@ -27,7 +27,7 @@
       "byType": {},
       "endpoints": 0,
       "lenses": {},
-      "repo": "neckarshore-skills/obsidian-vault-autopilot",
+      "repo": "Obsidian Vault Autopilot",
       "seeded": true,
       "total": 496
     },
@@ -56,7 +56,7 @@
       "endpoints": 0,
       "lenses": {},
       "private": true,
-      "repo": "privates Repo",
+      "repo": "Omnopsis",
       "seeded": true,
       "total": 232
     },
@@ -65,7 +65,7 @@
       "byType": {},
       "endpoints": 0,
       "lenses": {},
-      "repo": "neckarshore-skills/imap-mailbox-cleanup",
+      "repo": "IMAP Mailbox Cleanup",
       "seeded": true,
       "total": 171
     },
@@ -94,7 +94,7 @@
       "endpoints": 0,
       "lenses": {},
       "private": true,
-      "repo": "privates Repo",
+      "repo": "Omnopsis",
       "seeded": true,
       "total": 85
     },
@@ -113,7 +113,7 @@
       "byType": {},
       "endpoints": 0,
       "lenses": {},
-      "repo": "neckarshore-skills/ai-phrase-check",
+      "repo": "AI Phrase Check",
       "seeded": true,
       "total": 34
     },
@@ -200,7 +200,7 @@
       "byType": {},
       "endpoints": 0,
       "lenses": {},
-      "repo": "neckarshore-mmps/clearpath-52",
+      "repo": "ClearPath",
       "seeded": true,
       "total": 0
     }
