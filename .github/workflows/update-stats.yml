@@ -5,12 +5,21 @@ on:
     - cron: "0 4 * * *" # 04:00 UTC = 05:00 CET (06:00 CEST in summer)
   workflow_dispatch: # manual trigger for testing
 
+# Least-privilege default token — read-only at the top level. The one job
+# that writes (commit + push of the stats artifacts) re-declares the write it
+# needs at job scope (#270 §1.3: job-scope the write, never workflow-scope).
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   update-stats:
     runs-on: ubuntu-latest
+    # Job-scoped write — this job commits public/stats.json + the two rollups
+    # back to main. The actual push authenticates via secrets.STATS_PAT (set on
+    # checkout); contents:write is kept here as the correct least-privilege
+    # scope for a commit-and-push job (#89/#96/#97 pipeline — do NOT downgrade).
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
         with:
