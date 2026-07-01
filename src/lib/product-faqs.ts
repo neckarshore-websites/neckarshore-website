@@ -134,6 +134,25 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
     },
   ],
 
+  trustscope: [
+    {
+      q: "Was macht TrustScope?",
+      a: "TrustScope prüft ein öffentliches GitHub-Repository und erstellt daraus einen deterministischen Trust-Report entlang von vier Säulen. Das Problem, das TrustScope löst: Wer ein Open-Source-Tool in die eigene Lieferkette holt, verlässt sich auf fremden Code — und ein Stern-Zähler oder eine grüne Badge sagt wenig darüber, wie weit man ihm trauen kann. TrustScope beantwortet die eigentlich wichtigen Fragen getrennt: Sicherheit & Lieferkette auf Basis der vollständigen OpenSSF Scorecard, Trust & Governance über Lizenz, Security-Policy und Owner, sowie Community & Nachhaltigkeit als Lebenszyklus-Phase statt als Schulnote. Die funktionale Qualität bleibt bewusst offen — ein Handwerksurteil, das TrustScope nicht vortäuscht. Zu jedem Befund gibt es konkrete, konstruktive Verbesserungsvorschläge, die du auf Wunsch mit einem Klick als freundliches Issue beim Projekt einreichst.",
+    },
+    {
+      q: "Warum gibt es keine einzige Gesamt-Punktzahl?",
+      a: "Mit Absicht keine. Jede der vier Säulen beantwortet eine andere Frage — Ist es sicher gebaut? Steht ein verlässliches Projekt dahinter? Wird es weiter gepflegt? Sie zu einer einzigen Zahl zu verrechnen würde genau den Kompromiss verstecken, den man gerade abwägt.",
+    },
+    {
+      q: "Woher kommen die Bewertungen?",
+      a: "Aus der OpenSSF Scorecard und den öffentlichen GitHub-Daten des Repositories — deterministisch, also für dasselbe Repo reproduzierbar. Nur die funktionale Qualität wird bewusst nicht bewertet: Ob Software gut gebaut ist, ist ein Handwerksurteil, das sich nicht seriös automatisieren lässt — also täuscht TrustScope es nicht vor.",
+    },
+    {
+      q: "Was kostet TrustScope, und brauche ich ein Konto?",
+      a: "TrustScope ist kostenlos und ohne Anmeldung nutzbar — du gibst ein öffentliches Repo an und bekommst den Report. Ein GitHub-Login brauchst du nur, wenn du einen Verbesserungsvorschlag direkt als Issue beim Projekt einreichen willst; das Issue wird dann als du selbst erstellt, mit sichtbarer „via TrustScope\"-Kennzeichnung. Der Code ist quelloffen (MIT).",
+    },
+  ],
+
   // ── Private skill (noindex → visible FAQ, no schema) ──────────────────────
   "restaurant-menu-update": [
     {
