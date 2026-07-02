@@ -83,15 +83,30 @@ export function upsertRows(rows, row) {
   return [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date));
 }
 
-/** Parse an existing JSONL file into rows (empty if absent). Skips blank lines. */
+/**
+ * Parse JSONL text into rows. Skips blank lines AND self-heals past a malformed/partial line
+ * (skip + warn) instead of throwing — a single corrupt line must never permanently stall all
+ * future appends (the workflow step is fail-open, so an uncaught throw would silently stop history
+ * collection forever, which is exactly the "lost datapoint" failure #264 exists to prevent).
+ */
+export function parseHistory(text) {
+  const rows = [];
+  for (const line of text.split("\n")) {
+    const l = line.trim();
+    if (!l) continue;
+    try {
+      rows.push(JSON.parse(l));
+    } catch {
+      console.warn(`append-test-scope-history: skipping malformed history line: ${l.slice(0, 80)}`);
+    }
+  }
+  return rows;
+}
+
+/** Read an existing JSONL history file into rows (empty if absent). */
 function readHistory(file) {
   if (!fs.existsSync(file)) return [];
-  return fs
-    .readFileSync(file, "utf-8")
-    .split("\n")
-    .map((l) => l.trim())
-    .filter(Boolean)
-    .map((l) => JSON.parse(l));
+  return parseHistory(fs.readFileSync(file, "utf-8"));
 }
 
 /** Serialize rows to newline-terminated JSONL (one compact object per line, no trailing blank line). */

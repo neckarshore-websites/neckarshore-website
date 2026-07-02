@@ -5,6 +5,15 @@ on:
     - cron: "0 4 * * *" # 04:00 UTC = 05:00 CET (06:00 CEST in summer)
   workflow_dispatch: # manual trigger for testing
 
+# Serialize runs so an overlapping schedule+dispatch can't race the read-modify-write of the
+# committed stats artifacts (public/stats.json, estate-test-scope*.json, repositories.json,
+# estate-test-scope-history.jsonl) into a non-fast-forward push. cancel-in-progress:false — never
+# interrupt an in-flight commit/push; the later run waits, then checks out the earlier run's pushed
+# result and upserts on top (idempotent per date). (CodeRabbit #106)
+concurrency:
+  group: update-stats
+  cancel-in-progress: false
+
 # Least-privilege default token — read-only at the top level. The one job
 # that writes (commit + push of the stats artifacts) re-declares the write it
 # needs at job scope (#270 §1.3: job-scope the write, never workflow-scope).

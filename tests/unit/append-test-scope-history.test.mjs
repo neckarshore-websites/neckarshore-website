@@ -22,7 +22,7 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { buildHistoryRow, upsertRows, serializeHistory } from "../../scripts/append-test-scope-history.mjs";
+import { buildHistoryRow, upsertRows, serializeHistory, parseHistory } from "../../scripts/append-test-scope-history.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "../..");
@@ -115,6 +115,14 @@ test("(a) distinct dates accumulate and stay sorted ascending", () => {
   rows = upsertRows(rows, buildHistoryRow({ ...fixtureScope(), updatedAt: "2026-07-01T07:00:00Z" }));
   rows = upsertRows(rows, buildHistoryRow({ ...fixtureScope(), updatedAt: "2026-07-02T07:00:00Z" }));
   assert.deepEqual(rows.map((r) => r.date), ["2026-07-01", "2026-07-02", "2026-07-03"]);
+});
+
+test("(a) parseHistory self-heals past a malformed line (skip + warn) and keeps valid rows", () => {
+  const good1 = JSON.stringify({ date: "2026-07-01", total: 1, per_repo: {} });
+  const good2 = JSON.stringify({ date: "2026-07-02", total: 2, per_repo: {} });
+  const rows = parseHistory(`${good1}\n{ this is not json\n\n${good2}\n`);
+  assert.equal(rows.length, 2, "the one corrupt line is skipped — it must not stall future appends");
+  assert.deepEqual(rows.map((r) => r.date), ["2026-07-01", "2026-07-02"]);
 });
 
 test("(a) serializeHistory is newline-terminated JSONL, one object per line, no trailing blank", () => {
