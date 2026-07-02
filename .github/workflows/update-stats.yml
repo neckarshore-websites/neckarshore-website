@@ -270,11 +270,22 @@ jobs:
           echo "=== public/repositories.json ==="
           cat public/repositories.json
 
+      # --- Estate test-count history trendline (backlog #264, storage only — no UI yet) ---
+      # Appends/upserts ONE row per date into public/estate-test-scope-history.jsonl. Runs AFTER the
+      # withhold step above: it reads the POST-withhold public/estate-test-scope.json (display names
+      # only), so no raw private slug can enter the served history file — the ordering IS the privacy
+      # guarantee. Fail-OPEN (guardrail #244: the daily stats commit must keep publishing even if this
+      # secondary appender hiccups); the script is unit-tested, so a real bug is caught at PR time, not
+      # silently in prod. History cannot be backfilled — every skipped run is a lost datapoint.
+      - name: Append test-scope history
+        run: |
+          node scripts/append-test-scope-history.mjs || echo "::warning::append-test-scope-history failed — history not updated this run (stats publish continues)"
+
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/stats.json public/estate-test-scope.json public/repositories.json
+          git add public/stats.json public/estate-test-scope.json public/repositories.json public/estate-test-scope-history.jsonl
           if git diff --staged --quiet; then
             echo "No changes to stats — skipping commit"
           else
