@@ -5,6 +5,15 @@ on:
     - cron: "0 4 * * *" # 04:00 UTC = 05:00 CET (06:00 CEST in summer)
   workflow_dispatch: # manual trigger for testing
 
+# Serialize runs so an overlapping schedule+dispatch can't race the read-modify-write of the
+# committed stats artifacts (public/stats.json, estate-test-scope*.json, repositories.json,
+# estate-test-scope-history.jsonl) into a non-fast-forward push. cancel-in-progress:false — never
+# interrupt an in-flight commit/push; the later run waits, then checks out the earlier run's pushed
+# result and upserts on top (idempotent per date). (CodeRabbit #106)
+concurrency:
+  group: update-stats
+  cancel-in-progress: false
+
 # Least-privilege default token — read-only at the top level. The one job
 # that writes (commit + push of the stats artifacts) re-declares the write it
 # needs at job scope (#270 §1.3: job-scope the write, never workflow-scope).
@@ -270,11 +279,22 @@ jobs:
           echo "=== public/repositories.json ==="
           cat public/repositories.json
 
+      # --- Estate test-count history trendline (backlog #264, storage only — no UI yet) ---
+      # Appends/upserts ONE row per date into public/estate-test-scope-history.jsonl. Runs AFTER the
+      # withhold step above: it reads the POST-withhold public/estate-test-scope.json (display names
+      # only), so no raw private slug can enter the served history file — the ordering IS the privacy
+      # guarantee. Fail-OPEN (guardrail #244: the daily stats commit must keep publishing even if this
+      # secondary appender hiccups); the script is unit-tested, so a real bug is caught at PR time, not
+      # silently in prod. History cannot be backfilled — every skipped run is a lost datapoint.
+      - name: Append test-scope history
+        run: |
+          node scripts/append-test-scope-history.mjs || echo "::warning::append-test-scope-history failed — history not updated this run (stats publish continues)"
+
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/stats.json public/estate-test-scope.json public/repositories.json
+          git add public/stats.json public/estate-test-scope.json public/repositories.json public/estate-test-scope-history.jsonl
           if git diff --staged --quiet; then
             echo "No changes to stats — skipping commit"
           else
