@@ -4,6 +4,8 @@
     "neckarshore-mmps/mmp-local-seo-performance-hub": "Local SEO Hub",
     "neckarshore-mmps/mmp-prod-or-pretend": "Prod or Pretend",
     "neckarshore-mmps/phonesis-voicebank": "Phonesis",
+    "neckarshore-mmps/snakeoil-check": "Snakeoil-Check",
+    "neckarshore-mmps/trustscope": "TrustScope",
     "neckarshore-skills/ai-phrase-check": "AI Phrase Check",
     "neckarshore-skills/imap-mailbox-cleanup": "IMAP Mailbox Cleanup",
     "neckarshore-skills/obsidian-vault-autopilot": "Obsidian Vault Autopilot",
@@ -13,6 +15,7 @@
   },
   "named_private": [
     "neckarshore-mmps/phonesis-voicebank",
+    "neckarshore-mmps/snakeoil-check",
     "omnopsis-ai/omnopsis-backend",
     "omnopsis-ai/omnopsis-contracts",
     "omnopsis-ai/omnopsis-frontend"

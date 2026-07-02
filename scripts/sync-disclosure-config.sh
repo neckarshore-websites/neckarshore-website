@@ -34,10 +34,12 @@ OUT="disclosure-config.json"
 MODE="${1:-file}"
 
 # --- Hand-synced from repo-attribution-matrix.yaml `disclosure` (Founder-signed 2026-07-01) ---
-# named_private: the 4 approved private products (Omnopsis ×3 + Phonesis). Nothing else private is
-# ever named. Adding here without a matching display_overrides entry is a FAILURE (HARD RULE).
+# named_private: the 5 approved private products (Omnopsis ×3 + Phonesis + Snakeoil-Check). Nothing
+# else private is ever named. Adding here without a matching display_overrides entry is a FAILURE
+# (HARD RULE).
 NAMED_PRIVATE='[
   "neckarshore-mmps/phonesis-voicebank",
+  "neckarshore-mmps/snakeoil-check",
   "omnopsis-ai/omnopsis-backend",
   "omnopsis-ai/omnopsis-contracts",
   "omnopsis-ai/omnopsis-frontend"
@@ -50,6 +52,8 @@ DISPLAY_OVERRIDES='{
   "neckarshore-mmps/mmp-local-seo-performance-hub": "Local SEO Hub",
   "neckarshore-mmps/mmp-prod-or-pretend": "Prod or Pretend",
   "neckarshore-mmps/phonesis-voicebank": "Phonesis",
+  "neckarshore-mmps/snakeoil-check": "Snakeoil-Check",
+  "neckarshore-mmps/trustscope": "TrustScope",
   "neckarshore-skills/ai-phrase-check": "AI Phrase Check",
   "neckarshore-skills/imap-mailbox-cleanup": "IMAP Mailbox Cleanup",
   "neckarshore-skills/obsidian-vault-autopilot": "Obsidian Vault Autopilot",
