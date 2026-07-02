@@ -60,4 +60,12 @@ export const MMP_CARDS: Record<string, MmpCardData> = {
       "Ein konstruktiver Qualitäts-Spiegel für Tech-Hype. Prüft „an-einem-Wochenende-gebaut\"-Claims gegen echte Produktionsstandards — Tests, Security, Skalierbarkeit, Doku. Kein Debunker, sondern eine Substanz-von-Luft-Unterscheidung für Entscheider.",
     repoUrl: "https://github.com/neckarshore-mmps/mmp-prod-or-pretend",
   },
+  // NOTE: unlike the other MMP repos above, trustscope is PUBLIC (MIT) — the GitHub link
+  // resolves for logged-out visitors, no sign-in/404 wall.
+  trustscope: {
+    description:
+      "Ein deterministischer Vier-Säulen-Trust-Report für öffentliche Open-Source-Projekte. Du gibst ein GitHub-Repo an — TrustScope prüft Sicherheit & Lieferkette, Governance und Community auf Basis der OpenSSF Scorecard und legt die Kompromisse offen, statt sie hinter einer einzigen Punktzahl zu verstecken.",
+    repoUrl: "https://github.com/neckarshore-mmps/trustscope",
+    liveUrl: "https://trustscope.neckarshore.ai",
+  },
 };

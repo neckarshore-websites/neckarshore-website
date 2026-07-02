@@ -218,6 +218,21 @@ export const PORTFOLIO: PortfolioCategory[] = [
         // (no url/offers) until the public launch.
         hasOwnPage: true,
       },
+      {
+        name: "TrustScope",
+        slug: "trustscope",
+        tagline: "Deterministischer Vier-Säulen-Trust-Report für öffentliche GitHub-Repos — Sicherheit, Governance, Community.",
+        status: "live",
+        href: "/products/trustscope",
+        isExternal: false,
+        schemaType: "SoftwareApplication",
+        applicationCategory: "DeveloperApplication",
+        // LIVE at trustscope.neckarshore.ai — the only PUBLIC-repo (MIT) MMP. Detail page via the
+        // shared ProductDetailPage live branch → excluded from the [slug] skeleton route. Indexable;
+        // emits liveSoftwareApplicationSchema (live url, NO Offer — the shared live branch stays
+        // offer-free; genuinely free but not claimed as a schema Offer, AD-19 fail-closed).
+        hasOwnPage: true,
+      },
     ],
   },
   {
