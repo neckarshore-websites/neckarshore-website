@@ -233,6 +233,34 @@ test("missing[] absent → tolerated (defaults to [])", () => {
   assert.deepEqual(out.missing, []);
 });
 
+// --- unstamped[] 3-way (SHA-stamp coverage gap — same disclosure as missing[]) ---------------
+
+test("unstamped[] 3-way: product-name / raw-slug / privates Repo, LENGTH preserved", () => {
+  const out = run(
+    {
+      total: 0,
+      byType: {},
+      per_repo: [],
+      unstamped: [
+        "omnopsis-ai/omnopsis-backend", // named_private + override → product name
+        "neckarshore-websites/goldoni-website", // public, no override → raw slug
+        "neckarshore-ai/dev-environment", // not in named-set → withheld
+      ],
+    },
+    ["omnopsis-ai/omnopsis-backend", "neckarshore-websites/goldoni-website"],
+    { "omnopsis-ai/omnopsis-backend": "Omnopsis" },
+    ["omnopsis-ai/omnopsis-backend"],
+  );
+  // A private un-stamped repo must NEVER surface its raw slug in the (public) job summary.
+  assert.equal(out.unstamped.length, 3, "the count of un-stamped repos stays readable");
+  assert.deepEqual(out.unstamped, ["Omnopsis", "neckarshore-websites/goldoni-website", "privates Repo"]);
+});
+
+test("unstamped[] absent → tolerated (defaults to [])", () => {
+  const out = run({ total: 0, byType: {}, per_repo: [] }, ["o/open"]);
+  assert.deepEqual(out.unstamped, []);
+});
+
 // --- Headline math + honesty invariants -----------------------------------------------------
 
 test("top-level total + byType are never touched (headline math intact)", () => {

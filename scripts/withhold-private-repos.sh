@@ -32,7 +32,9 @@
 # The only way a raw owner/name slug survives to the output is branch 2 — a PUBLIC repo. A private
 # slug can therefore never appear raw. Public slugs may appear (Founder decision 2026-07-01).
 #
-# The same 3-way mapping is applied to missing[] (producer slugs; strings, no private/sha fields).
+# The same 3-way mapping is applied to missing[] AND unstamped[] (both are bare slug-string arrays;
+# unstamped[] = merged rows carrying audited_sha:null, the SHA-stamp coverage gap). Mapping it here
+# keeps the persistent (public) job summary privacy-safe: a private un-stamped repo → "privates Repo".
 #
 # Top-level total/byType are never touched → the honest headline math is preserved. Output is
 # `-S` key-sorted to match the aggregator's `jq -s -S`, so committed == cron output byte-for-byte.
@@ -81,4 +83,5 @@ jq -S \
 
   .per_repo = ((.per_repo // []) | map(disclose_repo))
   | .missing = ((.missing // []) | map(disclose_missing))
+  | .unstamped = ((.unstamped // []) | map(disclose_missing))
 '
