@@ -28,6 +28,13 @@
 #   repos start self-reporting. `reporting`/`expected`/`missing` stay LIVE-ONLY (a seed entry is
 #   not a "producer"). `floor:true` from the seed propagates to the output (→ the public tile's
 #   load-bearing "+"). Without a seed arg the behaviour is unchanged (floor:false, per_repo=live).
+#   A seed row's `audited_sha` (Durchstich SHA that produced its total, or null) is PROPAGATED into
+#   the rollup; the seed's `sha_note` (internal provenance) is NOT. Un-audited rows stay null.
+#
+# SHA-stamp coverage (Test Charter — the estate count is auditable, SHA-stamped):
+#   The output carries `unstamped[]` = merged rows with audited_sha:null (pre-withhold = the TRUE
+#   audit signal), and the script emits a stderr WARN listing them. Fail-OPEN: the warn NEVER
+#   changes the exit code (guardrail #244 — the count must keep publishing).
 #
 # Usage:  aggregate-test-scope.sh <stats-config.json> <stats-dir> [seed.json]
 #   stats-dir holds one file per fetched producer, named "<owner>__<name>.json".
@@ -82,10 +89,14 @@ if [ -n "$SEED" ]; then
     exit 1
   fi
   SEED_FLOOR=$(jq '.floor // false' "$SEED")
+  # Propagate the seed's audited_sha (Test Charter: the estate count is auditable, SHA-stamped).
+  # A seed row that a Lenin Durchstich covered carries its SHA here → it reaches the rollup. An
+  # un-audited row stays null (do NOT invent SHAs). sha_note is INTERNAL provenance, never copied
+  # into the rollup. A PRIVATE repo's SHA is nulled downstream by withhold-private-repos.sh.
   SEED_JSON=$(jq -c --argjson live "$LIVE_SLUGS" '
     [ .repos[]
       | select((.repo as $r | $live | index($r)) | not)
-      | { repo: .repo, audited_sha: null, total: (.total // 0), byType: {}, lenses: {}, endpoints: 0, seeded: true } ]
+      | { repo: .repo, audited_sha: (.audited_sha // null), total: (.total // 0), byType: {}, lenses: {}, endpoints: 0, seeded: true } ]
   ' "$SEED")
 fi
 
@@ -93,7 +104,7 @@ fi
 # (live only — seed is totals-only); endpoints = Σ. lenses are intentionally NOT aggregated
 # (they overlap and would double-count). `reporting`/`expected`/`missing` stay LIVE-ONLY.
 # Output shape (#244): repos = MERGED count, floor = seed flag, per_repo = the merged array.
-jq -s -S \
+OUT=$(jq -s -S \
   --argjson expected "$EXPECTED" \
   --argjson missing "$MISSING_JSON" \
   --argjson seed "$SEED_JSON" \
@@ -109,5 +120,21 @@ jq -s -S \
     missing: $missing,
     floor: $floor,
     repos: ($merged | length),
+    unstamped: ([$merged[] | select(.audited_sha == null) | .repo] | sort),
     per_repo: $merged
-  }' "$PER_REPO_FILE"
+  }' "$PER_REPO_FILE")
+
+# --- SHA-stamp coverage warn (Test Charter: the estate count is auditable, SHA-stamped) ---
+# A merged row with audited_sha:null is UN-STAMPED (no covering Durchstich, or a live producer
+# that omits it). `unstamped[]` is keyed on the PRE-withhold audited_sha = the TRUE audit signal:
+# the audited-but-private repos carry their real SHA here and are NOT flagged (post-withhold they'd
+# ALL read null → daily cry-wolf). The workflow maps unstamped[] through withhold-private-repos.sh
+# (same 3-way as missing[]) so the persistent job summary never leaks a raw private slug.
+# Fail-OPEN by design — NEVER exit non-zero; the estate count must keep publishing (guardrail #244).
+UNSTAMPED_N=$(printf '%s' "$OUT" | jq '.unstamped | length' 2>/dev/null || echo 0)
+if [ "${UNSTAMPED_N:-0}" -gt 0 ] 2>/dev/null; then
+  UNSTAMPED_LIST=$(printf '%s' "$OUT" | jq -r '.unstamped | join(", ")' 2>/dev/null || echo "?")
+  echo "WARN: ${UNSTAMPED_N} merged row(s) carry audited_sha:null (un-stamped): ${UNSTAMPED_LIST}" >&2
+fi
+
+printf '%s\n' "$OUT"

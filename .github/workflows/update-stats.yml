@@ -173,11 +173,42 @@ jobs:
           # repos (estate count) + floor drive the public tile (#244); kept alongside the
           # internal reporting/expected provenance fields.
           TEST_SCOPE_SUBSET=$(echo "$TEST_SCOPE" | jq '{total, byType, reporting, expected, missing, repos, floor}')
-          ESTATE_OUT=$(echo "$TEST_SCOPE" | jq --arg u "$NOW" '. + {updatedAt: $u}')
+          # `unstamped` is a TRANSIENT pipeline field (drives the stderr WARN + the job summary,
+          # which read the in-memory $TEST_SCOPE) — it is deliberately NOT persisted to the served
+          # artifact. Stripping it keeps the served schema unchanged AND keeps per_repo[].repo +
+          # missing[] the ONLY slug-bearing fields (TC-CNT-083's privacy scan assumes exactly those
+          # two; a third served slug-bearing array would be an unscanned leak vector).
+          ESTATE_OUT=$(echo "$TEST_SCOPE" | jq --arg u "$NOW" 'del(.unstamped) + {updatedAt: $u}')
 
           if [ "$REPORTING" -lt "$EXPECTED" ]; then
             echo "WARN: only ${REPORTING}/${EXPECTED} stats producers reported — missing: $(echo "$TEST_SCOPE" | jq -c '.missing')"
           fi
+
+          # --- SHA-stamp coverage → WARN + job summary (Test Charter: auditable, SHA-stamped) ---
+          # $TEST_SCOPE is the WITHHELD object here → its .unstamped[] is already privacy-mapped by
+          # withhold-private-repos.sh (a private un-stamped repo → "privates Repo"), so the persistent
+          # (public) job summary can never carry a raw private slug. WARN-ONLY, never fail — the
+          # `{ ...; } || true` wrapper keeps a jq/redirect hiccup from aborting the stats publish under
+          # `set -euo pipefail` (guardrail #244 — the count must keep publishing).
+          {
+            UNSTAMPED_N=$(echo "$TEST_SCOPE" | jq '.unstamped | length' 2>/dev/null || echo 0)
+            STAMPED_N=$(echo "$TEST_SCOPE" | jq '[.per_repo[] | select(.audited_sha != null)] | length' 2>/dev/null || echo 0)
+            UNSTAMPED_LIST=$(echo "$TEST_SCOPE" | jq -r '.unstamped | join(", ")' 2>/dev/null || echo "?")
+            if [ "${UNSTAMPED_N:-0}" -gt 0 ] 2>/dev/null; then
+              echo "WARN: ${UNSTAMPED_N} estate row(s) carry audited_sha:null (un-stamped): ${UNSTAMPED_LIST}"
+            fi
+            if [ -n "${GITHUB_STEP_SUMMARY:-}" ]; then
+              {
+                echo "### Estate SHA-stamp coverage"
+                echo ""
+                echo "- ✅ stamped: **${STAMPED_N}**"
+                echo "- ⚠️ un-stamped (audited_sha:null): **${UNSTAMPED_N}**"
+                if [ "${UNSTAMPED_N:-0}" -gt 0 ] 2>/dev/null; then
+                  echo "- offending: ${UNSTAMPED_LIST}"
+                fi
+              } >> "$GITHUB_STEP_SUMMARY"
+            fi
+          } || true
 
           # Last-known-good floor: if the rollup totally collapses to 0 (an infra/token failure,
           # not a real "estate has 0 tests"), keep the previously published numbers + artifact

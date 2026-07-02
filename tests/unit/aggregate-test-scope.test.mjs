@@ -16,13 +16,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from "node:fs";
+import { mkdtempSync, writeFileSync, rmSync, mkdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SCRIPT = path.resolve(__dirname, "../../scripts/aggregate-test-scope.sh");
+const SEED_PATH = path.resolve(__dirname, "../../estate-test-scope-seed.json");
 
 /** owner/name → the per-repo file name the aggregator looks up in the stats dir. */
 function statsFileName(owner, name) {
@@ -244,4 +245,109 @@ test("live producer WINS over a same-slug seed entry (no double-count)", () => {
   assert.equal(json.total, 308, "live 308 wins; the stale 999 seed entry is dropped");
   assert.equal(json.repos, 1, "the repo is counted once, not twice");
   assert.equal(json.per_repo.filter((r) => r.repo === "neckarshore-websites/neckarshore-website").length, 1, "no duplicate entry");
+});
+
+// ── SHA-stamp coverage: propagation + unstamped[] warn (Test Charter — auditable, SHA-stamped) ──
+
+test("seed audited_sha is PROPAGATED into the rollup (not hardcoded null)", () => {
+  const { json, status } = runAggregator(
+    [{ owner: "live", name: "prod", statsPath: "s.json", stats: { repo: "live/prod", audited_sha: "live999", tests: { total: 7, byType: { unit: 7 } } } }],
+    {
+      floor: true,
+      repos: [
+        { repo: "seed/stamped", total: 10, audited_sha: "abc1234", sha_note: "some Durchstich" },
+        { repo: "seed/unstamped", total: 5, sha_note: "no Durchstich" }, // no audited_sha key at all
+      ],
+    },
+  );
+  assert.equal(status, 0);
+  const stamped = json.per_repo.find((r) => r.repo === "seed/stamped");
+  const unstamped = json.per_repo.find((r) => r.repo === "seed/unstamped");
+  assert.equal(stamped.audited_sha, "abc1234", "a seed row's audited_sha must propagate into per_repo");
+  assert.equal(unstamped.audited_sha, null, "a seed row without a SHA stays null (never invented)");
+  // sha_note is INTERNAL provenance — it must NOT leak into the rollup's per_repo objects.
+  assert.ok(!("sha_note" in stamped), "sha_note must not be copied into the rollup");
+});
+
+test("unstamped[] lists null-sha rows + the aggregator emits a fail-open WARN (smoke: null-sha fixture)", () => {
+  const { json, stderr, status } = runAggregator(
+    [{ owner: "live", name: "prod", statsPath: "s.json", stats: { repo: "live/prod", audited_sha: "live999", tests: { total: 7, byType: { unit: 7 } } } }],
+    {
+      floor: true,
+      repos: [
+        { repo: "seed/has-sha", total: 3, audited_sha: "seed123" },
+        { repo: "seed/no-sha", total: 4 },
+      ],
+    },
+  );
+  assert.equal(status, 0, "the un-stamped WARN must be FAIL-OPEN — it never changes the exit code");
+  // Only the genuinely un-stamped row appears; the stamped live producer + stamped seed row do not.
+  assert.deepEqual(json.unstamped, ["seed/no-sha"]);
+  assert.match(stderr, /WARN.*audited_sha:null/, "the aggregator emits a visible un-stamped WARN");
+  assert.match(stderr, /seed\/no-sha/, "the WARN names the offending repo");
+});
+
+test("a live producer with NO audited_sha also lands in unstamped[] (the omnopsis-backend shape)", () => {
+  const { json } = runAggregator([
+    { owner: "omnopsis-ai", name: "omnopsis-backend", statsPath: "s.json", stats: { repo: "omnopsis-ai/omnopsis-backend", tests: { total: 588 }, endpoints: 96 } },
+  ]);
+  assert.deepEqual(json.unstamped, ["omnopsis-ai/omnopsis-backend"], "a producer omitting audited_sha is un-stamped");
+});
+
+test("unstamped[] is sorted A→Z", () => {
+  const { json } = runAggregator([], {
+    floor: true,
+    repos: [
+      { repo: "zzz/z", total: 1 },
+      { repo: "aaa/a", total: 1 },
+      { repo: "mmm/m", total: 1 },
+    ],
+  });
+  assert.deepEqual(json.unstamped, ["aaa/a", "mmm/m", "zzz/z"]);
+});
+
+test("fully-stamped rollup → unstamped[] is empty and NO WARN fires", () => {
+  const { json, stderr } = runAggregator(
+    [{ owner: "live", name: "prod", statsPath: "s.json", stats: { repo: "live/prod", audited_sha: "live999", tests: { total: 7, byType: { unit: 7 } } } }],
+    { floor: true, repos: [{ repo: "seed/stamped", total: 3, audited_sha: "seed123" }] },
+  );
+  assert.deepEqual(json.unstamped, []);
+  assert.ok(!/audited_sha:null/.test(stderr), "no un-stamped WARN when every row carries a SHA");
+});
+
+// ── Seed data invariant (estate-test-scope-seed.json — the committed floor) ──
+
+test("seed: repos with a known Lenin Durchstich carry a non-null audited_sha", () => {
+  const seed = JSON.parse(readFileSync(SEED_PATH, "utf8"));
+  const bySlug = Object.fromEntries(seed.repos.map((r) => [r.repo, r]));
+  // The 6 repos covered by a Lenin Durchstich (5 reports 2026-06-19..2026-06-30). Assert non-null
+  // + hex-shape, NOT the exact SHA — a legitimate re-audit may re-stamp with a newer SHA.
+  const KNOWN_DURCHSTICH = [
+    "neckarshore-websites/neckarshore-website",
+    "omnopsis-ai/omnopsis-frontend",
+    "neckarshore-ai/dev-environment",
+    "omnopsis-ai/omnopsis-contracts",
+    "neckarshore-ai/observatory",
+    "neckarshore-skills/ai-phrase-check",
+  ];
+  for (const slug of KNOWN_DURCHSTICH) {
+    assert.ok(bySlug[slug], `seed must contain ${slug}`);
+    assert.match(
+      bySlug[slug].audited_sha ?? "",
+      /^[0-9a-f]{7,40}$/,
+      `${slug} has a covering Durchstich → audited_sha must be a non-null SHA (got ${bySlug[slug].audited_sha})`,
+    );
+  }
+});
+
+test("seed: every row has an audited_sha (string|null) + a non-empty sha_note", () => {
+  const seed = JSON.parse(readFileSync(SEED_PATH, "utf8"));
+  for (const r of seed.repos) {
+    assert.ok("audited_sha" in r, `${r.repo} is missing the audited_sha key`);
+    assert.ok(
+      r.audited_sha === null || (typeof r.audited_sha === "string" && /^[0-9a-f]{7,40}$/.test(r.audited_sha)),
+      `${r.repo} audited_sha must be null or a hex SHA (got ${JSON.stringify(r.audited_sha)})`,
+    );
+    assert.ok(typeof r.sha_note === "string" && r.sha_note.length > 0, `${r.repo} needs a non-empty sha_note (provenance / reason-if-null)`);
+  }
 });

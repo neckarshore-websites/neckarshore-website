@@ -224,6 +224,15 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
 
     // The page still has data to render (we did not anonymize the file into uselessness).
     expect((scope.per_repo ?? []).length).toBeGreaterThan(0);
+
+    // `unstamped` is a TRANSIENT pipeline field (SHA-stamp coverage WARN + job summary) and MUST
+    // NOT be persisted to the served artifact — otherwise it is a THIRD slug-bearing field the
+    // slug scan above does not cover. update-stats.yml strips it via `del(.unstamped)`; this locks
+    // the "exactly two slug-bearing fields" assumption so a future re-add fails loudly here.
+    expect(
+      scope.unstamped,
+      "unstamped must stay transient — never persisted to the served estate-test-scope.json",
+    ).toBeUndefined();
   });
 
   test("TC-CNT-084: PRIVACY INVARIANT — /test-management renders no private repo name", async ({
