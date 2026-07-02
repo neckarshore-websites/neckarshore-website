@@ -69,6 +69,20 @@ const PAGES: { id: string; title: string; text: string; category: string; url: s
     url: "/products",
   },
   {
+    id: "page:/repositories",
+    title: "Unsere Repositories",
+    text: "Der gesamte Code-Bestand hinter unseren Produkten, Skills und Websites. Öffentliche Repositories listen wir einzeln mit Beschreibung, nach Typ gruppiert; private zählen wir nur — ohne Namen. Täglich automatisch mit GitHub abgeglichen, nicht von Hand gepflegt.",
+    category: "Seite",
+    url: "/repositories",
+  },
+  {
+    id: "page:/test-management",
+    title: "Wie wir testen",
+    text: "Wie wir unser Test-Estate zählen und prüfen: jede Zahl kommt vom Test-Runner selbst, nie geschätzt oder gegrep't, unabhängig gegengeprüft und nach unten gerundet. Die Story hinter der Automatisierte-Tests-Kachel — nachprüfbar statt nach Bauchgefühl.",
+    category: "Seite",
+    url: "/test-management",
+  },
+  {
     id: "page:/impressum",
     title: "Impressum",
     text: "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart. Angaben gemäß § 5 TMG.",
