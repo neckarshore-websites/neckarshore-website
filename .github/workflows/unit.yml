@@ -32,4 +32,9 @@ jobs:
         run: npm ci
 
       - name: Run unit tests
-        run: npm run test:unit
+        run: |
+          npm run test:unit
+          # §4c: gate the previously-ungated pure unit tests.
+          # test:search:unit is held out (currently RED — a real search-index
+          # bug, /repositories missing; tracked separately, not gated red).
+          npm run test:lighthouse:unit
