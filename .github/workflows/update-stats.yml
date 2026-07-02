@@ -173,7 +173,12 @@ jobs:
           # repos (estate count) + floor drive the public tile (#244); kept alongside the
           # internal reporting/expected provenance fields.
           TEST_SCOPE_SUBSET=$(echo "$TEST_SCOPE" | jq '{total, byType, reporting, expected, missing, repos, floor}')
-          ESTATE_OUT=$(echo "$TEST_SCOPE" | jq --arg u "$NOW" '. + {updatedAt: $u}')
+          # `unstamped` is a TRANSIENT pipeline field (drives the stderr WARN + the job summary,
+          # which read the in-memory $TEST_SCOPE) — it is deliberately NOT persisted to the served
+          # artifact. Stripping it keeps the served schema unchanged AND keeps per_repo[].repo +
+          # missing[] the ONLY slug-bearing fields (TC-CNT-083's privacy scan assumes exactly those
+          # two; a third served slug-bearing array would be an unscanned leak vector).
+          ESTATE_OUT=$(echo "$TEST_SCOPE" | jq --arg u "$NOW" 'del(.unstamped) + {updatedAt: $u}')
 
           if [ "$REPORTING" -lt "$EXPECTED" ]; then
             echo "WARN: only ${REPORTING}/${EXPECTED} stats producers reported — missing: $(echo "$TEST_SCOPE" | jq -c '.missing')"
