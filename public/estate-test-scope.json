@@ -32,7 +32,7 @@
       "total": 496
     },
     {
-      "audited_sha": null,
+      "audited_sha": "a1561cb",
       "byType": {},
       "endpoints": 0,
       "lenses": {},
@@ -46,7 +46,7 @@
       "endpoints": 0,
       "lenses": {},
       "private": true,
-      "repo": "privates Repo",
+      "repo": "Snakeoil-Check",
       "seeded": true,
       "total": 241
     },
@@ -109,7 +109,7 @@
       "total": 35
     },
     {
-      "audited_sha": null,
+      "audited_sha": "35044d1",
       "byType": {},
       "endpoints": 0,
       "lenses": {},
@@ -208,5 +208,5 @@
   "reporting": 1,
   "repos": 20,
   "total": 2611,
-  "updatedAt": "2026-07-02T07:00:09Z"
+  "updatedAt": "2026-07-03T06:54:27Z"
 }
