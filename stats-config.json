@@ -7,7 +7,7 @@
     { "owner": "neckarshore-ai", "name": "neckarshore-history", "private": true },
     { "owner": "neckarshore-ai", "name": "neckarshore-planning", "private": true },
     { "owner": "neckarshore-ai", "name": "observatory", "private": true },
-    { "owner": "neckarshore-mmps", "name": "clearpath", "private": true },
+    { "owner": "neckarshore-mmps", "name": "clearpath", "private": true, "statsPath": "stats.json" },
     { "owner": "neckarshore-mmps", "name": "mmp-local-seo-performance-hub", "private": false },
     { "owner": "neckarshore-mmps", "name": "mmp-prod-or-pretend", "private": true },
     { "owner": "neckarshore-mmps", "name": "phonesis-voicebank", "private": true },
