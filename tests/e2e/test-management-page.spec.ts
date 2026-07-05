@@ -127,6 +127,7 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     page,
   }) => {
     await page.goto(ROUTE);
+    const scope = loadScope();
     const table = page.locator("main table");
     await expect(table).toBeVisible();
     // Three columns now: Repository · Typ · Tests.
@@ -141,8 +142,14 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     // rewritten to a product display-name (approved-private OR public product) show Typ "—" — the
     // raw slug is gone, so the type is not guessed.
     expect(tableText).toContain("Webseite");
-    // Withheld private repos (NOT in named_private) surface as anonymized rows (count kept, no name/Typ).
-    expect(tableText).toContain("privates Repo");
+    // Withholding is active: the served data carries anonymized rows ("privates Repo", count kept,
+    // no name). They render as such WHERE they surface — but this assertion must not depend on
+    // RANKING: as the estate grew, the top withheld-private repo (126 tests) now ranks below the
+    // Top-6 (behind oakwood at 129) and folds into the rollup, so the literal label need not appear
+    // in the visible top rows (#111). The ranking-independent invariant is that the withholding
+    // transform ran and produced anonymized rows in the source data; raw private slugs are guarded
+    // by TC-CNT-084's canary loop.
+    expect(scope.per_repo.some((r) => r.repo === "privates Repo")).toBe(true);
     // §5b: the 0-test scaffold repo and the known-red repo (#257) stay in the rollup, not spotlit.
     // Their RAW slugs must never appear (clearpath-52 is now rendered "ClearPath" and lives in the rollup).
     expect(tableText).not.toContain("clearpath-52");
@@ -246,8 +253,12 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
         `private repo "${name}" must not render on the public /test-management page`,
       ).not.toContain(name);
     }
-    // Withheld private repos surface only as an anonymized label — count kept, no name/Typ.
-    expect(mainText).toContain("privates Repo");
+    // Withholding is active: the served data carries anonymized rows ("privates Repo", count kept,
+    // no name/Typ). The label renders where those rows surface; post-estate-growth the withheld
+    // repos fold into the Top-N rollup, so the literal string need not appear on the visible page
+    // (#111). The hard privacy guarantee is the canary loop above (no raw private name ever renders);
+    // this positive assertion verifies — ranking-independently — that the withholding transform ran.
+    expect(loadScope().per_repo.some((r) => r.repo === "privates Repo")).toBe(true);
   });
 
   test("TC-CNT-085: HONESTY INVARIANT — Σ per_repo.total still equals the headline total", () => {
