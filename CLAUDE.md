@@ -162,7 +162,7 @@ repo's raw slug must never reach a **served** artifact. Two layers enforce this:
    #267. Fails a PR if a private slug appears raw in any **served** file under `public/`. Runs in
    `unit.yml` via `npm run test:unit`. Known-private = `(stats-config − repositories.json live-public)
    ∪ named_private`, fail-closed; **no `stats-config.private==true` union** (that false-reds
-   `clearpath-52`, which is stale-private but live-public).
+   `clearpath`, which is stale-private but live-public).
 
 ### Served-vs-config boundary (Founder decision 2026-07-01: **accept + document**)
 

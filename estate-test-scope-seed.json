@@ -21,6 +21,6 @@
     { "repo": "neckarshore-websites/rauhut-website", "total": 17, "basis": "runner sum", "audited_sha": null, "sha_note": "no per-repo Lenin Durchstich; count from the coverage matrix, no auditable SHA" },
     { "repo": "neckarshore-websites/grafowerk-website", "total": 9, "basis": "runner sum", "audited_sha": null, "sha_note": "no per-repo Lenin Durchstich; count from the coverage matrix, no auditable SHA" },
     { "repo": "neckarshore-ai/neckarshore-planning", "total": 9, "basis": "docs/check-docs gate", "audited_sha": null, "sha_note": "no per-repo Lenin Durchstich; docs-gate count, no auditable SHA" },
-    { "repo": "neckarshore-mmps/clearpath-52", "total": 0, "basis": "audited, no tests yet (scaffold repo) — kept so repos count = 20", "audited_sha": null, "sha_note": "scaffold repo, 0 tests — nothing to audit" }
+    { "repo": "neckarshore-mmps/clearpath", "total": 0, "basis": "audited, no tests yet (scaffold repo) — kept so repos count = 20", "audited_sha": null, "sha_note": "scaffold repo, 0 tests — nothing to audit" }
   ]
 }
