@@ -48,7 +48,7 @@ NAMED_PRIVATE='[
 # display_overrides: slug → product display-name. Public products (board consistency) + the
 # approved-private products (disclose the announced fact, withhold the private slug).
 DISPLAY_OVERRIDES='{
-  "neckarshore-mmps/clearpath-52": "ClearPath",
+  "neckarshore-mmps/clearpath": "ClearPath",
   "neckarshore-mmps/mmp-local-seo-performance-hub": "Local SEO Hub",
   "neckarshore-mmps/mmp-prod-or-pretend": "Prod or Pretend",
   "neckarshore-mmps/phonesis-voicebank": "Phonesis",

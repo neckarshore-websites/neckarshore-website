@@ -36,7 +36,7 @@ export const MMP_CARDS: Record<string, MmpCardData> = {
   clearpath: {
     description:
       "Eine mentale Firewall gegen kognitive Verzerrungen. Du beschreibst eine anstehende Entscheidung — ClearPath spiegelt sie strukturiert zurück, benennt die Denkfallen darin und liefert eine zweite, nüchterne Perspektive, bevor du dich festlegst.",
-    repoUrl: "https://github.com/neckarshore-mmps/clearpath-52",
+    repoUrl: "https://github.com/neckarshore-mmps/clearpath",
     liveUrl: "https://clearpath.neckarshore.ai",
   },
   "snakeoil-check": {
