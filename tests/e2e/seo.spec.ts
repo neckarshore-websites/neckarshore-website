@@ -331,6 +331,28 @@ test.describe("SEO Basics", () => {
     const count = (title.match(/neckarshore\.ai/g) ?? []).length;
     expect(count, `brand appears ${count}× in "${title}"`).toBe(1);
   });
+
+  // TC-SEO-045: NEGATIVE-assertion regression-guard for 7a8f400 ("remove article:author
+  // meta tag from website-type page"). The landing page is og:type=website, not article;
+  // an `article:author` meta sent mixed signals so OG validators expected article-only
+  // fields (author, published_time). Author identity lives in the JSON-LD Person node.
+  // A regression that re-adds `other: { "article:author": ... }` to the layout metadata
+  // re-emits this tag into the head → this guard goes RED.
+  // NOTE: Next 16 renders `metadata.other` as `<meta name="...">`, while the OG article
+  // convention is `<meta property="...">`. The locator unions BOTH attribute forms so the
+  // guard fires no matter how a regression re-introduces the tag (verified empirically:
+  // reverting 7a8f400 emits `name="article:author"`).
+  test("TC-SEO-045: website-type homepage head carries no article:author meta", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    await expect(
+      page.locator(
+        'meta[property="article:author"], meta[name="article:author"]',
+      ),
+      "website-type page must not emit an article:author OG meta (name= or property=)",
+    ).toHaveCount(0);
+  });
 });
 
 // --- Per-route WebPage entity (L-NECK-ENTITY-WEBPAGE-ID, 2026-06-28) -------------
