@@ -7,11 +7,11 @@ import { PageSchema } from "@/components/PageSchema";
 export const metadata: Metadata = {
   title: "Impressum — neckarshore.ai",
   description:
-    "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart. Angaben gemäß § 5 TMG.",
+    "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart. Angaben gemäß § 5 DDG.",
   openGraph: {
     title: "Impressum — neckarshore.ai",
     description:
-      "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart. Angaben gemäß § 5 TMG.",
+      "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart. Angaben gemäß § 5 DDG.",
     url: "https://neckarshore.ai/impressum",
     siteName: "neckarshore.ai",
     locale: "de_DE",
@@ -50,7 +50,7 @@ export default function Impressum() {
 
         <div className="prose-neckarshore mt-10 space-y-8 text-neutral-dark/80 leading-relaxed dark:text-text-secondary">
           <section>
-            <p className="text-sm text-muted dark:text-text-secondary/60">Angaben gemäß § 5 TMG</p>
+            <p className="text-sm text-muted dark:text-text-secondary/60">Angaben gemäß § 5 DDG</p>
             <h2 className="mt-4 font-heading text-xl font-semibold text-primary dark:text-text-primary">Diensteanbieter</h2>
             <p>
               German Rauhut
@@ -123,8 +123,8 @@ export default function Impressum() {
             <p>
               Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit,
               Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als
-              Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den
-              allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch
+              Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den
+              allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG sind wir als Diensteanbieter jedoch
               nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach
               Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
             </p>
