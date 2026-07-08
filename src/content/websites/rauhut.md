@@ -19,7 +19,7 @@ status: "Live"
 
 ## Wie sind wir vorgegangen?
 
-Die Seite entstand KI-beschleunigt im selben Multi-Agent-Workflow, mit dem Neckarshore arbeitet. Architektonisch konsequent statisch: ein vorab gerenderter One-Pager ohne CMS, Dark Mode als Default mit Light-Toggle. Datenschutz ist by Design eingebaut — Schrift (Inter Variable) self-hosted statt über ein CDN, Analytics ausschließlich über die cookielose Vercel Web Analytics, daher kein Banner nötig. Das Impressum (§5 TMG) liegt auf `noindex`.
+Die Seite entstand KI-beschleunigt im selben Multi-Agent-Workflow, mit dem Neckarshore arbeitet. Architektonisch konsequent statisch: ein vorab gerenderter One-Pager ohne CMS, Dark Mode als Default mit Light-Toggle. Datenschutz ist by Design eingebaut — Schrift (Inter Variable) self-hosted statt über ein CDN, Analytics ausschließlich über die cookielose Vercel Web Analytics, daher kein Banner nötig. Das Impressum (§5 DDG) liegt auf `noindex`.
 
 ## Wie ist die Website technisch gebaut?
 
