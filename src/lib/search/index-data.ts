@@ -85,7 +85,7 @@ const PAGES: { id: string; title: string; text: string; category: string; url: s
   {
     id: "page:/impressum",
     title: "Impressum",
-    text: "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart. Angaben gemäß § 5 TMG.",
+    text: "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart. Angaben gemäß § 5 DDG.",
     category: "Seite",
     url: "/impressum",
   },

@@ -59,7 +59,7 @@ const faqItems = [
   },
   {
     q: "Ist neckarshore.ai DSGVO-konform?",
-    a: "Ja, DSGVO-Konformität ist bei uns Architekturentscheidung, keine Checkliste. Hosting in Deutschland, Verschlüsselung, Tenant-Isolation, und BYOLLM — eure Daten bleiben bei euch. Diese Website setzt keine Tracking-Cookies und lädt keine externen Ressourcen.",
+    a: "Ja, DSGVO-Konformität ist bei uns Architekturentscheidung, keine Checkliste. Verschlüsselung, Tenant-Isolation und BYOLLM — eure Daten bleiben bei euch. Diese Website setzt keine Tracking-Cookies und lädt keine externen Ressourcen.",
   },
 ];
 
@@ -262,7 +262,7 @@ export default function Home() {
                   icon: Shield,
                   title: "DSGVO-by-Design",
                   subtitle: "Datenschutz als Architektur.",
-                  text: "BYOLLM: Eure Daten verlassen euer Haus nicht. Hosting in Deutschland. Verschlüsselung. Tenant-Isolation. DSGVO ist bei uns keine Checkliste, sondern Architekturentscheidung.",
+                  text: "BYOLLM: Eure Daten verlassen euer Haus nicht. Verschlüsselung. Tenant-Isolation. DSGVO ist bei uns keine Checkliste, sondern Architekturentscheidung.",
                 },
                 {
                   icon: TestTubeDiagonal,

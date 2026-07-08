@@ -47,7 +47,7 @@ export default function Datenschutz() {
       <PageSchema path="/datenschutz" name="Datenschutzerklärung — neckarshore.ai" />
       <main className="mx-auto max-w-[800px] px-4 pt-40 pb-20 md:px-6">
         <h1 className="font-heading text-3xl font-bold text-accent md:text-5xl">Datenschutzerklärung</h1>
-        <p className="mt-2 text-sm text-muted dark:text-text-secondary/60">Stand: März 2026</p>
+        <p className="mt-2 text-sm text-muted dark:text-text-secondary/60">Stand: Juli 2026</p>
 
         <div className="mt-10 space-y-8 text-neutral-dark/80 leading-relaxed dark:text-text-secondary">
           <section>
@@ -231,7 +231,55 @@ export default function Datenschutz() {
 
           <section>
             <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">
-              7. Kontakt per E-Mail
+              7. Spam-Schutz für Formulare (Cloudflare Turnstile)
+            </h2>
+            <p className="mt-3">
+              Zum Schutz unseres Kontaktformulars vor automatisiertem Missbrauch
+              (Spam, Bots) setzen wir »Turnstile« ein, einen cookiefreien
+              Bot-Erkennungsdienst der Cloudflare Inc.:
+            </p>
+            <p className="mt-2">
+              <strong>Cloudflare, Inc.</strong>
+              <br />
+              101 Townsend Street
+              <br />
+              San Francisco, CA 94107, USA
+            </p>
+            <p className="mt-3">
+              Beim Aufruf eines Formulars lädt Ihr Browser ein Script von
+              Cloudflare (<code>challenges.cloudflare.com</code>) und übermittelt
+              technische Merkmale zur Unterscheidung von Mensch und Bot (u. a.
+              IP-Adresse, Browser- und Geräteinformationen sowie
+              Interaktionssignale). Turnstile arbeitet »interaction-only«: Es
+              setzt <strong>keine Cookies</strong> und verwendet die Daten nicht
+              zum seitenübergreifenden Tracking.
+            </p>
+            <p className="mt-2">
+              <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO
+              (berechtigtes Interesse an der Abwehr von Spam und missbräuchlichen
+              Formularübermittlungen).
+            </p>
+            <p className="mt-2">
+              Cloudflare kann Daten in die USA übermitteln. Die Übermittlung
+              erfolgt auf Basis von EU-Standardvertragsklauseln (Art. 46 Abs. 2
+              lit. c DSGVO).
+            </p>
+            <p className="mt-2">
+              Weitere Informationen:{" "}
+              <a
+                href="https://www.cloudflare.com/privacypolicy/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:text-accent-hover"
+              >
+                https://www.cloudflare.com/privacypolicy/
+              </a>
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">
+              8. Kontakt per E-Mail
             </h2>
             <p className="mt-3">
               Wenn Sie uns per E-Mail kontaktieren, werden Ihre Angaben (Name, E-Mail-Adresse, Inhalt der
@@ -249,7 +297,7 @@ export default function Datenschutz() {
 
           <section>
             <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">
-              8. Speicherung im Browser
+              9. Speicherung im Browser
             </h2>
             <p className="mt-3">
               Diese Website setzt <strong>keine Cookies</strong> (weder technisch
@@ -272,7 +320,7 @@ export default function Datenschutz() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">9. Ihre Rechte</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">10. Ihre Rechte</h2>
             <p className="mt-3">
               Sie haben folgende Rechte bezüglich Ihrer personenbezogenen Daten:
             </p>
@@ -307,7 +355,7 @@ export default function Datenschutz() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">10. Beschwerderecht</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">11. Beschwerderecht</h2>
             <p className="mt-3">
               Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren:
             </p>
@@ -332,7 +380,7 @@ export default function Datenschutz() {
           </section>
 
           <section>
-            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">11. Änderungen</h2>
+            <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">12. Änderungen</h2>
             <p className="mt-3">
               Wir behalten uns vor, diese Datenschutzerklärung bei Bedarf anzupassen, insbesondere bei
               Änderungen der Datenverarbeitung oder neuen gesetzlichen Vorgaben. Es gilt die jeweils auf der
