@@ -1,11 +1,11 @@
 {
   "byType": {
-    "e2e": 259,
-    "integration": 27,
-    "unit": 341
+    "e2e": 292,
+    "integration": 40,
+    "unit": 349
   },
   "endpoints": 96,
-  "expected": 2,
+  "expected": 3,
   "floor": true,
   "missing": [],
   "per_repo": [
@@ -18,6 +18,19 @@
       "lenses": {},
       "repo": "ClearPath",
       "total": 39
+    },
+    {
+      "audited_sha": null,
+      "byType": {
+        "e2e": 33,
+        "integration": 13,
+        "unit": 8
+      },
+      "endpoints": 0,
+      "lenses": {},
+      "private": true,
+      "repo": "privates Repo",
+      "total": 54
     },
     {
       "audited_sha": null,
@@ -206,8 +219,8 @@
       "total": 9
     }
   ],
-  "reporting": 2,
-  "repos": 20,
-  "total": 2650,
-  "updatedAt": "2026-07-08T06:21:55Z"
+  "reporting": 3,
+  "repos": 21,
+  "total": 2704,
+  "updatedAt": "2026-07-08T07:13:48Z"
 }
