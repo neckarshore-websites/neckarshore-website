@@ -1,11 +1,11 @@
 {
   "byType": {
-    "e2e": 295,
+    "e2e": 343,
     "integration": 40,
-    "unit": 349
+    "unit": 539
   },
   "endpoints": 96,
-  "expected": 3,
+  "expected": 4,
   "floor": true,
   "missing": [],
   "per_repo": [
@@ -31,6 +31,17 @@
       "private": true,
       "repo": "privates Repo",
       "total": 54
+    },
+    {
+      "audited_sha": "c24958de9439df40b52a5511dbf7cee8796a2eaf",
+      "byType": {
+        "e2e": 48,
+        "unit": 190
+      },
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "TrustScope",
+      "total": 238
     },
     {
       "audited_sha": null,
@@ -219,8 +230,8 @@
       "total": 9
     }
   ],
-  "reporting": 3,
-  "repos": 21,
-  "total": 2707,
-  "updatedAt": "2026-07-09T07:39:14Z"
+  "reporting": 4,
+  "repos": 22,
+  "total": 2945,
+  "updatedAt": "2026-07-09T08:47:33Z"
 }
