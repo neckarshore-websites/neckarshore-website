@@ -2,7 +2,7 @@
   "startDate": "2026-03-22",
   "repos": [
     { "owner": "neckarshore-agents", "name": "marvin-hq", "private": true },
-    { "owner": "neckarshore-ai", "name": "dev-environment", "private": true },
+    { "owner": "neckarshore-ai", "name": "dev-environment", "private": true, "statsPath": "stats.json" },
     { "owner": "neckarshore-ai", "name": "neckarshore-easter-eggs", "private": false },
     { "owner": "neckarshore-ai", "name": "neckarshore-history", "private": true },
     { "owner": "neckarshore-ai", "name": "neckarshore-planning", "private": true },
@@ -12,7 +12,7 @@
     { "owner": "neckarshore-mmps", "name": "mmp-local-seo-performance-hub", "private": false },
     { "owner": "neckarshore-mmps", "name": "mmp-prod-or-pretend", "private": true },
     { "owner": "neckarshore-mmps", "name": "phonesis-voicebank", "private": true },
-    { "owner": "neckarshore-mmps", "name": "snakeoil-check", "private": false },
+    { "owner": "neckarshore-mmps", "name": "snakeoil-check", "private": true, "statsPath": "stats.json" },
     { "owner": "neckarshore-mmps", "name": "trustscope", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
     { "owner": "neckarshore-skills", "name": "ai-phrase-check", "private": false },
     { "owner": "neckarshore-skills", "name": "imap-mailbox-cleanup", "private": false },
@@ -28,11 +28,11 @@
     { "owner": "neckarshore-websites", "name": "neckarshore-website", "private": false },
     { "owner": "neckarshore-websites", "name": "oakwoodgolfclub-website", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
     { "owner": "neckarshore-websites", "name": "rauhut-website", "private": false, "statsPath": "stats.json" },
-    { "owner": "neckarshore-websites", "name": "site-quality", "private": true },
+    { "owner": "neckarshore-websites", "name": "site-quality", "private": true, "statsPath": "stats.json" },
     { "owner": "omnopsis-ai", "name": "omnopsis-backend", "private": true, "statsPath": "backend/stats.json" },
-    { "owner": "omnopsis-ai", "name": "omnopsis-contracts", "private": true },
+    { "owner": "omnopsis-ai", "name": "omnopsis-contracts", "private": true, "statsPath": "stats.json" },
     { "owner": "omnopsis-ai", "name": "omnopsis-document-importer", "private": true },
-    { "owner": "omnopsis-ai", "name": "omnopsis-frontend", "private": true },
+    { "owner": "omnopsis-ai", "name": "omnopsis-frontend", "private": true, "statsPath": "stats.json" },
     { "owner": "omnopsis-ai", "name": "omnopsis-planning", "private": true },
     { "owner": "omnopsis-ai", "name": "omnopsis-test-management", "private": true }
   ]
