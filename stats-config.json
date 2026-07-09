@@ -13,6 +13,7 @@
     { "owner": "neckarshore-mmps", "name": "mmp-prod-or-pretend", "private": true },
     { "owner": "neckarshore-mmps", "name": "phonesis-voicebank", "private": true },
     { "owner": "neckarshore-mmps", "name": "snakeoil-check", "private": false },
+    { "owner": "neckarshore-mmps", "name": "trustscope", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
     { "owner": "neckarshore-skills", "name": "ai-phrase-check", "private": false },
     { "owner": "neckarshore-skills", "name": "imap-mailbox-cleanup", "private": false },
     { "owner": "neckarshore-skills", "name": "neckarshore-easter-eggs-skills", "private": true },
