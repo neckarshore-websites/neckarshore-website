@@ -1,7 +1,7 @@
 {
   "byType": {
     "e2e": 460,
-    "integration": 178,
+    "integration": 184,
     "unit": 1682
   },
   "endpoints": 96,
@@ -35,14 +35,14 @@
       "audited_sha": null,
       "byType": {
         "e2e": 33,
-        "integration": 13,
+        "integration": 19,
         "unit": 8
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 54
+      "total": 60
     },
     {
       "audited_sha": null,
@@ -247,6 +247,6 @@
   ],
   "reporting": 16,
   "repos": 22,
-  "total": 2739,
-  "updatedAt": "2026-07-09T17:51:39Z"
+  "total": 2745,
+  "updatedAt": "2026-07-09T21:51:04Z"
 }
