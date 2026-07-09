@@ -1,6 +1,6 @@
 {
   "byType": {
-    "e2e": 292,
+    "e2e": 295,
     "integration": 40,
     "unit": 349
   },
@@ -35,7 +35,7 @@
     {
       "audited_sha": null,
       "byType": {
-        "e2e": 259,
+        "e2e": 262,
         "integration": 27,
         "unit": 302
       },
@@ -43,7 +43,7 @@
       "lenses": {},
       "private": true,
       "repo": "Omnopsis",
-      "total": 588
+      "total": 591
     },
     {
       "audited_sha": null,
@@ -221,6 +221,6 @@
   ],
   "reporting": 3,
   "repos": 21,
-  "total": 2704,
-  "updatedAt": "2026-07-08T07:13:48Z"
+  "total": 2707,
+  "updatedAt": "2026-07-09T07:39:14Z"
 }
