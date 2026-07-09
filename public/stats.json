@@ -1,22 +1,22 @@
 {
   "days": 109,
-  "commits": 4539,
-  "tests": 2945,
+  "commits": 4601,
+  "tests": 2739,
   "endpoints": 96,
-  "linesOfCode": 869911,
-  "repos": 33,
+  "linesOfCode": 903898,
+  "repos": 34,
   "testScope": {
-    "total": 2945,
+    "total": 2739,
     "byType": {
-      "e2e": 343,
-      "integration": 40,
-      "unit": 539
+      "e2e": 460,
+      "integration": 178,
+      "unit": 1682
     },
-    "reporting": 4,
-    "expected": 4,
+    "reporting": 16,
+    "expected": 16,
     "missing": [],
     "repos": 22,
     "floor": true
   },
-  "updatedAt": "2026-07-09T08:47:33Z"
+  "updatedAt": "2026-07-09T17:51:39Z"
 }
