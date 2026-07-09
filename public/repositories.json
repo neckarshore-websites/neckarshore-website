@@ -27,6 +27,12 @@
       "description": "A constructive quality mirror for tech hype — checks 'built it in a weekend' claims against real production standards (tests, security, scalability, docs). Not a debunker; it helps decision-makers tell substance from air."
     },
     {
+      "owner": "neckarshore-mmps",
+      "name": "trustscope",
+      "visibility": "public",
+      "description": "TrustScope — paste a public GitHub repo and get a deterministic four-pillar trust report (security & supply chain, governance, community, and honestly-not-assessed functional quality) with constructive, upstream-friendly fixes. Built on OpenSSF Scorecard. A reputation surface by Neckarshore AI."
+    },
+    {
       "owner": "neckarshore-skills",
       "name": "ai-phrase-check",
       "visibility": "public",

@@ -102,16 +102,26 @@ jobs:
             # estate test-scope aggregator. The raw Accept header is mandatory — WITHOUT it the
             # contents API returns a base64 envelope (.content/.encoding), the aggregator reads
             # no numeric .tests.total, and the producer collapses to 0 + a false "missing".
+            #
+            # Optional statsRef: a public+protected producer cannot push stats.json to its
+            # protected main (a bot push is rejected without weakening main's protection), so it
+            # publishes to a dedicated UNPROTECTED data branch instead. When statsRef is set we
+            # fetch from that branch via ?ref=; when it is absent the contents API defaults to the
+            # repo's default branch — so every existing producer (md-viewer, clearpath, backend)
+            # is unchanged. First public+protected producer: neckarshore-mmps/trustscope → stats-data.
             STATS_PATH=$(echo "$CONFIG" | jq -r ".repos[$i].statsPath // empty")
             if [ -n "$STATS_PATH" ]; then
+              STATS_REF=$(echo "$CONFIG" | jq -r ".repos[$i].statsRef // empty")
+              STATS_URL="https://api.github.com/repos/${REPO}/contents/${STATS_PATH}"
+              [ -n "$STATS_REF" ] && STATS_URL="${STATS_URL}?ref=${STATS_REF}"
               if curl -sfL \
                 -H "Authorization: Bearer ${STATS_PAT}" \
                 -H "Accept: application/vnd.github.v3.raw" \
-                "https://api.github.com/repos/${REPO}/contents/${STATS_PATH}" \
+                "$STATS_URL" \
                 -o "/tmp/stats/${OWNER}__${NAME}.json" 2>/dev/null; then
-                echo "  Stats: fetched ${STATS_PATH}"
+                echo "  Stats: fetched ${STATS_PATH}${STATS_REF:+ @ref=$STATS_REF}"
               else
-                echo "  WARN: ${REPO} statsPath ${STATS_PATH} fetch failed — counts as a missing producer"
+                echo "  WARN: ${REPO} statsPath ${STATS_PATH}${STATS_REF:+ @ref=$STATS_REF} fetch failed — counts as a missing producer"
               fi
             fi
 
