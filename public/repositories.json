@@ -58,6 +58,12 @@
     },
     {
       "owner": "neckarshore-websites",
+      "name": "grafowerk-website",
+      "visibility": "public",
+      "description": "Marketing website for Grafowerk — a graphic and design studio."
+    },
+    {
+      "owner": "neckarshore-websites",
       "name": "neckarshore-website",
       "visibility": "public",
       "description": "Web presence and landing page for Neckarshore AI — AI products built in Germany, privacy-first and enterprise-grade."
