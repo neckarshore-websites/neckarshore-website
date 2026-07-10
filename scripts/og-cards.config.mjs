@@ -224,4 +224,140 @@ export const cards = [
     skip: true,
     skipReason: "awaiting MASCHIN positioning — see docs/branding/positioning-request-maschin.md",
   },
+
+  // ─── Product OG cards (public/og/<slug>.jpg) — per-product social preview, 1200x630 ───
+  // Taglines copied verbatim from src/lib/portfolio.ts. Chips are DESCRIPTIVE only
+  // (category/theme), never an availability claim. Set: L-NECK-OG-IMAGES-PER-PRODUCT (11 indexable).
+  {
+    label: "Product OG — omnopsis",
+    dest: "public/og/omnopsis.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200,
+    headline: "Omnopsis", headlineAccent: "Documentor+X.",
+    tagline: "KI-first Documentation Engine für Engineering-Teams — fail-closed, BYOLLM, DSGVO-by-Design.",
+    chips: [
+      { text: "KI-first", variant: "dot" },
+      { text: "BYOLLM", variant: "plain" },
+      { text: "DSGVO-by-Design", variant: "accent" },
+    ],
+  },
+  {
+    label: "Product OG — clearpath",
+    dest: "public/og/clearpath.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200,
+    headline: "ClearPath.",
+    tagline: "Eine mentale Firewall gegen kognitive Verzerrungen.",
+    chips: [
+      { text: "Decision Support", variant: "dot" },
+      { text: "Web-App", variant: "plain" },
+      { text: "DSGVO", variant: "accent" },
+    ],
+  },
+  {
+    label: "Product OG — snakeoil-check",
+    dest: "public/og/snakeoil-check.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200,
+    headline: "Snakeoil", headlineAccent: "Check.",
+    tagline: "Neutraler KI-Reality-Check für Online-Coachings und High-Ticket-Angebote.",
+    chips: [
+      { text: "KI-Reality-Check", variant: "dot" },
+      { text: "Neutral", variant: "plain" },
+      { text: "Made in Germany", variant: "accent" },
+    ],
+  },
+  {
+    label: "Product OG — phonesis",
+    dest: "public/og/phonesis.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200,
+    headline: "Phonesis", headlineAccent: "Voicebank.",
+    tagline: "Ein Archiv echter menschlicher Stimmen für den deutschen Markt.",
+    chips: [
+      { text: "Voice Archive", variant: "dot" },
+      { text: "Human Voices", variant: "plain" },
+      { text: "Made in Germany", variant: "accent" },
+    ],
+  },
+  {
+    label: "Product OG — local-seo-hub",
+    dest: "public/og/local-seo-hub.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200,
+    headline: "Local-SEO", headlineAccent: "Hub.",
+    tagline: "AI-first Sichtbarkeits-Plattform für lokale Unternehmen — Rankings, Reviews, Citations in einem Score.",
+    chips: [
+      { text: "Local SEO", variant: "dot" },
+      { text: "AI-first", variant: "plain" },
+      { text: "DSGVO", variant: "accent" },
+    ],
+  },
+  {
+    label: "Product OG — prod-or-pretend",
+    dest: "public/og/prod-or-pretend.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200,
+    headline: "Prod or", headlineAccent: "Pretend.",
+    tagline: "Ein Qualitäts-Spiegel für Tech-Hype — prüft „an-einem-Wochenende-gebaut\"-Claims gegen echte Produktionsstandards.",
+    chips: [
+      { text: "Quality Mirror", variant: "dot" },
+      { text: "Tech-Hype-Check", variant: "plain" },
+      { text: "Open Standards", variant: "accent" },
+    ],
+  },
+  {
+    label: "Product OG — trustscope",
+    dest: "public/og/trustscope.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200,
+    headline: "Trust", headlineAccent: "Scope.",
+    tagline: "Deterministischer Vier-Säulen-Trust-Report für öffentliche GitHub-Repos — Sicherheit, Governance, Community.",
+    chips: [
+      { text: "Trust Report", variant: "dot" },
+      { text: "GitHub", variant: "plain" },
+      { text: "MIT / Open Source", variant: "accent" },
+    ],
+  },
+  {
+    label: "Product OG — obsidian-vault-autopilot",
+    dest: "public/og/obsidian-vault-autopilot.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200,
+    headline: "Obsidian Vault", headlineAccent: "Autopilot.",
+    tagline: "Open-Source-Automatisierung für Wissens-Vaults in Obsidian — sortiert, benennt, taggt und reichert Notizen an.",
+    chips: [
+      { text: "Claude Skill", variant: "dot" },
+      { text: "Obsidian", variant: "plain" },
+      { text: "Open Source", variant: "accent" },
+    ],
+  },
+  {
+    label: "Product OG — social-scrapers",
+    dest: "public/og/social-scrapers.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200,
+    headline: "Social", headlineAccent: "Scrapers.",
+    tagline: "Obsidian-Skills für Instagram-, LinkedIn- und X-Profile — neutrale Markdown-Briefings statt Engagement-Bait.",
+    chips: [
+      { text: "Obsidian Skills", variant: "dot" },
+      { text: "Apify + X API", variant: "plain" },
+      { text: "Markdown", variant: "accent" },
+    ],
+  },
+  {
+    label: "Product OG — imap-mailbox-cleanup",
+    dest: "public/og/imap-mailbox-cleanup.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200,
+    headline: "Mailbox Triage.", headlineAccent: "Dry-run first.",
+    tagline: "Hybrid CLI + Claude-Skill für IONOS-IMAP-Postfach-Triage — dry-run by default, audit-logged.",
+    chips: [
+      { text: "CLI + Claude Skill", variant: "dot" },
+      { text: "Dry-run", variant: "plain" },
+      { text: "MIT / Open Source", variant: "accent" },
+    ],
+  },
+  {
+    label: "Product OG — ai-phrase-check",
+    dest: "public/og/ai-phrase-check.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200,
+    headline: "AI Phrase", headlineAccent: "Check.",
+    tagline: "Erkennt KI-typische Floskeln in deutschem und englischem Text.",
+    chips: [
+      { text: "Claude Skill", variant: "dot" },
+      { text: "DE + EN", variant: "plain" },
+      { text: "MIT / Open Source", variant: "accent" },
+    ],
+  },
 ];
