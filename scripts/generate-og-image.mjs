@@ -77,11 +77,16 @@ const DESIGN = {
  * Brand block is always "NECKARSHORE.AI" — identical on every card, no variation.
  */
 function renderCard(card) {
-  const { width, height, padding, headline, headlineAccent, tagline, chips } = card;
+  const { width, height, padding, headline, headlineAccent, tagline, chips, accentInline } = card;
   const D = DESIGN;
+  const taglineSize = card.taglineSize ?? D.taglineSize;
 
+  // accentInline: headline + accent on ONE line (accent keeps the cyan color).
+  // Default (no flag): accent renders as a second line, as the GitHub/site cards expect.
   const headlineHtml = headlineAccent
-    ? `${escapeHtml(headline)}<br/><span class="accent">${escapeHtml(headlineAccent)}</span>`
+    ? accentInline
+      ? `${escapeHtml(headline)}${card.accentJoin ?? " "}<span class="accent">${escapeHtml(headlineAccent)}</span>`
+      : `${escapeHtml(headline)}<br/><span class="accent">${escapeHtml(headlineAccent)}</span>`
     : escapeHtml(headline).replace(/\n/g, "<br/>");
 
   const chipsHtml = chips
@@ -171,7 +176,7 @@ function renderCard(card) {
     .tagline {
       margin-top: ${D.taglineMarginTop}px;
       font-family: "Inter", sans-serif;
-      font-size: ${D.taglineSize}px;
+      font-size: ${taglineSize}px;
       line-height: 1.35;
       color: ${D.color.textTertiary};
       font-weight: 400;

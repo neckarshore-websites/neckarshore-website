@@ -226,14 +226,16 @@ export const cards = [
   },
 
   // ─── Product OG cards (public/og/<slug>.jpg) — per-product social preview, 1200x630 ───
-  // Taglines copied verbatim from src/lib/portfolio.ts. Chips are DESCRIPTIVE only
-  // (category/theme), never an availability claim. Set: L-NECK-OG-IMAGES-PER-PRODUCT (11 indexable).
+  // v2 (2026-07-10, Founder review): single-line headline with INLINE cyan accent
+  // (accentInline) + a longer 2–3 line explanatory tagline (taglineSize 27). Chips are
+  // DESCRIPTIVE only (category/theme), never an availability claim. Card taglines now diverge
+  // from portfolio.ts by design (marketing surface). Set: L-NECK-OG-IMAGES-PER-PRODUCT (11 indexable).
   {
     label: "Product OG — omnopsis",
     dest: "public/og/omnopsis.jpg",
-    width: 1200, height: 630, padding: 72, maxKB: 200,
-    headline: "Omnopsis", headlineAccent: "Documentor+X.",
-    tagline: "KI-first Documentation Engine für Engineering-Teams — fail-closed, BYOLLM, DSGVO-by-Design.",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "Omnopsis", headlineAccent: "Documentor", accentInline: true,
+    tagline: "Die KI-first Documentation Engine für Software-Engineering-Teams. Hält technische Doku automatisch am Code aktuell — fail-closed, mit eigenem LLM (BYOLLM), DSGVO-by-Design.",
     chips: [
       { text: "KI-first", variant: "dot" },
       { text: "BYOLLM", variant: "plain" },
@@ -243,11 +245,11 @@ export const cards = [
   {
     label: "Product OG — clearpath",
     dest: "public/og/clearpath.jpg",
-    width: 1200, height: 630, padding: 72, maxKB: 200,
-    headline: "ClearPath.",
-    tagline: "Eine mentale Firewall gegen kognitive Verzerrungen.",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "Clear", headlineAccent: "Path.", accentInline: true, accentJoin: "",
+    tagline: "Eine mentale Firewall gegen kognitive Verzerrungen. Macht Bias in Entscheidungen sichtbar, bevor er teuer wird — strukturierte Gegen-Fragen statt Bauchgefühl.",
     chips: [
-      { text: "Decision Support", variant: "dot" },
+      { text: "Bias-Check", variant: "dot" },
       { text: "Web-App", variant: "plain" },
       { text: "DSGVO", variant: "accent" },
     ],
@@ -255,9 +257,9 @@ export const cards = [
   {
     label: "Product OG — snakeoil-check",
     dest: "public/og/snakeoil-check.jpg",
-    width: 1200, height: 630, padding: 72, maxKB: 200,
-    headline: "Snakeoil", headlineAccent: "Check.",
-    tagline: "Neutraler KI-Reality-Check für Online-Coachings und High-Ticket-Angebote.",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "Snakeoil", headlineAccent: "Check.", accentInline: true,
+    tagline: "Neutraler KI-Reality-Check für Online-Coachings und High-Ticket-Angebote. Prüft Versprechen gegen Substanz — und zeigt, ob echtes Handwerk dahintersteckt oder heiße Luft.",
     chips: [
       { text: "KI-Reality-Check", variant: "dot" },
       { text: "Neutral", variant: "plain" },
@@ -267,9 +269,9 @@ export const cards = [
   {
     label: "Product OG — phonesis",
     dest: "public/og/phonesis.jpg",
-    width: 1200, height: 630, padding: 72, maxKB: 200,
-    headline: "Phonesis", headlineAccent: "Voicebank.",
-    tagline: "Ein Archiv echter menschlicher Stimmen für den deutschen Markt.",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "Phonesis", headlineAccent: "Voicebank.", accentInline: true,
+    tagline: "Ein Archiv echter menschlicher Stimmen für den deutschen Markt. Bewahrt authentische Sprecher als Gegengewicht zur synthetischen KI-Stimme — mit Einwilligung und DSGVO-Konformität.",
     chips: [
       { text: "Voice Archive", variant: "dot" },
       { text: "Human Voices", variant: "plain" },
@@ -279,9 +281,9 @@ export const cards = [
   {
     label: "Product OG — local-seo-hub",
     dest: "public/og/local-seo-hub.jpg",
-    width: 1200, height: 630, padding: 72, maxKB: 200,
-    headline: "Local-SEO", headlineAccent: "Hub.",
-    tagline: "AI-first Sichtbarkeits-Plattform für lokale Unternehmen — Rankings, Reviews, Citations in einem Score.",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "Local-SEO", headlineAccent: "Hub.", accentInline: true,
+    tagline: "Die AI-first Sichtbarkeits-Plattform für lokale Unternehmen. Bündelt Rankings, Reviews und Citations in einem Score — und zeigt den nächsten Schritt zu mehr lokaler Sichtbarkeit.",
     chips: [
       { text: "Local SEO", variant: "dot" },
       { text: "AI-first", variant: "plain" },
@@ -291,9 +293,9 @@ export const cards = [
   {
     label: "Product OG — prod-or-pretend",
     dest: "public/og/prod-or-pretend.jpg",
-    width: 1200, height: 630, padding: 72, maxKB: 200,
-    headline: "Prod or", headlineAccent: "Pretend.",
-    tagline: "Ein Qualitäts-Spiegel für Tech-Hype — prüft „an-einem-Wochenende-gebaut\"-Claims gegen echte Produktionsstandards.",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "Prod or", headlineAccent: "Pretend.", accentInline: true,
+    tagline: "Ein Qualitäts-Spiegel für Tech-Hype. Prüft „an-einem-Wochenende-gebaut\"-Claims gegen echte Produktionsstandards — belastbares Handwerk statt Screenshot-Demo.",
     chips: [
       { text: "Quality Mirror", variant: "dot" },
       { text: "Tech-Hype-Check", variant: "plain" },
@@ -303,9 +305,9 @@ export const cards = [
   {
     label: "Product OG — trustscope",
     dest: "public/og/trustscope.jpg",
-    width: 1200, height: 630, padding: 72, maxKB: 200,
-    headline: "Trust", headlineAccent: "Scope.",
-    tagline: "Deterministischer Vier-Säulen-Trust-Report für öffentliche GitHub-Repos — Sicherheit, Governance, Community.",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "Trust", headlineAccent: "Scope.", accentInline: true, accentJoin: "",
+    tagline: "Ein deterministischer Trust-Report für öffentliche GitHub-Repos. Bewertet vier Säulen — Sicherheit, Governance, Aktivität, Community — nachvollziehbar und reproduzierbar, ohne Blackbox.",
     chips: [
       { text: "Trust Report", variant: "dot" },
       { text: "GitHub", variant: "plain" },
@@ -315,9 +317,9 @@ export const cards = [
   {
     label: "Product OG — obsidian-vault-autopilot",
     dest: "public/og/obsidian-vault-autopilot.jpg",
-    width: 1200, height: 630, padding: 72, maxKB: 200,
-    headline: "Obsidian Vault", headlineAccent: "Autopilot.",
-    tagline: "Open-Source-Automatisierung für Wissens-Vaults in Obsidian — sortiert, benennt, taggt und reichert Notizen an.",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "Obsidian Vault", headlineAccent: "Autopilot.", accentInline: true,
+    tagline: "Wissens-Vault-Automatisierung für 2nd Brains in Obsidian. Sortiert den Inbox, benennt Dateien, taggt und reichert Notizen an — damit du denkst statt ablegst. Open-Source für Claude Code.",
     chips: [
       { text: "Claude Skill", variant: "dot" },
       { text: "Obsidian", variant: "plain" },
@@ -327,9 +329,9 @@ export const cards = [
   {
     label: "Product OG — social-scrapers",
     dest: "public/og/social-scrapers.jpg",
-    width: 1200, height: 630, padding: 72, maxKB: 200,
-    headline: "Social", headlineAccent: "Scrapers.",
-    tagline: "Obsidian-Skills für Instagram-, LinkedIn- und X-Profile — neutrale Markdown-Briefings statt Engagement-Bait.",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "Social", headlineAccent: "Scrapers.", accentInline: true,
+    tagline: "Obsidian-Skills für Instagram-, LinkedIn- und X-Profile. Machen aus Posts und Threads neutrale Markdown-Zusammenfassungen & Briefings — recherchierbar im Vault statt im Engagement-Feed.",
     chips: [
       { text: "Obsidian Skills", variant: "dot" },
       { text: "Apify + X API", variant: "plain" },
@@ -339,9 +341,9 @@ export const cards = [
   {
     label: "Product OG — imap-mailbox-cleanup",
     dest: "public/og/imap-mailbox-cleanup.jpg",
-    width: 1200, height: 630, padding: 72, maxKB: 200,
-    headline: "Mailbox Triage.", headlineAccent: "Dry-run first.",
-    tagline: "Hybrid CLI + Claude-Skill für IONOS-IMAP-Postfach-Triage — dry-run by default, audit-logged.",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "Mailbox", headlineAccent: "Cleanup.", accentInline: true,
+    tagline: "Hybrid aus CLI und Claude-Skill für die IMAP-Postfach-Triage. Räumt überfüllte Postfächer auf — dry-run by default, soft-delete, audit-logged. Erprobt: 7.982 → 690 Mails ohne Verlust.",
     chips: [
       { text: "CLI + Claude Skill", variant: "dot" },
       { text: "Dry-run", variant: "plain" },
@@ -351,9 +353,9 @@ export const cards = [
   {
     label: "Product OG — ai-phrase-check",
     dest: "public/og/ai-phrase-check.jpg",
-    width: 1200, height: 630, padding: 72, maxKB: 200,
-    headline: "AI Phrase", headlineAccent: "Check.",
-    tagline: "Erkennt KI-typische Floskeln in deutschem und englischem Text.",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "AI Phrase", headlineAccent: "Check.", accentInline: true,
+    tagline: "Erkennt KI-typische Floskeln in deutschem und englischem Text. Markiert die verräterischen Wendungen generierter Sprache — damit dein Text nach dir klingt, nicht nach dem Modell.",
     chips: [
       { text: "Claude Skill", variant: "dot" },
       { text: "DE + EN", variant: "plain" },
