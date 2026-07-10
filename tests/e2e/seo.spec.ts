@@ -237,6 +237,35 @@ test.describe("SEO Basics", () => {
     });
   }
 
+  // --- Per-product OG images (L-NECK-OG-IMAGES-PER-PRODUCT) ---
+  // Each indexable product page must carry its OWN /og/<slug>.jpg (not the shared
+  // /og-image.jpg) on both og:image and twitter:image, and the asset must resolve.
+  const PRODUCT_OG_SLUGS = [
+    "omnopsis",
+    "clearpath",
+    "snakeoil-check",
+    "phonesis",
+    "local-seo-hub",
+    "prod-or-pretend",
+    "trustscope",
+    "obsidian-vault-autopilot",
+    "social-scrapers",
+    "imap-mailbox-cleanup",
+    "ai-phrase-check",
+  ];
+
+  for (const [i, slug] of PRODUCT_OG_SLUGS.entries()) {
+    test(`TC-SEO-0${46 + i}: /products/${slug} has its own per-product og:image`, async ({ page }) => {
+      const res = await page.goto(`/products/${slug}`);
+      expect(res?.status()).toBeLessThan(400);
+      const expected = new RegExp(`/og/${slug}\\.jpg`);
+      await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", expected);
+      await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute("content", expected);
+      const asset = await page.request.get(`/og/${slug}.jpg`);
+      expect(asset.status()).toBe(200);
+    });
+  }
+
   // --- /products surface hygiene (SEO/GEO audit 2026-06-28, Gate-3 mechanical fixes) ---
 
   // Helper: collect every JSON-LD @type rendered on a page (handles @graph + standalone nodes).

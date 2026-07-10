@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SkillDetailPage, SkillSection, SkillChipRow } from "@/components/SkillDetailPage";
 import { pageMetadata } from "@/lib/seo";
+import { productOgImage } from "@/lib/product-og";
 import { entityId } from "@/lib/schema/webpage";
 
 const REPO = "https://github.com/neckarshore-skills/imap-mailbox-cleanup";
@@ -17,6 +18,7 @@ export const metadata: Metadata = pageMetadata({
   title: "IMAP Mailbox Cleanup — regelbasierte Postfach-Triage | neckarshore.ai",
   description: META_DESCRIPTION,
   path: "/products/imap-mailbox-cleanup",
+  image: productOgImage("imap-mailbox-cleanup"),
 });
 
 const pieces = [

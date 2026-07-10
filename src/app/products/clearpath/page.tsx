@@ -9,6 +9,7 @@ import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { ProductFaq } from "@/components/ProductFaq";
 import { ExportButton } from "@/components/export/ExportButton";
 import { pageMetadata } from "@/lib/seo";
+import { productOgImage } from "@/lib/product-og";
 import { getProductEntry } from "@/lib/content/products";
 import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { faqForSlug } from "@/lib/product-faqs";
@@ -25,6 +26,7 @@ export function generateMetadata(): Metadata {
     title: "ClearPath — Mentale Firewall gegen Verzerrungen | neckarshore.ai",
     description: entry.metaDescription ?? entry.definition,
     path: `/products/${SLUG}`,
+    image: productOgImage(SLUG),
   });
 }
 
