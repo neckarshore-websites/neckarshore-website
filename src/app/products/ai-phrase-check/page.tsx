@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { SkillCard } from "@/components/SkillCard";
 import { pageMetadata } from "@/lib/seo";
+import { productOgImage } from "@/lib/product-og";
 import { entityId } from "@/lib/schema/webpage";
 import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { SKILL_CARDS } from "@/lib/skill-cards";
@@ -33,6 +34,7 @@ export const metadata: Metadata = pageMetadata({
   title: "AI Phrase Check — KI-Floskeln in DE & EN erkennen | neckarshore.ai",
   description: META_DESCRIPTION,
   path: "/products/ai-phrase-check",
+  image: productOgImage("ai-phrase-check"),
 });
 
 // The three-stage flow (source: repo README — Detect → Suggest → Apply, user gates).

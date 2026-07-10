@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { SkillCard } from "@/components/SkillCard";
 import { pageMetadata } from "@/lib/seo";
+import { productOgImage } from "@/lib/product-og";
 import { entityId } from "@/lib/schema/webpage";
 import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { SKILL_CARDS } from "@/lib/skill-cards";
@@ -27,6 +28,7 @@ export const metadata: Metadata = pageMetadata({
   title: "Obsidian Vault Autopilot — Open-Source-Automation | neckarshore.ai",
   description: META_DESCRIPTION,
   path: "/products/obsidian-vault-autopilot",
+  image: productOgImage("obsidian-vault-autopilot"),
 });
 
 // The four launch-scope skills (source: repo README, validated/stable + one beta).

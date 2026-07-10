@@ -20,14 +20,18 @@ export function pageMetadata({
   description,
   path,
   type = "website",
+  image,
 }: {
   title: string;
   description: string;
   /** Absolute path beginning with `/`, e.g. `/products/clearpath`. */
   path: string;
   type?: "website" | "article";
+  /** Per-page OG/social image. Falls back to the shared site OG when omitted. */
+  image?: { url: string; width: number; height: number; alt: string };
 }): Metadata {
   const url = `${BASE_URL}${path}`;
+  const og = image ?? OG_IMAGE;
   return {
     title,
     description,
@@ -39,13 +43,13 @@ export function pageMetadata({
       siteName: "neckarshore.ai",
       locale: "de_DE",
       type,
-      images: [OG_IMAGE],
+      images: [og],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [OG_IMAGE.url],
+      images: [og.url],
     },
   };
 }

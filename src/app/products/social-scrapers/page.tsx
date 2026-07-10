@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SkillDetailPage, SkillSection, SkillChipRow } from "@/components/SkillDetailPage";
 import { pageMetadata } from "@/lib/seo";
+import { productOgImage } from "@/lib/product-og";
 import { entityId } from "@/lib/schema/webpage";
 
 const DEFINITION =
@@ -15,6 +16,7 @@ export const metadata: Metadata = pageMetadata({
   title: "Obsidian Social Scrapers — Profile als Briefings | neckarshore.ai",
   description: META_DESCRIPTION,
   path: "/products/social-scrapers",
+  image: productOgImage("social-scrapers"),
 });
 
 const scrapers = [

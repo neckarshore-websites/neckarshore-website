@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { ProductFaq } from "@/components/ProductFaq";
 import { pageMetadata } from "@/lib/seo";
+import { productOgImage } from "@/lib/product-og";
 import { entityId } from "@/lib/schema/webpage";
 import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { faqForSlug } from "@/lib/product-faqs";
@@ -26,6 +27,7 @@ export const metadata: Metadata = pageMetadata({
   title: `${BRAND.PRODUCT_NAME} — KI-first Documentation Engine | neckarshore.ai`,
   description: META_DESCRIPTION,
   path: "/products/omnopsis",
+  image: productOgImage("omnopsis"),
 });
 
 // Commercial product, in development — a valid SoftwareApplication entity without
