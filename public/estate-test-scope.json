@@ -1,8 +1,14 @@
 {
+  "audited_floor": {
+    "applied": true,
+    "audited": "2026-07-10",
+    "source": "Lenin estate recount 2026-07-10 (drift-targeted fan-out wf_4fcf8c92-3a7: 18 repos re-measured on fresh clones at pinned origin/main SHAs + 7 inherited SHA-re-pinned; strict additive convention: executed AND CI-gated AND disjoint AND evidence-backed; adversarially verified, 0 refuted)",
+    "total": 3391
+  },
   "byType": {
-    "e2e": 467,
+    "e2e": 469,
     "integration": 184,
-    "unit": 1682
+    "unit": 1710
   },
   "endpoints": 96,
   "expected": 16,
@@ -34,7 +40,7 @@
     {
       "audited_sha": null,
       "byType": {
-        "e2e": 40,
+        "e2e": 42,
         "integration": 19,
         "unit": 8
       },
@@ -42,7 +48,7 @@
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 67
+      "total": 69
     },
     {
       "audited_sha": null,
@@ -57,18 +63,18 @@
       "total": 241
     },
     {
-      "audited_sha": "a2d3d31ea2759c99d43773760286d5c4391124a2",
+      "audited_sha": "ca15581ce5827dfb97ab8de22fe91fb8ef450ffe",
       "byType": {
         "e2e": 48,
-        "unit": 190
+        "unit": 210
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "TrustScope",
-      "total": 238
+      "total": 258
     },
     {
-      "audited_sha": "d8752bda52ead3de8eb1521481951f9227fc23c4",
+      "audited_sha": "3cfe0506d29b3c3a41f778473b8ff6eabe96dffd",
       "byType": {
         "unit": 34
       },
@@ -78,18 +84,18 @@
       "total": 34
     },
     {
-      "audited_sha": "0276517164a843fc8395fa6ae795404008aca24b",
+      "audited_sha": "722090e2a72bf55714e1552aad01ab81ae345a0a",
       "byType": {
         "integration": 4,
-        "unit": 167
+        "unit": 175
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "IMAP Mailbox Cleanup",
-      "total": 171
+      "total": 179
     },
     {
-      "audited_sha": "4191255f3762bc70a83fa045c50ce69fc30a9c00",
+      "audited_sha": "44cd328372801a015bbe6e67eebb1596f98db28c",
       "byType": {
         "unit": 293
       },
@@ -119,7 +125,7 @@
       "total": 3
     },
     {
-      "audited_sha": "d0f5a4b91bed3c10dcb76c9c5789f530552d1ef9",
+      "audited_sha": "ecb2b5c9eceb4e9f3711545e4e5e4d96559bf9d6",
       "byType": {
         "e2e": 54
       },
@@ -186,7 +192,7 @@
       "total": 227
     },
     {
-      "audited_sha": "a1561cb",
+      "audited_sha": "a1561cb10308036f22d0832950e47aefe534625a",
       "byType": {},
       "endpoints": 0,
       "lenses": {},
@@ -247,6 +253,6 @@
   ],
   "reporting": 16,
   "repos": 22,
-  "total": 2752,
-  "updatedAt": "2026-07-10T07:27:34Z"
+  "total": 3391,
+  "updatedAt": "2026-07-10T21:34:58Z"
 }
