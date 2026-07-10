@@ -9,6 +9,7 @@ import { ProductDetailNav } from "@/components/ProductDetailNav";
 import { ProductFaq } from "@/components/ProductFaq";
 import { ExportButton } from "@/components/export/ExportButton";
 import { pageMetadata } from "@/lib/seo";
+import { productOgImage } from "@/lib/product-og";
 import { breadcrumbTrailForSlug, getItemBySlug } from "@/lib/portfolio";
 import { getProductEntry } from "@/lib/content/products";
 import { faqForSlug } from "@/lib/product-faqs";
@@ -60,6 +61,7 @@ export function productDetailMetadata({
       title,
       description: entry.metaDescription ?? entry.definition,
       path: `/products/${slug}`,
+      image: productOgImage(slug),
     }),
     robots: { index: !noindex, follow: true },
   };
