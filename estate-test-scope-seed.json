@@ -4,7 +4,7 @@
   "floor": true,
   "repos": [
     { "repo": "neckarshore-skills/obsidian-vault-autopilot", "total": 496, "basis": "floor (node:test 245 + bash 251)", "audited_sha": null, "sha_note": "no per-repo Lenin Durchstich; floor count from the coverage matrix, no auditable SHA" },
-    { "repo": "neckarshore-websites/neckarshore-website", "total": 308, "basis": "4-runner sum", "audited_sha": "a1561cb", "sha_note": "2026-06-30-lenin-ud5-reconcile — runner-sum 308 @a1561cb (e2e 265 + node/tsx 43)" },
+    { "repo": "neckarshore-websites/neckarshore-website", "total": 308, "basis": "4-runner sum", "audited_sha": "a1561cb10308036f22d0832950e47aefe534625a", "sha_note": "2026-06-30-lenin-ud5-reconcile — runner-sum 308 @a1561cb (e2e 265 + node/tsx 43); full-SHA normalized 2026-07-10 for served-artifact consistency" },
     { "repo": "neckarshore-mmps/snakeoil-check", "total": 241, "basis": "playwright (4x2 devices) + unit", "audited_sha": null, "sha_note": "Durchstich deferred — dirty working tree at audit time = no clean SHA (2026-06-20-lenin-contracts §LENIN-DURCHSTICH-4)" },
     { "repo": "omnopsis-ai/omnopsis-frontend", "total": 232, "basis": "vitest 204 + e2e 23 + smoke 5", "audited_sha": "725e66f", "sha_note": "2026-06-21-lenin-omnopsis-frontend Durchstich — 232 @725e66f (tree-identical to origin/main)" },
     { "repo": "neckarshore-skills/imap-mailbox-cleanup", "total": 171, "basis": "pytest (CI runs 167)", "audited_sha": null, "sha_note": "no per-repo Lenin Durchstich; count from the coverage matrix, no auditable SHA" },
