@@ -21,16 +21,7 @@ export function breakdownLine(
   return parts.length ? parts.join(" · ") : null;
 }
 
-/**
- * Floor a test total to the nearest 100 below — the PUBLIC estate count is published as a
- * round, floor-framed number (e.g. `2.611 → 2.600`), never the over-precise figure (backlog
- * #244). Paired with the load-bearing "+" the tile appends when `testScope.floor` is set, so
- * the rendered "2.600+" always under-states the true count: honest by construction, and never
- * above the floor. Totals < 100 are returned truncated (no zeroing of a small real count);
- * non-positive / non-finite → 0.
- */
-export function flooredTotal(total: number): number {
-  if (!Number.isFinite(total) || total <= 0) return 0;
-  if (total < 100) return Math.trunc(total);
-  return Math.floor(total / 100) * 100;
-}
+// flooredTotal (round-down-to-100 display framing, backlog #244) was REMOVED 2026-07-10:
+// Founder directive — the tile shows the EXACT audited figure (e.g. "3.391+"), never a rounded
+// one; a rounded number reads as pseudo-precision. The load-bearing "+" stays (testScope.floor):
+// the exact figure is still a FLOOR of the true estate count.

@@ -158,7 +158,10 @@ jobs:
           # Pass the committed floor seed (estate-test-scope-seed.json) as the 3rd arg so repos
           # that don't yet self-report still contribute to the PUBLIC estate count (backlog #244).
           # Live producers win by slug → no double-count; the number auto-corrects as repos
-          # self-report. Estate floor today = 588 live (omnopsis-backend) + 2.023 seed = 2.611.
+          # self-report. The seed also carries `audited_floor` (Founder directive 2026-07-10):
+          # total = max(live+seed sum, audited_floor.total) — the tile shows the exact audited
+          # estate figure while per-repo pipeline coverage catches up; self-retiring once the
+          # organic sum passes it (aggregate-test-scope.sh emits `applied` provenance).
           TEST_SCOPE=$(bash scripts/aggregate-test-scope.sh stats-config.json /tmp/stats estate-test-scope-seed.json)
 
           # Apply the disclosure allow-list at the SOURCE (#525 → Pass-2a disclosure-config wiring).
@@ -190,8 +193,10 @@ jobs:
           REPORTING=$(echo "$TEST_SCOPE" | jq '.reporting')
           EXPECTED=$(echo "$TEST_SCOPE" | jq '.expected')
           # repos (estate count) + floor drive the public tile (#244); kept alongside the
-          # internal reporting/expected provenance fields.
-          TEST_SCOPE_SUBSET=$(echo "$TEST_SCOPE" | jq '{total, byType, reporting, expected, missing, repos, floor}')
+          # internal reporting/expected provenance fields. audited_floor (no slugs — TC-CNT-083's
+          # two-slug-field assumption holds) rides along so stats.json carries the same headline
+          # provenance as estate-test-scope.json; jq emits null when the seed has none.
+          TEST_SCOPE_SUBSET=$(echo "$TEST_SCOPE" | jq '{total, byType, reporting, expected, missing, repos, floor, audited_floor}')
           # `unstamped` is a TRANSIENT pipeline field (drives the stderr WARN + the job summary,
           # which read the in-memory $TEST_SCOPE) — it is deliberately NOT persisted to the served
           # artifact. Stripping it keeps the served schema unchanged AND keeps per_repo[].repo +

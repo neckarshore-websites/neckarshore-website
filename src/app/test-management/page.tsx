@@ -6,7 +6,6 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { PageSchema } from "@/components/PageSchema";
 import { pageMetadata } from "@/lib/seo";
-import { flooredTotal } from "@/lib/stats-breakdown";
 import { repoType } from "@/lib/repo-types";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
@@ -21,9 +20,10 @@ const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
  * are DATA-BOUND to the same single source as the tile (public/estate-test-scope.json) so the
  * page can never contradict its own tile and the count moves with the next Durchstich.
  *
- * Honesty guardrails (brief §4): phonesis is absent from the source data (never public); the
- * re-check catches are framed as METHOD only (no internal specifics); the aggregate is rounded
- * down (2.600+, never the exact 2.611 as a hard claim). Per §5(b): Top-N + rest-rollup, so the
+ * Honesty guardrails (brief §4, updated 2026-07-10): the re-check catches are framed as METHOD
+ * only (no internal specifics); the headline is the EXACT audited figure + load-bearing "+"
+ * (Founder directive 2026-07-10 — supersedes the #244 round-down framing; the exact figure is
+ * still a floor, see `audited_floor` in the source JSON). Per §5(b): Top-N + rest-rollup, so the
  * 0-test scaffold repo and the one known-red repo (#257) fold into "und N weitere".
  */
 
@@ -50,10 +50,9 @@ function loadEstateScope(): EstateScope {
   };
 }
 
-/** Rounded-down headline number: "2.600+" (down to 100, with the load-bearing "+"). */
+/** Exact headline number + load-bearing "+" when the total is a floor (e.g. "3.391+"). */
 function headlineTotal(scope: EstateScope): string {
-  const n = scope.floor ? flooredTotal(scope.total) : scope.total;
-  return n.toLocaleString("de-DE") + (scope.floor ? "+" : "");
+  return scope.total.toLocaleString("de-DE") + (scope.floor ? "+" : "");
 }
 
 const TOP_N = 6;

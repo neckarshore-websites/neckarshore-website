@@ -79,13 +79,14 @@ test.describe("Stats Tiles @smoke", () => {
     }
   });
 
-  // TC-STAT-009 (#244): the Tests tile big number is DATA-DRIVEN off public/stats.json — never a
-  // hardcoded literal. Reads the JSON, derives the expected rounded-down display, and asserts the
-  // rendered tile matches. If anyone hardcodes "2.600+", a change to stats.json.testScope would
+  // TC-STAT-009 (#244, exact-figure rev. 2026-07-10): the Tests tile big number is DATA-DRIVEN
+  // off public/stats.json — never a hardcoded literal. The tile renders the EXACT total (Founder
+  // directive 2026-07-10 — the old round-down-to-100 framing is retired) + the load-bearing "+"
+  // when floor-framed. If anyone hardcodes the figure, a change to stats.json.testScope would
   // make this fail → the regression guard the brief asks for. (#245 follow-up: the sub-line is no
   // longer the repo count — that was dropped to avoid the 20-vs-31 contradiction — but a "mehr"
   // cue into /test-management.)
-  test("TC-STAT-009: Tests tile renders the rounded-down estate total from stats.json (no literal)", async ({
+  test("TC-STAT-009: Tests tile renders the EXACT estate total from stats.json (no literal, no rounding)", async ({
     page,
   }) => {
     const stats = JSON.parse(
@@ -94,15 +95,14 @@ test.describe("Stats Tiles @smoke", () => {
     const total: number = stats.testScope?.total ?? stats.tests;
     const isFloor: boolean = stats.testScope?.floor ?? false;
 
-    // Mirror src/lib/stats-breakdown.ts flooredTotal: round down to 100 when floor-framed.
-    const flooredDisplay = isFloor ? Math.floor(total / 100) * 100 : total;
-    const expectedValue = flooredDisplay.toLocaleString("de-DE") + (isFloor ? "+" : "");
+    // Exact figure + load-bearing "+" when the total is a floor (e.g. "3.391+").
+    const expectedValue = total.toLocaleString("de-DE") + (isFloor ? "+" : "");
 
     await page.goto("/");
     await page.waitForTimeout(1500); // animation settles on the target
 
     const value = await getStatValue(page, "Automatisierte Tests");
-    expect(value).toBe(expectedValue); // e.g. "2.600+" — exact, derived from JSON not a literal
+    expect(value).toBe(expectedValue); // e.g. "3.391+" — exact, derived from JSON not a literal
 
     // Sub-line is now the "mehr" cue into the detail page (no repo count, no per-type split).
     const subline = page.getByTestId("tests-subline");

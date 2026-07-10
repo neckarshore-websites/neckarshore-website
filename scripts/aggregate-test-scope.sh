@@ -83,12 +83,21 @@ MISSING_JSON=$(sort "$MISSING_FILE" | jq -R . | jq -s .)
 LIVE_SLUGS=$(jq -s -c '[.[].repo]' "$PER_REPO_FILE")
 SEED_FLOOR=false
 SEED_JSON='[]'
+AUDITED_FLOOR='null'
 if [ -n "$SEED" ]; then
   if [ ! -f "$SEED" ]; then
     echo "ERROR: seed file '$SEED' not found" >&2
     exit 1
   fi
   SEED_FLOOR=$(jq '.floor // false' "$SEED")
+  # Audited floor (optional seed field `audited_floor` — Founder directive 2026-07-10): a Lenin
+  # estate-recount total ({total, audited, source}) that per-repo pipeline coverage has not caught
+  # up to yet (under-reporting emitters / not-yet-reporting repos). Output total = max(live+seed
+  # sum, audited_floor.total); the field is emitted with `applied: true|false` so consumers (and
+  # the TC-CNT-085 honesty invariant) can verify WHY the headline exceeds Σ per_repo. Self-
+  # retiring: once live producers sum past it, `applied` flips false and the organic number leads.
+  # Carries NO repo slugs (per_repo[] + missing[] stay the only slug-bearing fields, TC-CNT-083).
+  AUDITED_FLOOR=$(jq -c '.audited_floor // null' "$SEED")
   # Propagate the seed's audited_sha (Test Charter: the estate count is auditable, SHA-stamped).
   # A seed row that a Lenin Durchstich covered carries its SHA here → it reaches the rollup. An
   # un-audited row stays null (do NOT invent SHAs). sha_note is INTERNAL provenance, never copied
@@ -109,6 +118,7 @@ OUT=$(jq -s -S \
   --argjson missing "$MISSING_JSON" \
   --argjson seed "$SEED_JSON" \
   --argjson floor "$SEED_FLOOR" \
+  --argjson afloor "$AUDITED_FLOOR" \
   '. as $live
   | ($live + $seed) as $merged
   | {
@@ -122,7 +132,12 @@ OUT=$(jq -s -S \
     repos: ($merged | length),
     unstamped: ([$merged[] | select(.audited_sha == null) | .repo] | sort),
     per_repo: $merged
-  }' "$PER_REPO_FILE")
+  }
+  | (if $afloor == null then .
+     else . + {
+       audited_floor: ($afloor + { applied: (($afloor.total // 0) > .total) }),
+       total: ([ .total, ($afloor.total // 0) ] | max)
+     } end)' "$PER_REPO_FILE")
 
 # --- SHA-stamp coverage warn (Test Charter: the estate count is auditable, SHA-stamped) ---
 # A merged row with audited_sha:null is UN-STAMPED (no covering Durchstich, or a live producer

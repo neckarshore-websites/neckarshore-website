@@ -231,6 +231,48 @@ test("seed adds non-reporting repos to total + repos count; floor propagates; re
   assert.ok(json.per_repo.some((r) => r.repo === "neckarshore-mmps/clearpath-52" && r.total === 0), "0-test seed repo is kept (so the count is complete)");
 });
 
+// ── Audited floor (Founder directive 2026-07-10) ─────────────────────────────
+
+test("audited_floor ABOVE the merged sum → total = floor, applied:true, provenance emitted", () => {
+  const { json, status } = runAggregator(
+    [{ owner: "live", name: "a", statsPath: "s.json", stats: { repo: "live/a", tests: { total: 5, byType: { unit: 5 } } } }],
+    {
+      floor: true,
+      repos: [{ repo: "seed/b", total: 10 }],
+      audited_floor: { total: 100, audited: "2026-07-10", source: "lenin estate recount" },
+    },
+  );
+  assert.equal(status, 0);
+  assert.equal(json.total, 100, "headline = max(5 live + 10 seed, 100 audited floor)");
+  assert.equal(json.audited_floor.applied, true, "the floor is the reason the headline exceeds Σ per_repo");
+  assert.equal(json.audited_floor.audited, "2026-07-10", "date provenance propagates");
+  assert.equal(json.audited_floor.source, "lenin estate recount", "source provenance propagates");
+  const sum = json.per_repo.reduce((s, r) => s + r.total, 0);
+  assert.equal(sum, 15, "per_repo rows stay the real measured/seeded values — never inflated to match");
+});
+
+test("audited_floor BELOW the merged sum → organic total leads, applied:false (self-retiring)", () => {
+  const { json } = runAggregator(
+    [{ owner: "live", name: "a", statsPath: "s.json", stats: { repo: "live/a", tests: { total: 50, byType: { unit: 50 } } } }],
+    {
+      floor: true,
+      repos: [{ repo: "seed/b", total: 10 }],
+      audited_floor: { total: 12, audited: "2026-07-10", source: "lenin estate recount" },
+    },
+  );
+  assert.equal(json.total, 60, "organic 50+10 exceeds the stale floor 12 → organic number leads");
+  assert.equal(json.audited_floor.applied, false, "floor self-retires; field stays for provenance");
+});
+
+test("no audited_floor in the seed → output carries NO audited_floor key (back-compat)", () => {
+  const { json } = runAggregator(
+    [{ owner: "live", name: "a", statsPath: "s.json", stats: { repo: "live/a", tests: { total: 7, byType: { unit: 7 } } } }],
+    { floor: true, repos: [{ repo: "seed/b", total: 3 }] },
+  );
+  assert.equal(json.total, 10);
+  assert.equal(Object.hasOwn(json, "audited_floor"), false, "absent seed field → absent output field");
+});
+
 test("live producer WINS over a same-slug seed entry (no double-count)", () => {
   const { json } = runAggregator(
     [

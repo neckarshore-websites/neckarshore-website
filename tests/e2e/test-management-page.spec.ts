@@ -7,7 +7,8 @@ import path from "node:path";
  *
  * Verifies the page is DATA-BOUND to the same single source as the homepage tile
  * (public/estate-test-scope.json) — never a second hardcoded figure that can drift — and
- * holds the honesty guardrails (phonesis absent; rounded-down aggregate; Top-N + rest-rollup
+ * holds the honesty guardrails (EXACT aggregate + load-bearing "+" per the 2026-07-10 Founder
+ * directive, backed by a dated audited_floor when it exceeds Σ per_repo; Top-N + rest-rollup
  * so the 0-test scaffold repo and the known-red repo are not individually spotlighted). Also
  * checks the 13-test-type scope, the per-repo Typ column, and the /tests→/test-management 308.
  */
@@ -23,6 +24,14 @@ function loadScope() {
     repos: raw.repos as number,
     floor: Boolean(raw.floor),
     per_repo: (raw.per_repo ?? []) as { repo: string; total: number }[],
+    // Optional audited floor (Founder directive 2026-07-10): when the headline exceeds Σ per_repo,
+    // this dated + sourced field is the ONLY legitimate reason (TC-CNT-085).
+    audited_floor: (raw.audited_floor ?? null) as {
+      total: number;
+      audited: string;
+      source: string;
+      applied: boolean;
+    } | null,
   };
 }
 
@@ -94,12 +103,12 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     ).toBe(true);
   });
 
-  test("TC-CNT-069: headline number is data-bound to estate-test-scope.json (floored + '+')", async ({
+  test("TC-CNT-069: headline number is data-bound to estate-test-scope.json (exact + '+')", async ({
     page,
   }) => {
     const scope = loadScope();
-    const floored = scope.floor ? Math.floor(scope.total / 100) * 100 : scope.total;
-    const expected = floored.toLocaleString("de-DE") + (scope.floor ? "+" : "");
+    // Exact figure (Founder directive 2026-07-10 — round-down framing retired) + load-bearing "+".
+    const expected = scope.total.toLocaleString("de-DE") + (scope.floor ? "+" : "");
 
     await page.goto(ROUTE);
     const main = page.locator("main");
@@ -261,12 +270,21 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     expect(loadScope().per_repo.some((r) => r.repo === "privates Repo")).toBe(true);
   });
 
-  test("TC-CNT-085: HONESTY INVARIANT — Σ per_repo.total still equals the headline total", () => {
+  test("TC-CNT-085: HONESTY INVARIANT — headline total is Σ per_repo OR a dated, sourced audited floor", () => {
     const scope = loadScope();
     const sum = scope.per_repo.reduce((s, r) => s + r.total, 0);
-    // Disclosure renames slugs only — it must never touch a count, so the per-repo rows still
-    // sum to the headline (2.611). Guards against a transform that drops/alters entries.
-    expect(sum).toBe(scope.total);
+    // Disclosure renames slugs only — it must never touch a count. The headline must be EITHER
+    // the per-repo row-sum OR the declared audited_floor.total (whichever is greater) — nothing
+    // else. Guards against (a) a transform that drops/alters entries AND (b) silent inflation:
+    // any total not backed by the row-sum MUST be backed by a dated + sourced audit field.
+    const floorTotal = scope.audited_floor?.total ?? 0;
+    expect(scope.total).toBe(Math.max(sum, floorTotal));
+    if (scope.total > sum) {
+      // The excess is only legitimate with full audit provenance + the applied marker.
+      expect(scope.audited_floor?.applied).toBe(true);
+      expect(scope.audited_floor?.audited).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect((scope.audited_floor?.source ?? "").length).toBeGreaterThan(10);
+    }
   });
 
   test("TC-CNT-086: DISCLOSURE INVARIANT — approved-private products by product name, slug never raw", async ({

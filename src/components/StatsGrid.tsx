@@ -10,8 +10,6 @@ import {
   FolderGit2,
   CalendarDays,
 } from "lucide-react";
-import { flooredTotal } from "@/lib/stats-breakdown";
-
 export interface StatsData {
   days: number;
   commits: number;
@@ -32,7 +30,7 @@ export interface StatsData {
     missing?: string[];
     /** Estate repo span (count). Read by the /test-management page; no longer shown on the tile. */
     repos?: number;
-    /** Floor-framed total: render the headline rounded down to 100 + a load-bearing "+". */
+    /** Floor semantics: the exact total is a FLOOR of the true count → render a load-bearing "+". */
     floor?: boolean;
   };
 }
@@ -80,11 +78,12 @@ export default function StatsGrid({
 }) {
   const commits = useAnimatedNumber(stats.commits);
   // Big number = decomposed estate total when present; flat `tests` otherwise (backward-compat).
-  // Floor-framed (#244): the public number is rounded down to 100 + a load-bearing "+", so it
-  // always under-states the true estate count (two repos are themselves floors). Honest by design.
+  // EXACT figure (Founder directive 2026-07-10, supersedes the #244 round-down framing): the tile
+  // renders the precise audited total; the load-bearing "+" stays when `floor` is set, because the
+  // exact figure still UNDER-states the true estate count (floor repos + dropped-red + unmeasured).
   const rawTestTotal = stats.testScope?.total ?? stats.tests;
   const testsFloored = stats.testScope?.floor ?? false;
-  const tests = useAnimatedNumber(testsFloored ? flooredTotal(rawTestTotal) : rawTestTotal);
+  const tests = useAnimatedNumber(rawTestTotal);
   const testsSuffix = testsFloored ? "+" : "";
   const endpoints = useAnimatedNumber(stats.endpoints);
   const linesOfCode = useAnimatedNumber(stats.linesOfCode);
