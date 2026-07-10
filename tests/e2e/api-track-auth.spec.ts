@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { TEST_ANALYTICS_READ_TOKEN } from "./analytics-test-token";
 
 const ENDPOINT = "/api/track";
 
@@ -27,10 +28,11 @@ test.describe("TC-STAT-009 — /api/track GET auth", () => {
   });
 
   test("TC-STAT-009-4: GET with correct Bearer token returns 200 with expected shape", async ({ request }) => {
-    const token = process.env.ANALYTICS_READ_TOKEN;
-    test.skip(!token, "ANALYTICS_READ_TOKEN not set in test env");
+    // Token provisioned on the managed dev server via playwright.config.ts
+    // webServer.env — the PII success-path runs for real in CI (WO-2 #400),
+    // no skip on an unset secret.
     const response = await request.get(ENDPOINT, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${TEST_ANALYTICS_READ_TOKEN}` },
     });
     expect(response.status()).toBe(200);
     const body = await response.json();
@@ -43,10 +45,8 @@ test.describe("TC-STAT-009 — /api/track GET auth", () => {
   });
 
   test("TC-STAT-009-5: Authenticated 200 response has Cache-Control: private, no-store", async ({ request }) => {
-    const token = process.env.ANALYTICS_READ_TOKEN;
-    test.skip(!token, "ANALYTICS_READ_TOKEN not set in test env");
     const response = await request.get(ENDPOINT, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${TEST_ANALYTICS_READ_TOKEN}` },
     });
     expect(response.status()).toBe(200);
     const cacheControl = response.headers()["cache-control"] || "";

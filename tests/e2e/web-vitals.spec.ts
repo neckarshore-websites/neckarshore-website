@@ -6,6 +6,7 @@ import {
   percentile,
   summarizeWebVitals,
 } from "../../src/lib/web-vitals";
+import { TEST_ANALYTICS_READ_TOKEN } from "./analytics-test-token";
 
 // ---------------------------------------------------------------------------
 // TC-WV — Field Core Web Vitals (self-hosted via /api/track)
@@ -135,8 +136,10 @@ test.describe("TC-WV HTTP — /api/track web_vital ingestion", () => {
   });
 
   test("TC-WV-012: authenticated GET surfaces a webVitals p75 summary", async ({ request }) => {
-    const token = process.env.ANALYTICS_READ_TOKEN;
-    test.skip(!token, "ANALYTICS_READ_TOKEN not set in test env");
+    // Token provisioned on the managed dev server via playwright.config.ts
+    // webServer.env — this authenticated /api/track GET runs for real in CI
+    // (WO-2 #400), no skip on an unset secret. Local-only spec (never @smoke),
+    // so the fixture token is always the one the server was started with.
 
     // Seed two LCP samples so p75 is well-defined.
     for (const value of [1800, 2600]) {
@@ -147,7 +150,7 @@ test.describe("TC-WV HTTP — /api/track web_vital ingestion", () => {
     }
 
     const res = await request.get(`${ENDPOINT}?include_test=true`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${TEST_ANALYTICS_READ_TOKEN}` },
     });
     expect(res.status()).toBe(200);
     const body = await res.json();
