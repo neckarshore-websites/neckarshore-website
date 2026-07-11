@@ -18,8 +18,10 @@
  * display names are NOT unique in the source. By design 3 rows render as "Omnopsis"
  * (backend+frontend+contracts) and up to 9 as "privates Repo". The spec asks for an object keyed by
  * display name — a naive {name: total} would silently DROP the colliding rows (last-write-wins).
- * We SUM totals per display name instead: verlustfrei, deterministic, and it preserves the headline
- * invariant Σ(per_repo values) === total. That is why per_repo has FEWER keys than there are rows.
+ * We SUM totals per display name instead: verlustfrei (Σ output buckets === Σ input rows) and
+ * deterministic. That is why per_repo has FEWER keys than there are rows. Note: Σ(per_repo values)
+ * === the pre-floor merged sum, which equals the headline `total` ONLY when no audited_floor is
+ * applied; a Founder audited_floor uplifts `total` above the reconstructable per_repo sum by design.
  *
  * date = source.updatedAt sliced to YYYY-MM-DD (UTC). Snapshot-bound, NOT wall-clock — deterministic
  * (no Date.now), honest (the datapoint reflects the measurement it came from), and idempotent (re-run

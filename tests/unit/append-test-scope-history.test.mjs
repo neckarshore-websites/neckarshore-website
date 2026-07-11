@@ -8,8 +8,10 @@
  *                             is verlustfrei (Σ output === Σ input, colliding display names merge).
  *
  * Test (c) is deliberately decoupled from the aggregator: it asserts what the APPENDER does
- * (field-fidelity + collision-summing on a controlled fixture), not the aggregator's
- * Σ(source.per_repo)===total invariant. The real-data Omnopsis===905 line is a spot-check only.
+ * (field-fidelity + collision-summing on a controlled fixture). The load-bearing collision-summing
+ * invariant is Σ(buckets) === Σ(source per_repo totals) — floor-INDEPENDENT. Σ per_repo === headline
+ * total holds ONLY when no audited_floor is applied; an applied Founder floor intentionally exceeds
+ * the reconstructable per_repo sum (coverage not caught up), so the spot-check is floor-aware.
  *
  * Run: npm run test:unit
  */
@@ -83,13 +85,32 @@ test("(c) throws on a missing/malformed updatedAt (no honest date → no datapoi
   assert.throws(() => buildHistoryRow({ updatedAt: "not-a-date", per_repo: [] }), /no valid updatedAt/);
 });
 
-test("(c) spot-check against the committed served artifact (Σ per_repo === total, Omnopsis merged)", () => {
+test("(c) spot-check against the committed served artifact (collision-summing lossless, floor-aware headline)", () => {
   const src = path.join(ROOT, "public", "estate-test-scope.json");
   if (!fs.existsSync(src)) return; // artifact optional in a fresh checkout
   const scope = JSON.parse(fs.readFileSync(src, "utf-8"));
   const row = buildHistoryRow(scope);
   const sum = Object.values(row.per_repo).reduce((a, b) => a + b, 0);
-  assert.equal(sum, row.total, "collision-summed per_repo reconstructs the headline total");
+
+  // Load-bearing invariant (floor-INDEPENDENT): collision-summing must never DROP a row.
+  // Σ(display-name buckets) === Σ(source per_repo totals), even when colliding names merge.
+  // This is the real regression guard — if the appender ever last-write-wins a collision, or a
+  // future source shape drops rows, THIS line goes red regardless of any audited_floor uplift.
+  const srcSum = scope.per_repo.reduce((a, r) => a + (Number(r.total) || 0), 0);
+  assert.equal(sum, srcSum, "collision-summing is verlustfrei: Σ buckets === Σ source per_repo totals");
+
+  // Headline relationship is floor-AWARE. The row's `total` is the aggregator's floored headline:
+  //   total = max(Σ live+seed per_repo, audited_floor.total).
+  // When the Founder audited_floor is applied it INTENTIONALLY exceeds the reconstructable per_repo
+  // sum (per-repo pipeline coverage has not caught up yet) — so Σ per_repo === total is FALSE by
+  // design in that regime. Only assert equality when no floor uplifts the headline.
+  if (scope.audited_floor?.applied) {
+    assert.equal(row.total, scope.audited_floor.total, "floored headline === audited_floor.total");
+    assert.ok(row.total >= sum, "an applied audited_floor uplifts the headline above the reconstructable Σ");
+  } else {
+    assert.equal(sum, row.total, "no floor applied → collision-summed per_repo reconstructs the headline");
+  }
+
   if (scope.per_repo.some((r) => r.repo === "Omnopsis")) {
     assert.ok(row.per_repo["Omnopsis"] > 0, "the multiple Omnopsis products merge into one bucket");
   }
