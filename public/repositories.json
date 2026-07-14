@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-13T06:45:58Z",
+  "updatedAt": "2026-07-14T06:04:29Z",
   "privateCount": 20,
   "repos": [
     {
@@ -36,7 +36,7 @@
       "owner": "neckarshore-mmps",
       "name": "trustscope",
       "visibility": "public",
-      "description": "TrustScope — paste a public GitHub repo and get a deterministic four-pillar trust report (security & supply chain, governance, community, and honestly-not-assessed functional quality) with constructive, upstream-friendly fixes. Built on OpenSSF Scorecard. A reputation surface by Neckarshore AI."
+      "description": "TrustScope — paste a public GitHub repo and get a deterministic three-pillar trust report (security & supply chain, governance, community) with constructive, upstream-friendly fixes — no single misleading score. Built on OpenSSF Scorecard. A reputation surface by Neckarshore AI."
     },
     {
       "owner": "neckarshore-skills",
