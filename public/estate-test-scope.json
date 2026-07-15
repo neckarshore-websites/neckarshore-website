@@ -7,8 +7,8 @@
   },
   "byType": {
     "e2e": 498,
-    "integration": 184,
-    "unit": 1773
+    "integration": 221,
+    "unit": 1793
   },
   "endpoints": 96,
   "expected": 16,
@@ -18,14 +18,14 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 134,
+        "integration": 171,
         "unit": 95
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 229
+      "total": 266
     },
     {
       "audited_sha": "5165e42e2c353c1e73140a4bb8af0e327634b357",
@@ -38,7 +38,7 @@
       "total": 39
     },
     {
-      "audited_sha": "ce14f969114a31937e699395d47030f5399f6310",
+      "audited_sha": "86f62b16477b49bc9e166930b62536345d522fff",
       "byType": {
         "e2e": 47,
         "integration": 19,
@@ -62,15 +62,15 @@
       "total": 241
     },
     {
-      "audited_sha": "bef1dac393fb525d80ccbb9e3b99508dd23cf76e",
+      "audited_sha": "6882d95517c0872a72f1ab0233d22907b0d86184",
       "byType": {
         "e2e": 72,
-        "unit": 254
+        "unit": 274
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "TrustScope",
-      "total": 326
+      "total": 346
     },
     {
       "audited_sha": "3cfe0506d29b3c3a41f778473b8ff6eabe96dffd",
@@ -253,5 +253,5 @@
   "reporting": 16,
   "repos": 22,
   "total": 3391,
-  "updatedAt": "2026-07-14T06:04:29Z"
+  "updatedAt": "2026-07-15T06:07:22Z"
 }
