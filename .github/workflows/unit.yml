@@ -34,7 +34,10 @@ jobs:
       - name: Run unit tests
         run: |
           npm run test:unit
-          # §4c: gate the previously-ungated pure unit tests.
-          # test:search:unit is held out (currently RED — a real search-index
-          # bug, /repositories missing; tracked separately, not gated red).
           npm run test:lighthouse:unit
+          # §4c: gate the previously-ungated pure unit suites. test:search:unit is now GREEN at
+          # HEAD (12 passed, 30 docs) and exits non-zero on failure (process.exit(fail?1:0)), so
+          # this is a real gate, not cosmetic. The old "currently RED — /repositories missing"
+          # hold-out comment was stale (verified green 2026-07-16). Gating it makes the suite
+          # CI-gated -> strict-additive at emit time when the self-report lands (closes #174-tail).
+          npm run test:search:unit
