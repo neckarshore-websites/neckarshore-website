@@ -234,6 +234,16 @@ jobs:
             fi
           } || true
 
+          # --- Estate staleness gate (durable-estate-count Block 5 — the compensating control) ---
+          # While the seed's audited_floor lives, total = max(live+seed, floor) MASKS a silent
+          # under-report: a live producer whose emit CI stopped keeps floating its last number (or is
+          # quietly floored over) with no signal. This surfaces any fetched producer whose stats.json
+          # `updatedAt` is older than the threshold as a VISIBLE WARN (stderr + job summary). The
+          # script ALWAYS exits 0 (guardrail #244 — the publish must not abort) and NEVER touches the
+          # served artifact; it reads the same /tmp/stats dir the aggregator consumed. Pure classifier
+          # is unit-gated (tests/unit/check-stats-staleness.test.mjs).
+          node scripts/check-stats-staleness.mjs stats-config.json /tmp/stats 14 "$NOW" || true
+
           # Last-known-good floor: if the rollup totally collapses to 0 (an infra/token failure,
           # not a real "estate has 0 tests"), keep the previously published numbers + artifact
           # rather than zeroing the live homepage tile. Per-producer misses still surface above.
