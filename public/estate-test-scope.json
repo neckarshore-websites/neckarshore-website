@@ -6,8 +6,8 @@
     "total": 3391
   },
   "byType": {
-    "e2e": 498,
-    "integration": 221,
+    "e2e": 501,
+    "integration": 222,
     "unit": 1793
   },
   "endpoints": 96,
@@ -18,14 +18,14 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 171,
+        "integration": 172,
         "unit": 95
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 266
+      "total": 267
     },
     {
       "audited_sha": "5165e42e2c353c1e73140a4bb8af0e327634b357",
@@ -104,14 +104,14 @@
       "total": 293
     },
     {
-      "audited_sha": "0849fb2f25ac6cb2c744e5a97c1f8f81b6ace3f1",
+      "audited_sha": "1d5515385ba0b0f4e856eade937c1aa6390d351a",
       "byType": {
-        "e2e": 17
+        "e2e": 20
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/goldoni-website",
-      "total": 17
+      "total": 20
     },
     {
       "audited_sha": "e8ef45ad43ee81c0917c7ba52884de3e639187fe",
@@ -253,5 +253,5 @@
   "reporting": 16,
   "repos": 22,
   "total": 3391,
-  "updatedAt": "2026-07-16T10:07:24Z"
+  "updatedAt": "2026-07-17T06:09:00Z"
 }
