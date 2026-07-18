@@ -48,7 +48,7 @@ next-env.d.ts
 analytics-local.json
 
 # local tooling + manual lighthouse runs
-.claude/
+.claude/*
 lh-local.json
 lighthouse-report.report.html
 lighthouse-report.report.json
