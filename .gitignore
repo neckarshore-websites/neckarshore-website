@@ -53,3 +53,4 @@ lh-local.json
 lighthouse-report.report.html
 lighthouse-report.report.json
 link-check-report.json
+!.claude/settings.json
