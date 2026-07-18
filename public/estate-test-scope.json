@@ -6,8 +6,9 @@
     "total": 3391
   },
   "byType": {
-    "e2e": 501,
-    "integration": 222,
+    "e2e": 516,
+    "integration": 220,
+    "smoke": 1,
     "unit": 1793
   },
   "endpoints": 96,
@@ -38,16 +39,16 @@
       "total": 39
     },
     {
-      "audited_sha": "86f62b16477b49bc9e166930b62536345d522fff",
+      "audited_sha": "571db553b3a3d9752f5df0224ed4365993a76113",
       "byType": {
-        "e2e": 47,
-        "integration": 19,
+        "e2e": 62,
+        "integration": 17,
         "unit": 27
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-mmps/md-viewer",
-      "total": 93
+      "total": 106
     },
     {
       "audited_sha": null,
@@ -104,7 +105,7 @@
       "total": 293
     },
     {
-      "audited_sha": "1d5515385ba0b0f4e856eade937c1aa6390d351a",
+      "audited_sha": "820f54c6cc55808abdb24452a92f974c180482e3",
       "byType": {
         "e2e": 20
       },
@@ -170,13 +171,14 @@
     {
       "audited_sha": null,
       "byType": {
+        "smoke": 1,
         "unit": 85
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "Omnopsis",
-      "total": 85
+      "total": 86
     },
     {
       "audited_sha": null,
@@ -253,5 +255,5 @@
   "reporting": 16,
   "repos": 22,
   "total": 3391,
-  "updatedAt": "2026-07-17T06:09:00Z"
+  "updatedAt": "2026-07-18T05:57:34Z"
 }
