@@ -41,3 +41,11 @@ jobs:
           # hold-out comment was stale (verified green 2026-07-16). Gating it makes the suite
           # CI-gated -> strict-additive at emit time when the self-report lands (closes #174-tail).
           npm run test:search:unit
+          # §4c: crawl:test was this repo's last ungated suite. It runs the link-crawler's
+          # pure helpers via `--self-test` (17 assertions) and exits BEFORE any network or
+          # fetch call, so it is a genuine offline unit suite — no live site, no secrets,
+          # no flake surface. Class A: gated here inside the existing required check. It
+          # exits non-zero on assertion failure (`exit(selfTest() ? 0 : 1)`), so this is a
+          # real gate, not cosmetic. NB this is the crawler's SELF-TEST — `crawl` and
+          # `crawl:internal` DO hit the network and stay deliberately ungated (manual run).
+          npm run crawl:test
