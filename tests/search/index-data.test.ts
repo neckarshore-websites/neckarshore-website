@@ -83,13 +83,30 @@ check("no glossar docs remain (the surface was retired 2026-06-23)", () => {
   );
 });
 
+/** Routes that HAVE a page.tsx but are DELIBERATELY kept out of on-site search.
+ *  /style-guide is an internal design-system reference — noindex, absent from the
+ *  sitemap, reachable only via a discreet footer meta-link (2026-07-21, German
+ *  Rauhut: "es ist für mich, keiner soll suchen"). It must NOT surface in the
+ *  Cmd+K palette, so the coverage invariant carves it out explicitly. */
+const UNINDEXED_INTERNAL = new Set(["/style-guide"]);
+
 check("EVERY static app route is indexed (literal 'alle Seiten indiziert')", () => {
   // Derives routes from the filesystem, so a newly-added top-level page that
   // forgot its index entry fails here — not just the hand-listed ones below.
+  // Deliberately-internal routes (UNINDEXED_INTERNAL) are the sanctioned exception.
   for (const route of staticAppRoutes()) {
+    if (UNINDEXED_INTERNAL.has(route)) continue;
     const doc = docs.find((d) => d.url === route);
     assert.ok(doc, `no search doc for app route ${route} (page.tsx exists, index entry missing)`);
   }
+});
+
+check("internal /style-guide stays OUT of on-site search (it's for the founder, not visitors)", () => {
+  assert.equal(
+    docs.filter((d) => d.url === "/style-guide" || d.url.startsWith("/style-guide#")).length,
+    0,
+    "the internal /style-guide reference must never enter the search index",
+  );
 });
 
 check("the static + section pages are all indexed", () => {
