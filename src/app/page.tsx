@@ -463,6 +463,14 @@ export default function Home() {
           <div className="text-muted dark:text-text-tertiary">
             <LiveTicker fetchedAt={new Date().toISOString()} />
           </div>
+          {/* Internal design-system reference — deliberately discreet ("es ist für mich,
+              keiner soll suchen"). noindex, not in the sitemap, not in on-site search. */}
+          <Link
+            href="/style-guide"
+            className="text-xs text-muted transition-colors hover:text-accent dark:text-text-tertiary dark:hover:text-accent-bright"
+          >
+            Style Guide
+          </Link>
         </div>
       </footer>
     </>
