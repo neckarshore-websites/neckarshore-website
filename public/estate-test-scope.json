@@ -6,7 +6,7 @@
     "total": 3391
   },
   "byType": {
-    "e2e": 516,
+    "e2e": 518,
     "integration": 225,
     "smoke": 1,
     "unit": 1805
@@ -63,15 +63,15 @@
       "total": 241
     },
     {
-      "audited_sha": "b625dd2b8b2e4dd822b22f8b1e79a3c444363351",
+      "audited_sha": "b40e4a03bc0d789f6cde9822c42c5d7e9516c535",
       "byType": {
-        "e2e": 72,
+        "e2e": 74,
         "unit": 274
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "TrustScope",
-      "total": 346
+      "total": 348
     },
     {
       "audited_sha": "9cce216132e848592ba3181acdd461e6e9b62ad7",
@@ -255,5 +255,5 @@
   "reporting": 16,
   "repos": 22,
   "total": 3391,
-  "updatedAt": "2026-07-21T06:22:18Z"
+  "updatedAt": "2026-07-22T06:22:15Z"
 }
