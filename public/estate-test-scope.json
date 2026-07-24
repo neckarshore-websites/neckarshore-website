@@ -9,7 +9,7 @@
     "e2e": 518,
     "integration": 225,
     "smoke": 1,
-    "unit": 1804
+    "unit": 1805
   },
   "endpoints": 96,
   "expected": 16,
@@ -20,13 +20,13 @@
       "audited_sha": null,
       "byType": {
         "integration": 177,
-        "unit": 94
+        "unit": 95
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 271
+      "total": 272
     },
     {
       "audited_sha": "5165e42e2c353c1e73140a4bb8af0e327634b357",
@@ -255,5 +255,5 @@
   "reporting": 16,
   "repos": 22,
   "total": 3391,
-  "updatedAt": "2026-07-23T06:23:48Z"
+  "updatedAt": "2026-07-24T06:19:03Z"
 }
