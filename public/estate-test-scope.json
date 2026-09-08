@@ -1,12 +1,12 @@
 {
   "byType": {
-    "e2e": 534,
+    "e2e": 978,
     "integration": 292,
     "smoke": 1,
-    "unit": 2213
+    "unit": 2423
   },
   "endpoints": 96,
-  "expected": 17,
+  "expected": 18,
   "floor": true,
   "missing": [],
   "per_repo": [
@@ -130,6 +130,17 @@
       "total": 3
     },
     {
+      "audited_sha": "a61e8abf817273890fcdc31698a7c8b9e6f2ba3d",
+      "byType": {
+        "e2e": 444,
+        "unit": 210
+      },
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "neckarshore-websites/neckarshore-website",
+      "total": 654
+    },
+    {
       "audited_sha": "d28491b5ec7152999b413cc85f83720a573fc886",
       "byType": {
         "e2e": 54
@@ -198,15 +209,6 @@
       "total": 227
     },
     {
-      "audited_sha": "a1561cb10308036f22d0832950e47aefe534625a",
-      "byType": {},
-      "endpoints": 0,
-      "lenses": {},
-      "repo": "neckarshore-websites/neckarshore-website",
-      "seeded": true,
-      "total": 308
-    },
-    {
       "audited_sha": null,
       "byType": {},
       "endpoints": 0,
@@ -237,9 +239,9 @@
       "total": 9
     }
   ],
-  "reporting": 17,
+  "reporting": 18,
   "repos": 21,
-  "total": 3394,
-  "untyped_total": 354,
-  "updatedAt": "2026-09-08T10:14:09Z"
+  "total": 3740,
+  "untyped_total": 46,
+  "updatedAt": "2026-09-08T12:50:31Z"
 }
