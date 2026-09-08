@@ -32,7 +32,7 @@
     { "owner": "neckarshore-websites", "name": "grafowerk-website", "private": false, "statsPath": "stats.json" },
     { "owner": "neckarshore-websites", "name": "kaze-website", "private": true },
     { "owner": "neckarshore-websites", "name": "logibright-website", "private": true },
-    { "owner": "neckarshore-websites", "name": "neckarshore-website", "private": false },
+    { "owner": "neckarshore-websites", "name": "neckarshore-website", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
     { "owner": "neckarshore-websites", "name": "oakwoodgolfclub-website", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
     { "owner": "neckarshore-websites", "name": "paulus-website", "private": true },
     { "owner": "neckarshore-websites", "name": "rauhut-website", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
