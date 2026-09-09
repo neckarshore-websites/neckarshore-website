@@ -1,0 +1,142 @@
+# Wächter über die EINGABEN des Statistik-Sammlers — die Frische der Audit-Stempel (#2033).
+#
+# WARUM ES DIESEN DRITTEN WÄCHTER GIBT, neben update-stats.yml und stats-watchdog.yml:
+# die beiden bestehenden messen den Sammler selbst — ist er gelaufen, ist die veröffentlichte Zahl
+# frisch. Keiner von beiden schaut auf die Herkunft der Zahl. `estate-test-scope-seed.json` trägt
+# pro Zeile ein `audited_sha` und beruft sich in seinem eigenen `_sha_comment` auf die
+# Auditierbarkeits-Doktrin des Test-Charters — und nichts hat dieses SHA je gegen den Kopf des
+# jeweiligen Repos gehalten. Gemessen beim Bau am 2026-09-09: ALLE FÜNF Zeilen mit Stempel sind
+# überfällig, die älteste (`ai-phrase-check`) um 122 Tage.
+#
+# WAS GEMESSEN WIRD: der Abstand zwischen `audited_sha` und dem Kopf des jeweiligen Repos, auf zwei
+# Achsen (Commits ODER Tage). Nicht der Laufstatus, nicht das Alter der veröffentlichten Zahl.
+#
+# WOCHENTAKT, NICHT TAGESTAKT: ein Audit-Stempel bewegt sich in Monaten, nicht in Stunden. Ein
+# täglicher Lauf produzierte dieselbe Meldung siebenmal die Woche und wäre nach zwei Wochen Rauschen.
+# BEKANNTE SCHWÄCHE, hier statt im Kleingedruckten: ein Wochen-Workflow ist selbst die Bauform, die
+# in diesem Bestand fünf Sonntage in Folge rot stand, ohne dass es jemand sah (#1588). Der
+# Gegenzug ist nicht der Takt, sondern der Kanal — dieser Wächter meldet in einen VORGANG, der offen
+# bleibt, bis ihn jemand schließt, statt in eine Mail, die vorbeirauscht.
+#
+# WARUM STATS_PAT: drei der fünf gestempelten Zeilen zeigen auf PRIVATE Repos (omnopsis-frontend,
+# omnopsis-contracts, dev-environment). Ohne sie wären drei von fünf Zeilen dauerhaft "unmessbar"
+# und das Tor dauerhaft rot aus dem falschen Grund. OFFENGELEGT, NICHT NEBENBEI: das erweitert die
+# Abhängigkeit von einem stehenden Admin-Credential, die als #2030 bereits als eigener Vorgang steht.
+# Dieser Workflow führt kein neues Geheimnis ein — er benutzt das vorhandene und sagt es hier.
+name: Seed SHA Watchdog
+
+on:
+  schedule:
+    # Montag 12:00 UTC — derselbe Tagesslot wie stats-watchdog.yml, damit beide Wächter in
+    # derselben Actions-Ansicht nebeneinander stehen und ein fehlender auffällt.
+    - cron: "0 12 * * 1"
+  workflow_dispatch:
+    inputs:
+      schwelle_commits:
+        description: "Commit-Abstand, ab dem ein Audit-Stempel überfällig ist (Standard 100). 0 = alles überfällig — der Hebel für die Verfälschungsprobe."
+        required: false
+        default: "100"
+      schwelle_tage:
+        description: "Alter in Tagen, ab dem ein Audit-Stempel überfällig ist (Standard 45). 0 = alles überfällig."
+        required: false
+        default: "45"
+
+# Sparsamster Standard-Token.
+permissions:
+  contents: read
+
+jobs:
+  watchdog:
+    name: Frische der Saat-SHAs pruefen
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Job-scoped statt workflow-scoped (#270 §1.3): nur dieser Job legt einen Vorgang an.
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+        with:
+          # Der Waechter liest genau eine Datei und spricht sonst nur ueber die API. Er fuehrt keinen
+          # git-Befehl aus, also hat die Job-Anmeldung in der lokalen git-Konfiguration nichts zu
+          # suchen. Gleiche Begruendung wie in stats-watchdog.yml.
+          persist-credentials: false
+
+      # Kein `npm ci`: der Klassifikator ist abhaengigkeitsfrei. Ein Waechter, der erst einen
+      # Abhaengigkeitsbaum installieren muss, hat mehr Ausfallgruende als das, was er bewacht.
+      #
+      # continue-on-error: das Skript geht bei einem Befund ABSICHTLICH rot (Exit 1) — das ist seine
+      # CLI-Semantik und die bleibt. Hier darf der Schritt den Lauf aber nicht abbrechen, sonst
+      # laufen Melde- und Rot-Schritt nie. Der Absturzfall ist unten getrennt abgefangen.
+      - name: Saat-Frische klassifizieren
+        id: pruefung
+        continue-on-error: true
+        env:
+          # DIE EINGABEN GEHOEREN UEBER env, NICHT PER ${{ }} IN DEN KOMMANDOTEXT. Sie kommen vom
+          # Ausloeser eines workflow_dispatch und sind damit fremdbestimmter Text; direkt
+          # interpoliert waere `0"; <befehl>; "` ausfuehrbare Shell. (CodeRabbit-Fund auf PR #210,
+          # dort am Schwesterworkflow.)
+          SCHWELLE_COMMITS: ${{ inputs.schwelle_commits || '100' }}
+          SCHWELLE_TAGE: ${{ inputs.schwelle_tage || '45' }}
+          # Erreicht auch die drei privaten Repos. Siehe Kopfkommentar + #2030.
+          STATS_PAT: ${{ secrets.STATS_PAT }}
+        run: |
+          node scripts/check-seed-sha-freshness.mjs \
+            estate-test-scope-seed.json "${SCHWELLE_COMMITS}" "${SCHWELLE_TAGE}"
+
+      # FAIL-CLOSED AUF DEN ABSTURZ. Ohne diesen Schritt waere `continue-on-error` ein Loch: stuerzt
+      # das Skript ab (kaputtes JSON, node weg, API-Umbau), schreibt es keine Ausgabe, `stale` ist
+      # LEER — und "leer" ist nicht "false". Ein Tor, das bei unlesbarer Eingabe gruen meldet, ist
+      # genau der Zustand, den dieser Waechter abloesen soll.
+      - name: Absturz ist kein gruener Lauf
+        if: steps.pruefung.outputs.stale == ''
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          echo "::error::Der Saat-Pruefer hat keine Klassifikation geliefert — Absturz oder Abbruch, kein gruener Befund. Lauf: ${RUN_URL}"
+          exit 1
+
+      - name: Befund melden
+        if: steps.pruefung.outputs.stale == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Ausgaben laufen ueber env, NICHT direkt in die Shell interpoliert: ein `"` oder `$(...)`
+          # im Befundtext wuerde sonst als Shell-Syntax gelesen.
+          STALE_COUNT: ${{ steps.pruefung.outputs.stale_count }}
+          EXCLUDED_COUNT: ${{ steps.pruefung.outputs.excluded_count }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          cat > /tmp/saat.md <<TXT
+          **Audit-Stempel in der Saat sind ueberfaellig.**
+
+          - Ueberfaellige Zeilen: **${STALE_COUNT}**
+          - Vom Tor NICHT abgedeckt (\`audited_sha: null\`): **${EXCLUDED_COUNT}**
+          - Der vollstaendige Befund je Zeile steht in der Lauf-Zusammenfassung: ${RUN_URL}
+
+          Gemessen wird der Abstand zwischen dem \`audited_sha\` einer Saat-Zeile und dem Kopf des
+          jeweiligen Repos — auf zwei Achsen, Commits ODER Tage. Ein ueberfaelliger Stempel heisst
+          nicht, dass die Zahl falsch ist; er heisst, dass die Zeile ihre eigene
+          Auditierbarkeits-Behauptung nicht mehr belegt. Die Reparatur ist ein neuer Lenin-Durchstich
+          fuer die betroffene Zeile, nicht das Hochsetzen der Schwelle.
+
+          Die ausgenommenen Zeilen sind der ehrliche Teil der Reichweite: sie tragen gar keinen
+          Stempel und werden von diesem Tor nicht geprueft.
+
+          Solange dieser Vorgang offen ist, wird hier weiter kommentiert statt ein neuer angelegt.
+          TXT
+          bash scripts/report-stats-outage.sh \
+            "[saat-sha-alt]" \
+            "[saat-sha-alt] Audit-Stempel der Saat sind ueberfaellig" \
+            /tmp/saat.md
+
+      # Erst melden, dann scheitern — dieselbe Reihenfolge wie im Schwesterworkflow. Der offene
+      # Vorgang ist der Kanal, der bleibt; der rote Lauf ist der, den man in der Actions-Liste sieht.
+      - name: Rot gehen, damit der Befund auch in der Actions-Liste steht
+        if: steps.pruefung.outputs.stale == 'true'
+        env:
+          STALE_COUNT: ${{ steps.pruefung.outputs.stale_count }}
+        run: |
+          echo "::error::${STALE_COUNT} Saat-Zeilen tragen einen ueberfaelligen Audit-Stempel"
+          exit 1
