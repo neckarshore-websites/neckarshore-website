@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ComponentType } from "react";
+import { useEffect, useState, type ComponentType } from "react";
 import Link from "next/link";
 import {
   GitCommit,
@@ -42,15 +42,32 @@ function formatDE(n: number): string {
   return n.toLocaleString("de-DE");
 }
 
-/** Animates a number from 0 to target on first render */
+/**
+ * Animates a number from 0 to target.
+ *
+ * NO REF GUARD, AND THAT IS THE POINT. This hook used to carry a
+ * `hasAnimated` ref that returned early on the second run. Under React's
+ * double-invocation of effects (StrictMode, which `next dev` turns on) that
+ * guard is fatal rather than defensive: run 1 sets the ref and starts the
+ * interval, the cleanup clears the interval, run 2 sees the ref — refs survive
+ * the remount — and bails. No interval is ever started again and every tile
+ * stays at 0. Measured on next@16.3.4: eight of twelve stats e2e tests red,
+ * `Received: 0`; the same suite is 12/12 on 16.2.12, same machine.
+ *
+ * The guard was also redundant. The dep array is `[target]`, so the effect
+ * already re-runs only when the target actually changes, and the cleanup
+ * already cancels the previous interval. It protected against nothing.
+ *
+ * Scope of the original defect, stated precisely because it is easy to
+ * overstate: PRODUCTION WAS NEVER AFFECTED. React does not double-invoke
+ * effects in a production build — verified against `npm run build && npm run
+ * start` in a real browser, where the tiles read 8.689 / 1.208.919 / 41. What
+ * broke was the dev server, and with it the e2e suite that runs against it.
+ */
 function useAnimatedNumber(target: number): number {
   const [display, setDisplay] = useState(0);
-  const hasAnimated = useRef(false);
 
   useEffect(() => {
-    if (hasAnimated.current) return;
-    hasAnimated.current = true;
-
     const stepMs = ANIMATION_DURATION / ANIMATION_STEPS;
     let step = 0;
 
