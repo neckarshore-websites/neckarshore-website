@@ -55,16 +55,14 @@ import { execFileSync } from "node:child_process";
  * looked at. Two files, two decisions.
  */
 export const ALLOWLIST = [
-  {
-    id: "GHSA-f88m-g3jw-g9cj",
-    pkg: "sharp",
-    devOnly: false,
-    expires: "2026-10-31",
-    reason:
-      "sharp <0.35.0 inherits libvips CVEs. No forward fix inside Next's dependency range — " +
-      "next@16.2.12 still resolves sharp to 0.34.5, and npm's proposed remedy here is next@9.3.3, " +
-      "a downgrade across seven majors. Removable when Next widens its sharp range to >=0.35.0.",
-  },
+  // The sharp entry (GHSA-f88m-g3jw-g9cj) was removed 2026-09-09, seven weeks before its
+  // 2026-10-31 expiry. It named its own removal condition — "Removable when Next widens its
+  // sharp range to >=0.35.0" — and that is exactly what happened: next@16.3.4 declares
+  // sharp "^0.35.4" (was: a range resolving to 0.34.5), so the tree now resolves sharp to
+  // 0.35.4 and the advisory is FIXED, not suppressed. Verified before removal, not assumed:
+  // `require("sharp/package.json").version` -> 0.35.4. The gate itself flagged the entry as
+  // inert on the bump branch ("Listed but no longer reported"), which is the same signal that
+  // retired the brace-expansion and nanoid entries above. Same shape, same evidence bar.
   // The nanoid entry (GHSA-2v37-7h3g-55p8) was removed 2026-08-26, on the day its own
   // expiry fell due. It named its removal condition itself — "the moment the cooldown is
   // lifted or rolled forward" — and the cooldown is gone: `npm config get before` is null
