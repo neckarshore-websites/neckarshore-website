@@ -260,8 +260,11 @@ export default function Datenschutz() {
               Formularübermittlungen).
             </p>
             <p className="mt-2">
-              Cloudflare kann Daten in die USA übermitteln. Die Übermittlung
-              erfolgt auf Basis von EU-Standardvertragsklauseln (Art. 46 Abs. 2
+              Cloudflare kann Daten in die USA übermitteln. Cloudflare, Inc.
+              ist unter dem EU-US Data Privacy Framework zertifiziert; die
+              Übermittlung erfolgt daher auf Grundlage des
+              Angemessenheitsbeschlusses der EU-Kommission (Art. 45 DSGVO).
+              Ergänzend bestehen EU-Standardvertragsklauseln (Art. 46 Abs. 2
               lit. c DSGVO).
             </p>
             <p className="mt-2">
