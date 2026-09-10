@@ -189,6 +189,24 @@ jobs:
       # Diff-guard on the meaningful fields only (everything EXCEPT the always-changing
       # updatedAt): a new push has a new audited_sha -> publish; a re-run on the same sha
       # differs only by timestamp -> no churn commit. The concurrency group serializes it.
+      #
+      # WHY VERCEL DOES NOT BUILD THIS BRANCH, and why the answer is not in this repo
+      # (measured 2026-09-10): every push here used to trigger a Vercel build that failed with
+      # "Couldn't find any `pages` or `app` directory" — correct behaviour against a branch that
+      # holds one JSON file and no application. Several failures a day, which is worse than it
+      # sounds: a dashboard permanently showing red nobody reads is a dashboard in which the one
+      # red that matters goes unseen.
+      #
+      # It is switched off in the Vercel PROJECT setting "Ignored Build Step", not in a
+      # vercel.json, and that is not a preference — it was measured. A vercel.json on main has
+      # NO effect on a push to this branch: Vercel reads the config from the branch being
+      # BUILT, and this branch carries no vercel.json. Both `git.deploymentEnabled` and
+      # `ignoreCommand` fail for that reason. PR #232 tried the repo-versioned route, the merge
+      # itself served as the test, and two subsequent pushes here still built and still failed;
+      # #232 was reverted as dead config. Full record: PR #232 and its revert.
+      #
+      # Do NOT re-add a vercel.json here expecting it to help. If the builds ever come back,
+      # the place to look is the project setting, not this repo.
       - name: Publish stats.json to the stats-data branch when it changed
         env:
           GIT_AUTHOR_NAME: "github-actions[bot]"
