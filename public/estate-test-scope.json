@@ -1,9 +1,9 @@
 {
   "byType": {
     "e2e": 978,
-    "integration": 295,
+    "integration": 529,
     "smoke": 1,
-    "unit": 2423
+    "unit": 2433
   },
   "endpoints": 96,
   "expected": 18,
@@ -13,14 +13,14 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 247,
+        "integration": 481,
         "unit": 96
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 343
+      "total": 577
     },
     {
       "audited_sha": "02459573530c22911e0e07327d1746e603ff1d04",
@@ -89,7 +89,7 @@
       "total": 179
     },
     {
-      "audited_sha": "91ab83872e64c3109b90dfc9acc46036b8be32e3",
+      "audited_sha": "624c33be41f33485f89f639e6e134e58df03106e",
       "byType": {
         "unit": 468
       },
@@ -110,7 +110,7 @@
       "total": 214
     },
     {
-      "audited_sha": "c28487c536b9da88709d84957a9095142e07d933",
+      "audited_sha": "bc28549a901bdd58bcbeacda3844a9074335f6dc",
       "byType": {
         "e2e": 24
       },
@@ -130,18 +130,18 @@
       "total": 3
     },
     {
-      "audited_sha": "928257a84e8a137eb362b080e975a8825448a70a",
+      "audited_sha": "28882516974b2583f3fcf5748bbc323d1537b3eb",
       "byType": {
         "e2e": 444,
-        "unit": 210
+        "unit": 220
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/neckarshore-website",
-      "total": 654
+      "total": 664
     },
     {
-      "audited_sha": "d28491b5ec7152999b413cc85f83720a573fc886",
+      "audited_sha": "06fc2cfd6732bf702b0cc872f8a10ca2904df906",
       "byType": {
         "e2e": 54
       },
@@ -151,7 +151,7 @@
       "total": 54
     },
     {
-      "audited_sha": "f8eff97226baaad8caa500fc11c7f741dfb534b9",
+      "audited_sha": "d65ad522e936ea90512070af0edc85e94d6e8df8",
       "byType": {
         "e2e": 23
       },
@@ -241,7 +241,7 @@
   ],
   "reporting": 18,
   "repos": 21,
-  "total": 3743,
+  "total": 3987,
   "untyped_total": 46,
-  "updatedAt": "2026-09-09T08:31:40Z"
+  "updatedAt": "2026-09-10T08:32:59Z"
 }
