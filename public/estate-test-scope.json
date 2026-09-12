@@ -1,6 +1,6 @@
 {
   "byType": {
-    "e2e": 978,
+    "e2e": 987,
     "integration": 529,
     "smoke": 1,
     "unit": 2433
@@ -110,7 +110,7 @@
       "total": 214
     },
     {
-      "audited_sha": "4d1780cafc9bd5079cd1bf27cb116ef7d0bab82e",
+      "audited_sha": "32b9c657d8ef87f9c0dbd45fafa24d48daa967a9",
       "byType": {
         "e2e": 24
       },
@@ -130,7 +130,7 @@
       "total": 3
     },
     {
-      "audited_sha": "e94ade7f17079c8e4f28b2983cf89ef7a2f9a1e4",
+      "audited_sha": "45ae24367c3c66381921eda683a9339241aa0a62",
       "byType": {
         "e2e": 444,
         "unit": 220
@@ -151,14 +151,14 @@
       "total": 54
     },
     {
-      "audited_sha": "7c8179b5b97859f4fc45e117ea037aca45d01b14",
+      "audited_sha": "119898a749c3b095dcde66a8e3d7b15ad5e41054",
       "byType": {
-        "e2e": 23
+        "e2e": 32
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/rauhut-website",
-      "total": 23
+      "total": 32
     },
     {
       "audited_sha": null,
@@ -241,7 +241,7 @@
   ],
   "reporting": 18,
   "repos": 21,
-  "total": 3987,
+  "total": 3996,
   "untyped_total": 46,
-  "updatedAt": "2026-09-11T08:27:30Z"
+  "updatedAt": "2026-09-12T08:16:46Z"
 }
