@@ -54,7 +54,7 @@
     "@types/sanitize-html": "2.16.1",
     "axe-core": "4.13.0",
     "eslint": "^9",
-    "eslint-config-next": "16.3.4",
+    "eslint-config-next": "16.3.5",
     "lighthouse": "13.4.1",
     "tailwindcss": "^4",
     "tsx": "4.23.13",
