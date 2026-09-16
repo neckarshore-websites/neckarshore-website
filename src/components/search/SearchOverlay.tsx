@@ -83,6 +83,8 @@ function SearchPalette({
     // pushState, which does not) so the browser scrolls to the section. Cross-page
     // links (and plain pages) go through the router.
     if (hash && path === window.location.pathname) {
+      // The rule's suggested router.push is exactly what does not scroll here (see above).
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
       window.location.assign(`#${hash}`);
     } else {
       router.push(hit.url);
