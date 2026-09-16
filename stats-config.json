@@ -35,6 +35,7 @@
     { "owner": "neckarshore-websites", "name": "neckarshore-website", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
     { "owner": "neckarshore-websites", "name": "oakwoodgolfclub-website", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
     { "owner": "neckarshore-websites", "name": "paulus-website", "private": true },
+    { "owner": "neckarshore-websites", "name": "pet-foster-finder", "private": true },
     { "owner": "neckarshore-websites", "name": "rauhut-website", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
     { "owner": "neckarshore-websites", "name": "site-quality", "private": true, "statsPath": "stats.json" },
     { "owner": "omnopsis-ai", "name": "omnopsis-backend", "private": true, "statsPath": "backend/stats.json" },
