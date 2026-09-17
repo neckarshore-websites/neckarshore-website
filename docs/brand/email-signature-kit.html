@@ -437,6 +437,7 @@
       <button type="button" class="btn" data-copy="sig-ns-a" data-plain-src="plain-ns-a">Signatur kopieren</button>
       <button type="button" class="btn ghost" data-html="sig-ns-a">HTML-Quelltext</button>
       <button type="button" class="btn ghost" data-plain="plain-ns-a">Plain-Text ansehen</button>
+      <button type="button" class="btn ghost" data-copy-plain="plain-ns-a">Plain-Text kopieren</button>
     </div>
     <div class="drawer" id="drawer-sig-ns-a" hidden><pre></pre></div>
     <div class="drawer" id="drawer-plain-ns-a" hidden><pre id="plain-ns-a">German Rauhut
@@ -476,6 +477,7 @@ Nearshore-Engineering aus Stuttgart · DSGVO-konform · Made in Germany
       <button type="button" class="btn" data-copy="sig-ns-b" data-plain-src="plain-ns-b">Signatur kopieren</button>
       <button type="button" class="btn ghost" data-html="sig-ns-b">HTML-Quelltext</button>
       <button type="button" class="btn ghost" data-plain="plain-ns-b">Plain-Text ansehen</button>
+      <button type="button" class="btn ghost" data-copy-plain="plain-ns-b">Plain-Text kopieren</button>
     </div>
     <div class="drawer" id="drawer-sig-ns-b" hidden><pre></pre></div>
     <div class="drawer" id="drawer-plain-ns-b" hidden><pre id="plain-ns-b">neckarshore.ai
@@ -513,6 +515,7 @@ Nearshore-Engineering aus Stuttgart · DSGVO-konform · Made in Germany</pre></d
       <button type="button" class="btn" data-copy="sig-rh-a" data-plain-src="plain-rh-a">Signatur kopieren</button>
       <button type="button" class="btn ghost" data-html="sig-rh-a">HTML-Quelltext</button>
       <button type="button" class="btn ghost" data-plain="plain-rh-a">Plain-Text ansehen</button>
+      <button type="button" class="btn ghost" data-copy-plain="plain-rh-a">Plain-Text kopieren</button>
     </div>
     <div class="drawer" id="drawer-sig-rh-a" hidden><pre></pre></div>
     <div class="drawer" id="drawer-plain-rh-a" hidden><pre id="plain-rh-a">German Rauhut
@@ -551,6 +554,7 @@ Produkt, Architektur, Code · Stuttgart
       <button type="button" class="btn" data-copy="sig-rh-b" data-plain-src="plain-rh-b">Signatur kopieren</button>
       <button type="button" class="btn ghost" data-html="sig-rh-b">HTML-Quelltext</button>
       <button type="button" class="btn ghost" data-plain="plain-rh-b">Plain-Text ansehen</button>
+      <button type="button" class="btn ghost" data-copy-plain="plain-rh-b">Plain-Text kopieren</button>
     </div>
     <div class="drawer" id="drawer-sig-rh-b" hidden><pre></pre></div>
     <div class="drawer" id="drawer-plain-rh-b" hidden><pre id="plain-rh-b">German Rauhut
@@ -829,6 +833,38 @@ Produkt, Architektur, Code · Stuttgart
           });
         } else {
           flash(btn, legacyCopy(node) ? "Kopiert ✓" : "Fehlgeschlagen");
+        }
+      });
+    });
+
+    /* ---- plain-text only copy ---- */
+    function legacyCopyText(text) {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+
+    Array.prototype.forEach.call(document.querySelectorAll("[data-copy-plain]"), function (btn) {
+      btn.addEventListener("click", function () {
+        var node = document.getElementById(btn.getAttribute("data-copy-plain"));
+        if (!node) { return; }
+        var text = node.textContent.trim();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () {
+            flash(btn, "Kopiert ✓");
+          })["catch"](function () {
+            flash(btn, legacyCopyText(text) ? "Kopiert ✓" : "Fehlgeschlagen");
+          });
+        } else {
+          flash(btn, legacyCopyText(text) ? "Kopiert ✓" : "Fehlgeschlagen");
         }
       });
     });
