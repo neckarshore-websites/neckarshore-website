@@ -20,6 +20,19 @@ updates:
       - dependencies
     commit-message:
       prefix: chore(deps)
+    ignore:
+      # @types/node beschreibt die Schnittstellen EINER Node-Version. Vercel faehrt
+      # dieses Projekt auf Node 24.x (Projekteinstellung nodeVersion), die CI seit
+      # 2026-09-18 ebenfalls. Ein Major-Vorschlag zieht die Typen auf eine Laufzeit,
+      # die wir nicht haben — tsc waere dann gruen ueber Funktionen, die auf dem
+      # Server fehlen. Minor und Patch innerhalb der 24er-Linie kommen weiter.
+      #
+      # ENTFERNUNGSKRITERIUM (sonst steht diese Zeile in zwei Jahren noch hier):
+      # Sobald Vercels nodeVersion auf eine hoehere Linie gestellt wird, faellt diese
+      # Ausnahme weg und @types/node zieht in einem Zug mit nach.
+      - dependency-name: "@types/node"
+        update-types:
+          - version-update:semver-major
     groups:
       # Grouping is aligned with the auto-merge safe class (dependabot-auto-merge.yml)
       # so the boring class self-clears atomically and only the review-worthy bumps
