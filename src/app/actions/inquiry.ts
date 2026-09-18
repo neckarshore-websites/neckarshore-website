@@ -3,6 +3,10 @@
 import nodemailer from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import { CAPTCHA_FORM_FIELD, verifyCaptchaToken } from "@/lib/captcha/verify";
+import {
+  CONFIRMATION_SUBJECT,
+  buildConfirmationText,
+} from "@/lib/contact-confirmation";
 import type { ContactFieldValues, ContactState } from "./inquiry-state";
 
 /**
@@ -201,6 +205,30 @@ export async function sendContact(
         values: echoValues,
       };
     }
+
+    // ----- Eingangsbestaetigung an den Absender ----------------------
+    // BEST-EFFORT, und das ist der ganze Punkt: an dieser Stelle ist die
+    // Anfrage bereits zugestellt. Scheitert die Kopie an den Absender
+    // (Tippfehler in der Adresse, volles Postfach, Greylisting), darf das
+    // NIEMALS aus einer erfolgreich zugestellten Anfrage einen Fehler
+    // machen — sonst schickt der Absender sie ein zweites Mal ab und wir
+    // bearbeiten dieselbe Anfrage doppelt. Dasselbe Muster fahren
+    // goldoni-website und oakwoodgolfclub-website seit laengerem.
+    //
+    // replyTo zeigt auf unser Postfach, nicht auf die Absenderadresse:
+    // wer auf die Bestaetigung antwortet, soll bei UNS landen.
+    try {
+      await transporter.sendMail({
+        from: config.from,
+        to: email,
+        replyTo: config.to,
+        subject: CONFIRMATION_SUBJECT,
+        text: buildConfirmationText(name, message),
+      });
+    } catch (err) {
+      console.error("[neckarshore Contact] confirmation copy failed", err);
+    }
+
     return { status: "success" };
   } catch (err) {
     console.error("[neckarshore Contact] SMTP send threw", err);
