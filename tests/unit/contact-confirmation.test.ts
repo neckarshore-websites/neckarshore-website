@@ -29,13 +29,17 @@ test("weist die Mail als automatisch versendet aus", () => {
 });
 
 test("traegt einen Weg zurueck zu uns", () => {
-  // Zeilenweise und auf Gleichheit geprueft, nicht per includes() auf den
-  // Gesamttext: eine Teilstring-Pruefung auf eine URL waere schwaecher (der
-  // Treffer duerfte irgendwo stehen, auch als Teil einer fremden Adresse) —
-  // und CodeQL meldet sie zu Recht als js/incomplete-url-substring-sanitization.
+  // Vergleich auf GLEICHHEIT je Zeile, nicht includes(): eine
+  // Teilstring-Pruefung auf eine URL trifft auch dann zu, wenn die Adresse
+  // Teil einer fremden ist. CodeQL meldet das als
+  // js/incomplete-url-substring-sanitization — und zwar auch dann noch, wenn
+  // man nur von String.includes auf Array.includes wechselt (auf PR #258
+  // nachgemessen). Erst der ===-Vergleich beendet beides: die Meldung und
+  // die schwache Zusicherung dahinter.
   const lines = buildConfirmationText("Meier", "Test").split("\n");
-  assert.ok(lines.includes("https://neckarshore.ai"));
-  assert.ok(lines.includes("https://calendly.com/rauhut/20min"));
+  const countExact = (url: string) => lines.filter((l) => l === url).length;
+  assert.equal(countExact("https://neckarshore.ai"), 1);
+  assert.equal(countExact("https://calendly.com/rauhut/20min"), 1);
 });
 
 test("der Betreff nennt die Seite", () => {
