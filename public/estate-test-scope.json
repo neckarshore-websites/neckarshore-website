@@ -1,9 +1,9 @@
 {
   "byType": {
     "e2e": 989,
-    "integration": 559,
+    "integration": 619,
     "smoke": 1,
-    "unit": 2438
+    "unit": 2443
   },
   "endpoints": 96,
   "expected": 18,
@@ -13,14 +13,14 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 511,
+        "integration": 571,
         "unit": 101
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 612
+      "total": 672
     },
     {
       "audited_sha": "02459573530c22911e0e07327d1746e603ff1d04",
@@ -57,7 +57,7 @@
       "total": 241
     },
     {
-      "audited_sha": "e3acf8d46cca58cafd996290e084cdc643e95c13",
+      "audited_sha": "4011b404a16dec92eb258c3196cffe1294959b10",
       "byType": {
         "e2e": 74,
         "unit": 274
@@ -110,7 +110,7 @@
       "total": 214
     },
     {
-      "audited_sha": "747ce541dd56fe7ab87d8670dbbd63b60074a3b8",
+      "audited_sha": "ecc6c863b9e135ce71ea03168efba1c2fccee380",
       "byType": {
         "e2e": 24
       },
@@ -120,7 +120,7 @@
       "total": 24
     },
     {
-      "audited_sha": "0c85542d7f5050604da2b1bac45313625a62999f",
+      "audited_sha": "c60fca9d5f1d002af3385db9489b1922d05e2f23",
       "byType": {
         "e2e": 3
       },
@@ -130,18 +130,18 @@
       "total": 3
     },
     {
-      "audited_sha": "7a05fc85f7607c4b54ccd2c6e63824d1b43c8a70",
+      "audited_sha": "49d2a3515747cffb6fd8764a8aa9a9b01047fad9",
       "byType": {
         "e2e": 444,
-        "unit": 220
+        "unit": 225
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/neckarshore-website",
-      "total": 664
+      "total": 669
     },
     {
-      "audited_sha": "11657e17be2648156b9576adeecc547df13b8013",
+      "audited_sha": "9ade50fa8968b401afce65a32ecc87a098ff0753",
       "byType": {
         "e2e": 54
       },
@@ -151,7 +151,7 @@
       "total": 54
     },
     {
-      "audited_sha": "2acc323971a0a6fa12479485062ad1cf93b43ef9",
+      "audited_sha": "9520972012a99481fcafcae7ad8f2308421632be",
       "byType": {
         "e2e": 34
       },
@@ -241,7 +241,7 @@
   ],
   "reporting": 18,
   "repos": 21,
-  "total": 4033,
+  "total": 4098,
   "untyped_total": 46,
-  "updatedAt": "2026-09-17T09:04:09Z"
+  "updatedAt": "2026-09-18T13:32:26Z"
 }
