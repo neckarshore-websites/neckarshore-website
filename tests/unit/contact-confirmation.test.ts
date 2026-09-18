@@ -29,9 +29,13 @@ test("weist die Mail als automatisch versendet aus", () => {
 });
 
 test("traegt einen Weg zurueck zu uns", () => {
-  const text = buildConfirmationText("Meier", "Test");
-  assert.ok(text.includes("https://neckarshore.ai"));
-  assert.ok(text.includes("calendly.com/rauhut/20min"));
+  // Zeilenweise und auf Gleichheit geprueft, nicht per includes() auf den
+  // Gesamttext: eine Teilstring-Pruefung auf eine URL waere schwaecher (der
+  // Treffer duerfte irgendwo stehen, auch als Teil einer fremden Adresse) —
+  // und CodeQL meldet sie zu Recht als js/incomplete-url-substring-sanitization.
+  const lines = buildConfirmationText("Meier", "Test").split("\n");
+  assert.ok(lines.includes("https://neckarshore.ai"));
+  assert.ok(lines.includes("https://calendly.com/rauhut/20min"));
 });
 
 test("der Betreff nennt die Seite", () => {
