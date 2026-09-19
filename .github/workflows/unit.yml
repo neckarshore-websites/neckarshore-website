@@ -55,3 +55,11 @@ jobs:
           # real gate, not cosmetic. NB this is the crawler's SELF-TEST — `crawl` and
           # `crawl:internal` DO hit the network and stay deliberately ungated (manual run).
           npm run crawl:test
+          # Agent-file drift gate (#2360). Reads the REAL AGENTS.md and CLAUDE.md in the
+          # checkout — not a fixture, not node_modules — and fails when the foreign
+          # nextjs-agent-rules block differs from scripts/nextjs-agent-rules.expected.md,
+          # when it vanishes from AGENTS.md, or when it turns up in CLAUDE.md. The
+          # accompanying unit test covers the pure logic; it would go green without ever
+          # opening AGENTS.md, so BOTH lines have to stand here. No `next dev` runs in
+          # this job, so the generator cannot repair the very deviation being measured.
+          npm run check:agent-files
