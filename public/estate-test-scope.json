@@ -1,9 +1,9 @@
 {
   "byType": {
     "e2e": 989,
-    "integration": 619,
+    "integration": 627,
     "smoke": 1,
-    "unit": 2443
+    "unit": 2455
   },
   "endpoints": 96,
   "expected": 18,
@@ -13,14 +13,14 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 571,
+        "integration": 579,
         "unit": 101
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 672
+      "total": 680
     },
     {
       "audited_sha": "02459573530c22911e0e07327d1746e603ff1d04",
@@ -89,7 +89,7 @@
       "total": 179
     },
     {
-      "audited_sha": "624c33be41f33485f89f639e6e134e58df03106e",
+      "audited_sha": "84882b37d69070980077cf464080b7f532021b69",
       "byType": {
         "unit": 468
       },
@@ -110,7 +110,7 @@
       "total": 214
     },
     {
-      "audited_sha": "0582b6d3c4dd56d1ffc21987a540927fa9b26ab2",
+      "audited_sha": "c1152c5e782b2b53e0a65630f14cd47daa0029e1",
       "byType": {
         "e2e": 24
       },
@@ -120,7 +120,7 @@
       "total": 24
     },
     {
-      "audited_sha": "c60fca9d5f1d002af3385db9489b1922d05e2f23",
+      "audited_sha": "b9aae2f7093d1d5df4f92de9506dd09c6d4f38ec",
       "byType": {
         "e2e": 3
       },
@@ -130,15 +130,15 @@
       "total": 3
     },
     {
-      "audited_sha": "d94594d4e1bad4c8bd8d2835cacf6c8638357e91",
+      "audited_sha": "0c741d88bf68b456b3784d84168729cc70444b61",
       "byType": {
         "e2e": 444,
-        "unit": 225
+        "unit": 237
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/neckarshore-website",
-      "total": 669
+      "total": 681
     },
     {
       "audited_sha": "9ade50fa8968b401afce65a32ecc87a098ff0753",
@@ -151,7 +151,7 @@
       "total": 54
     },
     {
-      "audited_sha": "9520972012a99481fcafcae7ad8f2308421632be",
+      "audited_sha": "f8c28beeae276f32492ea015d6d1e846ee474e54",
       "byType": {
         "e2e": 34
       },
@@ -241,7 +241,7 @@
   ],
   "reporting": 18,
   "repos": 21,
-  "total": 4098,
+  "total": 4118,
   "untyped_total": 46,
-  "updatedAt": "2026-09-19T08:26:36Z"
+  "updatedAt": "2026-09-20T08:57:41Z"
 }
