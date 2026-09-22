@@ -112,16 +112,27 @@ export function classifySeedFreshness(rows, nowMs, opts = {}) {
     const commitsOver = r.aheadBy > thresholdCommits;
     const daysOver = age !== null && age > thresholdDays;
 
+    // Die Tage-Achse misst das Alter des auditierten COMMITS, nicht das Alter des AUDITS
+    // (shaDateISO = base_commit.committer.date). Bei aheadBy === 0 IST der auditierte SHA der
+    // Kopf des Repos: die Zahl kann nicht gedriftet sein, weil es keinen Commit gibt, in dem sie
+    // haette driften koennen. Ein ruhendes Repo konnte die Achse deshalb NIE erfuellen und lief
+    // mit jedem Tag sicher in den Alarm — gemessen am 2026-09-22 an
+    // neckarshore-ai/test-stats-action (0 Commits Abstand, 46 Tage, Schwelle 45).
+    // Die Commits-Achse bleibt unberuehrt: sie ist der eigentliche Drift-Sensor.
+    const dormant = r.aheadBy === 0;
+    const daysStale = daysOver && !dormant;
+
     const reasons = [];
     if (commitsOver) reasons.push(`${r.aheadBy} Commits > ${thresholdCommits}`);
-    if (daysOver) reasons.push(`${age} Tage > ${thresholdDays}`);
+    if (daysStale) reasons.push(`${age} Tage > ${thresholdDays}`);
+    if (daysOver && dormant) reasons.push(`${age} Tage, aber 0 Commits Abstand — der Stempel IST der Kopf`);
 
     checked.push({
       repo: r.repo,
       sha: r.audited_sha,
       aheadBy: r.aheadBy,
       ageDays: age,
-      stale: commitsOver || daysOver,
+      stale: commitsOver || daysStale,
       reason: reasons.join(" und ") || "frisch",
     });
   }

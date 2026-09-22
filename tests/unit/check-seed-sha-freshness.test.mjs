@@ -18,6 +18,15 @@
  *      weiterlaufen (Bot-Stapel) oder in 3 Commits ein halbes Jahr liegen. Eine einzelne Achse
  *      verpasst je einen der beiden Fälle.
  *
+ *   5. DIE TAGE-ACHSE GILT NUR BEI ABSTAND > 0 (Korrektur 2026-09-22, #241). Sie misst das Alter
+ *      des auditierten COMMITS, nicht das Alter des AUDITS. Bei `aheadBy === 0` IST der Stempel der
+ *      Kopf des Repos — die Zahl kann nicht gedriftet sein, weil es keinen Commit gibt, in dem sie
+ *      hätte driften können. Vorher lief ein ruhendes Repo mit jedem Tag sicher in den Alarm, ohne
+ *      dass sich irgendetwas an ihm geändert hätte. Gemessen an
+ *      `neckarshore-ai/test-stats-action`: 0 Commits Abstand, 46 Tage, Schwelle 45 — rot am Tag
+ *      seiner Eintragung. Die Zeile wird weiter GEFÜHRT und trägt ihr Alter im Grund, sie ist nur
+ *      nicht mehr `stale`.
+ *
  * REGRESSIONSFALL, gemessen und nicht erfunden: `neckarshore-websites/neckarshore-website` trägt
  * `a1561cb` vom 2026-06-29. Am 2026-09-09 sind das 183 Commits und 72 Tage
  * (`gh api .../compare/a1561cb...main --jq .ahead_by`). Das Ticket #2033 nennt in seiner
@@ -98,6 +107,41 @@ test("zwei Achsen, ODER-verknüpft — jede allein reicht zum Auslösen", () => 
 
   const beidesFrisch = classifySeedFreshness([row("o/r", "abc", 2, 3)], NOW, opts);
   assert.equal(beidesFrisch.stale.length, 0, "beide unter der Schwelle = frisch");
+});
+
+test("TAGE-ACHSE GILT NUR BEI ABSTAND > 0: ein ruhendes Repo ist nicht stale (#241)", () => {
+  // aheadBy === 0 heisst: der auditierte SHA IST der Kopf. Es gibt keinen Commit, in dem die
+  // Zahl haette driften koennen — also ist Alter allein kein Befund.
+  const ruhend = classifySeedFreshness([row("o/ruhend", "893875d", 0, 200)], NOW, {
+    thresholdCommits: 100,
+    thresholdDays: 45,
+  });
+  assert.equal(ruhend.stale.length, 0, "ruhendes Repo darf nicht stale sein");
+  assert.equal(ruhend.checked.length, 1, "es wird trotzdem GEFUEHRT, nicht ausgenommen");
+  assert.match(
+    ruhend.checked[0].reason,
+    /0 Commits Abstand/,
+    "das Alter muss im Grund sichtbar bleiben, sonst verschweigt das Tor es",
+  );
+
+  // Gegenprobe: ein einziger Commit Abstand macht dieselbe Zeile wieder stale.
+  const bewegt = classifySeedFreshness([row("o/bewegt", "893875d", 1, 200)], NOW, {
+    thresholdCommits: 100,
+    thresholdDays: 45,
+  });
+  assert.equal(bewegt.stale.length, 1, "ein Commit Abstand genuegt, die Tage-Achse greift wieder");
+  assert.match(bewegt.stale[0].reason, /200 Tage > 45/);
+});
+
+test("die Commits-Achse bleibt von der Korrektur unberuehrt", () => {
+  // Ein ruhendes Repo KANN die Commits-Achse nicht ueberschreiten (0 > N ist nie wahr), aber die
+  // Achse darf durch die Korrektur auch nicht stumpf geworden sein.
+  const v = classifySeedFreshness([row("o/r", "abc", 500, 1)], NOW, {
+    thresholdCommits: 100,
+    thresholdDays: 9999,
+  });
+  assert.equal(v.stale.length, 1);
+  assert.match(v.stale[0].reason, /500 Commits > 100/);
 });
 
 test("FAIL-CLOSED: ein SHA ohne ermittelbaren Abstand ist stale, nicht still", () => {
