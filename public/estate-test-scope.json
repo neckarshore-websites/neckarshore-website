@@ -1,7 +1,7 @@
 {
   "byType": {
     "e2e": 989,
-    "integration": 627,
+    "integration": 651,
     "smoke": 1,
     "unit": 2455
   },
@@ -13,14 +13,14 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 579,
+        "integration": 603,
         "unit": 101
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 680
+      "total": 704
     },
     {
       "audited_sha": "02459573530c22911e0e07327d1746e603ff1d04",
@@ -89,7 +89,7 @@
       "total": 179
     },
     {
-      "audited_sha": "84882b37d69070980077cf464080b7f532021b69",
+      "audited_sha": "ce572edda9656bcc16b9eab72957e35ce85f6aa9",
       "byType": {
         "unit": 468
       },
@@ -110,7 +110,7 @@
       "total": 214
     },
     {
-      "audited_sha": "c1152c5e782b2b53e0a65630f14cd47daa0029e1",
+      "audited_sha": "c0afefd0e640bf5c6eaf5da3bb48853d92708695",
       "byType": {
         "e2e": 24
       },
@@ -130,7 +130,7 @@
       "total": 3
     },
     {
-      "audited_sha": "3d7b7cd186546eacb967e6be7de52fc258cba36a",
+      "audited_sha": "de6a1f8ea0656caf234d317e4e5814711e8f4478",
       "byType": {
         "e2e": 444,
         "unit": 237
@@ -141,7 +141,7 @@
       "total": 681
     },
     {
-      "audited_sha": "9ade50fa8968b401afce65a32ecc87a098ff0753",
+      "audited_sha": "520a7316e6e60121b34136224b18b2c6c8109412",
       "byType": {
         "e2e": 54
       },
@@ -151,7 +151,7 @@
       "total": 54
     },
     {
-      "audited_sha": "f8c28beeae276f32492ea015d6d1e846ee474e54",
+      "audited_sha": "3a9afcb8229af587e8510556b2989ff102498f8d",
       "byType": {
         "e2e": 34
       },
@@ -209,14 +209,13 @@
       "total": 227
     },
     {
-      "audited_sha": null,
+      "audited_sha": "893875d",
       "byType": {},
       "endpoints": 0,
       "lenses": {},
-      "private": true,
-      "repo": "privates Repo",
+      "repo": "neckarshore-ai/test-stats-action",
       "seeded": true,
-      "total": 19
+      "total": 40
     },
     {
       "audited_sha": null,
@@ -226,7 +225,7 @@
       "private": true,
       "repo": "privates Repo",
       "seeded": true,
-      "total": 18
+      "total": 33
     },
     {
       "audited_sha": null,
@@ -241,7 +240,7 @@
   ],
   "reporting": 18,
   "repos": 21,
-  "total": 4118,
-  "untyped_total": 46,
-  "updatedAt": "2026-09-21T09:29:23Z"
+  "total": 4178,
+  "untyped_total": 82,
+  "updatedAt": "2026-09-22T07:30:30Z"
 }
