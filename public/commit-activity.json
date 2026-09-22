@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-09-22T07:49:17Z",
+  "updatedAt": "2026-09-22T08:54:05Z",
   "startDate": "2026-03-22",
-  "seriesTotal": 7166,
+  "seriesTotal": 8505,
   "weeks": [
     {
       "week": "2026-03-22",
@@ -9,137 +9,137 @@
     },
     {
       "week": "2026-03-29",
-      "total": 121
+      "total": 167
     },
     {
       "week": "2026-04-05",
-      "total": 347
+      "total": 384
     },
     {
       "week": "2026-04-12",
-      "total": 225
+      "total": 370
     },
     {
       "week": "2026-04-19",
-      "total": 133
+      "total": 216
     },
     {
       "week": "2026-04-26",
-      "total": 180
+      "total": 267
     },
     {
       "week": "2026-05-03",
-      "total": 235
+      "total": 271
     },
     {
       "week": "2026-05-10",
-      "total": 296
+      "total": 351
     },
     {
       "week": "2026-05-17",
-      "total": 104
+      "total": 132
     },
     {
       "week": "2026-05-24",
-      "total": 35
+      "total": 61
     },
     {
       "week": "2026-05-31",
-      "total": 212
+      "total": 231
     },
     {
       "week": "2026-06-07",
-      "total": 302
+      "total": 361
     },
     {
       "week": "2026-06-14",
-      "total": 164
+      "total": 284
     },
     {
       "week": "2026-06-21",
-      "total": 146
+      "total": 185
     },
     {
       "week": "2026-06-28",
-      "total": 345
+      "total": 399
     },
     {
       "week": "2026-07-05",
-      "total": 396
+      "total": 451
     },
     {
       "week": "2026-07-12",
-      "total": 515
+      "total": 557
     },
     {
       "week": "2026-07-19",
-      "total": 371
+      "total": 392
     },
     {
       "week": "2026-07-26",
-      "total": 335
+      "total": 385
     },
     {
       "week": "2026-08-02",
-      "total": 354
+      "total": 374
     },
     {
       "week": "2026-08-09",
-      "total": 481
+      "total": 508
     },
     {
       "week": "2026-08-16",
-      "total": 404
+      "total": 435
     },
     {
       "week": "2026-08-23",
-      "total": 360
+      "total": 419
     },
     {
       "week": "2026-08-30",
-      "total": 37
+      "total": 51
     },
     {
       "week": "2026-09-06",
-      "total": 245
+      "total": 309
     },
     {
       "week": "2026-09-13",
-      "total": 377
+      "total": 474
     },
     {
       "week": "2026-09-20",
-      "total": 83
+      "total": 108
     }
   ],
   "months": [
     {
       "month": "2026-03",
-      "total": 484
+      "total": 530
     },
     {
       "month": "2026-04",
-      "total": 885
+      "total": 1237
     },
     {
       "month": "2026-05",
-      "total": 882
+      "total": 1046
     },
     {
       "month": "2026-06",
-      "total": 957
+      "total": 1229
     },
     {
       "month": "2026-07",
-      "total": 1617
+      "total": 1785
     },
     {
       "month": "2026-08",
-      "total": 1636
+      "total": 1787
     },
     {
       "month": "2026-09",
-      "total": 705
+      "total": 891
     }
   ],
   "areas": [
@@ -152,6 +152,10 @@
       "total": 1821
     },
     {
+      "area": "Websites",
+      "total": 1455
+    },
+    {
       "area": "MMPs",
       "total": 1040
     },
@@ -160,18 +164,14 @@
       "total": 494
     },
     {
-      "area": "Websites",
-      "total": 116
-    },
-    {
       "area": "Agenten",
       "total": 3
     }
   ],
   "peak": {
     "month": "2026-08",
-    "total": 1636
+    "total": 1787
   },
-  "reposMissing": 6,
-  "reposCounted": 37
+  "reposMissing": 0,
+  "reposCounted": 43
 }
