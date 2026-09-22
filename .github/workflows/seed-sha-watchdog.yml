@@ -56,7 +56,7 @@ jobs:
       issues: write
 
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # Der Waechter liest genau eine Datei und spricht sonst nur ueber die API. Er fuehrt keinen
           # git-Befehl aus, also hat die Job-Anmeldung in der lokalen git-Konfiguration nichts zu

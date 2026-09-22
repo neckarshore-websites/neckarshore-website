@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-09-21T09:27:29Z",
+  "updatedAt": "2026-09-22T07:28:59Z",
   "startDate": "2026-03-22",
-  "seriesTotal": 8407,
+  "seriesTotal": 8349,
   "weeks": [
     {
       "week": "2026-03-22",
@@ -33,11 +33,11 @@
     },
     {
       "week": "2026-05-10",
-      "total": 351
+      "total": 241
     },
     {
       "week": "2026-05-17",
-      "total": 132
+      "total": 128
     },
     {
       "week": "2026-05-24",
@@ -57,11 +57,11 @@
     },
     {
       "week": "2026-06-21",
-      "total": 185
+      "total": 161
     },
     {
       "week": "2026-06-28",
-      "total": 399
+      "total": 393
     },
     {
       "week": "2026-07-05",
@@ -69,7 +69,7 @@
     },
     {
       "week": "2026-07-12",
-      "total": 557
+      "total": 555
     },
     {
       "week": "2026-07-19",
@@ -81,7 +81,7 @@
     },
     {
       "week": "2026-08-02",
-      "total": 374
+      "total": 373
     },
     {
       "week": "2026-08-09",
@@ -109,7 +109,7 @@
     },
     {
       "week": "2026-09-20",
-      "total": 10
+      "total": 99
     }
   ],
   "months": [
@@ -123,29 +123,29 @@
     },
     {
       "month": "2026-05",
-      "total": 1046
+      "total": 932
     },
     {
       "month": "2026-06",
-      "total": 1229
+      "total": 1199
     },
     {
       "month": "2026-07",
-      "total": 1785
+      "total": 1783
     },
     {
       "month": "2026-08",
-      "total": 1787
+      "total": 1786
     },
     {
       "month": "2026-09",
-      "total": 793
+      "total": 882
     }
   ],
   "areas": [
     {
       "area": "Infrastruktur",
-      "total": 3628
+      "total": 3692
     },
     {
       "area": "Omnopsis",
@@ -153,15 +153,15 @@
     },
     {
       "area": "Websites",
-      "total": 1433
+      "total": 1446
     },
     {
       "area": "MMPs",
-      "total": 1030
+      "total": 893
     },
     {
       "area": "Skills",
-      "total": 492
+      "total": 494
     },
     {
       "area": "Agenten",
@@ -170,8 +170,8 @@
   ],
   "peak": {
     "month": "2026-08",
-    "total": 1787
+    "total": 1786
   },
-  "reposMissing": 0,
-  "reposCounted": 43
+  "reposMissing": 1,
+  "reposCounted": 42
 }
