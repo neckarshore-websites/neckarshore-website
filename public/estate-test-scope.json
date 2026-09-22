@@ -3,7 +3,7 @@
     "e2e": 989,
     "integration": 651,
     "smoke": 1,
-    "unit": 2455
+    "unit": 2748
   },
   "endpoints": 96,
   "expected": 18,
@@ -110,27 +110,29 @@
       "total": 214
     },
     {
-      "audited_sha": "c0afefd0e640bf5c6eaf5da3bb48853d92708695",
+      "audited_sha": "48ba2bfe4a77f85ce7de76acf2f8de85394765ac",
       "byType": {
-        "e2e": 24
+        "e2e": 24,
+        "unit": 124
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/goldoni-website",
-      "total": 24
+      "total": 148
     },
     {
-      "audited_sha": "b9aae2f7093d1d5df4f92de9506dd09c6d4f38ec",
+      "audited_sha": "a2f4fe16ff4bef99eb7dca8147bba9ab13b986cd",
       "byType": {
-        "e2e": 3
+        "e2e": 3,
+        "unit": 6
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/grafowerk-website",
-      "total": 3
+      "total": 9
     },
     {
-      "audited_sha": "de6a1f8ea0656caf234d317e4e5814711e8f4478",
+      "audited_sha": "55537aaebf52184e337c7fc872bb2a4411cc3afd",
       "byType": {
         "e2e": 444,
         "unit": 237
@@ -141,24 +143,26 @@
       "total": 681
     },
     {
-      "audited_sha": "520a7316e6e60121b34136224b18b2c6c8109412",
+      "audited_sha": "48e7ef6b72e9aee72c5333f27d42afa7d9dd5a05",
       "byType": {
-        "e2e": 54
+        "e2e": 54,
+        "unit": 111
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/oakwoodgolfclub-website",
-      "total": 54
+      "total": 165
     },
     {
-      "audited_sha": "3a9afcb8229af587e8510556b2989ff102498f8d",
+      "audited_sha": "864d77a79517b09987dc416ad681315893b976f6",
       "byType": {
-        "e2e": 34
+        "e2e": 34,
+        "unit": 52
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/rauhut-website",
-      "total": 34
+      "total": 86
     },
     {
       "audited_sha": null,
@@ -240,7 +244,7 @@
   ],
   "reporting": 18,
   "repos": 21,
-  "total": 4178,
+  "total": 4471,
   "untyped_total": 82,
-  "updatedAt": "2026-09-22T07:30:30Z"
+  "updatedAt": "2026-09-22T07:50:31Z"
 }
