@@ -27,6 +27,13 @@
  *      seiner Eintragung. Die Zeile wird weiter GEFÜHRT und trägt ihr Alter im Grund, sie ist nur
  *      nicht mehr `stale`.
  *
+ *   6. RUHEND HEISST BEIDE RICHTUNGEN 0 (Nachtrag 2026-09-22, #241, Befund Lenin). `ahead_by === 0`
+ *      allein ist auch dann wahr, wenn der SHA ein NACHKOMME von main ist (`status: "behind"`) —
+ *      ein Commit, der auf main nie gelandet ist, etwa ein PR-Kopf. Gemessen in diesem Repo:
+ *      `compare(a91efcc...a25a7f2)` = ahead 0 / behind 6. Ohne `behind_by` wäre so ein Stempel
+ *      dauerhaft „ruhend" und nie überfällig, obwohl er auf einen Stand zeigt, den niemand gemergt
+ *      hat. Unbekanntes `behindBy` gilt FAIL-CLOSED als nicht ruhend.
+ *
  * REGRESSIONSFALL, gemessen und nicht erfunden: `neckarshore-websites/neckarshore-website` trägt
  * `a1561cb` vom 2026-06-29. Am 2026-09-09 sind das 183 Commits und 72 Tage
  * (`gh api .../compare/a1561cb...main --jq .ahead_by`). Das Ticket #2033 nennt in seiner
@@ -47,10 +54,11 @@ const NOW = Date.parse("2026-09-09T12:00:00Z");
 const daysAgo = (d) => new Date(NOW - d * 86_400_000).toISOString();
 
 /** Bequemer Zeilenbau — nur die Felder, die der Klassifikator liest. */
-const row = (repo, sha, aheadBy, shaDaysAgo) => ({
+const row = (repo, sha, aheadBy, shaDaysAgo, behindBy = 0) => ({
   repo,
   audited_sha: sha,
   aheadBy,
+  behindBy,
   shaDateISO: shaDaysAgo === null ? null : daysAgo(shaDaysAgo),
 });
 
@@ -120,7 +128,7 @@ test("TAGE-ACHSE GILT NUR BEI ABSTAND > 0: ein ruhendes Repo ist nicht stale (#2
   assert.equal(ruhend.checked.length, 1, "es wird trotzdem GEFUEHRT, nicht ausgenommen");
   assert.match(
     ruhend.checked[0].reason,
-    /0 Commits Abstand/,
+    /kein Commit Abstand zu main/,
     "das Alter muss im Grund sichtbar bleiben, sonst verschweigt das Tor es",
   );
 
@@ -131,6 +139,28 @@ test("TAGE-ACHSE GILT NUR BEI ABSTAND > 0: ein ruhendes Repo ist nicht stale (#2
   });
   assert.equal(bewegt.stale.length, 1, "ein Commit Abstand genuegt, die Tage-Achse greift wieder");
   assert.match(bewegt.stale[0].reason, /200 Tage > 45/);
+});
+
+test("RUHEND HEISST BEIDE RICHTUNGEN 0: ein Nachkomme von main ist NICHT ruhend (#241, Nachtrag)", () => {
+  const opts = { thresholdCommits: 100, thresholdDays: 45 };
+
+  // Stempel auf main, kein Abstand: ruhend, also nicht stale.
+  const aufMain = classifySeedFreshness([row("o/r", "abc", 0, 200, 0)], NOW, opts);
+  assert.equal(aufMain.stale.length, 0);
+
+  // Stempel auf einem PR-Kopf: ahead 0, aber 6 Commits, die main nicht hat. Die Tage-Achse
+  // greift wieder, und der Grund benennt den Zustand.
+  const nebenMain = classifySeedFreshness([row("o/r", "abc", 0, 200, 6)], NOW, opts);
+  assert.equal(nebenMain.stale.length, 1, "ein Stand abseits von main darf nicht als ruhend gelten");
+  assert.match(nebenMain.stale[0].reason, /nicht auf main liegen/);
+
+  // FAIL-CLOSED: behindBy unbekannt -> nicht ruhend, Tage-Achse greift wie vorher.
+  const unbekannt = classifySeedFreshness(
+    [{ repo: "o/r", audited_sha: "abc", aheadBy: 0, shaDateISO: daysAgo(200) }],
+    NOW,
+    opts,
+  );
+  assert.equal(unbekannt.stale.length, 1, "unbekanntes behindBy darf keine Ausnahme erzeugen");
 });
 
 test("die Commits-Achse bleibt von der Korrektur unberuehrt", () => {

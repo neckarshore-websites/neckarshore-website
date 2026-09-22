@@ -113,19 +113,31 @@ export function classifySeedFreshness(rows, nowMs, opts = {}) {
     const daysOver = age !== null && age > thresholdDays;
 
     // Die Tage-Achse misst das Alter des auditierten COMMITS, nicht das Alter des AUDITS
-    // (shaDateISO = base_commit.committer.date). Bei aheadBy === 0 IST der auditierte SHA der
-    // Kopf des Repos: die Zahl kann nicht gedriftet sein, weil es keinen Commit gibt, in dem sie
-    // haette driften koennen. Ein ruhendes Repo konnte die Achse deshalb NIE erfuellen und lief
-    // mit jedem Tag sicher in den Alarm — gemessen am 2026-09-22 an
-    // neckarshore-ai/test-stats-action (0 Commits Abstand, 46 Tage, Schwelle 45).
-    // Die Commits-Achse bleibt unberuehrt: sie ist der eigentliche Drift-Sensor.
-    const dormant = r.aheadBy === 0;
+    // (shaDateISO = base_commit.committer.date). Ein Stempel OHNE Abstand zu main kann nicht
+    // gedriftet sein, weil es keinen Commit gibt, in dem die Zahl haette driften koennen. Ein
+    // ruhendes Repo konnte die Achse deshalb NIE erfuellen und lief mit jedem Tag sicher in den
+    // Alarm — gemessen am 2026-09-22 an neckarshore-ai/test-stats-action (0 Commits, 46 Tage,
+    // Schwelle 45). Die Commits-Achse bleibt unberuehrt: sie ist der eigentliche Drift-Sensor.
+    //
+    // BEIDE Richtungen muessen 0 sein, und das ist der Nachtrag vom 2026-09-22 (#241, Lenin):
+    // `ahead_by === 0` allein bedeutet auch dann 0, wenn der SHA ein NACHKOMME von main ist
+    // (status "behind") — ein Commit, der auf main nie gelandet ist, etwa ein PR-Kopf. Gemessen in
+    // diesem Repo: compare(a91efcc...a25a7f2) = ahead 0 / behind 6 / "behind". Ohne behind_by waere
+    // so ein Stempel dauerhaft "ruhend" und nie ueberfaellig, obwohl er auf einen Stand zeigt, den
+    // niemand je gemergt hat. Es gibt diese Bauform: bei der Emitter-Durchsicht am 2026-08-18
+    // stempelte genau ein Erzeuger einen PR-Kopf (clearpath, N=1).
+    //
+    // FAIL-CLOSED: ist behindBy unbekannt (null/undefined), gilt die Zeile NICHT als ruhend — dann
+    // greift die Tage-Achse wie vor dieser Aenderung. Unwissen darf nie zur Ausnahme fuehren.
+    const dormant = r.aheadBy === 0 && r.behindBy === 0;
+    const offMain = r.aheadBy === 0 && typeof r.behindBy === "number" && r.behindBy > 0;
     const daysStale = daysOver && !dormant;
 
     const reasons = [];
     if (commitsOver) reasons.push(`${r.aheadBy} Commits > ${thresholdCommits}`);
     if (daysStale) reasons.push(`${age} Tage > ${thresholdDays}`);
-    if (daysOver && dormant) reasons.push(`${age} Tage, aber 0 Commits Abstand — der Stempel IST der Kopf`);
+    if (daysOver && dormant) reasons.push(`${age} Tage, aber kein Commit Abstand zu main`);
+    if (offMain) reasons.push(`${r.behindBy} Commits, die nicht auf main liegen — der Stempel zeigt auf einen Stand abseits von main`);
 
     checked.push({
       repo: r.repo,
@@ -186,16 +198,20 @@ async function measure(repo, sha, token) {
   if (token) headers.Authorization = `Bearer ${token}`;
   try {
     const res = await fetch(`https://api.github.com/repos/${repo}/compare/${sha}...HEAD`, { headers });
-    if (!res.ok) return { aheadBy: null, shaDateISO: null, error: `GitHub-API ${res.status}` };
+    if (!res.ok) return { aheadBy: null, behindBy: null, shaDateISO: null, error: `GitHub-API ${res.status}` };
     const j = await res.json();
     // `ahead_by` aus Sicht des Vergleichs-Kopfes = wie viele Commits main dem SHA voraus ist.
+    // `behind_by` ist die Gegenrichtung und wird gebraucht, weil ahead_by === 0 ZWEI Zustaende
+    // meint: der SHA IST main (status "identical") oder der SHA ist ein NACHKOMME von main
+    // (status "behind") — ein Commit, der auf main nie gelandet ist, etwa ein PR-Kopf.
     return {
       aheadBy: typeof j.ahead_by === "number" ? j.ahead_by : null,
+      behindBy: typeof j.behind_by === "number" ? j.behind_by : null,
       shaDateISO: j.base_commit?.commit?.committer?.date ?? null,
       error: null,
     };
   } catch (e) {
-    return { aheadBy: null, shaDateISO: null, error: `Abruf fehlgeschlagen: ${e.message}` };
+    return { aheadBy: null, behindBy: null, shaDateISO: null, error: `Abruf fehlgeschlagen: ${e.message}` };
   }
 }
 
@@ -212,7 +228,7 @@ async function main() {
   const rows = [];
   for (const r of seed.repos ?? []) {
     if (!r.audited_sha) {
-      rows.push({ repo: r.repo, audited_sha: null, aheadBy: null, shaDateISO: null });
+      rows.push({ repo: r.repo, audited_sha: null, aheadBy: null, behindBy: null, shaDateISO: null });
       continue;
     }
     const m = await measure(r.repo, r.audited_sha, token);
