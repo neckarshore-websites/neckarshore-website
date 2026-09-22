@@ -1,6 +1,6 @@
 {
   "repo": "neckarshore-websites/neckarshore-website",
-  "audited_sha": "ae117f823547e6b801bca599e1ddcf5d294f1845",
+  "audited_sha": "55537aaebf52184e337c7fc872bb2a4411cc3afd",
   "red": false,
   "red_detail": null,
   "tests": {
@@ -12,5 +12,5 @@
     "declared": {},
     "lenses": {}
   },
-  "updatedAt": "2026-09-22T07:35:56Z"
+  "updatedAt": "2026-09-22T07:50:05Z"
 }
