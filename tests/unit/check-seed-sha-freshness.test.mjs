@@ -163,6 +163,27 @@ test("RUHEND HEISST BEIDE RICHTUNGEN 0: ein Nachkomme von main ist NICHT ruhend 
   assert.equal(unbekannt.stale.length, 1, "unbekanntes behindBy darf keine Ausnahme erzeugen");
 });
 
+test("ein Stempel abseits von main ist ueberfaellig OHNE Schwelle (#241, Nachtrag)", () => {
+  // Der eigentliche Fall: JUNG und abseits von main. Beide Schwellen weit offen, damit nur die
+  // eine Eigenschaft uebrigbleibt. Die Verfaelschungsprobe dieses Nachtrags hat genau hier
+  // zuerst GRUEN gemeldet — ein frischer Zweigkopf lief durch, weil nur ein Grund gesetzt war
+  // und kein Befund. Ein solcher Stempel kann seine Auditierbarkeits-Behauptung nie belegen:
+  // der genannte Stand liegt nicht auf main und kann dort nie ankommen.
+  const v = classifySeedFreshness([row("o/r", "abc", 0, 0, 1)], NOW, {
+    thresholdCommits: 9999,
+    thresholdDays: 9999,
+  });
+  assert.equal(v.stale.length, 1, "abseits von main ist selbst der Befund, nicht erst mit Alter");
+  assert.match(v.stale[0].reason, /nicht auf main liegen/);
+
+  // Gegenprobe in derselben Lage: auf main, jung, weite Schwellen -> frisch.
+  const sauber = classifySeedFreshness([row("o/r", "abc", 0, 0, 0)], NOW, {
+    thresholdCommits: 9999,
+    thresholdDays: 9999,
+  });
+  assert.equal(sauber.stale.length, 0);
+});
+
 test("die Commits-Achse bleibt von der Korrektur unberuehrt", () => {
   // Ein ruhendes Repo KANN die Commits-Achse nicht ueberschreiten (0 > N ist nie wahr), aber die
   // Achse darf durch die Korrektur auch nicht stumpf geworden sein.

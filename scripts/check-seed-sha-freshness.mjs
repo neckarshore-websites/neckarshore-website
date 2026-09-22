@@ -133,6 +133,13 @@ export function classifySeedFreshness(rows, nowMs, opts = {}) {
     const offMain = r.aheadBy === 0 && typeof r.behindBy === "number" && r.behindBy > 0;
     const daysStale = daysOver && !dormant;
 
+    // Ein Stempel abseits von main ist ueberfaellig OHNE Schwelle, und das ist keine Zeitfrage:
+    // er behauptet, die Zahl sei am genannten Stand auditiert — dieser Stand liegt aber nicht auf
+    // main und kann dort nie ankommen, also ist die Behauptung nicht nachpruefbar. Ohne diese
+    // Zeile waere so ein Stempel gruen, solange er jung ist, und die Ueberfaelligkeit traete erst
+    // mit der Tage-Schwelle ein — aus dem falschen Grund. Gemessen in der Verfaelschungsprobe
+    // dieses PR: ein frischer Zweigkopf (ahead 0 / behind 1) lief gruen durch.
+
     const reasons = [];
     if (commitsOver) reasons.push(`${r.aheadBy} Commits > ${thresholdCommits}`);
     if (daysStale) reasons.push(`${age} Tage > ${thresholdDays}`);
@@ -144,7 +151,7 @@ export function classifySeedFreshness(rows, nowMs, opts = {}) {
       sha: r.audited_sha,
       aheadBy: r.aheadBy,
       ageDays: age,
-      stale: commitsOver || daysStale,
+      stale: commitsOver || daysStale || offMain,
       reason: reasons.join(" und ") || "frisch",
     });
   }
