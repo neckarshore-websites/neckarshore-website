@@ -184,6 +184,27 @@ test("ein Stempel abseits von main ist ueberfaellig OHNE Schwelle (#241, Nachtra
   assert.equal(sauber.stale.length, 0);
 });
 
+test("DIVERGED ist auch abseits von main — behind_by > 0 allein entscheidet (#241, Nachtrag)", () => {
+  const opts = { thresholdCommits: 9999, thresholdDays: 9999 };
+
+  // Der vierte Zustand: der Stempel traegt einen Commit, den main nicht hat, UND main ist ihm
+  // voraus. Genau die Lage, in die ein "behind"-Stempel von selbst hineinwaechst, sobald main
+  // einen eigenen Commit bekommt. Eine Fassung mit `aheadBy === 0 &&` hat ihn verfehlt, der
+  // Schutz waere also mit der Zeit zerfallen statt zu halten. Gemessen an 73142f0, dem
+  // squash-gemergten Kopf von PR #267: ahead 2 / behind 1 / "diverged".
+  const diverged = classifySeedFreshness([row("o/r", "abc", 3, 0, 1)], NOW, opts);
+  assert.equal(diverged.stale.length, 1, "diverged ist abseits von main, unabhaengig von aheadBy");
+  assert.match(diverged.stale[0].reason, /nicht auf main liegen/);
+
+  // Vollstaendigkeit der vier Zustaende, damit keiner unbemerkt durchfaellt:
+  const identisch = classifySeedFreshness([row("o/r", "abc", 0, 0, 0)], NOW, opts);
+  assert.equal(identisch.stale.length, 0, "identical: frisch");
+  const nurVoraus = classifySeedFreshness([row("o/r", "abc", 7, 0, 0)], NOW, opts);
+  assert.equal(nurVoraus.stale.length, 0, "ahead unter der Schwelle: frisch, das ist Drift-Sache");
+  const zurueck = classifySeedFreshness([row("o/r", "abc", 0, 0, 2)], NOW, opts);
+  assert.equal(zurueck.stale.length, 1, "behind: abseits von main");
+});
+
 test("die Commits-Achse bleibt von der Korrektur unberuehrt", () => {
   // Ein ruhendes Repo KANN die Commits-Achse nicht ueberschreiten (0 > N ist nie wahr), aber die
   // Achse darf durch die Korrektur auch nicht stumpf geworden sein.

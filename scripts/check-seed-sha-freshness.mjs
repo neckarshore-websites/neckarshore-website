@@ -130,7 +130,19 @@ export function classifySeedFreshness(rows, nowMs, opts = {}) {
     // FAIL-CLOSED: ist behindBy unbekannt (null/undefined), gilt die Zeile NICHT als ruhend — dann
     // greift die Tage-Achse wie vor dieser Aenderung. Unwissen darf nie zur Ausnahme fuehren.
     const dormant = r.aheadBy === 0 && r.behindBy === 0;
-    const offMain = r.aheadBy === 0 && typeof r.behindBy === "number" && r.behindBy > 0;
+    // `behind_by > 0` ALLEIN, ohne Konjunkt auf aheadBy — das ist exakt und vollstaendig
+    // "der Stempel ist kein Vorfahr von main". Das Skript ruft compare(sha...HEAD) mit base=sha
+    // und head=main, also: ahead_by = Commits, die main hat und der Stempel nicht (Drift),
+    // behind_by = Commits, die der STEMPEL hat und main nicht (nie gelandet). Vier Zustaende,
+    // kein Rest, an echten SHAs dieses Repos gemessen (2026-09-22):
+    //   identical  0/0    822f5a5   -> false
+    //   ahead    225/0    a1561cb   -> false (Drift, das ist die Commits-Achse)
+    //   behind     0/1    cfd33cb   -> true
+    //   diverged   2/1    73142f0   -> true   (Kopf von PR #267, squash-gemergt)
+    // Eine erste Fassung verlangte zusaetzlich aheadBy === 0 und verfehlte damit JEDEN diverged-
+    // Stempel — der Schutz waere mit dem ersten main-Commit nach dem Stempeln zerfallen, statt zu
+    // halten. Gefunden von Lenin an 73142f0, einem SHA aus derselben Stunde.
+    const offMain = typeof r.behindBy === "number" && r.behindBy > 0;
     const daysStale = daysOver && !dormant;
 
     // Ein Stempel abseits von main ist ueberfaellig OHNE Schwelle, und das ist keine Zeitfrage:
