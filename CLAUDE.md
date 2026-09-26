@@ -1,4 +1,8 @@
-@AGENTS.md
+# CLAUDE.md — neckarshore-website
+
+Next.js 16 has breaking changes against what most models were trained on. Before writing or changing framework code (routing, server actions, caching, config), read the matching guide in `node_modules/next/dist/docs/`.
+
+`agentRules: false` in `next.config.ts` stops `next dev` from generating its own `AGENTS.md` / `CLAUDE.md` (decision #2360, revised 2026-09-25). Keep it; `npm run check:agent-files` guards it in CI.
 
 ## Deploy Policy
 
