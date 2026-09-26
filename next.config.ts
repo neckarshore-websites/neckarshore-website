@@ -75,6 +75,10 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Next 16 writes AGENTS.md / CLAUDE.md on `next dev` when it detects an AI
+  // coding agent. We keep our own instruction file instead (see CLAUDE.md);
+  // `npm run check:agent-files` fails if this switch is removed (#2360).
+  agentRules: false,
   // Bundle-size guard: ensure modular per-icon imports for `lucide-react`.
   // Named imports (e.g. `import { Moon } from "lucide-react"`) are already
   // tree-shakeable; this pins the behaviour against future Next defaults.
