@@ -26,20 +26,20 @@ test.describe("KI-Beratung offer page", () => {
     );
   });
 
-  test("TC-CNT-088: the CTA says 20 minutes and links the 20-min Calendly", async ({
+  test("TC-CNT-088: the CTA says 30 minutes and links the 30-min Calendly", async ({
     page,
   }) => {
-    // THE POINT OF THIS TEST: the source one-pager promises 30 minutes, the site says 20
-    // everywhere, and honesty fix #4 (shipped 2026-08-06, PR #165) is what made it 20.
-    // A page that reintroduces "30 Minuten" would re-open a closed correction — and it
-    // would do so in the most visible place we have.
+    // THE POINT OF THIS TEST: the page states the length of the call it actually books.
+    // Honesty fix #4 (PR #165) pinned that to 20 while the Calendly slot was 20; since
+    // 2026-09-28 the slot is 30 (calendly.com/german-rauhut/30min). A page that still says
+    // "20 Minuten" would promise a call that no longer exists.
     await page.goto("/ki-beratung");
     const body = (await page.locator("main").textContent()) ?? "";
-    expect(body).toContain("20 Minuten");
-    expect(body).not.toContain("30 Minuten");
+    expect(body).toContain("30 Minuten");
+    expect(body).not.toContain("20 Minuten");
 
     const cta = page.locator('[data-track="kiberatung_cta_erstgespraech"]');
-    await expect(cta).toHaveAttribute("href", "https://calendly.com/rauhut/20min");
+    await expect(cta).toHaveAttribute("href", "https://calendly.com/german-rauhut/30min");
   });
 
   test("TC-CNT-089: one conversion ROUTE — every CTA points at the same target", async ({
@@ -63,7 +63,7 @@ test.describe("KI-Beratung offer page", () => {
       .evaluateAll((links) => [
         ...new Set(links.map((l) => (l as HTMLAnchorElement).href)),
       ]);
-    expect(targets).toEqual(["https://calendly.com/rauhut/20min"]);
+    expect(targets).toEqual(["https://calendly.com/german-rauhut/30min"]);
   });
 
   test("TC-CNT-090: the pricing guardrail holds — published figures only, never the internals", async ({

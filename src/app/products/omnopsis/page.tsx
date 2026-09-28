@@ -156,7 +156,7 @@ export default function OmnopsisPage() {
           hideCtaOnDesktop
           cta={
             <a
-              href="https://calendly.com/rauhut/20min"
+              href="https://calendly.com/german-rauhut/30min"
               target="_blank"
               rel="noopener noreferrer"
               data-track="omnopsis_cta"

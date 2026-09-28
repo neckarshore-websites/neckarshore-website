@@ -185,7 +185,7 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
           <SearchButton />
           <ThemeToggle />
           <a
-            href="https://calendly.com/rauhut/20min"
+            href="https://calendly.com/german-rauhut/30min"
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-lg bg-accent px-6 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
@@ -264,7 +264,7 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
           ))}
 
           <a
-            href="https://calendly.com/rauhut/20min"
+            href="https://calendly.com/german-rauhut/30min"
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}

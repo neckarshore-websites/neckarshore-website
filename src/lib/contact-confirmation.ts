@@ -24,7 +24,7 @@ export function buildConfirmationText(name: string, message: string): string {
     "",
     "Wir melden uns in der Regel innerhalb eines Werktags. Wenn es schneller",
     "gehen soll, koennen Sie direkt einen Termin waehlen:",
-    "https://calendly.com/rauhut/20min",
+    "https://calendly.com/german-rauhut/30min",
     "",
     "Ihre Nachricht im Wortlaut:",
     "",

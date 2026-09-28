@@ -129,7 +129,7 @@ ${PORTFOLIO.map(renderCategory).join("\n\n")}
 ## Key Differentiators
 
 - vs. Offshore: same timezone, same language, DSGVO-compliant by default
-- vs. Big-4: significantly more cost-effective at comparable quality; direct access to engineers instead of a junior-heavy bench model. Concrete pricing is discussed in the 20-minute intro call.
+- vs. Big-4: significantly more cost-effective at comparable quality; direct access to engineers instead of a junior-heavy bench model. Concrete pricing is discussed in the 30-minute intro call.
 - vs. Freelancers: structured processes, full project ownership, delivery that does not depend on a single person
 
 ## Contact
@@ -137,6 +137,6 @@ ${PORTFOLIO.map(renderCategory).join("\n\n")}
 - Website: ${SITE_URL}
 - Email: info@neckarshore.ai
 - Location: Stuttgart, Germany
-- Booking: https://calendly.com/rauhut/20min
+- Booking: https://calendly.com/german-rauhut/30min
 `;
 }

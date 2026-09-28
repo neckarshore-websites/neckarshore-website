@@ -854,7 +854,7 @@ test.describe("Content surface — website case-study desktop close CTA", () => 
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("/products/websites/neckarshore");
     await expect(cta).toBeVisible();
-    await expect(cta).toHaveAttribute("href", "https://calendly.com/rauhut/20min");
+    await expect(cta).toHaveAttribute("href", "https://calendly.com/german-rauhut/30min");
     await expect(cta).toHaveAttribute("target", "_blank");
     await expect(cta).toHaveAttribute("rel", /noopener/);
 

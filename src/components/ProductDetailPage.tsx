@@ -155,7 +155,7 @@ export default function ProductDetailPage({
 
               <div className="mt-8">
                 <a
-                  href="https://calendly.com/rauhut/20min"
+                  href="https://calendly.com/german-rauhut/30min"
                   target="_blank"
                   rel="noopener noreferrer"
                   data-track={`product_detail_cta_${slug}`}
@@ -164,7 +164,7 @@ export default function ProductDetailPage({
                   Über {cta} sprechen →
                 </a>
                 <p className="mt-3 text-sm text-muted dark:text-text-tertiary">
-                  Kurzes Gespräch, 20 Minuten — unverbindlich.
+                  Kurzes Gespräch, 30 Minuten — unverbindlich.
                 </p>
               </div>
             </>

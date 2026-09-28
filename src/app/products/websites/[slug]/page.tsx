@@ -150,12 +150,12 @@ export default async function WebsiteCaseStudyPage({
             Sie planen ein ähnliches Projekt?
           </p>
           <p className="mx-auto mt-2 max-w-md text-base text-muted dark:text-text-tertiary">
-            Im 20-minütigen Kennenlerntermin klären wir unverbindlich, ob und wie wir
+            Im 30-minütigen Kennenlerntermin klären wir unverbindlich, ob und wie wir
             helfen können — gleiche Zeitzone, gleiche Sprache, gleiche
             Datenschutzstandards.
           </p>
           <a
-            href="https://calendly.com/rauhut/20min"
+            href="https://calendly.com/german-rauhut/30min"
             target="_blank"
             rel="noopener noreferrer"
             data-track={`website_close_cta_${entry.slug}`}
@@ -170,7 +170,7 @@ export default async function WebsiteCaseStudyPage({
           hideCtaOnDesktop
           cta={
             <a
-              href="https://calendly.com/rauhut/20min"
+              href="https://calendly.com/german-rauhut/30min"
               target="_blank"
               rel="noopener noreferrer"
               data-track={`website_detail_cta_${entry.slug}`}
