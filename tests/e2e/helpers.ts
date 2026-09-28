@@ -52,7 +52,7 @@ export const VIEWPORTS = [
 export const SECTIONS = ["services", "why-nearshore", "omnopsis", "founder"] as const;
 
 /** Calendly booking URL */
-export const CALENDLY_URL = "https://calendly.com/rauhut/20min";
+export const CALENDLY_URL = "https://calendly.com/german-rauhut/30min";
 
 /** Scroll/navigation timeout */
 export const SCROLL_TIMEOUT = 5000;

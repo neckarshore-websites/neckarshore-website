@@ -94,7 +94,7 @@ export default async function ProductDetailPage({
           hideCtaOnDesktop
           cta={
             <a
-              href="https://calendly.com/rauhut/20min"
+              href="https://calendly.com/german-rauhut/30min"
               target="_blank"
               rel="noopener noreferrer"
               data-track={`product_detail_cta_${item.slug}`}

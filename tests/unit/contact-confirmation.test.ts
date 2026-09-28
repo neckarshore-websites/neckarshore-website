@@ -39,7 +39,7 @@ test("traegt einen Weg zurueck zu uns", () => {
   const lines = buildConfirmationText("Meier", "Test").split("\n");
   const countExact = (url: string) => lines.filter((l) => l === url).length;
   assert.equal(countExact("https://neckarshore.ai"), 1);
-  assert.equal(countExact("https://calendly.com/rauhut/20min"), 1);
+  assert.equal(countExact("https://calendly.com/german-rauhut/30min"), 1);
 });
 
 test("der Betreff nennt die Seite", () => {

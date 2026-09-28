@@ -26,10 +26,11 @@ import { breadcrumbListSchema } from "@/lib/schema/breadcrumb";
  *
  * FOUR DECISIONS BAKED IN, each with an owner:
  *
- *  1. 20 MINUTES, NOT 30. The one-pager promises a 30-minute Erstgespräch; the site says
- *     20 in three places and links calendly.com/rauhut/20min in seven. Making this page
- *     say 30 would re-open honesty fix #4 (2026-07-28, shipped 2026-08-06 in PR #165)
- *     nine days after it landed. Founder-decided 2026-08-15.
+ *  1. THE DURATION IS WHATEVER THE BOOKED CALL ACTUALLY IS. Honesty fix #4 (PR #165) made
+ *     the site say 20 because the Calendly slot was 20 (Founder 2026-08-15: "20, not 30").
+ *     On 2026-09-28 the Founder moved the intro call to 30 minutes at
+ *     calendly.com/german-rauhut/30min, so the same principle now requires 30. Change the
+ *     number only together with the Calendly event, never on its own.
  *  2. NO PRICING FORMULA, NO 2x CHECK, NO 700-EUR FLOOR — guardrail C6, Founder 2026-08-07.
  *     Only the published Festpreise appear here. Do not add the internal one-pager's
  *     calculation to this file, ever.
@@ -170,7 +171,7 @@ function auditedTestFigure(): string {
   return `${total.toLocaleString("de-DE")}${stats.testScope?.floor ? "+" : ""}`;
 }
 
-const CALENDLY = "https://calendly.com/rauhut/20min";
+const CALENDLY = "https://calendly.com/german-rauhut/30min";
 
 export default function KiBeratungPage() {
   const tests = auditedTestFigure();
@@ -210,7 +211,7 @@ export default function KiBeratungPage() {
             data-track="kiberatung_cta_hero"
             className="mt-7 inline-flex items-center rounded-lg bg-accent px-6 py-3 font-heading font-semibold text-white transition-colors hover:bg-accent/90 dark:bg-accent-bright dark:text-primary dark:hover:bg-accent-bright/90"
           >
-            Kostenloses Erstgespräch (20 Minuten)
+            Kostenloses Erstgespräch (30 Minuten)
           </a>
         </header>
 
@@ -448,7 +449,7 @@ export default function KiBeratungPage() {
             Nächster Schritt
           </h2>
           <p className="mt-4 max-w-[640px] text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-            Ein kostenloses Erstgespräch, 20 Minuten, remote: Sie schildern Ihre
+            Ein kostenloses Erstgespräch, 30 Minuten, remote: Sie schildern Ihre
             Situation, wir sagen ehrlich, ob eine Potenzialanalyse sich für Sie lohnt.
           </p>
           <a

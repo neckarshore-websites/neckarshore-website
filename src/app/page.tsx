@@ -51,7 +51,7 @@ const faqItems = [
   },
   {
     q: "Was kostet Nearshore-Entwicklung bei neckarshore.ai?",
-    a: "Wir sind deutlich kosteneffektiver als Big-4-Consultancies bei vergleichbarer Qualität. Durch KI-Beschleunigung liefert ein kleines Team, wofür andere deutlich mehr Leute brauchen. Konkrete Preise besprechen wir im 20-Minuten Kennenlerntermin.",
+    a: "Wir sind deutlich kosteneffektiver als Big-4-Consultancies bei vergleichbarer Qualität. Durch KI-Beschleunigung liefert ein kleines Team, wofür andere deutlich mehr Leute brauchen. Konkrete Preise besprechen wir im 30-Minuten Kennenlerntermin.",
   },
   {
     q: "Wo sitzt neckarshore.ai?",
@@ -117,7 +117,7 @@ export default function Home() {
             </p>
             <div className="mt-10 flex flex-col gap-4 sm:flex-row">
               <a
-                href="https://calendly.com/rauhut/20min"
+                href="https://calendly.com/german-rauhut/30min"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3.5 text-base font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
@@ -380,11 +380,11 @@ export default function Home() {
               Bereit, näher zusammenzuarbeiten?
             </h2>
             <p className="mt-6 text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-              20 Minuten Kennenlerntermin — wir reden über euer Projekt, nicht über unsere Folien.
+              30 Minuten Kennenlerntermin — wir reden über euer Projekt, nicht über unsere Folien.
             </p>
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <a
-                href="https://calendly.com/rauhut/20min"
+                href="https://calendly.com/german-rauhut/30min"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-lg bg-accent px-8 py-3.5 text-base font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
