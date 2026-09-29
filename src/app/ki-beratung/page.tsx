@@ -102,7 +102,9 @@ const DELIVERABLES = [
 
 /**
  * The two entry depths. Published Festpreise only — see decision 2 in the file header.
- * The figures were set by the Founder on 2026-08-15 at live acceptance of this page.
+ * The figures were set by the Founder on 2026-08-15 at live acceptance of this page;
+ * Kompakt-Analyse raised 1.500 -> 2.500 EUR by Founder decision 2026-09-26 (clarified
+ * 2026-09-29: the Workshop-Tag range stays, so both tiers now start at 2.500).
  *
  * `hinweis: "Einführungspreis"` is not decoration: the label is part of that ruling, and
  * TC-CNT-090 asserts it inside this exact row so it cannot quietly fall out of the cell.
@@ -112,7 +114,7 @@ const LADDER = [
     stufe: "Kompakt-Analyse",
     format: "Remote",
     umfang: "2–3 h strukturiertes Arbeitsgespräch + Auswertung",
-    preis: "1.500 EUR",
+    preis: "2.500 EUR",
     hinweis: "Einführungspreis",
   },
   {
