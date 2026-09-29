@@ -80,10 +80,12 @@ test.describe("KI-Beratung offer page", () => {
     // label only does its work while it sits ON the figure it qualifies.
     const body = (await page.locator("body").textContent()) ?? "";
     expect(body).not.toMatch(/700\s*EUR/);
+    // The Kompakt price before the Founder decision of 2026-09-26 must not survive anywhere.
+    expect(body).not.toMatch(/\b1[.,\u00a0 ]?500\s*EUR/);
     expect(body).not.toMatch(/\b2x[- ]Check\b/i);
 
     const kompakt = page.locator("tr", { hasText: "Kompakt-Analyse" });
-    await expect(kompakt).toContainText("1.500 EUR");
+    await expect(kompakt).toContainText("2.500 EUR");
     await expect(kompakt).toContainText("Einführungspreis");
 
     const workshop = page.locator("tr", { hasText: "Workshop-Tag" });
