@@ -90,3 +90,61 @@ test("the membership rule is pinned in code, not only in prose", () => {
   );
   assert.deepEqual(EXCLUDED_NAMES, [".github"]);
 });
+
+// ---------------------------------------------------------------------------
+// Asymmetric verdict (Founder 2026-09-29): "not yet configured" publishes with
+// a warning; everything that could make a published number wrong halts.
+// ---------------------------------------------------------------------------
+
+test("missing-only does NOT halt — publish with the known set and warn", () => {
+  const v = evaluate({
+    configured: ["neckarshore-ai/vault"],
+    live: ["neckarshore-ai/vault", "neckarshore-mmps/acceptor-gate"],
+  });
+  assert.equal(v.ok, false, "not a clean match");
+  assert.equal(v.halt, false, "a merely unconfigured live repo must not stop publishing");
+  assert.match(report(v), /^WARNUNG:/);
+  assert.match(report(v), /\+ neckarshore-mmps\/acceptor-gate/);
+  assert.doesNotMatch(report(v), /^FAIL/);
+});
+
+test("a stale configured repo halts", () => {
+  const v = evaluate({
+    configured: ["neckarshore-ai/vault", "neckarshore-ai/observatory"],
+    live: ["neckarshore-ai/vault"],
+  });
+  assert.equal(v.halt, true);
+  assert.match(report(v), /^FAIL/);
+});
+
+test("a duplicate halts", () => {
+  const v = evaluate({
+    configured: ["neckarshore-mmps/prod-or-pretend", "neckarshore-mmps/prod-or-pretend"],
+    live: ["neckarshore-mmps/prod-or-pretend"],
+  });
+  assert.equal(v.halt, true);
+});
+
+test("an archived configured repo halts", () => {
+  const v = evaluate({
+    configured: ["neckarshore-ai/observatory"],
+    live: ["neckarshore-ai/observatory"],
+    archived: ["neckarshore-ai/observatory"],
+  });
+  assert.equal(v.halt, true);
+});
+
+test("missing PLUS stale (the rename shape) still halts — the stale half wins", () => {
+  const v = evaluate({
+    configured: ["neckarshore-mmps/mmp-prod-or-pretend"],
+    live: ["neckarshore-mmps/prod-or-pretend"],
+  });
+  assert.equal(v.halt, true);
+  assert.match(report(v), /^FAIL/);
+});
+
+test("a clean match neither halts nor warns", () => {
+  const v = evaluate({ configured: ["neckarshore-ai/vault"], live: ["neckarshore-ai/vault"] });
+  assert.equal(v.ok, true);
+  assert.equal(v.halt, false);
+});

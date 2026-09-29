@@ -50,7 +50,14 @@ jobs:
       # number computed from it is wrong too, and publishing first would mean
       # the site serves bad figures until a human reads a red log. Fail here,
       # keep serving yesterday's honest numbers.
+      #
+      # ASYMMETRIC since 2026-09-29 (Founder): only a configured repo that is
+      # missing / renamed / archived / duplicated HALTS. A live repo that is
+      # merely not yet configured publishes with the known set and sets the
+      # `unconfigured` output; "Neues Repo melden" below files the issue.
+      # Origin: acceptor-gate froze the public number from 09-24 to 09-29.
       - name: Repo-Liste gegen GitHub pruefen
+        id: repoliste
         env:
           STATS_PAT: ${{ secrets.STATS_PAT }}
         run: node scripts/check-repo-list.mjs
@@ -362,6 +369,36 @@ jobs:
             git commit -m "chore: update daily stats"
             git push
           fi
+
+      # --- Noch nicht gelistetes Repo: veroeffentlicht, aber gemeldet --------------------------
+      # Laeuft NACH dem Push: die Veroeffentlichung darf nicht an der Meldung haengen. Scheitert
+      # die Meldung selbst, geht der Job rot und "Ausfall melden" darunter faengt das — ein
+      # stummer Melder ist ausgeschlossen, ohne dass er die Zahl blockiert.
+      # Eigener Titel-Marker: das ist kein Ausfall, sondern eine Aufgabe (dispatch:linus), und
+      # soll nicht im selben Vorgang wie ein echter Stillstand verschwinden.
+      - name: Neues Repo melden
+        if: steps.repoliste.outputs.unconfigured != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UNCONFIGURED: ${{ steps.repoliste.outputs.unconfigured }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          {
+            echo "**Lebende Repos, die noch nicht in \`stats-config.json\` stehen.**"
+            echo ""
+            for r in ${UNCONFIGURED}; do echo "- \`${r}\`"; done
+            echo ""
+            echo "Die Statistik wurde trotzdem veroeffentlicht, mit der bekannten Liste — die Repo-Zahl"
+            echo "liegt bis zur Aufnahme entsprechend zu niedrig. Aufnehmen wie die Geschwister derselben"
+            echo "Klasse (privat/oeffentlich, \`statsPath\` nur mit eigenem Produzenten)."
+            echo ""
+            echo "Lauf: ${RUN_URL}"
+          } > /tmp/neues-repo.md
+          bash scripts/report-stats-outage.sh \
+            "[stats-repo-fehlt]" \
+            "[stats-repo-fehlt] Neues Repo nicht in stats-config" \
+            /tmp/neues-repo.md
 
       # --- Ausfallmeldung: der Melder fuer den ROTEN Lauf ---------------------------------------
       # WARUM DIESER SCHRITT EXISTIERT: bis 2026-08-27 trug dieser Workflow keinen einzigen

@@ -38,14 +38,23 @@
  *  4. ARCHIVED IS A SEPARATE VERDICT. A repo that got archived since the last
  *     run is reported as such, not as a mystery mismatch, because that is the
  *     single most likely reason this gate ever goes red.
- *  5. NO NEW DEPENDENCY. Zero-dep Node with fetch, same house style as
+ *  5. ASYMMETRIC VERDICT (Founder 2026-09-29). Two kinds of mismatch are NOT
+ *     equally dangerous. A configured repo that is missing, renamed, archived
+ *     or duplicated means numbers we publish could be WRONG -> halt, exactly as
+ *     before. A live repo that is merely NOT YET in the config means the
+ *     published set is complete-but-short by the new repo -> publish anyway,
+ *     warn, and hand the repo list to the workflow, which files a
+ *     dispatch:linus issue. Origin: acceptor-gate (created 2026-09-23) halted
+ *     the whole pipeline from 09-24 to 09-29 and froze the public number for a
+ *     one-line config gap, while the watchdog's daily issue went unread.
+ *  6. NO NEW DEPENDENCY. Zero-dep Node with fetch, same house style as
  *     scripts/audit-gate.mjs.
  *
  * Usage:  STATS_PAT=... node scripts/check-repo-list.mjs
  * Tests:  node --test tests/unit/check-repo-list.test.mjs   (pure part only)
  */
 
-import { readFileSync } from "node:fs";
+import { appendFileSync, readFileSync } from "node:fs";
 
 /**
  * The six company orgs. A personal account is deliberately NOT a member:
@@ -80,7 +89,12 @@ export function evaluate({ configured, live, archived = [] }) {
   const duplicates = configured.filter((r, i) => configured.indexOf(r) !== i).sort();
   const archivedInConfig = [...archived].sort();
 
+  // HALT = the published numbers could be wrong. Missing-only is NOT a halt.
+  const halt =
+    stale.length > 0 || duplicates.length > 0 || archivedInConfig.length > 0;
+
   return {
+    halt,
     // ONE verdict, archived included. An earlier version kept `ok` free of the
     // archived check and handled it separately at the call site — so report()
     // printed "OK" for a config that still listed a dead repo. Two verdicts
@@ -102,6 +116,16 @@ export function evaluate({ configured, live, archived = [] }) {
 export function report(v) {
   if (v.ok) {
     return `OK: stats-config listet genau die ${v.counts.live} lebenden Repos der sechs Orgs.`;
+  }
+  if (!v.halt) {
+    const out = [
+      `WARNUNG: ${v.missing.length} lebende(s) Repo(s) noch nicht in stats-config ` +
+        `(${v.counts.configured} gelistet, ${v.counts.live} live).`,
+      "Veroeffentlicht wird trotzdem, mit der bekannten Liste — die Repo-Zahl liegt",
+      "bis zur Aufnahme um diese Anzahl zu niedrig. Aufnehmen:",
+    ];
+    v.missing.forEach((r) => out.push(`  + ${r}`));
+    return out.join("\n");
   }
   const out =
     v.counts.configured === v.counts.live
@@ -203,7 +227,24 @@ async function main() {
   const verdict = evaluate({ configured: resolved, live, archived });
 
   console.log(report(verdict));
-  if (!verdict.ok || verdict.archivedInConfig.length > 0) process.exit(1);
+  if (verdict.halt) process.exit(1);
+  if (!verdict.ok) {
+    // Missing-only: publish, but make it loud and hand the list to the workflow.
+    console.log(`::warning::Nicht in stats-config: ${verdict.missing.join(", ")}`);
+    writeUnconfigured(verdict.missing);
+  }
+}
+
+/**
+ * Hands the unconfigured repos to the next workflow step via $GITHUB_OUTPUT
+ * (`unconfigured=<space-separated list>`). Outside Actions the variable is
+ * absent and the warning above is the whole signal — that is the local-run case,
+ * not a skipped gate: the verdict was still computed and printed.
+ */
+function writeUnconfigured(missing) {
+  const out = process.env.GITHUB_OUTPUT;
+  if (!out) return;
+  appendFileSync(out, `unconfigured=${missing.join(" ")}\n`);
 }
 
 const invokedDirectly = process.argv[1] && process.argv[1].endsWith("check-repo-list.mjs");

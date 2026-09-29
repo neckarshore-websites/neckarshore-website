@@ -18,6 +18,14 @@
 #
 # Bei einem bereits offenen Issue wird KOMMENTIERT statt neu angelegt: ein Vorgang, eine Zeitleiste.
 #
+# ROUTING-LABEL (2026-09-29, MASCHIN-Auftrag): der Vorgang traegt danach `dispatch:linus`
+# (ueberschreibbar per MELDE_LABEL). Es wird NACH dem Anlegen/Kommentieren gesetzt und darf
+# scheitern — die Entdoppelungs-Begruendung oben gilt weiter: die Meldung selbst haengt nie an
+# einem Label. Ein fehlendes Label wird als ::warning:: sichtbar, nicht verschluckt.
+# GRENZE, ehrlich benannt: der Session-Start-Block liest dispatch:*-Labels derzeit NUR aus
+# neckarshore-planning. Hier ist das Label Filter und Zuordnung, noch keine Sichtbarkeit im
+# Briefing — die kommt erst mit dem Umbau in dev-environment (Bob, von MASCHIN geroutet).
+#
 # Aufruf:  scripts/report-stats-outage.sh <marker> <titel> <body-datei>
 # Braucht: GH_TOKEN mit `issues: write` (im Workflow job-scoped, nie workflow-scoped).
 set -euo pipefail
@@ -25,6 +33,12 @@ set -euo pipefail
 MARKER="${1:?usage: report-stats-outage.sh <marker> <titel> <body-datei>}"
 TITEL="${2:?fehlender Titel (arg 2)}"
 BODY_DATEI="${3:?fehlende Body-Datei (arg 3)}"
+MELDE_LABEL="${MELDE_LABEL:-dispatch:linus}"
+
+label_setzen() {
+  gh issue edit "$1" --add-label "$MELDE_LABEL" >/dev/null 2>&1 \
+    || echo "::warning::Label '${MELDE_LABEL}' konnte an #$1 nicht gesetzt werden (existiert es im Repo?)" >&2
+}
 
 [ -f "$BODY_DATEI" ] || { echo "FEHLER: Body-Datei $BODY_DATEI existiert nicht" >&2; exit 1; }
 case "$TITEL" in
@@ -58,10 +72,13 @@ BESTEHEND=$(printf '%s\n' "$TREFFER" | sed -n '1p')
 if [ -n "$BESTEHEND" ]; then
   echo "Bestehender offener Vorgang #${BESTEHEND} — kommentiere statt neu anzulegen." >&2
   gh issue comment "$BESTEHEND" --body-file "$BODY_DATEI"
+  label_setzen "$BESTEHEND"
   echo "$BESTEHEND"
 else
   echo "Kein offener Vorgang mit Marker '${MARKER}' — lege einen an." >&2
   URL=$(gh issue create --title "$TITEL" --body-file "$BODY_DATEI")
   echo "$URL" >&2
-  basename "$URL"
+  NEU=$(basename "$URL")
+  label_setzen "$NEU"
+  echo "$NEU"
 fi
