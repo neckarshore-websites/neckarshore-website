@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-09-23T08:57:48Z",
+  "updatedAt": "2026-09-29T18:07:36Z",
   "startDate": "2026-03-22",
-  "seriesTotal": 8612,
+  "seriesTotal": 9149,
   "weeks": [
     {
       "week": "2026-03-22",
@@ -109,7 +109,11 @@
     },
     {
       "week": "2026-09-20",
-      "total": 215
+      "total": 602
+    },
+    {
+      "week": "2026-09-27",
+      "total": 150
     }
   ],
   "months": [
@@ -139,29 +143,29 @@
     },
     {
       "month": "2026-09",
-      "total": 998
+      "total": 1535
     }
   ],
   "areas": [
     {
       "area": "Infrastruktur",
-      "total": 3763
+      "total": 4055
     },
     {
       "area": "Omnopsis",
-      "total": 1821
+      "total": 1829
     },
     {
       "area": "Websites",
-      "total": 1458
+      "total": 1507
     },
     {
       "area": "MMPs",
-      "total": 1069
+      "total": 1231
     },
     {
       "area": "Skills",
-      "total": 498
+      "total": 524
     },
     {
       "area": "Agenten",
@@ -173,5 +177,5 @@
     "total": 1787
   },
   "reposMissing": 0,
-  "reposCounted": 43
+  "reposCounted": 44
 }

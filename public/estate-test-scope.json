@@ -1,9 +1,9 @@
 {
   "byType": {
     "e2e": 989,
-    "integration": 661,
+    "integration": 733,
     "smoke": 1,
-    "unit": 2753
+    "unit": 3110
   },
   "endpoints": 96,
   "expected": 18,
@@ -13,17 +13,17 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 613,
+        "integration": 658,
         "unit": 101
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 714
+      "total": 759
     },
     {
-      "audited_sha": "02459573530c22911e0e07327d1746e603ff1d04",
+      "audited_sha": "30e9092bb58f4533408c43d32368bc4f741ac685",
       "byType": {
         "unit": 57
       },
@@ -57,7 +57,7 @@
       "total": 241
     },
     {
-      "audited_sha": "4011b404a16dec92eb258c3196cffe1294959b10",
+      "audited_sha": "e4bbc5ebaea0301e577494d8d0b1b7f70c1d315d",
       "byType": {
         "e2e": 74,
         "unit": 274
@@ -68,7 +68,7 @@
       "total": 348
     },
     {
-      "audited_sha": "a58bee08ddbd4e8fa2e16c8c8c38aeecdf3bc902",
+      "audited_sha": "54b027f6dc5572ba72f81f36f194924c1103bd3b",
       "byType": {
         "unit": 34
       },
@@ -78,25 +78,25 @@
       "total": 34
     },
     {
-      "audited_sha": "5218890f7a74f3e4737ceb1549b130a5f22a5774",
+      "audited_sha": "4158e68c1496a2a19c7be29baeec9887338876b9",
       "byType": {
-        "integration": 4,
-        "unit": 175
+        "integration": 31,
+        "unit": 504
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "IMAP Mailbox Cleanup",
-      "total": 179
+      "total": 535
     },
     {
-      "audited_sha": "4009cc343f1ade35e4757369d08c18fd8fa79a29",
+      "audited_sha": "4856af11a8a2c1728ed602843cd8dce51108a743",
       "byType": {
-        "unit": 468
+        "unit": 493
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "Obsidian Vault Autopilot",
-      "total": 468
+      "total": 493
     },
     {
       "audited_sha": null,
@@ -110,15 +110,15 @@
       "total": 214
     },
     {
-      "audited_sha": "48ba2bfe4a77f85ce7de76acf2f8de85394765ac",
+      "audited_sha": "822488797c15337c0b47a636da51e42f9a120e7a",
       "byType": {
         "e2e": 24,
-        "unit": 124
+        "unit": 138
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/goldoni-website",
-      "total": 148
+      "total": 162
     },
     {
       "audited_sha": "a2f4fe16ff4bef99eb7dca8147bba9ab13b986cd",
@@ -132,7 +132,7 @@
       "total": 9
     },
     {
-      "audited_sha": "b75c22ebc6cd193a72e9fa53aff8ded92c327019",
+      "audited_sha": "50966461de48826bec8a124f9b7867a71745a1ab",
       "byType": {
         "e2e": 444,
         "unit": 242
@@ -143,26 +143,26 @@
       "total": 686
     },
     {
-      "audited_sha": "48e7ef6b72e9aee72c5333f27d42afa7d9dd5a05",
+      "audited_sha": "50524cc9e8d08a043eeb4086baa3af86ac19a831",
       "byType": {
         "e2e": 54,
-        "unit": 111
+        "unit": 105
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/oakwoodgolfclub-website",
-      "total": 165
+      "total": 159
     },
     {
-      "audited_sha": "864d77a79517b09987dc416ad681315893b976f6",
+      "audited_sha": "e11f89a4e000b55d2bd3e1548284456085e5c63d",
       "byType": {
         "e2e": 34,
-        "unit": 52
+        "unit": 46
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/rauhut-website",
-      "total": 86
+      "total": 80
     },
     {
       "audited_sha": null,
@@ -180,13 +180,13 @@
       "byType": {
         "e2e": 263,
         "integration": 27,
-        "unit": 302
+        "unit": 303
       },
       "endpoints": 96,
       "lenses": {},
       "private": true,
       "repo": "Omnopsis",
-      "total": 592
+      "total": 593
     },
     {
       "audited_sha": null,
@@ -244,7 +244,7 @@
   ],
   "reporting": 18,
   "repos": 21,
-  "total": 4486,
+  "total": 4915,
   "untyped_total": 82,
-  "updatedAt": "2026-09-23T08:59:40Z"
+  "updatedAt": "2026-09-29T18:09:09Z"
 }
