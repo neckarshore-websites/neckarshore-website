@@ -106,8 +106,9 @@ const DELIVERABLES = [
  * Kompakt-Analyse raised 1.500 -> 2.500 EUR by Founder decision 2026-09-26 (clarified
  * 2026-09-29: the Workshop-Tag range stays, so both tiers now start at 2.500).
  *
- * `hinweis: "Einführungspreis"` is not decoration: the label is part of that ruling, and
- * TC-CNT-090 asserts it inside this exact row so it cannot quietly fall out of the cell.
+ * The "Einführungspreis" label on the Kompakt row was removed by Founder decision
+ * 2026-09-30: at 2.500 EUR it is the regular price, not an introductory one. TC-CNT-090
+ * asserts the label is gone page-wide, so it cannot quietly come back.
  */
 const LADDER = [
   {
@@ -115,7 +116,7 @@ const LADDER = [
     format: "Remote",
     umfang: "2–3 h strukturiertes Arbeitsgespräch + Auswertung",
     preis: "2.500 EUR",
-    hinweis: "Einführungspreis",
+    hinweis: null,
   },
   {
     stufe: "Workshop-Tag",
