@@ -107,8 +107,8 @@ const DELIVERABLES = [
  * 2026-09-29: the Workshop-Tag range stays, so both tiers now start at 2.500).
  *
  * The "Einführungspreis" label on the Kompakt row was removed by Founder decision
- * 2026-09-30: at 2.500 EUR it is the regular price, not an introductory one. TC-CNT-090
- * asserts the label is gone page-wide, so it cannot quietly come back.
+ * 2026-09-30. TC-CNT-090 asserts the label is gone page-wide, so it cannot quietly
+ * come back.
  */
 const LADDER = [
   {
