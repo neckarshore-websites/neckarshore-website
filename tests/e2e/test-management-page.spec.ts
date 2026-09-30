@@ -1,6 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
+import { TOP_N } from "../../src/lib/test-board";
 
 /**
  * /test-management — "Wie wir testen" detail surface (backlog #245, UD5 Front-10).
@@ -311,12 +312,15 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
       expect(mainText, `named_private slug leaked raw on the page: ${slug}`).not.toContain(slug);
     }
 
-    // POSITIVE (drift-safe): whichever approved-private products are present in the data are shown
-    // by their product name (Omnopsis today — backend/frontend/contracts). If none are in the data,
-    // the loop is empty and only the HARD RULE above is asserted.
+    // POSITIVE (drift-safe): whichever approved-private products the board LISTS are shown by
+    // their product name. The board lists only the TOP_N repos by test count; everything else
+    // rolls up into one line. Checking every product in the data broke on a correct page the day
+    // Snakeoil-Check (241) fell out of the top six as other repos grew (2026-09-29/30). If no
+    // approved-private product is in the top N, the loop is empty and the HARD RULE above holds alone.
     const privateProductNames = new Set(cfg.named_private.map((s) => cfg.display_overrides[s]));
+    const listed = [...scope.per_repo].sort((a, b) => b.total - a.total).slice(0, TOP_N);
     const rendered = new Set(
-      scope.per_repo.map((r) => r.repo).filter((name) => privateProductNames.has(name)),
+      listed.map((r) => r.repo).filter((name) => privateProductNames.has(name)),
     );
     for (const name of rendered) {
       expect(

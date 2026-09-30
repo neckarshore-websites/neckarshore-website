@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { PageSchema } from "@/components/PageSchema";
 import { pageMetadata } from "@/lib/seo";
 import { repoType } from "@/lib/repo-types";
+import { TOP_N } from "@/lib/test-board";
 
 const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
 
@@ -55,7 +56,6 @@ function headlineTotal(scope: EstateScope): string {
   return scope.total.toLocaleString("de-DE") + (scope.floor ? "+" : "");
 }
 
-const TOP_N = 6;
 
 // The full test-type scope (13), from the Test-Charter / Coverage-Matrix vocabulary. Listed
 // qualitatively (no per-type numbers — an estate-wide type-split is only partly available).
