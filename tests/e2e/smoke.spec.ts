@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./site-test";
 import { PAGES } from "./helpers";
 
 test.describe("Smoke @smoke", () => {
