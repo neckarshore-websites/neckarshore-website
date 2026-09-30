@@ -74,19 +74,18 @@ test.describe("KI-Beratung offer page", () => {
     // cost of getting it wrong is not a broken layout — it is an internal calculation
     // published on the open web.
     await page.goto("/ki-beratung");
-    //
-    // THE POSITIVE HALF IS ROW-SCOPED ON PURPOSE. A page-wide toContain("Einführungspreis")
-    // would still pass if the label drifted into a footnote three sections away, and the
-    // label only does its work while it sits ON the figure it qualifies.
     const body = (await page.locator("body").textContent()) ?? "";
     expect(body).not.toMatch(/700\s*EUR/);
     // The Kompakt price before the Founder decision of 2026-09-26 must not survive anywhere.
     expect(body).not.toMatch(/\b1[.,\u00a0 ]?500\s*EUR/);
     expect(body).not.toMatch(/\b2x[- ]Check\b/i);
+    // Founder decision 2026-09-30: 2.500 EUR is the regular Kompakt price, so the
+    // "Einführungspreis" label is gone. Page-wide on purpose: the label must not survive
+    // anywhere, not merely leave this one row.
+    expect(body).not.toMatch(/Einführungspreis/i);
 
     const kompakt = page.locator("tr", { hasText: "Kompakt-Analyse" });
     await expect(kompakt).toContainText("2.500 EUR");
-    await expect(kompakt).toContainText("Einführungspreis");
 
     const workshop = page.locator("tr", { hasText: "Workshop-Tag" });
     await expect(workshop).toContainText("2.500–3.500 EUR");
