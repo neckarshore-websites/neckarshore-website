@@ -1,3 +1,4 @@
+import { OSS_LAUNCH_SICHTBAR } from "@/lib/kontakt-config";
 import fs from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
@@ -9,7 +10,7 @@ import { pageMetadata } from "@/lib/seo";
 import { repoType } from "@/lib/repo-types";
 import { TOP_N } from "@/lib/test-board";
 
-const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
 /**
  * /test-management — "Wie wir testen, und warum die Zahl der Realität entspricht"

@@ -1,3 +1,4 @@
+import { OSS_LAUNCH_SICHTBAR } from "@/lib/kontakt-config";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
@@ -14,7 +15,7 @@ import { breadcrumbTrailForSlug, websiteCaseStudySlugs } from "@/lib/portfolio";
 import { faqForSlug } from "@/lib/product-faqs";
 import { websiteCaseStudySchema } from "@/lib/schema/website";
 
-const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
 /**
  * Website case-study detail page — /products/websites/[slug].

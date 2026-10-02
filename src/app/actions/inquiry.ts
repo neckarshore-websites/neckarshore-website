@@ -3,6 +3,7 @@
 import nodemailer from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import { CAPTCHA_FORM_FIELD, verifyCaptchaToken } from "@/lib/captcha/verify";
+import { KONTAKT } from "@/lib/kontakt-config";
 import {
   CONFIRMATION_SUBJECT,
   buildConfirmationText,
@@ -81,21 +82,24 @@ interface SmtpConfig {
   to: string;
 }
 
-/** Read SMTP config from env. Returns null if any required value is missing. */
+/**
+ * SMTP config: everything from kontakt-config.ts except the password (#2879).
+ * Returns null if the password is missing — previews and `npm run dev` have none
+ * (it is set for Production only), so they keep the dry-run / transport-error
+ * paths below exactly as before.
+ */
 function readSmtpConfig(): SmtpConfig | null {
-  const host = process.env.SMTP_HOST;
-  const portRaw = process.env.SMTP_PORT;
-  const user = process.env.SMTP_USER;
   const pass = process.env.SMTP_PASS;
-  const from = process.env.SMTP_FROM;
-  const to = process.env.CONTACT_EMAIL_TO;
+  if (!pass) return null;
 
-  if (!host || !portRaw || !user || !pass || !from || !to) return null;
-
-  const port = Number(portRaw);
-  if (!Number.isFinite(port) || port <= 0 || port > 65535) return null;
-
-  return { host, port, user, pass, from, to };
+  return {
+    host: KONTAKT.smtpHost,
+    port: KONTAKT.smtpPort,
+    user: KONTAKT.smtpUser,
+    pass,
+    from: KONTAKT.absender,
+    to: KONTAKT.empfaenger,
+  };
 }
 
 export async function sendContact(
@@ -164,7 +168,7 @@ export async function sendContact(
     if (isProd) {
       console.error(
         "[neckarshore Contact] SMTP not configured in production — " +
-          "set SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASS/SMTP_FROM/CONTACT_EMAIL_TO",
+          "set SMTP_PASS (everything else lives in src/lib/kontakt-config.ts)",
       );
       return {
         status: "error",

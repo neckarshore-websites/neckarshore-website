@@ -1,3 +1,4 @@
+import { OSS_LAUNCH_SICHTBAR } from "@/lib/kontakt-config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/Nav";
@@ -16,7 +17,7 @@ import { cardDescription } from "@/lib/card-descriptions";
 import { collectionPageSchema } from "@/lib/schema/product";
 import { breadcrumbListSchema } from "@/lib/schema/breadcrumb";
 
-const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
 /**
  * "Lesen · Pflegen · Vertrauen" — the tooling-cluster block (GTM first-move #4,

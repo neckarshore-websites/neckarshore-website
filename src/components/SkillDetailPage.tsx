@@ -1,3 +1,4 @@
+import { OSS_LAUNCH_SICHTBAR } from "@/lib/kontakt-config";
 import type { ReactNode } from "react";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -52,7 +53,7 @@ export function SkillDetailPage({
   /** The bespoke article sections for this skill (before the FAQ). */
   children: ReactNode;
 }) {
-  const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+  const showOssLaunch = OSS_LAUNCH_SICHTBAR;
   const card = SKILL_CARDS[slug];
   const pageName = getItemBySlug(slug)?.name ?? slug;
 

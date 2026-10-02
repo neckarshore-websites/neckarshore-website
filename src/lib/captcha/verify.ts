@@ -30,6 +30,8 @@
  * Docs: https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
  */
 
+import { CAPTCHA_AKTIV, TURNSTILE_SITEKEY } from "@/lib/kontakt-config";
+
 const TURNSTILE_VERIFY_URL =
   "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
@@ -44,11 +46,9 @@ export type CaptchaVerifyResult =
 export async function verifyCaptchaToken(
   token: string | undefined | null,
 ): Promise<CaptchaVerifyResult> {
-  // Feature-Flag: Spam-Schutz greift nur, wenn explizit aktiviert. Sonst
-  // kommt der Schutz aus dem Honeypot-Feld in der Server Action. `=== "true"`
-  // als strikter Check: unset, leer, "false" oder irgendein anderer Wert →
-  // aus. Sicherer Default: aus.
-  const captchaEnabled = process.env.CAPTCHA_ENABLED === "true";
+  // Schalter im Code (src/lib/kontakt-config.ts, #2879), nicht mehr in Vercel.
+  // Aus: Schutz kommt allein aus dem Honeypot-Feld in der Server Action.
+  const captchaEnabled = CAPTCHA_AKTIV;
   if (!captchaEnabled) {
     return { ok: true, skipped: true };
   }
@@ -57,8 +57,13 @@ export async function verifyCaptchaToken(
 
   // Flag aktiv, aber Secret fehlt → in Production fail-closed, sonst graceful
   // (Dev/Preview-Komfort, kein Launch-Blocker).
+  //
+  // VERCEL_ENV, NICHT NODE_ENV (#2879): NODE_ENV ist auch in jeder Vorschau
+  // "production". Solange der Schalter in Vercel nur fuer Production gesetzt
+  // war, fiel das nicht auf. Seit er im Code steht und ueberall an ist, haette
+  // NODE_ENV jede Vorschau-Anfrage abgewiesen.
   if (!secretKey) {
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.VERCEL_ENV === "production") {
       console.error(
         "[captcha] CAPTCHA_ENABLED=true but TURNSTILE_SECRET_KEY missing in production — rejecting submit.",
       );
@@ -130,3 +135,18 @@ export async function verifyCaptchaToken(
  * default — keep in sync with the widget in components/Turnstile.tsx.
  */
 export const CAPTCHA_FORM_FIELD = "cf-turnstile-response";
+
+/**
+ * The site key the contact form should render with, or null for no widget (#2879).
+ *
+ * Null wherever the secret is missing (previews, `npm run dev`, E2E): a widget
+ * whose token the server cannot verify would only produce a failing submit.
+ * Lives here, not in kontakt-config.ts, because it has to name the secret, and
+ * that file is guarded against secret names. Server-side only — the client
+ * receives the result as a prop.
+ */
+export function captchaSitekey(
+  umgebung: Record<string, string | undefined> = process.env,
+): string | null {
+  return CAPTCHA_AKTIV && umgebung.TURNSTILE_SECRET_KEY ? TURNSTILE_SITEKEY : null;
+}

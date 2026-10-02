@@ -20,7 +20,12 @@ const fieldClass =
   "w-full rounded-lg border border-primary/15 bg-white px-4 py-3 text-base text-primary placeholder:text-muted focus:border-accent focus:outline-none dark:border-text-secondary/20 dark:bg-deep-space dark:text-text-primary";
 const errorClass = "mt-1.5 text-sm text-error";
 
-export default function ContactForm() {
+export default function ContactForm({
+  turnstileSitekey = null,
+}: {
+  /** From the server page (`captchaSitekey()`); null = no widget. */
+  turnstileSitekey?: string | null;
+} = {}) {
   const [state, formAction, pending] = useActionState(
     sendContact,
     CONTACT_INITIAL_STATE,
@@ -116,7 +121,7 @@ export default function ContactForm() {
         ) : null}
       </div>
 
-      <Turnstile />
+      <Turnstile sitekey={turnstileSitekey} />
 
       {state.status === "error" && state.message ? (
         <p role="alert" className="text-sm text-error">

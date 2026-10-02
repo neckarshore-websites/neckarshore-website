@@ -17,6 +17,8 @@ import Nav from "@/components/Nav";
 import Logo from "@/components/Logo";
 import { PageSchema } from "@/components/PageSchema";
 import ContactForm from "@/components/ContactForm";
+import { OSS_LAUNCH_SICHTBAR } from "@/lib/kontakt-config";
+import { captchaSitekey } from "@/lib/captcha/verify";
 import StatsGrid, { type StatsData } from "@/components/StatsGrid";
 import FounderImage from "@/components/FounderImage";
 import LiveTicker from "@/components/LiveTicker";
@@ -24,7 +26,7 @@ import { BRAND } from "@/lib/brand";
 
 /* ---------- constants ---------- */
 
-const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
 // FAQ — single visible <details> accordion + FAQPage JSON-LD (GEO / AI-citation + SEO).
 // Merged the former standalone "Knowledge Base" GEO snippets in here 2026-06-25 (German
@@ -401,7 +403,7 @@ export default function Home() {
               <p className="mb-5 text-center text-base text-muted dark:text-text-secondary">
                 Lieber schreiben? Schick uns direkt eine Nachricht:
               </p>
-              <ContactForm />
+              <ContactForm turnstileSitekey={captchaSitekey()} />
             </div>
           </div>
         </section>

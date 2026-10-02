@@ -1,3 +1,4 @@
+import { OSS_LAUNCH_SICHTBAR } from "@/lib/kontakt-config";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import Nav from "@/components/Nav";
@@ -9,7 +10,7 @@ import { collectionPageSchema } from "@/lib/schema/product";
 import { breadcrumbTrailForCategory, type PortfolioCategory } from "@/lib/portfolio";
 import { cardDescription } from "@/lib/card-descriptions";
 
-const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
 /**
  * Shared per-category sub-portal (Server Component). Lists one PORTFOLIO category's

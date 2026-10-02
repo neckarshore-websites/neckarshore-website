@@ -1,3 +1,4 @@
+import { OSS_LAUNCH_SICHTBAR } from "@/lib/kontakt-config";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
@@ -18,7 +19,7 @@ import {
   previewSoftwareApplicationSchema,
 } from "@/lib/schema/product";
 
-const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
 /**
  * Shared MMP detail page — renders a PREVIEW page (in development, no public app) OR a LIVE
