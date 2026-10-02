@@ -109,7 +109,7 @@ async function mitUmgebung<T>(werte: Record<string, string | undefined>, fn: () 
 
 test("missing captcha secret rejects in production", async () => {
   const ergebnis = await mitUmgebung(
-    { VERCEL_ENV: "production", TURNSTILE_SECRET_KEY: undefined },
+    { VERCEL_ENV: "production", NODE_ENV: "production", TURNSTILE_SECRET_KEY: undefined },
     () => verifyCaptchaToken("irgendwas"),
   );
   assert.equal(ergebnis.ok, false);
@@ -118,6 +118,22 @@ test("missing captcha secret rejects in production", async () => {
 test("missing captcha secret is skipped in a preview, even though NODE_ENV is production there", async () => {
   const ergebnis = await mitUmgebung(
     { VERCEL_ENV: "preview", NODE_ENV: "production", TURNSTILE_SECRET_KEY: undefined },
+    () => verifyCaptchaToken(null),
+  );
+  assert.deepEqual(ergebnis, { ok: true, skipped: true });
+});
+
+test("missing captcha secret rejects in a production build outside Vercel (VERCEL_ENV unset)", async () => {
+  const ergebnis = await mitUmgebung(
+    { VERCEL_ENV: undefined, NODE_ENV: "production", TURNSTILE_SECRET_KEY: undefined },
+    () => verifyCaptchaToken("irgendwas"),
+  );
+  assert.equal(ergebnis.ok, false);
+});
+
+test("missing captcha secret is skipped in development", async () => {
+  const ergebnis = await mitUmgebung(
+    { VERCEL_ENV: undefined, NODE_ENV: "development", TURNSTILE_SECRET_KEY: undefined },
     () => verifyCaptchaToken(null),
   );
   assert.deepEqual(ergebnis, { ok: true, skipped: true });

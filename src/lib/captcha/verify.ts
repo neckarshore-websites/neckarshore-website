@@ -58,12 +58,16 @@ export async function verifyCaptchaToken(
   // Flag aktiv, aber Secret fehlt → in Production fail-closed, sonst graceful
   // (Dev/Preview-Komfort, kein Launch-Blocker).
   //
-  // VERCEL_ENV, NICHT NODE_ENV (#2879): NODE_ENV ist auch in jeder Vorschau
-  // "production". Solange der Schalter in Vercel nur fuer Production gesetzt
-  // war, fiel das nicht auf. Seit er im Code steht und ueberall an ist, haette
-  // NODE_ENV jede Vorschau-Anfrage abgewiesen.
+  // UEBERSPRINGEN NUR AUSDRUECKLICH (#2879): in Entwicklung oder in einer
+  // Vercel-Vorschau. NODE_ENV allein reicht nicht, es ist auch in jeder
+  // Vorschau "production" und haette dort jede Anfrage abgewiesen, seit der
+  // Schalter im Code steht und ueberall an ist. Umgekehrt darf ein FEHLENDES
+  // VERCEL_ENV nicht durchwinken (CodeRabbit auf PR #286): ein Produktionsbau
+  // ausserhalb von Vercel ist fail-closed.
   if (!secretKey) {
-    if (process.env.VERCEL_ENV === "production") {
+    const darfUeberspringen =
+      process.env.NODE_ENV !== "production" || process.env.VERCEL_ENV === "preview";
+    if (!darfUeberspringen) {
       console.error(
         "[captcha] CAPTCHA_ENABLED=true but TURNSTILE_SECRET_KEY missing in production — rejecting submit.",
       );
