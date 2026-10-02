@@ -1,3 +1,4 @@
+import { OSS_LAUNCH_SICHTBAR } from "@/lib/kontakt-config";
 import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -12,7 +13,7 @@ import { entityId } from "@/lib/schema/webpage";
 import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { SKILL_CARDS } from "@/lib/skill-cards";
 
-const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 const REPO = "https://github.com/neckarshore-skills/ai-phrase-check";
 const card = SKILL_CARDS["ai-phrase-check"];
 

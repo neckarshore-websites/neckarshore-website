@@ -83,13 +83,16 @@ function loadTurnstileScript(): Promise<void> {
   });
 }
 
-export function Turnstile() {
-  const captchaEnabled = process.env.NEXT_PUBLIC_CAPTCHA_ENABLED === "true";
-  const sitekey = process.env.NEXT_PUBLIC_TURNSTILE_SITEKEY;
+/**
+ * `sitekey` comes from the server page (kontakt-config.ts `captchaSitekey()`, #2879):
+ * the public key where the secret exists, null everywhere else. This component no
+ * longer reads any environment variable itself.
+ */
+export function Turnstile({ sitekey }: { sitekey: string | null }) {
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!captchaEnabled || !sitekey || !mountRef.current) return;
+    if (!sitekey || !mountRef.current) return;
 
     let cancelled = false;
     let widgetId: string | null = null;
@@ -124,11 +127,11 @@ export function Turnstile() {
         }
       }
     };
-  }, [captchaEnabled, sitekey]);
+  }, [sitekey]);
 
   // Feature-Flag aus ODER kein Sitekey → Widget komplett unsichtbar.
   // Form bleibt funktional; die Server-Seite respektiert das gleiche Flag.
-  if (!captchaEnabled || !sitekey) return null;
+  if (!sitekey) return null;
 
   return (
     <div

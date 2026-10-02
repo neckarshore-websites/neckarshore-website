@@ -1,3 +1,4 @@
+import { OSS_LAUNCH_SICHTBAR } from "@/lib/kontakt-config";
 import fs from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
@@ -7,7 +8,7 @@ import { PageSchema } from "@/components/PageSchema";
 import { pageMetadata } from "@/lib/seo";
 import { repoType, REPO_TYPE_ORDER, type RepoType } from "@/lib/repo-types";
 
-const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
 /**
  * /repositories — the public repository inventory (backlog #7, PUBLIC-ONLY + auto-synced).

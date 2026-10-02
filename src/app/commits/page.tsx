@@ -1,3 +1,4 @@
+import { OSS_LAUNCH_SICHTBAR } from "@/lib/kontakt-config";
 import fs from "node:fs";
 import path from "node:path";
 import type { Metadata } from "next";
@@ -6,7 +7,7 @@ import Footer from "@/components/Footer";
 import { PageSchema } from "@/components/PageSchema";
 import { pageMetadata } from "@/lib/seo";
 
-const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
 /**
  * /commits — how this estate was actually built, over time (Founder decision 2026-08-12).

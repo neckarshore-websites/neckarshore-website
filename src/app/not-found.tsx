@@ -1,3 +1,4 @@
+import { OSS_LAUNCH_SICHTBAR } from "@/lib/kontakt-config";
 import { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/Nav";
@@ -7,7 +8,7 @@ export const metadata: Metadata = {
   description: "Diese Seite existiert nicht. Zurück zur Startseite von neckarshore.ai.",
 };
 
-const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
 export default function NotFound() {
   return (

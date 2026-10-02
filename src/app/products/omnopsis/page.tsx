@@ -1,3 +1,4 @@
+import { OSS_LAUNCH_SICHTBAR } from "@/lib/kontakt-config";
 import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
@@ -13,7 +14,7 @@ import { breadcrumbTrailForSlug } from "@/lib/portfolio";
 import { faqForSlug } from "@/lib/product-faqs";
 import { BRAND } from "@/lib/brand";
 
-const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
 const DEFINITION =
   "Omnopsis ist unsere KI-first Documentation Engine: Sie zieht automatisch aus Git, Jira und Confluence und generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten — fail-closed, also lieber schweigend als falsch.";

@@ -1,3 +1,4 @@
+import { OSS_LAUNCH_SICHTBAR } from "@/lib/kontakt-config";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
@@ -13,7 +14,7 @@ import {
 } from "@/lib/portfolio";
 import { previewSoftwareApplicationSchema } from "@/lib/schema/product";
 
-const showOssLaunch = process.env.OSS_LAUNCH_VISIBLE === "true";
+const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
 /**
  * Skeleton detail route for in-development products (status: "preview"). Bespoke
