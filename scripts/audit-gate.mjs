@@ -55,6 +55,25 @@ import { execFileSync } from "node:child_process";
  * looked at. Two files, two decisions.
  */
 export const ALLOWLIST = [
+  {
+    // Added 2026-10-05. ACCEPTED, NOT FIXED. One advisory object in the tree; the four other
+    // packages npm lists as "high" (micromatch, fast-glob, @next/eslint-plugin-next,
+    // eslint-config-next) are parent pointers to this one and carry no advisory of their own.
+    id: "GHSA-vfj7-8cjw-p6xm",
+    pkg: "braces",
+    devOnly: true,
+    expires: "2026-11-04",
+    reason:
+      "No forward fix exists: the advisory covers braces <=3.0.3, 3.0.3 is the latest release, " +
+      "and GitHub lists no patched version (measured 2026-10-05). npm's only offer is " +
+      "eslint-config-next 14.2.35, a major downgrade of the lint config against Next 16. The " +
+      "single path is eslint-config-next -> @next/eslint-plugin-next -> fast-glob -> micromatch " +
+      "-> braces, lint-time only: `npm ls braces --omit=dev` is empty, so nothing served to a " +
+      "visitor loads it, and the patterns it expands come from our own lint config, not from " +
+      "request input. Removable when braces >3.0.3 is published, or when fast-glob or " +
+      "micromatch drops braces, or when @next/eslint-plugin-next drops fast-glob. If the " +
+      "expiry arrives and none of these happened, re-measure reachability before extending.",
+  },
   // The sharp entry (GHSA-f88m-g3jw-g9cj) was removed 2026-09-09, seven weeks before its
   // 2026-10-31 expiry. It named its own removal condition — "Removable when Next widens its
   // sharp range to >=0.35.0" — and that is exactly what happened: next@16.3.4 declares
