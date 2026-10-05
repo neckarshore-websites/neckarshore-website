@@ -1,23 +1,59 @@
 import { Redis } from "@upstash/redis";
+import { randomBytes } from "crypto";
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
 
 const LOCAL_FILE = join(process.cwd(), "analytics-local.json");
 
-interface AnalyticsStore {
+/**
+ * How long a day of analytics is kept (planning#2877, accepted by the DPO
+ * 2026-10-05). 90 because the read endpoint cannot look further back anyway
+ * (GET /api/track caps `days` at 90). The privacy page states this number;
+ * tests/unit/analytics-retention.test.ts fails if the two drift apart.
+ */
+export const RETENTION_DAYS = 90;
+export const RETENTION_SECONDS = RETENTION_DAYS * 24 * 60 * 60;
+
+/**
+ * Lifetime of the daily salt. A salt is created with the first event of a UTC
+ * day and is needed until that day ends, so at most 24 h; one hour of slack.
+ * After that the store deletes it, and the visitor ids of that day can no
+ * longer be recomputed from an IP address and a user agent — by anyone,
+ * including us.
+ */
+export const SALT_TTL_SECONDS = 25 * 60 * 60;
+
+export interface AnalyticsStore {
   push(key: string, value: string): Promise<void>;
   list(key: string): Promise<string[]>;
   /** Add a value to a set (for unique-visitor counting). */
   addToSet(key: string, value: string): Promise<void>;
   /** Get the size of a set. */
   setSize(key: string): Promise<number>;
+  /** The random salt of a UTC day; created on first use, never extended. */
+  dailySalt(day: string): Promise<string>;
 }
 
-function createRedisStore(): AnalyticsStore {
-  const redis = Redis.fromEnv();
+/** The slice of the Upstash client this store uses — narrow so a test can fake it. */
+export interface RedisLike {
+  lpush(key: string, value: string): Promise<unknown>;
+  lrange(key: string, start: number, stop: number): Promise<unknown[]>;
+  sadd(key: string, value: string): Promise<unknown>;
+  scard(key: string): Promise<number>;
+  expire(key: string, seconds: number, option: "NX"): Promise<unknown>;
+  set(key: string, value: string, opts: { nx: true; ex: number }): Promise<unknown>;
+  get(key: string): Promise<unknown>;
+}
+
+export function createRedisStore(redis: RedisLike): AnalyticsStore {
+  // The expiry lives INSIDE the two write methods, not at their call site, so a
+  // future writer cannot store a key without one. NX = only when the key has no
+  // expiry yet: the clock starts with the first event of a day and a later
+  // write cannot push it out.
   return {
     async push(key, value) {
       await redis.lpush(key, value);
+      await redis.expire(key, RETENTION_SECONDS, "NX");
     },
     async list(key) {
       const raw = await redis.lrange(key, 0, -1);
@@ -25,13 +61,34 @@ function createRedisStore(): AnalyticsStore {
     },
     async addToSet(key, value) {
       await redis.sadd(key, value);
+      await redis.expire(key, RETENTION_SECONDS, "NX");
     },
     async setSize(key) {
       return await redis.scard(key);
     },
+    async dailySalt(day) {
+      const key = `salt:${day}`;
+      // SET NX: the first request of the day wins, every later one (and every
+      // concurrent one) reads the same value back. The "s:" prefix keeps the
+      // client from parsing an all-digit hex string as a number.
+      await redis.set(key, `s:${randomBytes(32).toString("hex")}`, {
+        nx: true,
+        ex: SALT_TTL_SECONDS,
+      });
+      const salt = await redis.get(key);
+      if (typeof salt !== "string" || salt.length === 0) {
+        // Fail closed: without a salt the id would be recomputable.
+        throw new Error("daily salt unavailable");
+      }
+      return salt;
+    },
   };
 }
 
+/**
+ * Local development store (a JSON file, gitignored). It has no expiry: it never
+ * holds visitor data from the live site.
+ */
 function createLocalStore(): AnalyticsStore {
   function read(): Record<string, string[]> {
     if (!existsSync(LOCAL_FILE)) return {};
@@ -65,11 +122,21 @@ function createLocalStore(): AnalyticsStore {
       const data = read();
       return (data[`set:${key}`] || []).length;
     },
+    async dailySalt(day) {
+      const data = read();
+      const key = `salt:${day}`;
+      if (!data[key]?.[0]) {
+        for (const k of Object.keys(data)) if (k.startsWith("salt:")) delete data[k];
+        data[key] = [`s:${randomBytes(32).toString("hex")}`];
+        write(data);
+      }
+      return data[key][0];
+    },
   };
 }
 
 const hasRedis = Boolean(process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN);
 
 export const store: AnalyticsStore = hasRedis
-  ? createRedisStore()
+  ? createRedisStore(Redis.fromEnv() as unknown as RedisLike)
   : createLocalStore();
