@@ -26,7 +26,7 @@ import {
   type RedisLike,
   type RedisTx,
 } from "../../src/lib/analytics-store";
-import { dailyVisitorHash, serverNow } from "../../src/lib/visitor-hash";
+import { dailyVisitorHash, pickCampaign, referrerHost, serverNow } from "../../src/lib/visitor-hash";
 import { planCleanup, printable, RETENTION_DAYS as CLEANUP_DAYS } from "../../scripts/track-retention-cleanup.mjs";
 
 type Call = [string, ...unknown[]];
@@ -102,7 +102,16 @@ test("the retention period is 90 days, in the store and in the cleanup script", 
 
 test("the privacy page states the same retention period as the code", () => {
   const seite = readFileSync(new URL("../../src/app/datenschutz/page.tsx", import.meta.url), "utf8");
-  assert.match(seite, new RegExp(`\\b${RETENTION_DAYS}\\s+Tage`), "privacy page does not name the retention period");
+  const flach = seite.replace(/\s+/g, " ");
+  assert.ok(
+    flach.includes(`werden ${RETENTION_DAYS} Tage nach dem ersten Eintrag dieses Tages automatisch gelöscht`),
+    "privacy page does not name the retention period",
+  );
+  // The three sentences the DPO struck (planning#2877) must not come back.
+  for (const weg of ["anonymisiert", "nicht auf IP-Adresse oder Person rückführbar", "kein personenbezogenes Datum persistiert", "Es werden keine Daten an Dritte übermittelt"]) {
+    assert.ok(!flach.includes(weg), `struck wording is back on the privacy page: ${weg}`);
+  }
+  assert.ok(flach.includes("Upstash, Inc. (USA)"), "privacy page does not name Upstash");
 });
 
 /* 3. Salted, and the salt is short-lived ------------------------------------- */
@@ -158,6 +167,34 @@ test("printable() makes a hostile key name inert", () => {
   assert.equal(printable("events:\u001b[2J\u001b[31mowned\nFAKE LINE"), '"events:\\u001b[2J\\u001b[31mowned\\nFAKE LINE"');
   assert.equal(printable("events:2026-10-05"), '"events:2026-10-05"');
   assert.ok(printable("x".repeat(500)).length <= 130);
+});
+
+/* 4b. Data minimisation at write time ----------------------------------------- */
+
+test("only the hostname of a referrer is kept", () => {
+  assert.equal(referrerHost("https://www.google.com/search?q=private+words&token=abc"), "google.com");
+  assert.equal(referrerHost("https://example.org:8443/a/b#frag"), "example.org");
+  assert.equal(referrerHost("javascript:alert(1)"), null);
+  assert.equal(referrerHost("not a url"), null);
+  assert.equal(referrerHost(""), null);
+  assert.equal(referrerHost(undefined), null);
+});
+
+test("only the six campaign keys the privacy page names are kept", () => {
+  assert.deepEqual(pickCampaign({ utm_source: "rauhut", ref: "x", email: "a@b.c", utm_term: 7 }), {
+    utm_source: "rauhut",
+    ref: "x",
+  });
+  assert.equal(pickCampaign({ email: "a@b.c" }), null);
+  assert.equal(pickCampaign("utm_source=x"), null);
+  assert.equal(pickCampaign({ utm_source: "y".repeat(500) })?.utm_source.length, 200);
+});
+
+test("the route stores the cut referrer and the picked campaign keys, never the raw fields", () => {
+  const route = readFileSync(new URL("../../src/app/api/track/route.ts", import.meta.url), "utf8");
+  assert.match(route, /referrer: referrerHost\(body\.referrer\)/);
+  assert.match(route, /utm: pickCampaign\(body\.utm\)/);
+  assert.doesNotMatch(route, /body\.(referrer|utm) \|\|/);
 });
 
 /* 5. The one-off cleanup ------------------------------------------------------ */

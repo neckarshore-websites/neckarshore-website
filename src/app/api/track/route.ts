@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { store } from "@/lib/analytics-store";
 import { isWebVitalName, summarizeWebVitals } from "@/lib/web-vitals";
 import { timingSafeEqual } from "crypto";
-import { dailyVisitorHash, serverNow } from "@/lib/visitor-hash";
+import { dailyVisitorHash, pickCampaign, referrerHost, serverNow } from "@/lib/visitor-hash";
 
 // ---------------------------------------------------------------------------
 // Config
@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
     const event = {
       event: body.event,
       page: body.page || "/",
-      referrer: body.referrer || null,
+      referrer: referrerHost(body.referrer), // hostname only — never the full address
       device: body.device || "unknown",
       depth: body.depth || null,
       action: body.action || null,
@@ -132,7 +132,7 @@ export async function POST(req: NextRequest) {
       // New fields
       vid: visitorHash,
       geo: geo.country ? geo : null,
-      utm: body.utm || null,
+      utm: pickCampaign(body.utm), // the six named keys only
       // web_vital fields (null for all other event types)
       metric: isVital ? body.metric : null,
       value: isVital ? body.value : null,

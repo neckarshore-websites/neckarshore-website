@@ -115,8 +115,9 @@ export default function Datenschutz() {
               notwendig (Art. 6 Abs. 1 lit. f DSGVO).
             </p>
             <p className="mt-2">
-              Vercel kann Daten in die USA übermitteln. Die Übermittlung erfolgt auf Basis von
-              EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).
+              Vercel hat seinen Sitz in den USA und kann Daten dorthin übermitteln. Vercel ist unter dem
+              EU-US Data Privacy Framework zertifiziert (Art. 45 DSGVO); der Vertrag mit Vercel enthält
+              zusätzlich die EU-Standardvertragsklauseln (Art. 46 Abs. 2 lit. c DSGVO).
             </p>
             <p className="mt-2">
               Für die Webanalyse (siehe § 4) leitet Vercel aus der Client-IP-Adresse
@@ -140,43 +141,53 @@ export default function Datenschutz() {
           <section>
             <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">4. Webanalyse</h2>
             <p className="mt-3">
-              Wir betreiben auf dieser Website ein eigenes, cookiefreies
-              Webanalyse-System. Erfasst werden: aufgerufene Seite, Referrer,
-              Gerätetyp (grob: mobil/Desktop), Scrolltiefe, Zeitpunkt des Aufrufs
-              sowie aggregierte Core-Web-Vitals-Metriken.
+              Wir betreiben auf dieser Website ein eigenes, cookiefreies Webanalyse-System. Erfasst
+              werden: aufgerufene Seite, die Website, von der Sie kommen (Referrer, nur der Hostname),
+              Gerätetyp (grob: mobil/Desktop), Scrolltiefe, sichtbar gewordene Seitenabschnitte,
+              angeklickte Navigationselemente und Schaltflächen, Kampagnenparameter aus der
+              aufgerufenen Adresse (utm_source, utm_medium, utm_campaign, utm_term, utm_content, ref),
+              Land und Region, Zeitpunkt des Aufrufs sowie Core-Web-Vitals-Messwerte.
             </p>
             <p className="mt-2">
-              Zur Unterscheidung von Sitzungen innerhalb eines Tages bilden wir
-              serverseitig einen tagesrotierenden Kurzbezeichner (anonymisierten
-              Zählschlüssel) durch Verknüpfung von IP-Adresse, User-Agent-String
-              und Kalendertag mittels SHA-256. Dieser Schlüssel (16 Hexzeichen)
-              ist nicht auf IP-Adresse oder Person rückführbar. Die IP-Adresse
-              selbst wird nicht gespeichert; sie fließt ausschließlich transient
-              in die Hash-Berechnung ein und wird anschließend verworfen.
+              Um Besuche innerhalb eines Tages voneinander zu unterscheiden und Sitzungen zu bilden
+              (Dauer, Zahl der aufgerufenen Seiten), bilden wir serverseitig einen pseudonymen
+              Tagesschlüssel: IP-Adresse, User-Agent-String, Kalendertag und ein zufälliger Tageswert
+              werden mit SHA-256 verknüpft; gespeichert werden 16 Hexzeichen des Ergebnisses. Der
+              Schlüssel ist ein pseudonymisiertes, personenbezogenes Datum. Solange der Tageswert
+              existiert, ließe er sich für eine bekannte IP-Adresse und einen bekannten Browser
+              nachrechnen; der Tageswert wird spätestens 25 Stunden nach seiner Erzeugung gelöscht. Der
+              Schlüssel wechselt täglich; über mehrere Tage hinweg lässt sich ein Besuch damit nicht
+              wiedererkennen. Die IP-Adresse selbst speichern wir nicht; sie fließt nur in diese
+              Berechnung ein.
             </p>
             <p className="mt-2">
-              Zur geografischen Zuordnung (Land/Region) werten wir Geo-Header aus,
-              die Vercel als Infrastrukturanbieter aus der Client-IP ableitet und
-              als anonymisierte Metadaten weiterreicht (Header:{" "}
-              <code>x-vercel-ip-country</code>,{" "}
-              <code>x-vercel-ip-country-region</code>); die IP-Adresse selbst
-              verlässt Vercels Infrastruktur für diesen Zweck nicht.
+              Land und Region entnehmen wir Angaben, die Vercel als Infrastrukturanbieter aus der
+              IP-Adresse ableitet und uns mit der Anfrage übergibt (Header:{" "}
+              <code>x-vercel-ip-country</code>, <code>x-vercel-ip-country-region</code>).
             </p>
             <p className="mt-2">
-              Es werden keine Daten an Dritte übermittelt. Es werden{" "}
-              <strong>keine Cookies</strong> gesetzt und kein Speicherzugriff auf
-              Ihr Endgerät vorgenommen.
+              <strong>Empfänger und Speicherort:</strong> Die Analysedaten werden in einer Datenbank
+              der Upstash, Inc. (USA) gespeichert; der Speicher steht in den USA. Upstash stützt die
+              Übermittlung auf das EU-US Data Privacy Framework und, wo dieses nicht greift, auf die
+              EU-Standardvertragsklauseln.
             </p>
             <p className="mt-2">
-              <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO
-              (berechtigtes Interesse an anonymer Nutzungsanalyse zur Verbesserung
-              unseres Angebots).
+              <strong>Speicherdauer:</strong> Die Daten eines Tages werden 90 Tage nach dem ersten
+              Eintrag dieses Tages automatisch gelöscht.
             </p>
             <p className="mt-2">
-              <strong>Widerspruchsrecht:</strong> Sie können der Verarbeitung
-              jederzeit widersprechen (info@neckarshore.ai). Da kein
-              personenbezogenes Datum persistiert wird, besteht nach Ablauf des
-              Tages keine weitere Möglichkeit der Zuordnung.
+              Es werden <strong>keine Cookies</strong> gesetzt und kein Speicherzugriff auf Ihr
+              Endgerät vorgenommen.
+            </p>
+            <p className="mt-2">
+              <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an
+              einer Reichweitenmessung zur Verbesserung unseres Angebots).
+            </p>
+            <p className="mt-2">
+              <strong>Widerspruchsrecht:</strong> Sie können der Verarbeitung jederzeit widersprechen
+              (info@neckarshore.ai). Sobald der Tageswert gelöscht ist, können wir die Einträge eines
+              einzelnen Besuchs nicht mehr heraussuchen (Art. 11 DSGVO); sie werden mit Ablauf der 90
+              Tage gelöscht.
             </p>
           </section>
 

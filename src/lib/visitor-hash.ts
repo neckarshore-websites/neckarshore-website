@@ -28,3 +28,41 @@ export function serverNow(now: Date = new Date()): { timestamp: string; day: str
   const timestamp = now.toISOString();
   return { timestamp, day: timestamp.slice(0, 10) };
 }
+
+/**
+ * Only the hostname of a referring address is kept (planning#2877, DPO
+ * condition 1, Art. 5(1)(c)). A full address can carry another site's search
+ * terms or tokens, and the only reader uses the hostname anyway.
+ * Returns null for anything that is not an http(s) address.
+ */
+export function referrerHost(raw: unknown): string | null {
+  if (typeof raw !== "string" || raw.length === 0) return null;
+  try {
+    const url = new URL(raw);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return null;
+    return url.hostname.replace(/^www\./, "") || null;
+  } catch {
+    return null;
+  }
+}
+
+/** The campaign keys the privacy page names — nothing else is stored. */
+export const CAMPAIGN_KEYS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+  "ref",
+] as const;
+
+/** Keeps only the named campaign keys, as short strings. null when none is left. */
+export function pickCampaign(raw: unknown): Record<string, string> | null {
+  if (!raw || typeof raw !== "object") return null;
+  const out: Record<string, string> = {};
+  for (const key of CAMPAIGN_KEYS) {
+    const value = (raw as Record<string, unknown>)[key];
+    if (typeof value === "string" && value.length > 0) out[key] = value.slice(0, 200);
+  }
+  return Object.keys(out).length > 0 ? out : null;
+}
