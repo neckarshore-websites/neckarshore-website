@@ -66,6 +66,16 @@ export function planCleanup(entries, today) {
   return plan;
 }
 
+/**
+ * Renders an untrusted key name for a terminal or a log: JSON-quoted, every
+ * character outside printable ASCII escaped, cut at 120 characters. A raw name
+ * could carry escape sequences (clear screen, recolour, forge a line).
+ */
+export function printable(key) {
+  const cut = String(key).slice(0, 120);
+  return JSON.stringify(cut).replace(/[^\x20-\x7e]/g, (c) => `\\u${c.charCodeAt(0).toString(16).padStart(4, "0")}`);
+}
+
 async function main() {
   const apply = process.argv.includes("--apply");
   const { Redis } = await import("@upstash/redis");
@@ -92,8 +102,9 @@ async function main() {
   console.log(`no expiry, older than ${RETENTION_DAYS} days -> delete: ${plan.deleteOverdue.length}  (${perFamily(plan.deleteOverdue)})`);
   console.log(`no expiry, day in the future -> delete:  ${plan.deleteFuture.length}`);
   console.log(`no expiry, day unreadable -> delete:     ${plan.deleteUnreadable.length}`);
-  // Key names carry a date and nothing else, so listing the odd ones is safe.
-  for (const key of [...plan.deleteFuture, ...plan.deleteUnreadable]) console.log(`    ${key}`);
+  // These names are NOT trusted: until this change the day came from the request
+  // body, so a key name can hold anything a visitor sent. printable() escapes it.
+  for (const key of [...plan.deleteFuture, ...plan.deleteUnreadable]) console.log(`    ${printable(key)}`);
 
   if (!apply) {
     console.log("\nNothing was changed. Re-run with --apply to do the above.");

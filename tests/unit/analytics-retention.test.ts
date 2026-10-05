@@ -24,9 +24,10 @@ import {
   RETENTION_SECONDS,
   SALT_TTL_SECONDS,
   type RedisLike,
+  type RedisTx,
 } from "../../src/lib/analytics-store";
 import { dailyVisitorHash, serverNow } from "../../src/lib/visitor-hash";
-import { planCleanup, RETENTION_DAYS as CLEANUP_DAYS } from "../../scripts/track-retention-cleanup.mjs";
+import { planCleanup, printable, RETENTION_DAYS as CLEANUP_DAYS } from "../../scripts/track-retention-cleanup.mjs";
 
 type Call = [string, ...unknown[]];
 
@@ -35,20 +36,34 @@ function fakeRedis(): { redis: RedisLike; calls: Call[] } {
   const calls: Call[] = [];
   const strings = new Map<string, string>();
   const redis: RedisLike = {
-    async lpush(key, value) {
-      calls.push(["lpush", key, value]);
+    multi() {
+      // Records the queued commands as ONE entry at exec() — so the test sees
+      // whether write and expiry travelled together.
+      const queued: unknown[][] = [];
+      const tx: RedisTx = {
+        lpush(key, value) {
+          queued.push(["lpush", key, value]);
+          return tx;
+        },
+        sadd(key, value) {
+          queued.push(["sadd", key, value]);
+          return tx;
+        },
+        expire(key, seconds, option) {
+          queued.push(["expire", key, seconds, option]);
+          return tx;
+        },
+        async exec() {
+          calls.push(["exec", ...queued]);
+        },
+      };
+      return tx;
     },
     async lrange() {
       return [];
     },
-    async sadd(key, value) {
-      calls.push(["sadd", key, value]);
-    },
     async scard() {
       return 0;
-    },
-    async expire(key, seconds, option) {
-      calls.push(["expire", key, seconds, option]);
     },
     async set(key, value, opts) {
       calls.push(["set", key, opts]);
@@ -63,21 +78,19 @@ function fakeRedis(): { redis: RedisLike; calls: Call[] } {
 
 /* 1 + 2. Every write carries an expiry, and it cannot be extended ------------- */
 
-test("push sets a 90-day expiry on the events key, only if it has none", async () => {
+test("push writes the event and its 90-day expiry in one transaction", async () => {
   const { redis, calls } = fakeRedis();
   await createRedisStore(redis).push("events:2026-10-05", "{}");
   assert.deepEqual(calls, [
-    ["lpush", "events:2026-10-05", "{}"],
-    ["expire", "events:2026-10-05", RETENTION_SECONDS, "NX"],
+    ["exec", ["lpush", "events:2026-10-05", "{}"], ["expire", "events:2026-10-05", RETENTION_SECONDS, "NX"]],
   ]);
 });
 
-test("addToSet sets a 90-day expiry on the visitors key, only if it has none", async () => {
+test("addToSet writes the visitor and its 90-day expiry in one transaction", async () => {
   const { redis, calls } = fakeRedis();
   await createRedisStore(redis).addToSet("visitors:2026-10-05", "abc");
   assert.deepEqual(calls, [
-    ["sadd", "visitors:2026-10-05", "abc"],
-    ["expire", "visitors:2026-10-05", RETENTION_SECONDS, "NX"],
+    ["exec", ["sadd", "visitors:2026-10-05", "abc"], ["expire", "visitors:2026-10-05", RETENTION_SECONDS, "NX"]],
   ]);
 });
 
@@ -137,6 +150,14 @@ test("the route never reads a timestamp from the request body", () => {
   assert.doesNotMatch(route, /body\.timestamp/);
   assert.match(route, /serverNow\(\)/);
   assert.match(route, /store\.dailySalt\(day\)/);
+});
+
+test("printable() makes a hostile key name inert", () => {
+  // Key names were client-influenced before this change (the day came from the
+  // request body), so one may carry terminal escape sequences or line breaks.
+  assert.equal(printable("events:\u001b[2J\u001b[31mowned\nFAKE LINE"), '"events:\\u001b[2J\\u001b[31mowned\\nFAKE LINE"');
+  assert.equal(printable("events:2026-10-05"), '"events:2026-10-05"');
+  assert.ok(printable("x".repeat(500)).length <= 130);
 });
 
 /* 5. The one-off cleanup ------------------------------------------------------ */

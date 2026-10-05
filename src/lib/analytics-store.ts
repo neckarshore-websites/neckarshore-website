@@ -36,13 +36,19 @@ export interface AnalyticsStore {
 
 /** The slice of the Upstash client this store uses — narrow so a test can fake it. */
 export interface RedisLike {
-  lpush(key: string, value: string): Promise<unknown>;
+  /** MULTI/EXEC: the queued commands run as one transaction, all or none. */
+  multi(): RedisTx;
   lrange(key: string, start: number, stop: number): Promise<unknown[]>;
-  sadd(key: string, value: string): Promise<unknown>;
   scard(key: string): Promise<number>;
-  expire(key: string, seconds: number, option: "NX"): Promise<unknown>;
   set(key: string, value: string, opts: { nx: true; ex: number }): Promise<unknown>;
   get(key: string): Promise<unknown>;
+}
+
+export interface RedisTx {
+  lpush(key: string, value: string): RedisTx;
+  sadd(key: string, value: string): RedisTx;
+  expire(key: string, seconds: number, option: "NX"): RedisTx;
+  exec(): Promise<unknown>;
 }
 
 export function createRedisStore(redis: RedisLike): AnalyticsStore {
@@ -50,18 +56,21 @@ export function createRedisStore(redis: RedisLike): AnalyticsStore {
   // future writer cannot store a key without one. NX = only when the key has no
   // expiry yet: the clock starts with the first event of a day and a later
   // write cannot push it out.
+  //
+  // Write and expiry go in ONE transaction. As two separate calls, a failure
+  // between them (timeout, rate limit) would leave a key with data and no
+  // expiry — the exact state this change exists to end — and nothing would
+  // report it.
   return {
     async push(key, value) {
-      await redis.lpush(key, value);
-      await redis.expire(key, RETENTION_SECONDS, "NX");
+      await redis.multi().lpush(key, value).expire(key, RETENTION_SECONDS, "NX").exec();
     },
     async list(key) {
       const raw = await redis.lrange(key, 0, -1);
       return raw.map((r) => (typeof r === "string" ? r : JSON.stringify(r)));
     },
     async addToSet(key, value) {
-      await redis.sadd(key, value);
-      await redis.expire(key, RETENTION_SECONDS, "NX");
+      await redis.multi().sadd(key, value).expire(key, RETENTION_SECONDS, "NX").exec();
     },
     async setSize(key) {
       return await redis.scard(key);
