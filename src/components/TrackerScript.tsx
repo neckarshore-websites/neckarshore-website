@@ -29,6 +29,14 @@ function getUtmParams(): Record<string, string> {
   }
 }
 
+function referrerHostname(): string | null {
+  try {
+    return document.referrer ? `https://${new URL(document.referrer).hostname}` : null;
+  } catch {
+    return null;
+  }
+}
+
 /** Cached UTM params — evaluated once when the module loads in the browser. */
 let cachedUtm: Record<string, string> | null = null;
 
@@ -44,9 +52,11 @@ function track(event: string, data?: Record<string, unknown>) {
       JSON.stringify({
         event,
         page: window.location.pathname,
-        referrer: document.referrer || null,
+        // Hostname only — the full referring address never leaves the browser.
+        // The server cuts it again (referrerHost in lib/visitor-hash.ts) and
+        // sets the time itself, so no timestamp is sent.
+        referrer: referrerHostname(),
         device: window.innerWidth < 768 ? "mobile" : "desktop",
-        timestamp: new Date().toISOString(),
         source,
         // UTM params — only included when present
         ...(Object.keys(cachedUtm).length > 0 ? { utm: cachedUtm } : {}),

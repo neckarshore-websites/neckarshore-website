@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { store } from "@/lib/analytics-store";
 import { isWebVitalName, summarizeWebVitals } from "@/lib/web-vitals";
-import { createHash, timingSafeEqual } from "crypto";
+import { timingSafeEqual } from "crypto";
+import { dailyVisitorHash, pickCampaign, referrerHost, serverNow } from "@/lib/visitor-hash";
 
 // ---------------------------------------------------------------------------
 // Config
@@ -22,23 +23,6 @@ const SESSION_GAP_MS = 30 * 60 * 1000;
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-/**
- * Generate a daily-rotating anonymous visitor hash.
- *
- * SHA-256(IP + User-Agent + YYYY-MM-DD) → hex.
- * - Not reversible to a person (hash is one-way).
- * - Rotates daily → no cross-day tracking.
- * - No PII stored — only the hash.
- *
- * This is the Plausible/Fathom model accepted by German DPAs.
- */
-function dailyVisitorHash(ip: string, ua: string, day: string): string {
-  return createHash("sha256")
-    .update(`${ip}|${ua}|${day}`)
-    .digest("hex")
-    .slice(0, 16); // 16 hex chars = 64 bits — enough for uniqueness within a day
-}
 
 /**
  * Extract country/region from Vercel geo headers.
@@ -121,13 +105,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "invalid web_vital" }, { status: 400 });
     }
 
-    const timestamp = body.timestamp || new Date().toISOString();
-    const day = timestamp.slice(0, 10);
+    // Day and time come from the server, never from the request body
+    // (planning#2877, DPO condition A): the day names the storage key, and the
+    // key's 90-day expiry can only be checked if a client cannot choose it.
+    const { timestamp, day } = serverNow();
 
-    // --- Visitor hash (Feature 1) ---
+    // --- Visitor id (Feature 1) — pseudonymous, salted per day ---
     const ip = getClientIp(req);
     const ua = req.headers.get("user-agent") || "";
-    const visitorHash = dailyVisitorHash(ip, ua, day);
+    const visitorHash = dailyVisitorHash(await store.dailySalt(day), ip, ua, day);
 
     // --- Geo (Feature 3) ---
     const geo = extractGeo(req);
@@ -136,7 +122,7 @@ export async function POST(req: NextRequest) {
     const event = {
       event: body.event,
       page: body.page || "/",
-      referrer: body.referrer || null,
+      referrer: referrerHost(body.referrer), // hostname only — never the full address
       device: body.device || "unknown",
       depth: body.depth || null,
       action: body.action || null,
@@ -146,14 +132,15 @@ export async function POST(req: NextRequest) {
       // New fields
       vid: visitorHash,
       geo: geo.country ? geo : null,
-      utm: body.utm || null,
+      utm: pickCampaign(body.utm), // the six named keys only
       // web_vital fields (null for all other event types)
       metric: isVital ? body.metric : null,
       value: isVital ? body.value : null,
       rating: isVital && typeof body.rating === "string" ? body.rating : null,
     };
 
-    // Store the event
+    // Store the event. Both writes set a 90-day expiry inside the store
+    // (RETENTION_SECONDS) — there is no write path without one.
     await store.push(`events:${day}`, JSON.stringify(event));
 
     // Track unique visitor in a daily set (for fast unique count)
