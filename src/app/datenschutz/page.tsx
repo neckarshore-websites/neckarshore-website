@@ -189,6 +189,10 @@ export default function Datenschutz() {
               einzelnen Besuchs nicht mehr heraussuchen (Art. 11 DSGVO); sie werden mit Ablauf der 90
               Tage gelöscht.
             </p>
+            <p className="mt-2">
+              Sendet Ihr Browser das Signal „Global Privacy Control“ oder „Do Not Track“, werten wir
+              das als Widerspruch: Für solche Aufrufe speichern wir keine Analysedaten.
+            </p>
           </section>
 
           <section>
