@@ -190,8 +190,10 @@ export default function Datenschutz() {
               Tage gelöscht.
             </p>
             <p className="mt-2">
-              Sendet Ihr Browser das Signal „Global Privacy Control“ oder „Do Not Track“, werten wir
-              das als Widerspruch: Für solche Aufrufe speichern wir keine Analysedaten.
+              Auch künftige Besuche können wir einer E-Mail nicht zuordnen, weil wir Besucher nicht
+              wiedererkennen. Sendet Ihr Browser das Signal „Global Privacy Control“ oder „Do Not
+              Track“, werten wir das als Widerspruch: Für solche Aufrufe speichern wir keine
+              Analysedaten.
             </p>
           </section>
 
