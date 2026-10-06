@@ -3,6 +3,7 @@ import { store } from "@/lib/analytics-store";
 import { isWebVitalName, summarizeWebVitals } from "@/lib/web-vitals";
 import { timingSafeEqual } from "crypto";
 import { dailyVisitorHash, pickCampaign, referrerHost, serverNow } from "@/lib/visitor-hash";
+import { hasOptOutSignal } from "@/lib/tracking-signal";
 
 // ---------------------------------------------------------------------------
 // Config
@@ -91,6 +92,13 @@ function isAuthenticated(req: NextRequest): boolean {
 // ---------------------------------------------------------------------------
 
 export async function POST(req: NextRequest) {
+  // Opt-out signal first (Sec-GPC / DNT — Art. 21(5) GDPR): nothing is read
+  // from the request, no visitor id is computed, nothing is stored. Answered
+  // like a stored event, so a page behaves the same either way.
+  if (hasOptOutSignal(req.headers)) {
+    return NextResponse.json({ ok: true }, { status: 200 });
+  }
+
   try {
     const body = await req.json();
 

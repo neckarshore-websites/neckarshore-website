@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { onCLS, onFCP, onINP, onLCP, onTTFB, type Metric } from "web-vitals";
 import { BRAND } from "@/lib/brand";
+import { browserOptedOut } from "@/lib/tracking-signal";
 
 /**
  * Extract campaign parameters from the current URL (once per page load).
@@ -42,6 +43,10 @@ let cachedUtm: Record<string, string> | null = null;
 
 function track(event: string, data?: Record<string, unknown>) {
   try {
+    // Global Privacy Control / Do Not Track: send nothing at all. The route
+    // would drop the event anyway; not sending also keeps the request itself
+    // off the wire.
+    if (browserOptedOut()) return;
     if (!cachedUtm) cachedUtm = getUtmParams();
 
     const source = (navigator as Navigator & { webdriver?: boolean }).webdriver
