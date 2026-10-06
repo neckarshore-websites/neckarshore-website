@@ -1,9 +1,9 @@
 {
   "byType": {
     "e2e": 989,
-    "integration": 843,
+    "integration": 845,
     "smoke": 1,
-    "unit": 3142
+    "unit": 3183
   },
   "endpoints": 96,
   "expected": 18,
@@ -78,15 +78,16 @@
       "total": 34
     },
     {
-      "audited_sha": "4158e68c1496a2a19c7be29baeec9887338876b9",
+      "audited_sha": null,
       "byType": {
-        "integration": 31,
-        "unit": 504
+        "integration": 33,
+        "unit": 545
       },
       "endpoints": 0,
       "lenses": {},
-      "repo": "IMAP Mailbox Cleanup",
-      "total": 535
+      "private": true,
+      "repo": "privates Repo",
+      "total": 578
     },
     {
       "audited_sha": "4856af11a8a2c1728ed602843cd8dce51108a743",
@@ -132,7 +133,7 @@
       "total": 9
     },
     {
-      "audited_sha": "e8eedbd17f86d86704dc9b9c9f4e933d537aea05",
+      "audited_sha": "f973aba7f5e7e1867767d244b858e3b6e436d88f",
       "byType": {
         "e2e": 444,
         "unit": 270
@@ -213,6 +214,15 @@
       "total": 227
     },
     {
+      "audited_sha": null,
+      "byType": {},
+      "endpoints": 0,
+      "lenses": {},
+      "repo": "IMAP Mailbox Cleanup",
+      "seeded": true,
+      "total": 171
+    },
+    {
       "audited_sha": "893875d",
       "byType": {},
       "endpoints": 0,
@@ -243,8 +253,8 @@
     }
   ],
   "reporting": 18,
-  "repos": 21,
-  "total": 5057,
-  "untyped_total": 82,
-  "updatedAt": "2026-10-05T11:02:47Z"
+  "repos": 22,
+  "total": 5271,
+  "untyped_total": 253,
+  "updatedAt": "2026-10-06T10:58:03Z"
 }
