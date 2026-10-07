@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-10-06T10:56:18Z",
+  "updatedAt": "2026-10-07T10:43:56Z",
   "startDate": "2026-03-22",
-  "seriesTotal": 9723,
+  "seriesTotal": 9845,
   "weeks": [
     {
       "week": "2026-03-22",
@@ -117,7 +117,7 @@
     },
     {
       "week": "2026-10-04",
-      "total": 242
+      "total": 364
     }
   ],
   "months": [
@@ -151,13 +151,13 @@
     },
     {
       "month": "2026-10",
-      "total": 242
+      "total": 364
     }
   ],
   "areas": [
     {
       "area": "Infrastruktur",
-      "total": 4460
+      "total": 4558
     },
     {
       "area": "Omnopsis",
@@ -165,15 +165,15 @@
     },
     {
       "area": "Websites",
-      "total": 1548
+      "total": 1560
     },
     {
       "area": "MMPs",
-      "total": 1352
+      "total": 1363
     },
     {
       "area": "Skills",
-      "total": 531
+      "total": 532
     },
     {
       "area": "Agenten",

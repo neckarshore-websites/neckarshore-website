@@ -1,9 +1,9 @@
 {
   "byType": {
-    "e2e": 989,
-    "integration": 845,
+    "e2e": 995,
+    "integration": 904,
     "smoke": 1,
-    "unit": 3183
+    "unit": 3235
   },
   "endpoints": 96,
   "expected": 18,
@@ -13,14 +13,14 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 768,
+        "integration": 827,
         "unit": 105
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 873
+      "total": 932
     },
     {
       "audited_sha": "30e9092bb58f4533408c43d32368bc4f741ac685",
@@ -81,13 +81,13 @@
       "audited_sha": null,
       "byType": {
         "integration": 33,
-        "unit": 545
+        "unit": 572
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 578
+      "total": 605
     },
     {
       "audited_sha": "4856af11a8a2c1728ed602843cd8dce51108a743",
@@ -133,15 +133,15 @@
       "total": 9
     },
     {
-      "audited_sha": "f973aba7f5e7e1867767d244b858e3b6e436d88f",
+      "audited_sha": "24b9107f7e57546bf88407f9046cdfb14e8f94d5",
       "byType": {
-        "e2e": 444,
-        "unit": 270
+        "e2e": 450,
+        "unit": 295
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/neckarshore-website",
-      "total": 714
+      "total": 745
     },
     {
       "audited_sha": "50524cc9e8d08a043eeb4086baa3af86ac19a831",
@@ -254,7 +254,7 @@
   ],
   "reporting": 18,
   "repos": 22,
-  "total": 5271,
+  "total": 5388,
   "untyped_total": 253,
-  "updatedAt": "2026-10-06T10:58:03Z"
+  "updatedAt": "2026-10-07T10:45:50Z"
 }
