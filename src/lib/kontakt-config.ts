@@ -72,9 +72,11 @@ export const TURNSTILE_SITEKEY = "0x4AAAAAADjkp7DYwmfqk44x";
 export const CAPTCHA_AKTIV = true;
 
 /**
- * The "Obsidian Vault Autopilot is live" strip in the nav. Measured live
- * 2026-10-02: shown on / and /products. Its review date in Nav.tsx (2026-07-25)
- * has passed — that is a Founder question, not changed here. Previews now show
- * it too (before: Production-only variable), which makes them match production.
+ * The "Obsidian Vault Autopilot is live" strip in the nav. OFF since 2026-10-07 on the
+ * Founder's decision: it was planned for 30 days from 2026-06-25, its review date in
+ * Nav.tsx (2026-07-25) had passed, and "is live" was no longer news. The markup stays in
+ * Nav.tsx so the next announcement needs new words and this switch, not a new component.
+ * Only Nav.tsx reads the switch: no page changes its own top padding with it, so the first
+ * section of each page sits the strip's height further from the nav than before.
  */
-export const OSS_LAUNCH_SICHTBAR = true;
+export const OSS_LAUNCH_SICHTBAR = false;
