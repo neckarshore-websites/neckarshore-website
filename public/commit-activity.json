@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-10-14T09:11:01Z",
+  "updatedAt": "2026-10-15T08:44:06Z",
   "startDate": "2026-03-22",
-  "seriesTotal": 10209,
+  "seriesTotal": 10271,
   "weeks": [
     {
       "week": "2026-03-22",
-      "total": 360
+      "total": 363
     },
     {
       "week": "2026-03-29",
@@ -17,7 +17,7 @@
     },
     {
       "week": "2026-04-12",
-      "total": 369
+      "total": 370
     },
     {
       "week": "2026-04-19",
@@ -29,7 +29,7 @@
     },
     {
       "week": "2026-05-03",
-      "total": 270
+      "total": 271
     },
     {
       "week": "2026-05-10",
@@ -45,11 +45,11 @@
     },
     {
       "week": "2026-05-31",
-      "total": 230
+      "total": 231
     },
     {
       "week": "2026-06-07",
-      "total": 360
+      "total": 361
     },
     {
       "week": "2026-06-14",
@@ -57,11 +57,11 @@
     },
     {
       "week": "2026-06-21",
-      "total": 184
+      "total": 185
     },
     {
       "week": "2026-06-28",
-      "total": 397
+      "total": 399
     },
     {
       "week": "2026-07-05",
@@ -69,7 +69,7 @@
     },
     {
       "week": "2026-07-12",
-      "total": 555
+      "total": 557
     },
     {
       "week": "2026-07-19",
@@ -81,7 +81,7 @@
     },
     {
       "week": "2026-08-02",
-      "total": 373
+      "total": 374
     },
     {
       "week": "2026-08-09",
@@ -121,33 +121,33 @@
     },
     {
       "week": "2026-10-11",
-      "total": 168
+      "total": 217
     }
   ],
   "months": [
     {
       "month": "2026-03",
-      "total": 527
+      "total": 530
     },
     {
       "month": "2026-04",
-      "total": 1236
+      "total": 1237
     },
     {
       "month": "2026-05",
-      "total": 1044
+      "total": 1046
     },
     {
       "month": "2026-06",
-      "total": 1225
+      "total": 1229
     },
     {
       "month": "2026-07",
-      "total": 1783
+      "total": 1785
     },
     {
       "month": "2026-08",
-      "total": 1786
+      "total": 1787
     },
     {
       "month": "2026-09",
@@ -155,13 +155,13 @@
     },
     {
       "month": "2026-10",
-      "total": 741
+      "total": 790
     }
   ],
   "areas": [
     {
       "area": "Infrastruktur",
-      "total": 4819
+      "total": 4855
     },
     {
       "area": "Omnopsis",
@@ -169,15 +169,15 @@
     },
     {
       "area": "Websites",
-      "total": 1602
+      "total": 1608
     },
     {
       "area": "MMPs",
-      "total": 1412
+      "total": 1430
     },
     {
       "area": "Skills",
-      "total": 544
+      "total": 546
     },
     {
       "area": "Agenten",
@@ -188,6 +188,6 @@
     "month": "2026-09",
     "total": 1867
   },
-  "reposMissing": 1,
-  "reposCounted": 44
+  "reposMissing": 0,
+  "reposCounted": 45
 }
