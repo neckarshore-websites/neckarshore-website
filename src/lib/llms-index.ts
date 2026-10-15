@@ -121,7 +121,7 @@ Omnopsis Documentor+X — an AI-first documentation engine that generates compli
 
 neckarshore.ai builds across four tiers: flagships, MMPs (Minimum Marketable Products), focused open-source skills, and client/own websites. Product names, one-liners and status below are generated from the same source as the site's own product pages. Full tree: ${SITE_URL}/products
 
-Native iPhone apps (listed under MMPs, not yet in the App Store): ${appItems()
+Native iPhone apps (listed under MMPs, status per line below): ${appItems()
   .map((a) => `${a.name} (${SITE_URL}${a.href})`)
   .join(", ")}.
 

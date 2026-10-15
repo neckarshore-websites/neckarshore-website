@@ -171,8 +171,11 @@ export default function ProductDetailPage({
                   >
                     Zur Seite der App ↗
                   </a>
+                  {/* Keyed on `status`, not on `appSiteUrl`: when an app ships, flipping its
+                      status is the one edit, and this sentence goes with it. */}
                   <p className="mt-3 text-sm text-muted dark:text-text-tertiary">
-                    Noch nicht im App Store. Dort stehen Handbuch, Fragen und Datenschutz.
+                    {item?.status === "preview" ? "Noch nicht im App Store. " : ""}
+                    Dort stehen Handbuch, Fragen und Datenschutz.
                   </p>
                 </div>
               ) : (
