@@ -253,6 +253,9 @@ test.describe("SEO Basics", () => {
     "social-scrapers",
     "imap-mailbox-cleanup",
     "ai-phrase-check",
+    // iPhone apps, indexable since 2026-10-15 (Founder) — appended so earlier IDs stay put.
+    "kaze",
+    "musclecat",
   ];
 
   for (const [i, slug] of PRODUCT_OG_SLUGS.entries()) {
@@ -297,6 +300,8 @@ test.describe("SEO Basics", () => {
     "/products/social-scrapers",
     "/products/imap-mailbox-cleanup",
     "/products/restaurant-menu-update",
+    "/products/kaze",
+    "/products/musclecat",
     "/products/websites/neckarshore",
     "/products/websites/ristorante-goldoni",
     "/products/websites/oakwood-golf-club",
@@ -588,8 +593,10 @@ test.describe("SEO — meta description length", () => {
   }) => {
     // Sequentially navigates every owned route; like TC-SEO-035 the first hit per route
     // compiles on demand in dev, so the default 30s is too tight under worker contention.
-    // Wall-time only — the ≤155 assertion is unchanged.
-    test.setTimeout(120_000);
+    // Wall-time only — the ≤155 assertion is unchanged. 120s -> 180s on 2026-10-15: Kaze
+    // and MuscleCat joined the sitemap, and a cold local run hit 120s while compiling the
+    // last routes (warm: 1.3m). No route was an offender in either run.
+    test.setTimeout(180_000);
     const xml = await (await request.get("/sitemap.xml")).text();
     const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
       (m) => m[1].replace(BASE, "") || "/",

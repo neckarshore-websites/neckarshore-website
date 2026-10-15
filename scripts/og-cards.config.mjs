@@ -278,6 +278,31 @@ export const cards = [
       { text: "Made in Germany", variant: "accent" },
     ],
   },
+  // iPhone apps (2026-10-15). Taglines follow the apps' own public pages; no price, no date.
+  {
+    label: "Product OG — kaze",
+    dest: "public/og/kaze.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "Kaze", headlineAccent: "風.", accentInline: true,
+    tagline: "Sperrt die Apps, zu denen du greifst, ohne es zu wollen — für eine Zeit, die du selbst bestimmst. Verlängern sofort, verkürzen nur per Notfallcode. Kein Konto, keine Statistik.",
+    chips: [
+      { text: "iPhone-App", variant: "dot" },
+      { text: "Ohne Konto", variant: "plain" },
+      { text: "Made in Germany", variant: "accent" },
+    ],
+  },
+  {
+    label: "Product OG — musclecat",
+    dest: "public/og/musclecat.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "Muscle", headlineAccent: "Cat.", accentInline: true, accentJoin: "",
+    tagline: "Das Trainingstagebuch fürs Studio. Sätze eintragen, Pause abwarten, beim nächsten Mal wissen, was du auflegst. Kein Konto, keine Berechtigungen, alles bleibt auf dem Gerät.",
+    chips: [
+      { text: "iPhone-App", variant: "dot" },
+      { text: "Ohne Konto", variant: "plain" },
+      { text: "Made in Germany", variant: "accent" },
+    ],
+  },
   {
     label: "Product OG — local-seo-hub",
     dest: "public/og/local-seo-hub.jpg",

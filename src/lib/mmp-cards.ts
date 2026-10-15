@@ -30,6 +30,13 @@ export interface MmpCardData {
    * Only set for MMPs with a functional public app (ClearPath, Snakeoil-Check).
    */
   liveUrl?: string;
+  /**
+   * Native apps only: the app's own public page (handbook, FAQ, privacy) — NOT the app.
+   * Deliberately a separate field from `liveUrl`: `liveUrl` arms the live schema and the
+   * "Live ausprobieren" button, and a click there would land on another text page instead
+   * of a product. This one renders as "App-Seite ↗" and as a link in llms.txt.
+   */
+  appSiteUrl?: string;
 }
 
 export const MMP_CARDS: Record<string, MmpCardData> = {
@@ -50,12 +57,22 @@ export const MMP_CARDS: Record<string, MmpCardData> = {
       "Ein Archiv echter menschlicher Stimmen für Familien und Institutionen. Geführte Aufnahme, Consent-first, sicher verwahrt — eine Stimme, die bleibt, für die Menschen, die nach uns kommen.",
     repoUrl: "https://github.com/neckarshore-mmps/phonesis-voicebank",
   },
-  // Grundversion 2026-08-06: scope is being defined (Engels pass) — the description stays
-  // deliberately claim-free until it lands. repoUrl per Founder decision 2026-08-06.
+  // Rewritten 2026-10-15 from kaze.neckarshore.ai (its own public page), replacing the
+  // 2026-08-06 placeholder ("scope is being sharpened"). Still no price, no subscription
+  // wording and no release date — those stay off this surface until the Founder says so.
   kaze: {
     description:
-      "Das erste iOS-Produkt von Neckarshore AI. Der Produkt-Scope wird gerade geschärft — diese Seite füllt sich, sobald er steht. Gebaut nach derselben Arbeitsweise wie alles hier: KI-beschleunigt, DSGVO-by-Design, Made in Germany.",
+      "Sperrt die Apps, zu denen du greifst, ohne es zu wollen — für eine Zeit, die du selbst bestimmst. Verlängern geht sofort, verkürzen nur mit einem Notfallcode per E-Mail. Keine Statistik, keine Serien, kein Konto.",
     repoUrl: "https://github.com/neckarshore-mmps/kaze",
+    appSiteUrl: "https://kaze.neckarshore.ai",
+  },
+  // Facts from musclecat.neckarshore.ai (its own public page, 15.10.2026). No price and no
+  // money model: the model is still moving (musclecat#276 vs the site's privacy pages).
+  musclecat: {
+    description:
+      "Ein Trainingstagebuch fürs Studio: Sätze mit Gewicht und Wiederholungen eintragen, nach jedem Satz läuft die Pause. Am Ende einer Übung sagst du weniger, gleich oder mehr — und siehst, was du beim nächsten Mal auflegst.",
+    repoUrl: "https://github.com/neckarshore-mmps/musclecat",
+    appSiteUrl: "https://musclecat.neckarshore.ai",
   },
   "local-seo-hub": {
     description:

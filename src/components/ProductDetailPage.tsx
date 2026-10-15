@@ -14,6 +14,7 @@ import { productOgImage } from "@/lib/product-og";
 import { breadcrumbTrailForSlug, getItemBySlug } from "@/lib/portfolio";
 import { getProductEntry } from "@/lib/content/products";
 import { faqForSlug } from "@/lib/product-faqs";
+import { MMP_CARDS } from "@/lib/mmp-cards";
 import {
   liveSoftwareApplicationSchema,
   previewSoftwareApplicationSchema,
@@ -94,6 +95,7 @@ export default function ProductDetailPage({
   const cta = ctaName ?? entry.name;
   const liveUrl = entry.liveUrl;
   const path = `/products/${slug}`;
+  const item = getItemBySlug(slug);
   const softwareSchema = liveUrl
     ? liveSoftwareApplicationSchema({
         name: entry.name,
@@ -107,7 +109,11 @@ export default function ProductDetailPage({
         definition: entry.definition,
         applicationCategory: entry.applicationCategory,
         path,
+        operatingSystem: item?.platform ?? "Web",
       });
+  // Native apps (Kaze, MuscleCat): the preview CTA points at the app's own public page
+  // instead of a sales call. A consumer app is not something one books 30 minutes about.
+  const appSiteUrl = item?.platform ? MMP_CARDS[slug]?.appSiteUrl : undefined;
 
   return (
     <>
@@ -154,20 +160,37 @@ export default function ProductDetailPage({
                 In Entwicklung
               </div>
 
-              <div className="mt-8">
-                <a
-                  href="https://calendly.com/german-rauhut/30min"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-track={`product_detail_cta_${slug}`}
-                  className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-base font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
-                >
-                  Über {cta} sprechen →
-                </a>
-                <p className="mt-3 text-sm text-muted dark:text-text-tertiary">
-                  Kurzes Gespräch, 30 Minuten — unverbindlich.
-                </p>
-              </div>
+              {appSiteUrl ? (
+                <div className="mt-8">
+                  <a
+                    href={appSiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-track={`product_app_site_cta_${slug}`}
+                    className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-base font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    Zur Seite der App ↗
+                  </a>
+                  <p className="mt-3 text-sm text-muted dark:text-text-tertiary">
+                    Noch nicht im App Store. Dort stehen Handbuch, Fragen und Datenschutz.
+                  </p>
+                </div>
+              ) : (
+                <div className="mt-8">
+                  <a
+                    href="https://calendly.com/german-rauhut/30min"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-track={`product_detail_cta_${slug}`}
+                    className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-base font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    Über {cta} sprechen →
+                  </a>
+                  <p className="mt-3 text-sm text-muted dark:text-text-tertiary">
+                    Kurzes Gespräch, 30 Minuten — unverbindlich.
+                  </p>
+                </div>
+              )}
             </>
           )}
 

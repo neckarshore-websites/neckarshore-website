@@ -7,8 +7,11 @@ import { ProductCard } from "@/components/ProductCard";
 import { JsonLd } from "@/components/JsonLd";
 import { PageSchema } from "@/components/PageSchema";
 import { pageMetadata } from "@/lib/seo";
+import Image from "next/image";
+import { MMP_CARDS } from "@/lib/mmp-cards";
 import {
   PORTFOLIO,
+  appItems,
   featuredItems,
   groupItemsByStatus,
   hiddenItemCount,
@@ -68,8 +71,29 @@ const CLUSTER_DOORS: {
   },
 ];
 
+/**
+ * "Apps fürs iPhone" — the native-app block (2026-10-15, Founder order L-NECK-APP-SEITEN:
+ * "an 'Apps' group on /products"). Built like the tooling cluster above: a curated,
+ * cross-category block, NOT a fifth tier — the apps stay MMP items, because the tree
+ * mirrors the GitHub org split and both repos live in neckarshore-mmps.
+ *
+ * The list is DERIVED (`appItems()` = every item with `platform`), so a third app is one
+ * portfolio entry. Icon paths are keyed here by slug; a new app without one falls back to
+ * no icon rather than to a wrong one.
+ *
+ * COPY STATUS: PROPOSAL (Linus, 2026-10-15), for the Founder's approval. No price, no
+ * subscription wording, no date — see product-faqs.ts for why.
+ */
+const APPS_HEADING = "Apps fürs iPhone";
+const APPS_INTRO =
+  "Zwei Apps für den Alltag außerhalb des Büros. Beide kommen ohne Konto aus und wollen nicht mehr wissen, als sie brauchen. Beide sind noch nicht im App Store.";
+const APP_ICONS: Record<string, string> = {
+  kaze: "/images/products/kaze-icon.png",
+  musclecat: "/images/products/musclecat-icon.png",
+};
+
 const PORTAL_DESCRIPTION =
-  "Das Produkt-Portfolio von neckarshore.ai — vom Flagship Omnopsis über Minimum Marketable Products und fokussierte Open-Source-Skills bis zu Web-Präsenzen. Made in Germany, DSGVO-by-Design.";
+  "Das Produkt-Portfolio von neckarshore.ai — vom Flagship Omnopsis über Minimum Marketable Products, die iPhone-Apps Kaze und MuscleCat und fokussierte Open-Source-Skills bis zu Web-Präsenzen. Made in Germany, DSGVO-by-Design.";
 
 // Short SERP pitch (≤155, audit P2-2). PORTAL_DESCRIPTION stays long for the CollectionPage
 // schema description (GEO citation surface). AI-draft → Rauhut-edit.
@@ -116,8 +140,8 @@ export default function ProductsIndex() {
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
             Heute ein Flagship, dazu eine Handvoll Minimum Marketable Products,
-            fokussierte Open-Source-Skills — und ein paar Web-Präsenzen
-            nebenbei. Alle nach derselben Arbeitsweise gebaut: KI-beschleunigt,
+            zwei iPhone-Apps, fokussierte Open-Source-Skills — und ein paar
+            Web-Präsenzen nebenbei. Alle nach derselben Arbeitsweise gebaut: KI-beschleunigt,
             DSGVO-by-Design, Made in Germany.
           </p>
         </header>
@@ -156,6 +180,78 @@ export default function ProductsIndex() {
                 </span>
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* Apps fürs iPhone — see APPS_HEADING above for the decision + copy status. */}
+        <section aria-labelledby="apps-heading" className="mt-14">
+          <div className="flex items-baseline gap-3 border-b border-primary/5 pb-3 dark:border-text-secondary/10">
+            <h2
+              id="apps-heading"
+              className="font-heading text-2xl font-bold text-primary dark:text-text-primary"
+            >
+              {APPS_HEADING}
+            </h2>
+            <span className="text-sm font-medium text-muted dark:text-text-tertiary">
+              {appItems().length} Apps
+            </span>
+          </div>
+          <p className="mt-4 max-w-[640px] text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
+            {APPS_INTRO}
+          </p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {appItems().map((app) => {
+              const icon = APP_ICONS[app.slug];
+              const appSite = MMP_CARDS[app.slug]?.appSiteUrl;
+              return (
+                <div
+                  key={app.slug}
+                  className="group relative flex h-full flex-col rounded-xl border border-primary/5 bg-white/50 p-6 transition-all hover:border-accent/30 hover:bg-white dark:border-text-secondary/10 dark:bg-surface/40 dark:hover:bg-surface"
+                >
+                  <div className="flex items-center gap-4">
+                    {icon && (
+                      <Image
+                        src={icon}
+                        alt={`App-Icon von ${app.name}`}
+                        width={56}
+                        height={56}
+                        sizes="56px"
+                        className="h-14 w-14 shrink-0 rounded-[22%] border border-primary/10 dark:border-text-secondary/15"
+                      />
+                    )}
+                    <h3 className="font-heading text-lg font-semibold text-primary dark:text-text-primary">
+                      {app.name}
+                    </h3>
+                  </div>
+                  <p className="mt-4 flex-1 text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
+                    {cardDescription(app.slug) ?? app.tagline}
+                  </p>
+                  <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+                    {appSite ? (
+                      <a
+                        href={appSite}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        data-track={`products_app_site_${app.slug}`}
+                        className="relative z-10 text-sm font-medium text-muted underline-offset-4 transition-colors hover:text-accent hover:underline dark:text-text-tertiary dark:hover:text-accent-bright"
+                      >
+                        Seite der App ↗
+                      </a>
+                    ) : (
+                      <span />
+                    )}
+                    <Link
+                      href={app.href}
+                      data-track={`products_app_${app.slug}`}
+                      aria-label={`Mehr über ${app.name}`}
+                      className="inline-flex items-center gap-1 text-sm font-medium text-accent transition-colors after:absolute after:inset-0 after:content-[''] hover:text-accent-hover dark:text-accent-bright"
+                    >
+                      Mehr erfahren →
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </section>
 

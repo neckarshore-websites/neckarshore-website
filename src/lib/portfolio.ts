@@ -67,6 +67,14 @@ export interface PortfolioItem {
   caseStudySlug?: string;
   /** Websites tier: the live external domain (the card's "Website ↗" button + the case-study CTA). */
   liveUrl?: string;
+  /**
+   * Set for native apps (today: "iOS"). Drives two things and nothing else:
+   *   - the "Apps" block on /products lists every item that carries it (`appItems()`),
+   *   - the SoftwareApplication schema says `operatingSystem: "iOS"` instead of "Web".
+   * The item stays in its GitHub-org category (mmps) — the tree still mirrors the org split.
+   * Do not also set `featured` on an app: the Apps block already shows it on /products.
+   */
+  platform?: "iOS";
 }
 
 export interface PortfolioCategory {
@@ -201,9 +209,13 @@ export const PORTFOLIO: PortfolioCategory[] = [
       {
         name: "Kaze",
         slug: "kaze",
-        tagline: "Das erste iOS-Produkt von Neckarshore AI.",
+        tagline:
+          "iPhone-App, die ausgewählte Apps für eine selbst gesetzte Zeit sperrt — ohne Konto, ohne Auswertung.",
         status: "preview",
-        featured: true,
+        platform: "iOS",
+        // Unfeatured 2026-10-15: Kaze now leads in the "Apps" block on /products (with
+        // MuscleCat). Featured AND in that block would show it twice on one page. Ranking
+        // change, disclosed in the PR for the Founder (#515 set the MMP ranking).
         href: "/products/kaze",
         isExternal: false,
         schemaType: "SoftwareApplication",
@@ -219,13 +231,14 @@ export const PORTFOLIO: PortfolioCategory[] = [
         // dem Text widerspricht, waere eine Falschaussage an eine Maschine. Founder-Frage,
         // nicht Bauentscheidung.
         //
-        // noindex BLEIBT, obwohl jetzt echter Inhalt dasteht. Die App ist nicht im App
-        // Store; eine indexierte Seite ueber ein Produkt, das niemand bekommen kann,
-        // sammelt Besucher fuer eine Sackgasse. Das Kennzeichen schaltet Robots-Meta,
-        // Sitemap UND das FAQPage-Schema gemeinsam (AP-1) — wenn es faellt, faellt alles
-        // drei zusammen, und der Zeitpunkt ist eine Founder-Ansage.
+        // INDEXIERBAR SEIT 15.10.2026 (Founder, im Terminal, auf die Frage nach Sitemap,
+        // llms.txt und OG-Karte: "Beide indexieren"). Bis dahin stand hier `noindex` mit dem
+        // Grund "nicht im App Store, also Sackgasse". Der Grund traegt nicht mehr: die App
+        // hat mit kaze.neckarshore.ai eine eigene Anlaufstelle, auf die die Seite verweist,
+        // und die Seite sagt selbst, dass Kaze noch nicht im App Store ist. Das Kennzeichen
+        // schaltete Robots-Meta, Sitemap, llms.txt, llms-full.txt und FAQPage gemeinsam
+        // (AP-1); mit ihm fallen alle zusammen.
         hasOwnPage: true,
-        noindex: true,
       },
       {
         name: "Local-SEO-Hub",
@@ -240,6 +253,25 @@ export const PORTFOLIO: PortfolioCategory[] = [
         // Bespoke preview detail page (src/app/products/local-seo-hub) → excluded from the
         // [slug] skeleton route. Indexable since 2026-06-22 (rich content shipped); the page
         // emits the honest preview schema (no url/offers) until the public app launches.
+        hasOwnPage: true,
+      },
+      {
+        name: "MuscleCat",
+        slug: "musclecat",
+        tagline:
+          "Trainingstagebuch fürs Studio als iPhone-App — Sätze eintragen, Pause abwarten, beim nächsten Mal wissen, was du auflegst.",
+        status: "preview",
+        platform: "iOS",
+        href: "/products/musclecat",
+        isExternal: false,
+        schemaType: "SoftwareApplication",
+        // schema.org's own list names HealthApplication for fitness; Apple files training
+        // logs under "Health & Fitness". Proposal, disclosed in the PR — not a store claim.
+        applicationCategory: "HealthApplication",
+        // Bespoke page (src/app/products/musclecat), fed by content/products/musclecat.md and
+        // product-faqs. Every fact comes from musclecat.neckarshore.ai (llms.txt, 15.10.2026),
+        // the app's own public page — not from memory and not from the tickets. Indexable from
+        // the start, same Founder answer as Kaze (15.10.2026).
         hasOwnPage: true,
       },
       {
@@ -479,6 +511,16 @@ export function allItems(): PortfolioItem[] {
 /** Teaser items for the /products portal: the featured Top-N of a category. */
 export function featuredItems(category: PortfolioCategory): PortfolioItem[] {
   return category.items.filter((i) => i.featured);
+}
+
+/**
+ * Native apps across all categories, A→Z — the "Apps" block on /products. Derived from
+ * `platform`, so a third app is one entry with `platform` set (AP-1).
+ */
+export function appItems(): PortfolioItem[] {
+  return allItems()
+    .filter((i) => i.platform)
+    .sort((a, b) => a.name.localeCompare(b.name, "de", { sensitivity: "base" }));
 }
 
 /** Count of a category's items not shown on the portal teaser (live on the sub-portal). */
