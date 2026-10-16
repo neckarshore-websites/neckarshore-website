@@ -155,7 +155,7 @@ function SearchPalette({
                 }`}
               >
                 <span className="flex items-center gap-2">
-                  <span className="rounded-sm bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted dark:bg-text-secondary/10 dark:text-text-tertiary">
+                  <span className="rounded-sm bg-primary/10 px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-muted dark:bg-text-secondary/10 dark:text-text-tertiary">
                     {TYPE_LABEL[hit.type]}
                   </span>
                   <span className="font-medium text-primary dark:text-text-primary">

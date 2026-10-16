@@ -78,7 +78,7 @@ const BRAND: Swatch[] = [
     cls: "secondary",
     hex: "#00D4FF",
     fg: "#0A2540",
-    usage: "Eyebrows & Card-Icons auf dunklem Grund, Hero-Glow. NIE als Text auf Weiß.",
+    usage: "Card-Icons auf dunklem Grund, Hero-Glow. NIE als Text auf Weiß.",
     contrast: "nur auf Dunkel — decorative on light",
   },
   {
@@ -391,14 +391,6 @@ export default function StyleGuidePage() {
                 </p>
                 <p className="font-heading text-xl font-semibold text-primary md:text-2xl dark:text-text-primary">
                   AI-Powered Development
-                </p>
-              </div>
-              <div>
-                <p className="mb-2 font-mono text-xs text-muted dark:text-text-tertiary">
-                  Eyebrow · text-sm · uppercase · tracking-widest · text-accent (Hell) / text-secondary (Dunkel)
-                </p>
-                <p className="text-sm font-semibold uppercase tracking-widest text-accent dark:text-secondary">
-                  Unser Portfolio
                 </p>
               </div>
               <div>

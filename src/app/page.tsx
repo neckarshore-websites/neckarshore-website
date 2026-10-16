@@ -167,10 +167,7 @@ export default function Home() {
           <div className="mx-auto max-w-[1200px]">
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-widest text-secondary">
-                  Unser Portfolio
-                </p>
-                <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
+                <h2 className="font-heading text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
                   Ein Flagship. Diverse Produkte. Skills. Eine Bauweise.
                 </h2>
                 <p className="mt-6 text-lg leading-relaxed text-text-secondary">
