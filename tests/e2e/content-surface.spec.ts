@@ -892,6 +892,24 @@ test.describe("Content surface — iPhone apps", () => {
     }
   });
 
+  test("TC-CNT-101: on /products the Apps block follows the MMP tier and precedes the Skills tier (Founder 2026-10-16)", async ({
+    page,
+  }) => {
+    // Founder, 2026-10-16 23:38 CEST, question 2 on #309: "Unter den MMPs". The Flagships keep
+    // the place they had before the apps arrived; consumer apps do not lead a B2B portal.
+    await page.goto("/products");
+    const order = await page.evaluate(() =>
+      Array.from(document.querySelectorAll("main section[aria-labelledby]"))
+        .map((s) => s.getAttribute("aria-labelledby"))
+        .filter((id) => id === "apps-heading" || (id ?? "").startsWith("tier-")),
+    );
+    const apps = order.indexOf("apps-heading");
+    expect(apps, `section order: ${order.join(", ")}`).toBeGreaterThan(-1);
+    expect(order[apps - 1], `section order: ${order.join(", ")}`).toBe("tier-mmps");
+    expect(order[apps + 1], `section order: ${order.join(", ")}`).toBe("tier-skills");
+    expect(order.indexOf("tier-flagships")).toBeLessThan(apps);
+  });
+
   for (const { slug, site } of APPS) {
     test(`TC-CNT-099 [/products/${slug}]: 200, one H1, indexable, iOS schema, app-site CTA, three screenshots`, async ({
       page,
