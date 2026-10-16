@@ -137,6 +137,7 @@ export function Turnstile({ sitekey }: { sitekey: string | null }) {
     <div
       ref={mountRef}
       className="cf-turnstile"
+      role="group"
       aria-label="Spam-Schutz (Cloudflare Turnstile)"
     />
   );

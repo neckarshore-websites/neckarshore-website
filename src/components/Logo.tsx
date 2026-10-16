@@ -23,6 +23,7 @@ export default function Logo({
   return (
     <span
       className={`inline-flex items-center gap-0.5 ${size} ${className}`}
+      role="img"
       aria-label="neckarshore.ai"
     >
       <NIcon className="h-[1.4em] w-auto shrink-0 object-contain" />

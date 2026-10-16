@@ -34,6 +34,19 @@ test.describe("Cmd+K Search @search", () => {
     await expect(page).toHaveURL(/\/datenschutz/, { timeout: 15_000 });
   });
 
+  test("TC-SRCH-008: the focused search field shows a visible focus indicator", async ({ page }) => {
+    await openWithShortcut(page, "Meta+k");
+    await expect(combo(page)).toBeFocused();
+    const indicator = await combo(page).evaluate((el) => {
+      const cs = getComputedStyle(el);
+      return { outline: cs.outlineStyle, shadow: cs.boxShadow };
+    });
+    expect(
+      indicator.outline !== "none" || indicator.shadow !== "none",
+      `no focus indicator: ${JSON.stringify(indicator)}`,
+    ).toBe(true);
+  });
+
   test("TC-SRCH-002: Ctrl+K opens, Escape closes", async ({ page }) => {
     await openWithShortcut(page, "Control+k");
     await page.keyboard.press("Escape");
