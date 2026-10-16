@@ -77,5 +77,17 @@ test.describe("Accessibility", () => {
       );
       expect(unnamed, `${path}: Schaltflaechen ohne zugaenglichen Namen`).toBe(0);
     });
+
+    // axe aria-prohibited-attr: aria-label on a div/span with no role is ignored by
+    // assistive technology (WCAG 4.1.2). Found live on the Turnstile mount (2026-10-16).
+    test(`TC-A11Y-${path}-aria-role: ${path} — aria-label nur auf Elementen mit Rolle`, async ({
+      page,
+    }) => {
+      await page.goto(path);
+      const offenders = await page.$$eval("div[aria-label], span[aria-label]", (els) =>
+        els.filter((e) => !e.getAttribute("role")).map((e) => e.getAttribute("aria-label")),
+      );
+      expect(offenders, `${path}: aria-label ohne Rolle: ${offenders.join(", ")}`).toEqual([]);
+    });
   }
 });
