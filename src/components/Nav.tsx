@@ -132,8 +132,8 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
           something new. Links to the Vault Autopilot product page (homepage OSS section
           was removed 2026-06-25). ===== */}
       {showOssLaunch && (
-        <div className="bg-[#5C1A2A] px-4 py-2.5 md:px-6">
-          <div className="mx-auto flex max-w-[1200px] items-center justify-center gap-2 text-[13px] text-[#F5C6D0] md:gap-3 md:text-sm">
+        <div className="bg-bordeaux px-4 py-2.5 md:px-6">
+          <div className="mx-auto flex max-w-[1200px] items-center justify-center gap-2 text-[13px] text-bordeaux-text md:gap-3 md:text-sm">
             <span className="rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white md:text-xs">
               Neu
             </span>
@@ -143,7 +143,7 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
             </span>
             <Link
               href="/products/obsidian-vault-autopilot"
-              className="shrink-0 font-medium text-white underline-offset-4 transition-colors hover:underline hover:text-[#F5C6D0]"
+              className="shrink-0 font-medium text-white underline-offset-4 transition-colors hover:underline hover:text-bordeaux-text"
               data-track="hero_teaser_oss"
             >
               Zum Projekt&nbsp;&rarr;

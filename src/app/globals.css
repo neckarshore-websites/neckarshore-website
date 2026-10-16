@@ -21,6 +21,12 @@
      schlechtesten Fall bei 6.31. */
   --color-muted: #475569;
 
+  /* Accent surfaces — one-off bands, tokenised 2026-10-16 (Impeccable audit P2) */
+  --color-band-teal: #B2F0FF; /* full-width teal band (MASCHIN + S-Team), light */
+  --color-band-teal-dark: #1A4D5C; /* same band, dark mode */
+  --color-bordeaux: #5C1A2A; /* announcement strip surface */
+  --color-bordeaux-text: #F5C6D0; /* body text on the bordeaux strip */
+
   /* Dark Mode */
   --color-deep-space: #0F172A;
   --color-surface: #1E2937;
