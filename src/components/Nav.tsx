@@ -134,7 +134,7 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
       {showOssLaunch && (
         <div className="bg-bordeaux px-4 py-2.5 md:px-6">
           <div className="mx-auto flex max-w-[1200px] items-center justify-center gap-2 text-[13px] text-bordeaux-text md:gap-3 md:text-sm">
-            <span className="rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white md:text-xs">
+            <span className="rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-white md:text-xs">
               Neu
             </span>
             <span className="truncate">

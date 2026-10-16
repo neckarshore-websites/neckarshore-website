@@ -167,6 +167,8 @@ export default function Home() {
           <div className="mx-auto max-w-[1200px]">
             <div className="grid items-center gap-12 md:grid-cols-2">
               <div>
+                {/* Section label kept by Founder verdict 2026-10-16: the h2 is a slogan, the label names the section.
+                    Impeccable flags it as kicker-above-heading; deliberate choice, do not remove on that basis. */}
                 <p className="text-sm font-semibold uppercase tracking-widest text-secondary">
                   Unser Portfolio
                 </p>
