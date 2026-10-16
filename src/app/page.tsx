@@ -149,14 +149,6 @@ export default function Home() {
               </span>
             </div>
           </div>
-          {/* Decorative gradient blob */}
-          <div
-            className="pointer-events-none absolute -right-40 -top-40 h-[600px] w-[600px] rounded-full opacity-[0.07] dark:opacity-[0.12]"
-            style={{
-              background:
-                "radial-gradient(circle, #00D4FF 0%, transparent 70%)",
-            }}
-          />
         </section>
 
         {/* ===== PORTFOLIO / FLAGSHIP — reframed 2026-06-17 (was Omnopsis-only teaser).
@@ -230,7 +222,7 @@ export default function Home() {
               ].map((item) => (
                 <div
                   key={item.title}
-                  className="group rounded-xl border-l-4 border-accent bg-neutral-light p-8 shadow-sm transition-[transform,box-shadow] duration-250 hover:-translate-y-0.5 hover:shadow-md dark:bg-deep-space"
+                  className="rounded-xl border border-primary/10 bg-neutral-light p-8 dark:border-text-secondary/15 dark:bg-deep-space"
                 >
                   <item.icon size={32} className="text-secondary" />
                   <h3 className="mt-4 font-heading text-xl font-semibold text-primary md:text-2xl dark:text-text-primary">

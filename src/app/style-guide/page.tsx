@@ -124,7 +124,7 @@ const NEUTRALS: Swatch[] = [
     cls: "neutral-light",
     hex: "#F1F5F9",
     fg: "#0A2540",
-    usage: "Heller Seiten-Grund, Card-Fläche (accent-left Cards).",
+    usage: "Heller Seiten-Grund, Card-Fläche (Hairline Cards).",
   },
   {
     name: "Neutral Dark",
@@ -557,16 +557,16 @@ export default function StyleGuidePage() {
             <SectionHead
               number="05 · Cards & Flächen"
               title="Cards & Surfaces"
-              note="rounded-xl durchgängig. Zwei Card-Typen: accent-left (border-l-4) auf neutral-light, und soft-shadow auf Weiß. Beide heben on-hover leicht an. StatusPill sitzt bottom-left auf jeder Produkt-Card."
+              note="rounded-xl durchgängig. Zwei Card-Typen: Hairline (1 px Rahmen) auf neutral-light, und soft-shadow auf Weiß. Nur verlinkte Cards heben on-hover an. Kein farbiger Seitenrand (Impeccable-Audit 2026-10-16). StatusPill sitzt bottom-left auf jeder Produkt-Card."
             />
             <div className="grid gap-6 md:grid-cols-2">
-              <div className="group rounded-xl border-l-4 border-accent bg-neutral-light p-8 shadow-sm transition-all duration-250 hover:-translate-y-0.5 hover:shadow-md dark:bg-deep-space">
+              <div className="rounded-xl border border-primary/10 bg-neutral-light p-8 dark:border-text-secondary/15 dark:bg-deep-space">
                 <Clock size={32} className="text-secondary" />
                 <h3 className="mt-4 font-heading text-xl font-semibold text-primary md:text-2xl dark:text-text-primary">
-                  Accent-Left Card
+                  Hairline Card
                 </h3>
                 <p className="mt-1 text-sm font-medium text-accent dark:text-accent-bright">
-                  border-l-4 border-accent · bg-neutral-light
+                  border border-primary/10 · bg-neutral-light
                 </p>
                 <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
                   Für die „vs.“-Vergleichs-Cards. Icon in Cyan (text-secondary), Subtitle in Teal.
