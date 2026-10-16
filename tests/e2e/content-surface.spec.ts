@@ -910,6 +910,17 @@ test.describe("Content surface — iPhone apps", () => {
     expect(order.indexOf("tier-flagships")).toBeLessThan(apps);
   });
 
+  for (const path of ["/products", "/products/mmps", "/products/kaze", "/products/musclecat"]) {
+    test(`TC-CNT-102 [${path}]: no link to the private app repos (Founder 2026-10-16)`, async ({ page }) => {
+      // Founder, 2026-10-16 23:45 CEST, question 4 on #309: both repos are private, so a GitHub
+      // button sends every logged-out visitor into a 404. The apps link their own public page.
+      await page.goto(path);
+      for (const slug of ["kaze", "musclecat"]) {
+        await expect(page.locator(`a[href*="github.com/neckarshore-mmps/${slug}"]`)).toHaveCount(0);
+      }
+    });
+  }
+
   for (const { slug, site } of APPS) {
     test(`TC-CNT-099 [/products/${slug}]: 200, one H1, indexable, iOS schema, app-site CTA, three screenshots`, async ({
       page,

@@ -13,6 +13,10 @@
  * MIT-licensed Skills. A logged-out visitor following the GitHub link lands on GitHub's
  * sign-in / 404 wall. The link is present by Founder decision (2026-06-21) for visual
  * parity with the skill cards; it resolves cleanly once a repo is made public.
+ * EXCEPTION, the native apps (Kaze, MuscleCat): no `repoUrl`. Founder, 2026-10-16 23:45 CEST,
+ * question 4 on #309: a button every visitor follows into a 404 is a broken link, and an app
+ * has its own public page instead (`appSiteUrl`). kaze.neckarshore.ai itself tests that it never
+ * links its private repo. TC-CNT-102 holds it here.
  *
  * Descriptions are grounded in each repo's own description (no invention) + refined for the
  * card surface (≈3 lines). Adding/refining an MMP card = one entry here.
@@ -21,8 +25,8 @@
 export interface MmpCardData {
   /** ≈3-line card description shown on the /products/mmps sub-portal. */
   description: string;
-  /** Repository URL — renders the GitHub button. PRIVATE today (see module note). */
-  repoUrl: string;
+  /** Repository URL — renders the GitHub button. PRIVATE today; absent for the apps (module note). */
+  repoUrl?: string;
   /**
    * Live-app subdomain — renders a "Live ↗" button alongside GitHub on the card. Kept here
    * (server-only) rather than on the client-imported `portfolio.ts`, so the URL never ships in
@@ -63,7 +67,6 @@ export const MMP_CARDS: Record<string, MmpCardData> = {
   kaze: {
     description:
       "Sperrt die Apps, zu denen du greifst, ohne es zu wollen — für eine Zeit, die du selbst bestimmst. Verlängern geht sofort, verkürzen nur mit einem Notfallcode per E-Mail. Keine Statistik, keine Serien, kein Konto.",
-    repoUrl: "https://github.com/neckarshore-mmps/kaze",
     appSiteUrl: "https://kaze.neckarshore.ai",
   },
   // Facts from musclecat.neckarshore.ai (its own public page, 15.10.2026). No price and no
@@ -71,7 +74,6 @@ export const MMP_CARDS: Record<string, MmpCardData> = {
   musclecat: {
     description:
       "Ein Trainingstagebuch fürs Studio: Sätze mit Gewicht und Wiederholungen eintragen, nach jedem Satz läuft die Pause. Am Ende einer Übung sagst du weniger, gleich oder mehr — und siehst, was du beim nächsten Mal auflegst.",
-    repoUrl: "https://github.com/neckarshore-mmps/musclecat",
     appSiteUrl: "https://musclecat.neckarshore.ai",
   },
   "local-seo-hub": {
