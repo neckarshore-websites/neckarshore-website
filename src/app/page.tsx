@@ -337,7 +337,7 @@ export default function Home() {
         </section>
 
         {/* ===== MASCHIN + S-Team — full-width teal band ===== */}
-        <section className="bg-[#B2F0FF] px-4 py-20 md:px-6 md:py-24 dark:bg-[#1A4D5C]">
+        <section className="bg-band-teal px-4 py-20 md:px-6 md:py-24 dark:bg-band-teal-dark">
           <div className="mx-auto max-w-[1200px]">
             <div className="grid items-start gap-12 md:grid-cols-[280px_1fr]">
               <div className="mx-auto overflow-hidden rounded-2xl md:mx-0">
