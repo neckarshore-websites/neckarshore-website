@@ -149,6 +149,14 @@ export default function Home() {
               </span>
             </div>
           </div>
+          {/* Decorative gradient blob — kept by Founder verdict 2026-10-16 (Impeccable flags it as radial-halo; deliberate brand choice) */}
+          <div
+            className="pointer-events-none absolute -right-40 -top-40 h-[600px] w-[600px] rounded-full opacity-[0.07] dark:opacity-[0.12]"
+            style={{
+              background:
+                "radial-gradient(circle, #00D4FF 0%, transparent 70%)",
+            }}
+          />
         </section>
 
         {/* ===== PORTFOLIO / FLAGSHIP — reframed 2026-06-17 (was Omnopsis-only teaser).
