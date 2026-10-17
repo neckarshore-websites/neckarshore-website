@@ -93,6 +93,8 @@ interface PreviewSoftwareApplicationInput {
   applicationCategory: string;
   /** Route path (e.g. `/products/phonesis`) → the entity `@id` via `entityId`. */
   path: string;
+  /** "iOS" for native apps (portfolio `platform`); defaults to "Web" like every other entity. */
+  operatingSystem?: string;
 }
 
 export function previewSoftwareApplicationSchema({
@@ -100,6 +102,7 @@ export function previewSoftwareApplicationSchema({
   definition,
   applicationCategory,
   path,
+  operatingSystem = "Web",
 }: PreviewSoftwareApplicationInput) {
   return {
     "@context": "https://schema.org",
@@ -108,7 +111,7 @@ export function previewSoftwareApplicationSchema({
     name,
     description: definition,
     applicationCategory,
-    operatingSystem: "Web",
+    operatingSystem,
     author: { "@type": "Organization", name: "neckarshore.ai" },
   } as const;
 }

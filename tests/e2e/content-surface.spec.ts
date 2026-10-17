@@ -83,9 +83,10 @@ test.describe("Content surface — Products index", () => {
     page,
   }) => {
     await page.goto("/products");
-    // featured MMPs present on the portal teaser (kaze added 2026-08-06; TrustScope +
-    // md-viewer promoted 2026-08-15 as the two Rang-1 leads, #515)
-    for (const slug of ["phonesis", "kaze", "trustscope", "md-viewer"]) {
+    // featured MMPs present on the portal teaser (TrustScope + md-viewer promoted 2026-08-15
+    // as the two Rang-1 leads, #515). Kaze left the teaser on 2026-10-15: it leads in the
+    // "Apps fürs iPhone" block instead (TC-CNT-098), so it is still on the page — once.
+    for (const slug of ["phonesis", "trustscope", "md-viewer"]) {
       await expect(page.locator(`a[href="/products/${slug}"]`).first()).toBeVisible();
     }
     // non-featured MMPs are NOT on the teaser (they live on the sub-portal). ClearPath and
@@ -110,6 +111,7 @@ test.describe("Content surface — Products index", () => {
       "phonesis",
       "kaze",
       "local-seo-hub",
+      "musclecat",
       "prod-or-pretend",
     ]) {
       await expect(page.locator(`a[href="/products/${slug}"]`).first()).toBeVisible();
@@ -863,5 +865,108 @@ test.describe("Content surface — website case-study desktop close CTA", () => 
     await page.goto("/products/websites/neckarshore");
     await expect(cta).toHaveCount(1); // in the DOM…
     await expect(cta).toBeHidden(); // …but display:none via the `hidden` base class
+  });
+});
+
+// iPhone apps (L-NECK-APP-SEITEN, Founder order 2026-10-15): an "Apps" block on /products,
+// a MuscleCat page, and both app pages indexable with their own app site as the CTA.
+test.describe("Content surface — iPhone apps", () => {
+  const APPS = [
+    { slug: "kaze", site: "https://kaze.neckarshore.ai" },
+    { slug: "musclecat", site: "https://musclecat.neckarshore.ai" },
+  ];
+
+  test("TC-CNT-098: /products carries the Apps block, each app once, with detail page and app site", async ({
+    page,
+  }) => {
+    await page.goto("/products");
+    const block = page.locator('section[aria-labelledby="apps-heading"]');
+    await expect(block.getByRole("heading", { level: 2 })).toHaveText("Apps fürs iPhone");
+    for (const { slug, site } of APPS) {
+      await expect(block.locator(`a[href="/products/${slug}"]`)).toHaveCount(1);
+      const out = block.locator(`a[data-track="products_app_site_${slug}"]`);
+      await expect(out).toHaveAttribute("href", site);
+      await expect(out).toHaveAttribute("target", "_blank");
+      // shown exactly once on the whole portal: not also in the MMP teaser
+      await expect(page.locator(`a[href="/products/${slug}"]`)).toHaveCount(1);
+    }
+  });
+
+  test("TC-CNT-101: on /products the Apps block follows the MMP tier and precedes the Skills tier (Founder 2026-10-16)", async ({
+    page,
+  }) => {
+    // Founder, 2026-10-16 23:38 CEST, question 2 on #309: "Unter den MMPs". The Flagships keep
+    // the place they had before the apps arrived; consumer apps do not lead a B2B portal.
+    await page.goto("/products");
+    const order = await page.evaluate(() =>
+      Array.from(document.querySelectorAll("main section[aria-labelledby]"))
+        .map((s) => s.getAttribute("aria-labelledby"))
+        .filter((id) => id === "apps-heading" || (id ?? "").startsWith("tier-")),
+    );
+    const apps = order.indexOf("apps-heading");
+    expect(apps, `section order: ${order.join(", ")}`).toBeGreaterThan(-1);
+    expect(order[apps - 1], `section order: ${order.join(", ")}`).toBe("tier-mmps");
+    expect(order[apps + 1], `section order: ${order.join(", ")}`).toBe("tier-skills");
+    expect(order.indexOf("tier-flagships")).toBeLessThan(apps);
+  });
+
+  test("TC-CNT-103: the Apps block on /products states no store state (Founder 2026-10-17)", async ({
+    page,
+  }) => {
+    // Founder, 2026-10-17, question 1 on #309: the intro lost "Beide sind noch nicht im App
+    // Store.", a fixed sentence that turns false the day Apple releases either app. The detail
+    // pages derive their store sentence from `status`; this overview must not carry one.
+    await page.goto("/products");
+    const block = page.locator('section[aria-labelledby="apps-heading"]');
+    await expect(block).toBeVisible();
+    await expect(block).not.toContainText("App Store");
+  });
+
+  for (const path of ["/products", "/products/mmps", "/products/kaze", "/products/musclecat"]) {
+    test(`TC-CNT-102 [${path}]: no link to the private app repos (Founder 2026-10-16)`, async ({ page }) => {
+      // Founder, 2026-10-16 23:45 CEST, question 4 on #309: both repos are private, so a GitHub
+      // button sends every logged-out visitor into a 404. The apps link their own public page.
+      await page.goto(path);
+      for (const slug of ["kaze", "musclecat"]) {
+        await expect(page.locator(`a[href*="github.com/neckarshore-mmps/${slug}"]`)).toHaveCount(0);
+      }
+    });
+  }
+
+  for (const { slug, site } of APPS) {
+    test(`TC-CNT-099 [/products/${slug}]: 200, one H1, indexable, iOS schema, app-site CTA, three screenshots`, async ({
+      page,
+    }) => {
+      const res = await page.goto(`/products/${slug}`);
+      expect(res?.status()).toBe(200);
+      await expect(page.locator("h1")).toHaveCount(1);
+      // indexable: no robots noindex
+      const robots = page.locator('meta[name="robots"]');
+      if ((await robots.count()) > 0) {
+        await expect(robots).not.toHaveAttribute("content", /noindex/);
+      }
+      const graphs = await page
+        .locator('script[type="application/ld+json"]')
+        .allTextContents();
+      expect(graphs.join("\n")).toContain('"operatingSystem":"iOS"');
+      const cta = page.locator(`a[data-track="product_app_site_cta_${slug}"]`);
+      await expect(cta).toHaveAttribute("href", site);
+      // no sales-call CTA on a consumer app
+      await expect(page.locator(`a[data-track="product_detail_cta_${slug}"]`)).toHaveCount(0);
+      // three screenshots, light set visible in light mode
+      await expect(page.locator('figure img:visible')).toHaveCount(3);
+    });
+  }
+
+  test("TC-CNT-100: sitemap and llms.txt list both apps; llms.txt names each app site", async ({
+    request,
+  }) => {
+    const sitemap = await (await request.get("/sitemap.xml")).text();
+    const llms = await (await request.get("/llms.txt")).text();
+    for (const { slug, site } of APPS) {
+      expect(sitemap).toContain(`https://neckarshore.ai/products/${slug}`);
+      expect(llms).toContain(`https://neckarshore.ai/products/${slug}`);
+      expect(llms).toContain(site);
+    }
   });
 });

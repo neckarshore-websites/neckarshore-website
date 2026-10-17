@@ -78,38 +78,39 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
   ],
 
   /**
-   * KAZE — zwei Grenzen, die hier schaerfer sind als bei den uebrigen Eintraegen.
+   * KAZE und MUSCLECAT — die beiden iPhone-Apps. Drei Grenzen, schaerfer als bei den
+   * uebrigen Eintraegen:
    *
-   * 1. KEINE AUSSAGE ZU DEN OFFENEN KAUFMAENNISCHEN FRAGEN, weder zusagend noch
-   *    verneinend, solange sie offen sind (kaze#124, #109). Das ist eine
-   *    PRODUKT-Grenze und keine Repo-Grenze: das Kaze-Repo erzwingt sie mit einem
-   *    eigenen Test, dieses hier hat keinen — die Regel gilt trotzdem, und dass sie
-   *    hier nur als Kommentar steht, ist ein bekannter Unterschied und kein Versehen.
-   *    Der naheliegendste Verkaufssatz fehlt deshalb bewusst.
-   * 2. KEIN VEROEFFENTLICHUNGSDATUM. Kaze ist nicht im App Store; ein genanntes Datum
-   *    waere ein Versprechen, das niemand gedeckt hat.
-   *
-   * Alle Verhaltensaussagen sind an der gebauten App gemessen (Simulator-Durchlauf und
-   * Quelltext-Lesung, 20.08.2026), nicht aus dem Gedaechtnis geschrieben. Der Wortlaut
-   * folgt der Produktseite unter kaze.neckarshore.ai, damit beide Flaechen dasselbe
-   * sagen statt zweimal aehnlich.
+   * 1. KEINE AUSSAGE ZU PREIS, ABO ODER GELDMODELL. Bei Kaze waren das kaze#124/#109 (beide
+   *    inzwischen geschlossen; die Kaze-Datenschutzseite nennt ein Jahresabo). Bei MuscleCat
+   *    bewegt sich das Modell noch (musclecat#276 gegen die Datenschutzseiten der App). Ob
+   *    neckarshore.ai darueber spricht, ist eine Founder-Frage — bis dahin schweigt diese
+   *    Flaeche, weder zusagend noch verneinend. Kein Test erzwingt das hier; es ist ein
+   *    Kommentar und bekannt als solcher.
+   * 2. KEIN VEROEFFENTLICHUNGSDATUM. Beide sind nicht im App Store.
+   * 3. JEDE AUSSAGE STAMMT VON DER EIGENEN SEITE DER APP (kaze.neckarshore.ai/de/fragen und
+   *    /de/notfallcode, musclecat.neckarshore.ai/llms.txt — gelesen 15.10.2026), nicht aus
+   *    dem Gedaechtnis und nicht aus Tickets. Die Kaze-Antworten von 20.08.2026 sind an dem
+   *    Tag gegen die heutige Kaze-Seite abgeglichen worden: Verlaengern geht in
+   *    Viertelstunden-Schritten (vorher stand hier "fuenf Minuten"), und Kaze hat drei
+   *    benannte Ausnahmen beim Datenversand, nicht eine.
    */
   kaze: [
     {
       q: "Was ist Kaze?",
-      a: "Kaze ist eine iOS-App, die ausgewählte Apps für einen selbst gesetzten Zeitraum sperrt. Man wählt die Apps, stellt eine Dauer zwischen einer und vierundzwanzig Stunden ein und schiebt den Riegel zu — danach sind sie weg, bis die Zeit abgelaufen ist. Kaze zählt dabei nichts mit: keine Auswertung, keine Serie, kein Punktestand, kein Konto. Es ist unser erstes iOS-Produkt.",
+      a: "Kaze ist eine App für das iPhone, die ausgewählte Apps für eine selbst gesetzte Zeit sperrt. Man wählt die Apps, stellt eine Dauer zwischen einer und vierundzwanzig Stunden ein und schiebt den Riegel zu — danach sind sie weg, bis die Zeit abgelaufen ist. Kaze zählt dabei nichts mit: keine Auswertung, keine Serie, kein Punktestand, kein Konto. Es ist das erste iOS-Produkt von Neckarshore AI.",
     },
     {
       q: "Warum kann ich eine Sperre nicht einfach abbrechen?",
-      a: "Weil ein Abbrechen-Knopf genau das wäre, was man in dem Moment drückt. Kaze ist absichtlich unsymmetrisch: Verlängern geht sofort mit einer Drehung am Zifferblatt, ohne Umweg. Verkürzen gibt es nicht — nur das vollständige Entriegeln, und dafür braucht es einen Notfallcode, den Kaze per E-Mail schickt. Davor liegt eine Nachdenkpause von fünfzehn Sekunden. Zusammen etwa eine Minute: klein genug für einen echten Notfall, groß genug gegen „nur kurz“.",
+      a: "Weil ein Abbrechen-Knopf genau das wäre, was man in dem Moment drückt. Kaze ist absichtlich unsymmetrisch: Verlängern geht sofort mit einer Drehung am Zifferblatt, in Viertelstunden-Schritten. Verkürzen gibt es nicht — nur das vorzeitige Entriegeln, und dafür braucht es einen Notfallcode, den Kaze per E-Mail schickt. Ein Umweg von etwa einer Minute: klein genug für einen echten Notfall, groß genug gegen „nur kurz“.",
     },
     {
       q: "Sieht Kaze, welche Apps ich sperre?",
-      a: "Nein, und das ist keine Einstellung, sondern die Bauweise. Die Auswahl läuft über Apples eigenes Auswahlfenster; was Kaze von iOS zurückbekommt, sind unlesbare Kennungen. Namen und Symbole zeichnet iOS selbst, Kaze bekommt sie nie zu sehen. Auch die Notfallcode-Mail verrät nichts: im Betreff steht „1 App“ oder „3 Apps“, nie ein App-Name.",
+      a: "Nein, und das ist keine Einstellung, sondern die Bauweise. Die Auswahl läuft über Apples eigenes Auswahlfenster und die Bildschirmzeit-Freigabe von iOS; was Kaze zurückbekommt, sind unlesbare Kennungen. Welche Apps du gewählt hast, sieht nur dein iPhone.",
     },
     {
-      q: "Was schickt Kaze an Server?",
-      a: "Nur das, was für die Notfallcode-Mail nötig ist — der Versand braucht eine E-Mail-Adresse und einen Code. Es gibt kein Konto, keine Anmeldung, keine Nutzungsauswertung und keine Gerätedaten. Welche Apps gesperrt sind, erfährt kein Server, weil Kaze es selbst nicht weiß.",
+      q: "Sammelt Kaze Daten über mich?",
+      a: "Kaze erhebt keine Daten über dich. Es gibt kein Konto, keine Anmeldung, keine Auswertung und keine Weitergabe. Drei Ausnahmen gibt es: den Notfallcode, der eine E-Mail-Adresse braucht, das Kontaktformular und den Rückmeldeweg in der App. Was dabei genau passiert, steht auf der Datenschutzseite unter kaze.neckarshore.ai.",
     },
     {
       q: "Warum baut eine Softwareschmiede eine solche App?",
@@ -117,7 +118,38 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
     },
     {
       q: "Wann ist Kaze verfügbar?",
-      a: "Kaze ist in Entwicklung und noch nicht im App Store. Ein Veröffentlichungsdatum nennen wir erst, wenn es belastbar ist — lieber keines als ein gerissenes. Die Produktseite liegt unter kaze.neckarshore.ai.",
+      a: "Kaze ist noch nicht im App Store. Ein Veröffentlichungsdatum nennen wir erst, wenn es belastbar ist — lieber keines als ein gerissenes. Handbuch, Fragen und Support stehen unter kaze.neckarshore.ai.",
+    },
+  ],
+
+  musclecat: [
+    {
+      q: "Was ist MuscleCat?",
+      a: "MuscleCat ist ein Trainingstagebuch für das iPhone, gedacht für Menschen, die an Geräten, mit Freihanteln oder am Cardio-Gerät trainieren und beim nächsten Training wissen wollen, wo sie weitermachen. Du trägst jeden Satz mit Gewicht und Wiederholungen ein, nach jedem Satz läuft eine Pause, und am Ende einer Übung sagst du „Weniger“, „Gleich“ oder „Mehr“ — daraus zeigt MuscleCat, was du beim nächsten Mal auflegst.",
+    },
+    {
+      q: "Brauche ich ein Konto?",
+      a: "Nein. MuscleCat kommt ohne Konto und ohne Anmeldung aus.",
+    },
+    {
+      q: "Welche Berechtigungen fragt die App ab?",
+      a: "Keine. MuscleCat fragt dein Telefon um keine Berechtigung: kein Zugriff auf Health, Standort, Kontakte oder Fotos. Was du einträgst, bleibt auf deinem Gerät.",
+    },
+    {
+      q: "Woher weiß MuscleCat, was ich auflegen soll?",
+      a: "Aus deiner eigenen Rückmeldung. Am Ende einer Übung sagst du: weniger, gleich oder mehr. „Mehr“ erhöht das Arbeitsgewicht um die Schrittweite, „Weniger“ senkt es, „Gleich“ lässt es stehen. Das Gewicht hängt an der Übung, nicht am Plan.",
+    },
+    {
+      q: "Kann ich ohne Gewicht trainieren?",
+      a: "Ja. Sätze lassen sich auch nur mit Wiederholungen erfassen, etwa bei Klimmzügen und Dips. Cardio-Geräte erfassen Dauer, Distanz und Widerstand statt Kilogramm.",
+    },
+    {
+      q: "Wie komme ich auf ein neues Telefon?",
+      a: "Über eine Sicherung: auf dem alten Telefon „Sicherung erstellen“, auf dem neuen „Sicherung einlesen“. Die Datei enthält deinen ganzen Bestand.",
+    },
+    {
+      q: "Wann ist MuscleCat verfügbar?",
+      a: "MuscleCat ist noch nicht im App Store. Ein Veröffentlichungsdatum nennen wir erst, wenn es belastbar ist. Handbuch, Glossar, Fragen und Support stehen unter musclecat.neckarshore.ai.",
     },
   ],
 

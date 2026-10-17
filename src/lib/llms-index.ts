@@ -30,8 +30,10 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { MMP_CARDS } from "@/lib/mmp-cards";
 import {
   PORTFOLIO,
+  appItems,
   statusPillLabel,
   type PortfolioCategory,
   type PortfolioItem,
@@ -81,7 +83,11 @@ function renderCategory(category: PortfolioCategory): string {
     .map((item) => {
       const status = statusPillLabel(item);
       const statusSuffix = status && status !== "Live" ? ` [${status}]` : "";
-      return `- ${item.name}${statusSuffix} — ${item.tagline} ${itemUrl(item)}`;
+      // Native apps also name their own public page (handbook, FAQ, privacy), so a reader
+      // can tie the app's site to the company that builds it (2026-10-15).
+      const appSite = item.platform ? MMP_CARDS[item.slug]?.appSiteUrl : undefined;
+      const appSuffix = appSite ? ` — ${item.platform}-App, eigene Seite: ${appSite}` : "";
+      return `- ${item.name}${statusSuffix} — ${item.tagline} ${itemUrl(item)}${appSuffix}`;
     });
 
   return [`### ${category.title} — ${category.subtitle}`, category.intro, "", ...lines].join(
@@ -114,6 +120,10 @@ Omnopsis Documentor+X — an AI-first documentation engine that generates compli
 ## Products
 
 neckarshore.ai builds across four tiers: flagships, MMPs (Minimum Marketable Products), focused open-source skills, and client/own websites. Product names, one-liners and status below are generated from the same source as the site's own product pages. Full tree: ${SITE_URL}/products
+
+Native iPhone apps (listed under MMPs, status per line below): ${appItems()
+  .map((a) => `${a.name} (${SITE_URL}${a.href})`)
+  .join(", ")}.
 
 ${PORTFOLIO.map(renderCategory).join("\n\n")}
 

@@ -62,6 +62,15 @@ See `CLAUDE.md` → "Lighthouse Device Matrix" for profile definitions and gate 
 | 41 | 2026-06-28 | linus/markdown-export | desktop | 100 | 96 | 100 | 100 | 642ms | 0ms | 0.002 | ad-hoc (homepage; MD-export feature lives on /products/* — the `<a>` a11y is covered by e2e accessibility across all pages) |
 | 42 | 2026-06-28 | linus/markdown-export | mobile-5g | 100 | 96 | 100 | 100 | 290ms | 11ms | 0.002 | ad-hoc (homepage) |
 | 43 | 2026-06-28 | linus/markdown-export | mobile-4g | 96 | 96 | 100 | 100 | 2.8s | 10ms | 0.002 | ad-hoc (homepage) |
+| 44 | 2026-10-15 | linus/2026-10-15-app-seiten | desktop | 100 | 100 | 100 | 100 | 705ms | 0ms | 0.001 | ad-hoc (/products) |
+| 45 | 2026-10-15 | linus/2026-10-15-app-seiten | mobile-5g | 100 | 100 | 100 | 100 | 452ms | 66ms | 0.001 | ad-hoc (/products) |
+| 46 | 2026-10-15 | linus/2026-10-15-app-seiten | mobile-4g | 96 | 100 | 100 | 100 | 2.8s | 33ms | 0.001 | ad-hoc (/products) |
+| 47 | 2026-10-15 | linus/2026-10-15-app-seiten | desktop | 100 | 100 | 100 | 100 | 577ms | 0ms | 0.001 | ad-hoc (/products/kaze) |
+| 48 | 2026-10-15 | linus/2026-10-15-app-seiten | mobile-5g | 96 | 100 | 100 | 100 | 1.3s | 230ms | 0.001 | ad-hoc (/products/kaze) |
+| 49 | 2026-10-15 | linus/2026-10-15-app-seiten | mobile-4g | 96 | 100 | 100 | 100 | 2.8s | 72ms | 0.020 | ad-hoc (/products/kaze) |
+| 50 | 2026-10-15 | linus/2026-10-15-app-seiten | desktop | 100 | 100 | 100 | 100 | 559ms | 0ms | 0.001 | ad-hoc (/products/musclecat) |
+| 51 | 2026-10-15 | linus/2026-10-15-app-seiten | mobile-5g | 68 | 100 | 100 | 100 | 2.5s | 3.6s | 0.001 | ad-hoc (/products/musclecat); soft-warn, TBT spike; two repeats 96/98, TBT 231/166ms |
+| 52 | 2026-10-15 | linus/2026-10-15-app-seiten | mobile-4g | 94 | 100 | 100 | 100 | 2.7s | 152ms | 0.001 | ad-hoc (/products/musclecat) |
 
 > **Baseline established 2026-04-10 (local, rows 1/3).** Mobile Slow (Edge-5G) reveals the blind spot: Perf 70-71, LCP 9.6s. This is the scenario a colleague reported from France on weak 5G. CI vs local delta is minimal (±1 point).
 

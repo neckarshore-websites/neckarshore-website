@@ -1,38 +1,53 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import ProductDetailPage, {
   productDetailMetadata,
 } from "@/components/ProductDetailPage";
+import { AppScreens, type AppShot } from "@/components/AppScreens";
 
 const SLUG = "kaze";
 
 /**
- * Kaze — Produktseite in der Vorschau-Haltung.
+ * Kaze — Produktseite einer iPhone-App, die noch nicht im App Store ist.
  *
  * KEIN `liveUrl` IM FRONTMATTER, und das ist eine Entscheidung, keine Luecke: die App ist
- * nicht im App Store. Damit greift die Vorschau-Haltung des geteilten Bausteins —
- * Vorschau-Schema ohne `url` und ohne Angebot, kein "Live ausprobieren", der Ruf zur Tat
- * ist ein Gespraech. Eine strukturierte Angabe, die eine Adresse oder ein Angebot
- * behauptet, das es nicht gibt, waere eine Falschaussage an eine Maschine.
+ * nicht im App Store. `liveUrl` schaltet im Baustein das Live-Schema samt "Live
+ * ausprobieren" scharf; wer darauf klickte, bekaeme eine weitere Textseite statt eines
+ * Produkts. kaze.neckarshore.ai steht deshalb als `appSiteUrl` in mmp-cards.ts — der
+ * Baustein macht daraus "Zur Seite der App ↗" statt des Gespraechs-Knopfs.
  *
- * kaze.neckarshore.ai ist ABSICHTLICH NICHT als `liveUrl` eingetragen, obwohl die Adresse
- * antwortet. Sie traegt die Produktseite der App, nicht die App — und `liveUrl` schaltet
- * im Baustein das Live-Schema samt "Live ausprobieren" scharf. Wer darauf klickte,
- * bekaeme eine weitere Textseite statt eines Produkts. Der Verweis steht deshalb im
- * Fliesstext, wo er beschrieben werden kann.
- *
- * DAS BILD IST DAS APP-ICON, nicht ein Bildschirmfoto. Zwei Gruende: es gibt noch keine
- * abgenommenen Bildschirmfotos der App, und ein zusammengesuchtes waere eine Behauptung
- * ueber einen Stand, der sich taeglich bewegt. Das Icon dagegen ist fertig, es ist
- * dasselbe, das die App traegt — dieselbe Datei aus demselben Verfahren, nicht
- * nachgezeichnet —, und es transportiert genau das, was die Seite behauptet: ein Zeichen,
- * viel Ruhe drumherum.
+ * DIE BILDER (seit 15.10.2026, vorher nur das App-Icon): dieselben drei Bildschirmfotos,
+ * die kaze.neckarshore.ai auf seiner Startseite zeigt, hell und dunkel, kopiert aus
+ * `origin/main` von kaze-website. Bis dahin stand hier das Icon, weil es keine
+ * abgenommenen Bildschirmfotos gab; die gibt es jetzt, auf der eigenen Seite der App. Die
+ * Beschriftungen folgen den dortigen, die Alternativtexte ebenso.
  */
-const ICON = {
-  src: "/images/products/kaze-icon.png",
-  size: 512,
-  alt: "Das Kaze-App-Icon: das japanische Zeichen 風 für Wind, hell auf zinnoberrotem Grund.",
-};
+const DIR = "/images/products/apps";
+const SHOTS: AppShot[] = [
+  {
+    light: `${DIR}/kaze-hell-02e-einrichten-mit-weiteren.webp`,
+    dark: `${DIR}/kaze-dunkel-02e-einrichten-mit-weiteren.webp`,
+    width: 1080,
+    height: 2090,
+    alt: "Bildschirm „Wer soll erst mal Ruhe geben?“ mit fünf gewählten Apps, 4 Stunden Dauer und dem Riegel Anwenden.",
+    caption: "Auswahl und Dauer",
+  },
+  {
+    light: `${DIR}/kaze-hell-03-verriegelt.webp`,
+    dark: `${DIR}/kaze-dunkel-03-verriegelt.webp`,
+    width: 1080,
+    height: 2090,
+    alt: "Übersicht „Verriegelt“ mit zwei aktiven Sperren, YouTube und Instagram, jede mit ihrer Restzeit.",
+    caption: "Die laufenden Sperren",
+  },
+  {
+    light: `${DIR}/kaze-hell-04-detail.webp`,
+    dark: `${DIR}/kaze-dunkel-04-detail.webp`,
+    width: 1080,
+    height: 2090,
+    alt: "Zifferblatt mit der Restzeit 1:52 für Instagram, darunter der Knopf Entriegeln.",
+    caption: "Die Uhr einer Sperre",
+  },
+];
 
 export function generateMetadata(): Metadata {
   return productDetailMetadata({
@@ -42,31 +57,5 @@ export function generateMetadata(): Metadata {
 }
 
 export default function KazePage() {
-  return (
-    <ProductDetailPage
-      slug={SLUG}
-      media={
-        <figure>
-          {/*
-            Bewusst KEIN Vergroessern-Klick wie beim Bildschirmfoto der anderen Seite: ein
-            Icon hat nichts, was sich beim Heranzoomen erschliesst. Und bewusst klein
-            gehalten — es ist ein Icon, kein Titelbild; auf halbe Spaltenbreite gezogen
-            saehe es aus wie ein Fehler.
-          */}
-          <Image
-            src={ICON.src}
-            alt={ICON.alt}
-            width={ICON.size}
-            height={ICON.size}
-            sizes="160px"
-            className="h-40 w-40 rounded-[22%] border border-primary/10 dark:border-text-secondary/15"
-          />
-          <figcaption className="mt-3 text-sm text-muted dark:text-text-tertiary">
-            風 — Wind. Dasselbe Zeichen trägt die App, der Browser-Reiter und der
-            Startbildschirm.
-          </figcaption>
-        </figure>
-      }
-    />
-  );
+  return <ProductDetailPage slug={SLUG} media={<AppScreens shots={SHOTS} />} />;
 }
