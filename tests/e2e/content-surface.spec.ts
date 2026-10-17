@@ -910,6 +910,18 @@ test.describe("Content surface — iPhone apps", () => {
     expect(order.indexOf("tier-flagships")).toBeLessThan(apps);
   });
 
+  test("TC-CNT-103: the Apps block on /products states no store state (Founder 2026-10-17)", async ({
+    page,
+  }) => {
+    // Founder, 2026-10-17, question 1 on #309: the intro lost "Beide sind noch nicht im App
+    // Store.", a fixed sentence that turns false the day Apple releases either app. The detail
+    // pages derive their store sentence from `status`; this overview must not carry one.
+    await page.goto("/products");
+    const block = page.locator('section[aria-labelledby="apps-heading"]');
+    await expect(block).toBeVisible();
+    await expect(block).not.toContainText("App Store");
+  });
+
   for (const path of ["/products", "/products/mmps", "/products/kaze", "/products/musclecat"]) {
     test(`TC-CNT-102 [${path}]: no link to the private app repos (Founder 2026-10-16)`, async ({ page }) => {
       // Founder, 2026-10-16 23:45 CEST, question 4 on #309: both repos are private, so a GitHub

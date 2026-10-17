@@ -82,12 +82,17 @@ const CLUSTER_DOORS: {
  * portfolio entry. Icon paths are keyed here by slug; a new app without one falls back to
  * no icon rather than to a wrong one.
  *
- * COPY STATUS: PROPOSAL (Linus, 2026-10-15), for the Founder's approval. No price, no
- * subscription wording, no date — see product-faqs.ts for why.
+ * COPY STATUS: SETTLED. Written by Linus on 2026-10-15, approved by the Founder on 2026-10-17
+ * (question 1 on #309) together with the card texts and the MuscleCat page sections. No price,
+ * no subscription wording, no date — see product-faqs.ts for why.
+ *
+ * NO STORE STATE IN THIS INTRO (same decision): it used to end "Beide sind noch nicht im App
+ * Store.", a fixed sentence that turns false the day Apple releases either app. The detail
+ * pages derive that sentence from `status` (ProductDetailPage); this overview does not repeat it.
  */
 const APPS_HEADING = "Apps fürs iPhone";
 const APPS_INTRO =
-  "Zwei Apps für den Alltag außerhalb des Büros. Beide kommen ohne Konto aus und wollen nicht mehr wissen, als sie brauchen. Beide sind noch nicht im App Store.";
+  "Zwei Apps für den Alltag außerhalb des Büros. Beide kommen ohne Konto aus und wollen nicht mehr wissen, als sie brauchen.";
 const APP_ICONS: Record<string, string> = {
   kaze: "/images/products/kaze-icon.png",
   musclecat: "/images/products/musclecat-icon.png",
