@@ -970,3 +970,49 @@ test.describe("Content surface — iPhone apps", () => {
     }
   });
 });
+
+// Both apps are in the App Store (Kaze since 2026-10-18, MuscleCat since 2026-10-15). The
+// detail pages show Apple's official German badge, linked to the store, and the app's
+// Instagram profile as an icon link; the "In Entwicklung" pill and the "not in the store"
+// sentence are gone (status "live" in portfolio.ts, appStoreUrl + socials in mmp-cards.ts).
+test.describe("Content surface — iPhone apps in the App Store", () => {
+  const STORE = [
+    {
+      slug: "kaze",
+      store: "https://apps.apple.com/de/app/id6803057753",
+      instagram: "https://www.instagram.com/kaze.wind.app/",
+      name: "Kaze auf Instagram",
+    },
+    {
+      slug: "musclecat",
+      store: "https://apps.apple.com/de/app/id6800642926",
+      instagram: "https://www.instagram.com/musclecat.fitness.app/",
+      name: "MuscleCat auf Instagram",
+    },
+  ];
+
+  for (const { slug, store, instagram, name } of STORE) {
+    test(`TC-CNT-104 [/products/${slug}]: App Store badge and Instagram link, no pre-launch wording`, async ({
+      page,
+    }) => {
+      await page.goto(`/products/${slug}`);
+      const badge = page.locator(`a[data-track="product_app_store_${slug}"]`);
+      await expect(badge).toHaveAttribute("href", store);
+      await expect(badge).toHaveAttribute("target", "_blank");
+      await expect(badge).toHaveAttribute("rel", /noopener/);
+      await expect(badge.locator('img[src="/images/badges/app-store-de.svg"]')).toHaveAttribute(
+        "alt",
+        "Laden im App Store",
+      );
+
+      const ig = page.getByRole("link", { name, exact: true });
+      await expect(ig).toHaveAttribute("href", instagram);
+      await expect(ig).toHaveAttribute("target", "_blank");
+      await expect(ig).toHaveAttribute("rel", /noopener/);
+
+      const main = page.locator("main");
+      await expect(main).not.toContainText("noch nicht im App Store", { ignoreCase: true });
+      await expect(main.getByText("In Entwicklung", { exact: true })).toHaveCount(0);
+    });
+  }
+});
