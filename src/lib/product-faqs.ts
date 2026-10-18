@@ -87,7 +87,8 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
    *    neckarshore.ai darueber spricht, ist eine Founder-Frage — bis dahin schweigt diese
    *    Flaeche, weder zusagend noch verneinend. Kein Test erzwingt das hier; es ist ein
    *    Kommentar und bekannt als solcher.
-   * 2. KEIN VEROEFFENTLICHUNGSDATUM. Beide sind nicht im App Store.
+   * 2. KEIN VEROEFFENTLICHUNGSDATUM. Seit 2026-10-19 sagen die Antworten nur, DASS beide im
+   *    App Store stehen (DE, AT, CH), nicht seit wann.
    * 3. JEDE AUSSAGE STAMMT VON DER EIGENEN SEITE DER APP (kaze.neckarshore.ai/de/fragen und
    *    /de/notfallcode, musclecat.neckarshore.ai/llms.txt — gelesen 15.10.2026), nicht aus
    *    dem Gedaechtnis und nicht aus Tickets. Die Kaze-Antworten von 20.08.2026 sind an dem
@@ -118,7 +119,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
     },
     {
       q: "Wann ist Kaze verfügbar?",
-      a: "Kaze ist noch nicht im App Store. Ein Veröffentlichungsdatum nennen wir erst, wenn es belastbar ist — lieber keines als ein gerissenes. Handbuch, Fragen und Support stehen unter kaze.neckarshore.ai.",
+      a: "Jetzt: Kaze steht im App Store, für das iPhone, in Deutschland, Österreich und der Schweiz. Handbuch, Fragen und Support stehen unter kaze.neckarshore.ai.",
     },
   ],
 
@@ -149,7 +150,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
     },
     {
       q: "Wann ist MuscleCat verfügbar?",
-      a: "MuscleCat ist noch nicht im App Store. Ein Veröffentlichungsdatum nennen wir erst, wenn es belastbar ist. Handbuch, Glossar, Fragen und Support stehen unter musclecat.neckarshore.ai.",
+      a: "Jetzt: MuscleCat steht im App Store, für das iPhone, in Deutschland, Österreich und der Schweiz. Handbuch, Glossar, Fragen und Support stehen unter musclecat.neckarshore.ai.",
     },
   ],
 
