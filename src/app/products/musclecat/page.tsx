@@ -7,7 +7,8 @@ import { AppScreens, type AppShot } from "@/components/AppScreens";
 const SLUG = "musclecat";
 
 /**
- * MuscleCat — Produktseite einer iPhone-App, die noch nicht im App Store ist.
+ * MuscleCat — Produktseite einer iPhone-App, seit 15.10.2026 im App Store (DE, AT, CH). Das
+ * App-Store-Abzeichen und der Instagram-Link kommen aus mmp-cards.ts (`appStoreUrl`, `socials`).
  *
  * Dieselbe Haltung wie Kaze (siehe dort): kein `liveUrl`, weil es keine App zum
  * Ausprobieren im Browser gibt; musclecat.neckarshore.ai steht als `appSiteUrl` in

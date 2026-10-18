@@ -7,7 +7,8 @@ import { AppScreens, type AppShot } from "@/components/AppScreens";
 const SLUG = "kaze";
 
 /**
- * Kaze — Produktseite einer iPhone-App, die noch nicht im App Store ist.
+ * Kaze — Produktseite einer iPhone-App, seit 18.10.2026 im App Store (DE, AT, CH). Das
+ * App-Store-Abzeichen und der Instagram-Link kommen aus mmp-cards.ts (`appStoreUrl`, `socials`).
  *
  * KEIN `liveUrl` IM FRONTMATTER, und das ist eine Entscheidung, keine Luecke: die App ist
  * nicht im App Store. `liveUrl` schaltet im Baustein das Live-Schema samt "Live
