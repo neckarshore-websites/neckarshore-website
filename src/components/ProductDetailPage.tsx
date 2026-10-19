@@ -170,6 +170,9 @@ export default function ProductDetailPage({
 
               {appSiteUrl ? (
                 <div className="mt-8">
+                  {/* ONE ROW, ONE HEIGHT (Founder 2026-10-19): Apple's badge, the app-site button and
+                      the Instagram icon stand side by side, all 40 px high — the badge's own
+                      minimum height sets the measure. */}
                   <div className="flex flex-wrap items-center gap-4">
                     {appStoreUrl && <AppStoreBadge href={appStoreUrl} slug={slug} />}
                     <a
@@ -177,10 +180,11 @@ export default function ProductDetailPage({
                       target="_blank"
                       rel="noopener noreferrer"
                       data-track={`product_app_site_cta_${slug}`}
-                      className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-base font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
+                      className="inline-flex h-10 items-center gap-2 rounded-lg bg-accent px-6 text-base font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
                     >
                       Zur Seite der App ↗
                     </a>
+                    <SocialLinks name={entry.name} slug={slug} links={socials} />
                   </div>
                   {/* Keyed on `status`, not on `appSiteUrl`: when an app ships, flipping its
                       status is the one edit, and this sentence goes with it. */}
@@ -188,12 +192,6 @@ export default function ProductDetailPage({
                     {item?.status === "preview" ? "Noch nicht im App Store. " : ""}
                     Dort stehen Handbuch, Fragen und Datenschutz.
                   </p>
-                  <SocialLinks
-                    name={entry.name}
-                    slug={slug}
-                    links={socials}
-                    className="mt-4 -ml-2"
-                  />
                 </div>
               ) : (
                 <div className="mt-8">

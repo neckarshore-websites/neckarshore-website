@@ -19,7 +19,7 @@ export function SocialLinks({
   if (links.length === 0) return null;
   return (
     <ul
-      className={`flex list-none items-center gap-3 p-0 ${className}`}
+      className={`flex list-none items-center gap-3 p-0 ${className}`.trim()}
       data-social-links
     >
       {links.map(({ platform, href }) => {
@@ -37,8 +37,8 @@ export function SocialLinks({
             >
               <svg
                 viewBox="0 0 24 24"
-                width="22"
-                height="22"
+                width="40"
+                height="40"
                 fill="currentColor"
                 aria-hidden="true"
                 focusable="false"
