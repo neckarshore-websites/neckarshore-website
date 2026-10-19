@@ -39,6 +39,4 @@ MuscleCat ist aus dem eigenen Trainingsalltag entstanden: Satz eintragen, Pause 
 
 ## Stand
 
-MuscleCat ist noch nicht im App Store. Handbuch, Glossar, Fragen, Datenschutz und Support stehen auf der eigenen Seite der App: [musclecat.neckarshore.ai](https://musclecat.neckarshore.ai).
-
-Ein Veröffentlichungsdatum nennen wir erst, wenn es belastbar ist.
+MuscleCat steht im [App Store](https://apps.apple.com/de/app/id6800642926), für das iPhone, in Deutschland, Österreich und der Schweiz. Handbuch, Glossar, Fragen, Datenschutz und Support stehen auf der eigenen Seite der App: [musclecat.neckarshore.ai](https://musclecat.neckarshore.ai).

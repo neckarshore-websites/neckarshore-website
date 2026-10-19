@@ -15,6 +15,8 @@ import { breadcrumbTrailForSlug, getItemBySlug } from "@/lib/portfolio";
 import { getProductEntry } from "@/lib/content/products";
 import { faqForSlug } from "@/lib/product-faqs";
 import { MMP_CARDS } from "@/lib/mmp-cards";
+import { AppStoreBadge } from "@/components/AppStoreBadge";
+import { SocialLinks } from "@/components/SocialLinks";
 import {
   liveSoftwareApplicationSchema,
   previewSoftwareApplicationSchema,
@@ -114,6 +116,10 @@ export default function ProductDetailPage({
   // Native apps (Kaze, MuscleCat): the preview CTA points at the app's own public page
   // instead of a sales call. A consumer app is not something one books 30 minutes about.
   const appSiteUrl = item?.platform ? MMP_CARDS[slug]?.appSiteUrl : undefined;
+  // Native apps in the App Store: Apple's badge replaces the "In Entwicklung" pill, and the
+  // app's social channels follow as icon links. Both come from mmp-cards.ts (one entry per app).
+  const appStoreUrl = item?.platform ? MMP_CARDS[slug]?.appStoreUrl : undefined;
+  const socials = item?.platform ? (MMP_CARDS[slug]?.socials ?? []) : [];
 
   return (
     <>
@@ -155,28 +161,39 @@ export default function ProductDetailPage({
             </div>
           ) : (
             <>
-              <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary/5 px-4 py-1.5 text-sm font-medium text-muted dark:bg-text-secondary/10 dark:text-text-tertiary">
-                <span className="h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
-                In Entwicklung
-              </div>
+              {!appStoreUrl && (
+                <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary/5 px-4 py-1.5 text-sm font-medium text-muted dark:bg-text-secondary/10 dark:text-text-tertiary">
+                  <span className="h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
+                  In Entwicklung
+                </div>
+              )}
 
               {appSiteUrl ? (
                 <div className="mt-8">
-                  <a
-                    href={appSiteUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-track={`product_app_site_cta_${slug}`}
-                    className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-base font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
-                  >
-                    Zur Seite der App ↗
-                  </a>
+                  <div className="flex flex-wrap items-center gap-4">
+                    {appStoreUrl && <AppStoreBadge href={appStoreUrl} slug={slug} />}
+                    <a
+                      href={appSiteUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-track={`product_app_site_cta_${slug}`}
+                      className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 text-base font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      Zur Seite der App ↗
+                    </a>
+                  </div>
                   {/* Keyed on `status`, not on `appSiteUrl`: when an app ships, flipping its
                       status is the one edit, and this sentence goes with it. */}
                   <p className="mt-3 text-sm text-muted dark:text-text-tertiary">
                     {item?.status === "preview" ? "Noch nicht im App Store. " : ""}
                     Dort stehen Handbuch, Fragen und Datenschutz.
                   </p>
+                  <SocialLinks
+                    name={entry.name}
+                    slug={slug}
+                    links={socials}
+                    className="mt-4 -ml-2"
+                  />
                 </div>
               ) : (
                 <div className="mt-8">

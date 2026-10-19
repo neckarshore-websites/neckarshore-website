@@ -211,7 +211,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
         slug: "kaze",
         tagline:
           "iPhone-App, die ausgewählte Apps für eine selbst gesetzte Zeit sperrt — ohne Konto, ohne Auswertung.",
-        status: "preview",
+        status: "live", // In the App Store since 2026-10-18 (DE, AT, CH).
         platform: "iOS",
         // Unfeatured 2026-10-15: Kaze now leads in the "Apps" block on /products (with
         // MuscleCat). Featured AND in that block would show it twice on one page. Ranking
@@ -260,7 +260,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
         slug: "musclecat",
         tagline:
           "Trainingstagebuch fürs Studio als iPhone-App — Sätze eintragen, Pause abwarten, beim nächsten Mal wissen, was du auflegst.",
-        status: "preview",
+        status: "live", // In the App Store since 2026-10-15 (DE, AT, CH).
         platform: "iOS",
         href: "/products/musclecat",
         isExternal: false,
