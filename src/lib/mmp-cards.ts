@@ -1,3 +1,5 @@
+import type { SocialLink } from "@/lib/social";
+
 /**
  * Rich MMP sub-portal card content — the longer card description + the repository link
  * for each Minimum Marketable Product. Keyed by the SAME slug as the matching `PORTFOLIO`
@@ -41,6 +43,13 @@ export interface MmpCardData {
    * of a product. This one renders as "App-Seite ↗" and as a link in llms.txt.
    */
   appSiteUrl?: string;
+  /**
+   * Native apps only: the app's App Store page. When set, the detail page shows Apple's
+   * official badge next to the app-site button instead of the "In Entwicklung" pill.
+   */
+  appStoreUrl?: string;
+  /** Native apps only: the app's social channels, as icon links on the detail page (lib/social.ts). */
+  socials?: SocialLink[];
 }
 
 export const MMP_CARDS: Record<string, MmpCardData> = {
@@ -68,6 +77,10 @@ export const MMP_CARDS: Record<string, MmpCardData> = {
     description:
       "Sperrt die Apps, zu denen du greifst, ohne es zu wollen — für eine Zeit, die du selbst bestimmst. Verlängern geht sofort, verkürzen nur mit einem Notfallcode per E-Mail. Keine Statistik, keine Serien, kein Konto.",
     appSiteUrl: "https://kaze.neckarshore.ai",
+    // In the App Store since 2026-10-18 (DE, AT, CH). Plain store URL, no campaign token.
+    appStoreUrl: "https://apps.apple.com/de/app/id6803057753",
+    // TikTok later: add { platform: "tiktok", href: "https://www.tiktok.com/@<handle>" } here.
+    socials: [{ platform: "instagram", href: "https://www.instagram.com/kaze.wind.app/" }],
   },
   // Facts from musclecat.neckarshore.ai (its own public page, 15.10.2026). No price and no
   // money model: the model is still moving (musclecat#276 vs the site's privacy pages).
@@ -75,6 +88,10 @@ export const MMP_CARDS: Record<string, MmpCardData> = {
     description:
       "Ein Trainingstagebuch fürs Studio: Sätze mit Gewicht und Wiederholungen eintragen, nach jedem Satz läuft die Pause. Am Ende einer Übung sagst du weniger, gleich oder mehr — und siehst, was du beim nächsten Mal auflegst.",
     appSiteUrl: "https://musclecat.neckarshore.ai",
+    // In the App Store since 2026-10-15 (DE, AT, CH). Plain store URL, no campaign token.
+    appStoreUrl: "https://apps.apple.com/de/app/id6800642926",
+    // TikTok later: add { platform: "tiktok", href: "https://www.tiktok.com/@<handle>" } here.
+    socials: [{ platform: "instagram", href: "https://www.instagram.com/musclecat.fitness.app/" }],
   },
   "local-seo-hub": {
     description:

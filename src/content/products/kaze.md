@@ -49,6 +49,4 @@ Wer wissen will, wie wir arbeiten, kann sich Referenzen ansehen. Oder eine App, 
 
 ## Stand
 
-Kaze ist noch nicht im App Store. Handbuch, Fragen, Datenschutz und Support stehen auf der eigenen Seite der App: [kaze.neckarshore.ai](https://kaze.neckarshore.ai).
-
-Ein Veröffentlichungsdatum nennen wir erst, wenn es belastbar ist — lieber keines als ein gerissenes.
+Kaze steht im [App Store](https://apps.apple.com/de/app/id6803057753), für das iPhone, in Deutschland, Österreich und der Schweiz. Handbuch, Fragen, Datenschutz und Support stehen auf der eigenen Seite der App: [kaze.neckarshore.ai](https://kaze.neckarshore.ai).

@@ -1,9 +1,9 @@
 {
   "byType": {
-    "e2e": 1050,
-    "integration": 971,
+    "e2e": 1052,
+    "integration": 1034,
     "smoke": 1,
-    "unit": 3535
+    "unit": 3595
   },
   "endpoints": 96,
   "expected": 18,
@@ -13,14 +13,14 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 890,
+        "integration": 953,
         "unit": 105
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 995
+      "total": 1058
     },
     {
       "audited_sha": "7dbd5a1394e94b36ae3c018b42364c842742d6ed",
@@ -81,13 +81,13 @@
       "audited_sha": null,
       "byType": {
         "integration": 37,
-        "unit": 850
+        "unit": 910
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 887
+      "total": 947
     },
     {
       "audited_sha": "4856af11a8a2c1728ed602843cd8dce51108a743",
@@ -111,7 +111,7 @@
       "total": 214
     },
     {
-      "audited_sha": "b1a81ae165e58c7f1ea5dc0e9fa9ca38089660bf",
+      "audited_sha": "1e1580ddacb12ddf702d5ea4821b363f57ba43f5",
       "byType": {
         "e2e": 24,
         "unit": 138
@@ -122,7 +122,7 @@
       "total": 162
     },
     {
-      "audited_sha": "e1accb5bf7635f641d50debb2336897d9492b1ca",
+      "audited_sha": "bbab890c7060638d8b96652706c72b5f9b0bf492",
       "byType": {
         "e2e": 3,
         "unit": 6
@@ -133,18 +133,18 @@
       "total": 9
     },
     {
-      "audited_sha": "b8a90e78da32be575bbe2500e146a1da74d8952c",
+      "audited_sha": "a8df3392e65bee911e20392b0c9bf935dbe4d0f5",
       "byType": {
-        "e2e": 505,
+        "e2e": 507,
         "unit": 297
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/neckarshore-website",
-      "total": 802
+      "total": 804
     },
     {
-      "audited_sha": "50524cc9e8d08a043eeb4086baa3af86ac19a831",
+      "audited_sha": "49a88436902e3d409406d231c0b3553689b20720",
       "byType": {
         "e2e": 54,
         "unit": 105
@@ -155,7 +155,7 @@
       "total": 159
     },
     {
-      "audited_sha": "e11f89a4e000b55d2bd3e1548284456085e5c63d",
+      "audited_sha": "b7bc4dc2acae93ec2de7ee72e3ae431b4e6ae4b2",
       "byType": {
         "e2e": 34,
         "unit": 46
@@ -254,7 +254,7 @@
   ],
   "reporting": 18,
   "repos": 22,
-  "total": 5810,
+  "total": 5935,
   "untyped_total": 253,
-  "updatedAt": "2026-10-19T09:28:54Z"
+  "updatedAt": "2026-10-21T09:02:59Z"
 }
