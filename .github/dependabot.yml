@@ -10,6 +10,12 @@ version: 2
 updates:
   - package-ecosystem: npm
     directory: /
+    # 3-day cooldown (Founder 2026-10-23, dev-environment #296): a release is
+    # only proposed once it has been public for 3 days, so a pulled or
+    # compromised release has time to be noticed before it is auto-merged.
+    # Security updates are not delayed by cooldown.
+    cooldown:
+      default-days: 3
     schedule:
       interval: weekly
       day: monday
@@ -40,7 +46,7 @@ updates:
       #   - npm-development: dev deps, minor+patch  -> auto (minor&&dev, or patch)
       #   - npm-production:  prod deps, patch only   -> auto (patch)
       #   - runtime minor (prod, minor): ungrouped -> individual PR -> MANUAL
-      #   - any major:                   ungrouped -> individual PR -> MANUAL
+      #   - any major:                   npm-major (one PR) -> MANUAL (#296, 2026-10-23)
       npm-development:
         dependency-type: development
         update-types:
@@ -50,9 +56,24 @@ updates:
         dependency-type: production
         update-types:
           - patch
+      # Majors, grouped (MASCHIN architect 2026-10-23, #296): one PR per ecosystem's
+      # majors instead of one each. Still manual, never auto-merged: the
+      # safe class excludes semver-major. LAST so the named groups above
+      # keep their own majors. The @types/node major ignore above still applies.
+      npm-major:
+        patterns:
+          - "*"
+        update-types:
+          - major
 
   - package-ecosystem: github-actions
     directory: /
+    # 3-day cooldown (Founder 2026-10-23, dev-environment #296): a release is
+    # only proposed once it has been public for 3 days, so a pulled or
+    # compromised release has time to be noticed before it is auto-merged.
+    # Security updates are not delayed by cooldown.
+    cooldown:
+      default-days: 3
     schedule:
       interval: weekly
       day: monday
@@ -81,12 +102,20 @@ updates:
           - minor
           - patch
 
-      # Non-major actions bumps batch into one auto-mergeable PR; an actions MAJOR
-      # stays ungrouped so it surfaces individually for review — except codeql, which
-      # the group above deliberately keeps together across majors too.
+      # Non-major actions bumps batch into one auto-mergeable PR; actions MAJORS batch
+      # into actions-major below (#296), which stays manual — except codeql, which the
+      # group above keeps together across majors (it is declared first and keeps them).
       github-actions-minor-patch:
         patterns:
           - "*"
         update-types:
           - minor
           - patch
+
+      # Majors, grouped (MASCHIN architect 2026-10-23, #296). Still manual. LAST, so
+      # codeql-action above keeps its own majors.
+      actions-major:
+        patterns:
+          - "*"
+        update-types:
+          - major
