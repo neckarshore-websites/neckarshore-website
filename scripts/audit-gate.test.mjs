@@ -140,6 +140,20 @@ check("an expired entry fails EVEN IF its advisory is gone", () => {
   assert(r.expired.length === 1, "an expired entry must fail even with a clean audit");
 });
 
+check("a listed entry whose advisory is gone is reported as stale", () => {
+  const r = evaluate(payload({}), LIST, "2026-07-27");
+  assert(r.stale.length === 1 && r.stale[0].id === "GHSA-known", "an inert entry must be named");
+  assert(r.unlisted.length === 0 && r.expired.length === 0, "a stale entry alone must not fail the gate");
+});
+
+check("a reported entry is not stale, and an expired one is reported once, as expired", () => {
+  const live = payload({ x: { severity: "high", name: "p", via: [advisory("GHSA-known")] } });
+  assert(evaluate(live, LIST, "2026-07-27").stale.length === 0, "a live entry is not stale");
+  const old = [{ id: "GHSA-old", pkg: "p", devOnly: false, expires: "2026-01-01", reason: "r" }];
+  const r = evaluate(payload({}), old, "2026-07-27");
+  assert(r.expired.length === 1 && r.stale.length === 0, "expired must not also be stale");
+});
+
 check("an entry expiring exactly today is still valid", () => {
   const sameDay = [{ id: "GHSA-t", pkg: "p", devOnly: false, expires: "2026-07-27", reason: "r" }];
   assert(findExpired(sameDay, "2026-07-27").length === 0, "expiry must be inclusive of its own day");

@@ -30,7 +30,7 @@
  *     ids across the whole tree sidesteps that entirely.
  *  4. NO NEW DEPENDENCY. `audit-ci` and `better-npm-audit` both solve this,
  *     and both mean adding a dependency to the thing whose job is auditing
- *     dependencies. This is ~120 lines of zero-dep Node, in the same style as
+ *     dependencies. This is a small zero-dep Node script, in the same style as
  *     scripts/check-private-slug-leak.sh.
  *
  * Usage:  node scripts/audit-gate.mjs
@@ -55,35 +55,15 @@ import { execFileSync } from "node:child_process";
  * looked at. Two files, two decisions.
  */
 export const ALLOWLIST = [
-  // The braces entry (GHSA-vfj7-8cjw-p6xm) was removed 2026-10-24, eleven days before its
-  // 2026-11-04 expiry. Not fixed and not suppressed: GitHub WITHDREW the advisory on
-  // 2026-10-23 (`gh api /advisories/GHSA-vfj7-8cjw-p6xm` -> withdrawn_at
-  // 2026-10-23T12:53:02Z), so npm audit no longer reports it while braces is still 3.0.3.
-  // The gate flagged the entry as inert ("Listed but no longer reported"), the same signal
-  // that retired the entries below.
-  // The sharp entry (GHSA-f88m-g3jw-g9cj) was removed 2026-09-09, seven weeks before its
-  // 2026-10-31 expiry. It named its own removal condition — "Removable when Next widens its
-  // sharp range to >=0.35.0" — and that is exactly what happened: next@16.3.4 declares
-  // sharp "^0.35.4" (was: a range resolving to 0.34.5), so the tree now resolves sharp to
-  // 0.35.4 and the advisory is FIXED, not suppressed. Verified before removal, not assumed:
-  // `require("sharp/package.json").version` -> 0.35.4. The gate itself flagged the entry as
-  // inert on the bump branch ("Listed but no longer reported"), which is the same signal that
-  // retired the brace-expansion and nanoid entries above. Same shape, same evidence bar.
-  // The nanoid entry (GHSA-2v37-7h3g-55p8) was removed 2026-08-26, on the day its own
-  // expiry fell due. It named its removal condition itself — "the moment the cooldown is
-  // lifted or rolled forward" — and the cooldown is gone: `npm config get before` is null
-  // and `npm pack nanoid@3.3.18 --dry-run` fetches the tarball. The advisory is not
-  // suppressed now, it is FIXED: package.json carries an `overrides` entry pinning nanoid
-  // to 3.3.18, because the path is purely transitive (@tailwindcss/postcss -> postcss ->
-  // nanoid) and postcss's `^3.3.16` range is already satisfied by 3.3.17, so `npm update`
-  // will not lift it. Same shape as the brace-expansion removal below.
-  // Both brace-expansion entries (GHSA-mh99-v99m-4gvg, GHSA-rgw5-rvv9-x895) removed
-  // 2026-08-12. Their own text named the condition for removal — "the bump fix is
-  // barred by the install freeze, re-decide at freeze lift" — and the freeze lifted
-  // that morning. `npm audit fix` then resolved both, and the gate's own
-  // "listed but no longer reported" line confirmed the entries had gone inert.
-  // An acceptance that outlives its reason is how a temporary exception becomes
-  // permanent silence, which is exactly what design rule 2 exists to prevent.
+  // Empty since 2026-10-24. Retired entries, newest first; the reasoning lives in the commit
+  // that removed each one (`git log -G <id> -- scripts/audit-gate.mjs`):
+  //   GHSA-vfj7-8cjw-p6xm  braces           2026-10-24  advisory WITHDRAWN by GitHub 2026-10-23
+  //   GHSA-f88m-g3jw-g9cj  sharp            2026-09-09  fixed: next@16.3.4 widened sharp to ^0.35.4
+  //   GHSA-2v37-7h3g-55p8  nanoid           2026-08-26  fixed: overrides pin nanoid 3.3.18
+  //   GHSA-mh99-v99m-4gvg  brace-expansion  2026-08-12  fixed: npm audit fix after the freeze lift
+  //   GHSA-rgw5-rvv9-x895  brace-expansion  2026-08-12  fixed: same
+  // An entry has the shape { id, pkg, devOnly, expires: "YYYY-MM-DD", reason } and its reason
+  // names the condition under which it may be removed.
 ];
 
 /*
@@ -180,7 +160,11 @@ export function evaluate(raw, allowlist, today) {
   const unlisted = [...found.values()].filter((a) => !allowed.has(a.id));
   const suppressed = [...found.values()].filter((a) => allowed.has(a.id));
 
-  return { found, unlisted, suppressed, expired, allowed };
+  // Listed, not reported, not expired: the entry no longer does anything. Expired entries are
+  // reported as expired instead, so a line is never named twice.
+  const stale = allowlist.filter((e) => !found.has(e.id) && !expired.includes(e));
+
+  return { found, unlisted, suppressed, expired, allowed, stale };
 }
 
 function main() {
@@ -206,12 +190,13 @@ function main() {
     console.log("");
   }
 
-  const staleEntries = ALLOWLIST.filter(
-    (e) => !result.found.has(e.id) && !result.expired.includes(e),
-  );
-  if (staleEntries.length) {
-    console.log("Listed but no longer reported — the advisory is gone, drop these lines:");
-    for (const e of staleEntries) console.log(`  [36m·[0m ${e.id}  ${e.pkg}`);
+  if (result.stale.length) {
+    console.log("Listed but no longer reported — drop these lines, after reading WHY it is gone:");
+    for (const e of result.stale) {
+      console.log(`  [36m·[0m ${e.id}  ${e.pkg}  https://github.com/advisories/${e.id}`);
+    }
+    console.log("    fixed (a version in the tree), or withdrawn (the advisory page says so, or");
+    console.log(`    gh api /advisories/<id> -q .withdrawn_at)? The removal commit names which.`);
     console.log("");
   }
 
