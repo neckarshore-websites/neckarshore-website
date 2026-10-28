@@ -211,3 +211,25 @@ body {
 .dark .prose-content td:first-child {
   color: var(--color-text-primary);
 }
+
+/* 404 — "Neckar-Kilometer 404" (src/app/not-found.tsx). The water drifts by one wave length
+   (80 units: two 40-unit halves of the path), so the loop has no visible seam. The reduced-motion
+   rule at the top of this file stops it. */
+.neckar-welle {
+  animation: neckar-drift 6s linear infinite;
+}
+.neckar-welle-2 {
+  animation-duration: 8s;
+  animation-direction: reverse;
+}
+.neckar-welle-3 {
+  animation-duration: 11s;
+}
+@keyframes neckar-drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(80px);
+  }
+}
