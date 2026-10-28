@@ -67,7 +67,7 @@ export default function NotFound() {
       >
         <KilometerTafel />
         <h1 className="mt-8 font-heading text-[1.75rem] leading-tight font-bold sm:text-4xl text-primary md:text-5xl dark:text-text-primary">
-          <span className="block whitespace-nowrap">Neckar-Kilometer 404</span>
+          <span className="block">Neckar-Kilometer{"\u00a0"}404</span>
           <span className="block">gibt es nicht.</span>
         </h1>
         <p className="mt-4 max-w-md text-lg leading-relaxed text-muted dark:text-text-secondary">

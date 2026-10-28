@@ -213,8 +213,9 @@ body {
 }
 
 /* 404 — "Neckar-Kilometer 404" (src/app/not-found.tsx). The water drifts by one wave length
-   (80 units: two 40-unit halves of the path), so the loop has no visible seam. The reduced-motion
-   rule at the top of this file stops it. */
+   (80 units: two 40-unit halves of the path), so the loop has no visible seam. Under reduced
+   motion it is switched off here: the global rule only shortens the duration, and an infinite
+   loop at 0.01ms jitters instead of standing still (CodeRabbit on #332). */
 .neckar-welle {
   animation: neckar-drift 6s linear infinite;
 }
@@ -231,5 +232,10 @@ body {
   }
   to {
     transform: translateX(80px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .neckar-welle {
+    animation: none !important;
   }
 }
