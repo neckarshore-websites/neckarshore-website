@@ -36,6 +36,20 @@ test.describe("Responsive", () => {
       } else {
         await expect(page.locator('nav a[href="/#services"]')).toBeVisible();
       }
+      // The logo's wordmark must not run under the first header button. Measured on
+      // the ink (widest descendant), not the link box: at 320px the link box shrank to
+      // 178px while the wordmark kept drawing to 193px, under the search button.
+      const gap = await page.evaluate(() => {
+        const logo = document.querySelector('nav a[aria-label="neckarshore.ai Home"]')!;
+        const ink = Math.max(
+          logo.getBoundingClientRect().right,
+          ...[...logo.querySelectorAll("*")].map((e) => e.getBoundingClientRect().right),
+        );
+        const search = [...document.querySelectorAll('nav button[aria-label="Suche öffnen"]')]
+          .find((e) => e.getBoundingClientRect().width > 0)!;
+        return search.getBoundingClientRect().left - ink;
+      });
+      expect(gap, `Logo runs ${-gap}px under the search button at ${vp.width}px`).toBeGreaterThanOrEqual(0);
     });
   }
 });

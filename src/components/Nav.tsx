@@ -153,8 +153,11 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
       )}
 
       <div className="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-3 md:px-6">
-        <Link href="/" className="flex items-center gap-2" aria-label="neckarshore.ai Home">
-          <Logo size="text-xl" className="text-primary/70 dark:text-text-secondary" />
+        {/* Below 360px the logo is one step smaller and the buttons sit closer: at 320px
+            logo (177px) + buttons (126px) did not fit the 288px row and the wordmark ran
+            15px under the search button (TC-RES-016). From 360px nothing changes. */}
+        <Link href="/" className="flex shrink-0 items-center gap-2" aria-label="neckarshore.ai Home">
+          <Logo size="text-lg min-[360px]:text-xl" className="text-primary/70 dark:text-text-secondary" />
         </Link>
 
         {/* Desktop nav — shown from lg (1024px). Below that the hamburger handles it:
@@ -196,7 +199,7 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
         </div>
 
         {/* Mobile + tablet-portrait (< lg): search + theme toggle + hamburger */}
-        <div className="flex items-center gap-2 lg:hidden">
+        <div className="flex items-center gap-1 min-[360px]:gap-2 lg:hidden">
           <SearchButton />
           <ThemeToggle />
           <button
