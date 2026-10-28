@@ -1,9 +1,9 @@
 {
   "byType": {
-    "e2e": 1052,
-    "integration": 1034,
+    "e2e": 1054,
+    "integration": 1156,
     "smoke": 1,
-    "unit": 3595
+    "unit": 3574
   },
   "endpoints": 96,
   "expected": 18,
@@ -13,14 +13,14 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 953,
-        "unit": 105
+        "integration": 1075,
+        "unit": 55
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 1058
+      "total": 1130
     },
     {
       "audited_sha": "7dbd5a1394e94b36ae3c018b42364c842742d6ed",
@@ -57,7 +57,7 @@
       "total": 241
     },
     {
-      "audited_sha": "e4bbc5ebaea0301e577494d8d0b1b7f70c1d315d",
+      "audited_sha": "07476dd59897e7e402c1036d1f10c1c0d152c907",
       "byType": {
         "e2e": 74,
         "unit": 274
@@ -81,13 +81,13 @@
       "audited_sha": null,
       "byType": {
         "integration": 37,
-        "unit": 910
+        "unit": 932
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 947
+      "total": 969
     },
     {
       "audited_sha": "4856af11a8a2c1728ed602843cd8dce51108a743",
@@ -111,7 +111,7 @@
       "total": 214
     },
     {
-      "audited_sha": "1e1580ddacb12ddf702d5ea4821b363f57ba43f5",
+      "audited_sha": "3d910a65b8c0e10cc5f62b357fd3f12536704030",
       "byType": {
         "e2e": 24,
         "unit": 138
@@ -122,7 +122,7 @@
       "total": 162
     },
     {
-      "audited_sha": "bbab890c7060638d8b96652706c72b5f9b0bf492",
+      "audited_sha": "3d8a3b74804ca14cd0b973950cf818b2e184976f",
       "byType": {
         "e2e": 3,
         "unit": 6
@@ -133,18 +133,18 @@
       "total": 9
     },
     {
-      "audited_sha": "a8df3392e65bee911e20392b0c9bf935dbe4d0f5",
+      "audited_sha": "d550bb4b84144b34dcaaca0f0ba6197d9c8cb45e",
       "byType": {
-        "e2e": 507,
-        "unit": 297
+        "e2e": 508,
+        "unit": 299
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/neckarshore-website",
-      "total": 804
+      "total": 807
     },
     {
-      "audited_sha": "49a88436902e3d409406d231c0b3553689b20720",
+      "audited_sha": "29030c6ed1b62ab4ea1fc7b6d1727fc8c68dbdab",
       "byType": {
         "e2e": 54,
         "unit": 105
@@ -155,26 +155,26 @@
       "total": 159
     },
     {
-      "audited_sha": "b7bc4dc2acae93ec2de7ee72e3ae431b4e6ae4b2",
+      "audited_sha": "690d1b5a65477d1bacf6099b5cdc7d29f0a28fd3",
       "byType": {
-        "e2e": 34,
+        "e2e": 35,
         "unit": 46
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/rauhut-website",
-      "total": 80
+      "total": 81
     },
     {
       "audited_sha": null,
       "byType": {
-        "unit": 44
+        "unit": 49
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 44
+      "total": 49
     },
     {
       "audited_sha": null,
@@ -254,7 +254,7 @@
   ],
   "reporting": 18,
   "repos": 22,
-  "total": 5935,
+  "total": 6038,
   "untyped_total": 253,
-  "updatedAt": "2026-10-21T09:02:59Z"
+  "updatedAt": "2026-10-28T21:20:30Z"
 }
