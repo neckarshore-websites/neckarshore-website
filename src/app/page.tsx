@@ -381,7 +381,8 @@ export default function Home() {
         <section id="cta" className="bg-neutral-light px-4 py-20 md:px-6 md:py-24 dark:bg-deep-space">
           <div className="mx-auto max-w-[700px] text-center">
             <h2 className="font-heading text-3xl font-semibold tracking-tight text-primary md:text-4xl dark:text-text-primary">
-              Bereit, näher zusammenzuarbeiten?
+              {/* Soft hyphen: at 320px the word is wider than the column (10px sideways scroll). */}
+              Bereit, näher zusammen­zuarbeiten?
             </h2>
             <p className="mt-6 text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
               30 Minuten Kennenlerntermin — wir reden über euer Projekt, nicht über unsere Folien.

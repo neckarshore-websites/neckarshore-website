@@ -3,6 +3,7 @@ import { PAGES, VIEWPORTS } from "./helpers";
 
 // Hardcoded stable IDs — 4 tests per viewport (3 overflow + 1 nav)
 const IDS: Record<string, [string, string, string, string]> = {
+  "Small phone":    ["TC-RES-013", "TC-RES-014", "TC-RES-015", "TC-RES-016"],
   "iPhone 15 Pro":  ["TC-RES-001", "TC-RES-002", "TC-RES-003", "TC-RES-004"],
   "iPhone 14 Plus": ["TC-RES-005", "TC-RES-006", "TC-RES-007", "TC-RES-008"],
   "iPad Mini":      ["TC-RES-009", "TC-RES-010", "TC-RES-011", "TC-RES-012"],

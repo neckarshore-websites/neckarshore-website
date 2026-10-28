@@ -46,7 +46,7 @@ export default function Datenschutz() {
     <>
       <Nav showOssLaunch={showOssLaunch} />
       <PageSchema path="/datenschutz" name="Datenschutzerklärung — neckarshore.ai" />
-      <main className="mx-auto max-w-[800px] px-4 pt-40 pb-20 md:px-6">
+      <main className="mx-auto max-w-[800px] break-words px-4 pt-40 pb-20 md:px-6">
         <h1 className="font-heading text-3xl font-bold text-accent md:text-5xl">Datenschutzerklärung</h1>
         <p className="mt-2 text-sm text-muted dark:text-text-tertiary">Stand: Juli 2026</p>
 
