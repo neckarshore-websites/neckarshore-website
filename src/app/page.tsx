@@ -1,3 +1,4 @@
+import NeckarLinie from "@/components/NeckarLinie";
 import fs from "fs";
 import path from "path";
 import {
@@ -103,7 +104,9 @@ export default function Home() {
       <main>
         {/* ===== HERO ===== */}
         <section className="relative overflow-hidden bg-neutral-light px-4 pt-40 pb-20 md:px-6 md:pt-44 md:pb-24 dark:bg-deep-space">
-          <div className="mx-auto max-w-[1200px]">
+          {/* The Neckar line (Founder 2026-10-17) — behind the copy, which is `relative` below. */}
+          <NeckarLinie />
+          <div className="relative z-[2] mx-auto max-w-[1200px]">
             <h1 className="font-heading text-4xl font-bold leading-[1.1] tracking-tight text-primary md:text-[56px] dark:text-text-primary">
               Software Development.
               <br />
