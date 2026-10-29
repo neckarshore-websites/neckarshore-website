@@ -379,12 +379,36 @@ export const cards = [
     label: "Product OG — imap-mailbox-cleanup",
     dest: "public/og/imap-mailbox-cleanup.jpg",
     width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
-    headline: "Mailbox", headlineAccent: "Cleanup.", accentInline: true,
-    tagline: "Hybrid aus CLI und Claude-Skill für die IMAP-Postfach-Triage. Räumt überfüllte Postfächer auf — dry-run by default, soft-delete, audit-logged. Erprobt: 7.982 → 690 Mails ohne Verlust.",
+    headline: "Mailbox", headlineAccent: "Autopilot.", accentInline: true,
+    tagline: "Hybrid aus CLI und Claude-Skill für IMAP-Postfächer. Räumt auf und entwirft Antworten — dry-run by default, soft-delete, sendet nie. Erprobt: 7.982 → 690 Mails ohne Verlust.",
     chips: [
       { text: "CLI + Claude Skill", variant: "dot" },
       { text: "Dry-run", variant: "plain" },
       { text: "MIT / Open Source", variant: "accent" },
+    ],
+  },
+  {
+    label: "Product OG — paperless-autopilot",
+    dest: "public/og/paperless-autopilot.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "Paperless", headlineAccent: "Autopilot.", accentInline: true,
+    tagline: "Claude-Skills für Paperless-ngx. Ordnen Dokumente, stellen Auswertungen zusammen und führen offene Rechnungen — es schlägt vor, du entscheidest.",
+    chips: [
+      { text: "Claude Skills", variant: "dot" },
+      { text: "Paperless-ngx", variant: "plain" },
+      { text: "Beta", variant: "accent" },
+    ],
+  },
+  {
+    label: "Product OG — photo-autopilot",
+    dest: "public/og/photo-autopilot.jpg",
+    width: 1200, height: 630, padding: 72, maxKB: 200, taglineSize: 27,
+    headline: "Photo", headlineAccent: "Autopilot.", accentInline: true,
+    tagline: "Claude-Skill für die lokale Fotobibliothek. Findet doppelte und fast gleiche Fotos und legt sie zur Prüfung vor — gelöscht wird nie.",
+    chips: [
+      { text: "Claude Skill", variant: "dot" },
+      { text: "Lokal", variant: "plain" },
+      { text: "In Entwicklung", variant: "accent" },
     ],
   },
   {

@@ -256,6 +256,9 @@ test.describe("SEO Basics", () => {
     // iPhone apps, indexable since 2026-10-15 (Founder) — appended so earlier IDs stay put.
     "kaze",
     "musclecat",
+    // Skill detail pages, Founder order 2026-10-29 — appended so earlier IDs stay put.
+    "paperless-autopilot",
+    "photo-autopilot",
   ];
 
   for (const [i, slug] of PRODUCT_OG_SLUGS.entries()) {
@@ -299,6 +302,8 @@ test.describe("SEO Basics", () => {
     "/products/ai-phrase-check",
     "/products/social-scrapers",
     "/products/imap-mailbox-cleanup",
+    "/products/paperless-autopilot",
+    "/products/photo-autopilot",
     "/products/restaurant-menu-update",
     "/products/kaze",
     "/products/musclecat",

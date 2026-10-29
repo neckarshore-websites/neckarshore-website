@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
 import SubPortal from "@/components/SubPortal";
-import { SkillCard } from "@/components/SkillCard";
-import { ProductCard } from "@/components/ProductCard";
 import { pageMetadata } from "@/lib/seo";
-import {
-  PORTFOLIO,
-  categoryMetaTitle,
-  groupItemsByStatus,
-} from "@/lib/portfolio";
+import { PORTFOLIO, categoryMetaTitle } from "@/lib/portfolio";
 import { SKILL_CARDS } from "@/lib/skill-cards";
 
 const category = PORTFOLIO.find((c) => c.id === "skills")!;
@@ -20,45 +14,31 @@ export const metadata: Metadata = pageMetadata({
   path: category.href,
 });
 
-/**
- * A skill links to its detail page once one EXISTS — keyed on `hasOwnPage`, NOT on
- * `noindex`. The two are decoupled: `hasOwnPage` = "a real bespoke page exists → link
- * to it"; `noindex` = "held out of robots/sitemap". A private skill (restaurant-menu-
- * update) has a page AND stays noindex, so it must still link off-page, not to an anchor.
- * Any future skeleton skill without a page falls back to the in-page card anchor (`#slug`).
- */
-function detailHrefFor(
-  item: (typeof category.items)[number],
-): string | undefined {
-  return !item.isExternal && item.hasOwnPage ? item.href : undefined;
-}
-
-// On-page overview: name + the one problem it solves + code visibility + status. The
-// Tool name links to the detail page when one exists ("Beides" nav), else jumps to the
-// matching card below. Built from the same PORTFOLIO order + SKILL_CARDS data the cards
-// render from — single source, no drift.
-const overviewRows = category.items.map((item) => {
-  const card = SKILL_CARDS[item.slug];
-  const detail = detailHrefFor(item);
-  return {
-    slug: item.slug,
-    title: card?.title ?? item.name,
-    summary: card?.summary ?? item.tagline,
-    status: card?.badge ?? (card?.footerBadge ? "Referenz" : null),
-    visibility: card?.visibility ?? null,
-    href: detail ?? `#${item.slug}`,
-    hasDetail: Boolean(detail),
-  };
-});
+// On-page overview: name + the one problem it solves + code visibility + status, sorted
+// A→Z by the shown name (Founder 2026-10-29). Every skill has its own detail page, which
+// carries the full card; the overview page itself shows no cards any more (Founder
+// 2026-10-29: "die Kacheln kommen ja noch mal auf der Detailseite").
+const overviewRows = category.items
+  .filter((item) => !item.isExternal)
+  .map((item) => {
+    const card = SKILL_CARDS[item.slug];
+    return {
+      slug: item.slug,
+      title: card?.title ?? item.name,
+      summary: card?.summary ?? item.tagline,
+      status: card?.badge ?? (card?.footerBadge ? "Referenz" : null),
+      visibility: card?.visibility ?? null,
+      href: item.href,
+    };
+  })
+  .sort((a, b) => a.title.localeCompare(b.title, "de", { sensitivity: "base" }));
 
 export default function SkillsPage() {
   return (
     <SubPortal category={category} description={description} wide>
-      {/* Overview table — Tool name → detail page (when one exists) or jumps to the
-          matching card below. Spans the full content width (= the two-card grid).
-          On phones (<sm) the two narrow pill columns (Code, Status) hide so the wide
-          "Löst" description keeps the rows short instead of wrapping to ~8 lines in a
-          starved column; the Public/Beta pills stay visible on each rich card below. */}
+      {/* Overview table — Tool name → detail page. On phones (<sm) the two narrow pill
+          columns (Code, Status) hide so the wide "Löst" description keeps the rows short;
+          the pills stay visible on each detail page's card. */}
       <section aria-labelledby="skills-overview-heading" className="mt-10">
         <h2
           id="skills-overview-heading"
@@ -106,11 +86,7 @@ export default function SkillsPage() {
                     <a
                       href={row.href}
                       className="font-medium text-accent underline-offset-2 hover:underline dark:text-accent-bright"
-                      data-track={
-                        row.hasDetail
-                          ? `skills_detail_${row.slug}`
-                          : `skills_jump_${row.slug}`
-                      }
+                      data-track={`skills_detail_${row.slug}`}
                     >
                       {row.title}
                     </a>
@@ -143,47 +119,36 @@ export default function SkillsPage() {
             </tbody>
           </table>
         </div>
-      </section>
-
-      {/* Rich skill cards (one per portfolio item, in portfolio order). Heading level
-          h2 — directly under the page h1, no skip. id = portfolio slug so the overview
-          table bookmarks land on the matching card. `detailHref` lights up the title
-          link + "Mehr erfahren →" CTA for skills with a real detail page. Falls back to
-          the plain ProductCard for any item that has no rich card data yet.
-
-          Grid breakpoint is lg (1024px), NOT md: at tablet-portrait width (768px) two
-          rich cards get cramped, so we stay single-column there (full-width, readable)
-          and only split into two columns at tablet-landscape / desktop. */}
-      {/* Live first under a sub-header, in-development below — each A→Z (2026-08-06). */}
-      {groupItemsByStatus(category.items).map((group, idx, groups) => (
-        <div key={group.label}>
-          {groups.length > 1 && (
-            <p
-              className={`${idx === 0 ? "mt-8" : "mt-10"} text-xs font-semibold uppercase tracking-wider text-muted dark:text-text-tertiary`}
-            >
-              {group.label}
-            </p>
-          )}
-          <div
-            className={`${groups.length > 1 ? "mt-3" : "mt-8"} grid gap-6 lg:grid-cols-2`}
+        {/* Install path for the public plugins (2026-10-29). Marketplace name and plugin names
+            measured from neckarshore-plugins/.claude-plugin/marketplace.json (name
+            "neckarshore-ai"). Adding the marketplace does not install anything (CodeRabbit on
+            #337), so the install lines are shown too. */}
+        <p className="mt-4 text-sm leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
+          Obsidian Vault Autopilot und Mailbox Autopilot installierst du in Claude Code über
+          unseren Plugin-Marketplace (
+          <a
+            href="https://github.com/neckarshore-skills/neckarshore-plugins"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-accent-hover dark:hover:text-accent-bright"
+            data-track="oss_plugin_marketplace"
           >
-            {group.items.map((item) => {
-              const card = SKILL_CARDS[item.slug];
-              return card ? (
-                <SkillCard
-                  key={item.slug}
-                  card={card}
-                  headingLevel="h2"
-                  id={item.slug}
-                  detailHref={detailHrefFor(item)}
-                />
-              ) : (
-                <ProductCard key={item.slug} item={item} headingLevel="h2" />
-              );
-            })}
-          </div>
-        </div>
-      ))}
+            Marketplace auf GitHub
+          </a>
+          ). Erst den Marketplace hinzufügen, dann das gewünschte Plugin installieren:
+        </p>
+        {/* Own lines, so a command never breaks mid-word on desktop; on a 320px phone it may
+            still wrap, and overflow-wrap:anywhere keeps it inside the gutter. */}
+        <pre className="mt-2 w-fit max-w-full whitespace-pre-wrap rounded bg-primary/5 px-3 py-2 text-xs font-semibold leading-relaxed text-accent-hover [overflow-wrap:anywhere] dark:bg-text-secondary/10 dark:text-accent-bright">
+          <code>
+            {[
+              "/plugin marketplace add neckarshore-skills/neckarshore-plugins",
+              "/plugin install obsidian-vault-autopilot@neckarshore-ai",
+              "/plugin install mailbox-autopilot@neckarshore-ai",
+            ].join("\n")}
+          </code>
+        </pre>
+      </section>
     </SubPortal>
   );
 }
