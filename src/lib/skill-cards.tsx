@@ -1,4 +1,6 @@
 import {
+  FileText,
+  Images,
   Layers,
   Mail,
   SpellCheck,
@@ -71,7 +73,7 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
     title: "Obsidian Vault Autopilot",
     summary: "Sortiert, benennt und reichert Obsidian-Notizen automatisch an.",
     description:
-      "AI-Vault-Automation für Obsidian × Claude Code. Sortiert die Inbox, benennt Notes um, füllt Frontmatter — vier Skills halten deinen Second Brain im Hintergrund auf Linie.",
+      "AI-Vault-Automation für Obsidian × Claude Code. Sortiert die Inbox, benennt Notes um, füllt Frontmatter — elf Skills, drei davon stabil und acht in Beta, halten deinen Second Brain im Hintergrund auf Linie.",
     capabilities: [
       {
         code: "property-enrich",
@@ -90,7 +92,7 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
         text: "Erzeugt knappe `description`-Frontmatter aus dem Inhalt. Beta — usable today, Polish-Loop läuft.",
       },
     ],
-    moreNote: "… weitere in Entwicklung",
+    moreNote: "… plus sieben weitere Skills in Beta",
     license: "MIT License",
     repoUrl: "https://github.com/neckarshore-skills/obsidian-vault-autopilot",
     track: "oss_vault_autopilot",
@@ -124,8 +126,8 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
       },
     ],
     moreNote: "… weitere in Entwicklung",
-    repoUrl: "https://github.com/neckarshore-skills/obsidian-social-scrapers-common",
-    track: "oss_social_scrapers",
+    // No repoUrl: the bundle repo is private, so a GitHub button 404s for every visitor
+    // (measured 2026-10-29 on the former obsidian-social-scrapers-common link).
     visibility: "private",
   },
 
@@ -133,18 +135,22 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
   "imap-mailbox-cleanup": {
     icon: Mail,
     badge: "Beta",
-    title: "IMAP Mailbox Cleanup",
-    summary: "Regelbasierte IMAP-Postfach-Triage, dry-run by default.",
+    title: "Mailbox Autopilot",
+    summary: "Räumt IMAP-Postfächer auf und entwirft Antworten — sendet nie.",
     description:
-      "Hybrid aus CLI und Claude-Skill für die Triage großer IMAP-Postfächer. Räumt nach klaren Regeln auf — dry-run als Default, jede Aktion audit-logged. Läuft gegen dein eigenes Postfach (IONOS getestet), ohne Cloud-Zwischenstopp.",
+      "Hybrid aus CLI und Claude-Skill für große IMAP-Postfächer. Räumt nach klaren Regeln auf und legt Antwortentwürfe in deinen Entwürfe-Ordner — verschickt wird nichts, das machst du selbst. Dry-run als Default, jede Aktion audit-logged. Mit IONOS getestet, mehrere Konten möglich.",
     capabilities: [
       {
         code: "dry-run",
         text: "Zeigt erst, was passieren würde — nichts wird ohne explizite Bestätigung verschoben oder gelöscht.",
       },
       {
-        code: "rule-triage",
+        code: "cleanup",
         text: "Sortiert, archiviert und löscht nach konfigurierbaren Regeln: Absender, Alter, Betreff, Ordner.",
+      },
+      {
+        code: "manage",
+        text: "Findet Mails, liest sie und schreibt Antwortentwürfe in den Entwürfe-Ordner. Gesendet wird nie — das tust du aus deinem Mailprogramm.",
       },
       {
         code: "audit-log",
@@ -152,11 +158,11 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
       },
       {
         code: "imap-native",
-        text: "Spricht direkt per IMAP mit dem Server (IONOS getestet). Deine Mails verlassen das Postfach nicht.",
+        text: "Spricht direkt per IMAP mit deinem Server, ohne Zwischendienst (IONOS getestet).",
       },
     ],
     license: "MIT License",
-    repoUrl: "https://github.com/neckarshore-skills/imap-mailbox-cleanup",
+    repoUrl: "https://github.com/neckarshore-skills/mailbox-autopilot",
     track: "oss_imap_cleanup",
     visibility: "public",
   },
@@ -193,7 +199,58 @@ export const SKILL_CARDS: Record<string, SkillCardData> = {
     visibility: "public",
   },
 
-  // 5 — NEW. A bespoke client skill from a PRIVATE barter deal → no public repo,
+  // 5 — NEW 2026-10-29. Private repo (v0.4.0 beta, README status line) → no repoUrl, no license.
+  "paperless-autopilot": {
+    icon: FileText,
+    badge: "Beta",
+    title: "Paperless Autopilot",
+    summary: "Ordnet Paperless-ngx-Dokumente, behält offene Rechnungen im Blick.",
+    description:
+      "Claude-Skills für Paperless-ngx. Schlagen für jedes Dokument Titel, Typ, Korrespondent und Tags vor, stellen Auswertungen über viele Dokumente zusammen und führen offene Rechnungen mit Betrag und Fälligkeit. Es schlägt vor, du entscheidest — nichts wird still geschrieben. Die Dokumentinhalte gehen dabei zur Auswertung an die Claude-API.",
+    capabilities: [
+      {
+        code: "paperless-classify",
+        text: "Schlägt Titel, Dokumenttyp, Korrespondent und Tags vor. Dry-run als Default, der vorherige Stand wird fürs Zurückrollen protokolliert.",
+      },
+      {
+        code: "paperless-query",
+        text: "Stellt Dokumente übergreifend zusammen, z. B. alle Steuerunterlagen eines Jahres. Liest nur.",
+      },
+      {
+        code: "paperless-extractor",
+        text: "Schlägt Betrag und Fälligkeit pro Rechnung vor und listet offene Rechnungen mit Summen. Bezahlt markierst du selbst.",
+      },
+    ],
+    visibility: "private",
+  },
+
+  // 6 — NEW 2026-10-29. Private repo, one skill (photo-dedup) → "In Entwicklung".
+  "photo-autopilot": {
+    icon: Images,
+    badge: "In Entwicklung",
+    title: "Photo Autopilot",
+    summary: "Findet doppelte Fotos in deiner lokalen Bibliothek.",
+    description:
+      "Claude-Skill für die lokale Fotobibliothek. Findet doppelte und fast gleiche Fotos und legt sie dir zur Prüfung vor. Suchen und Handeln sind zwei getrennte Programme: Der Scan liest nur, die Aktion verschiebt nur in einen Quarantäne-Ordner. Einen Lösch-Pfad gibt es nicht.",
+    capabilities: [
+      {
+        code: "photo-dedup",
+        text: "Findet Duplikate und Beinahe-Duplikate in einem lokalen Ordner und listet sie zur Prüfung.",
+      },
+      {
+        code: "read-only-scan",
+        text: "Die Suche liest die Bibliothek nur — sie verändert keine einzige Datei.",
+      },
+      {
+        code: "quarantine",
+        text: "Aussortiertes wird in einen Quarantäne-Ordner verschoben, nie gelöscht. Ein Test stellt sicher, dass es keinen Lösch-Code gibt.",
+      },
+    ],
+    moreNote: "… weitere Skills in Entwicklung",
+    visibility: "private",
+  },
+
+  // 7 — NEW. A bespoke client skill from a PRIVATE barter deal → no public repo,
   // client name genericized ("Restaurant-Menüpflege"). Shown as a reference example,
   // not a downloadable OSS tool. If it later lands in a neckarshore-skills repo, set
   // repoUrl + license, flip visibility → "public" and drop footerBadge.

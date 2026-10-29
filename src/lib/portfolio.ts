@@ -340,7 +340,9 @@ export const PORTFOLIO: PortfolioCategory[] = [
     navLabel: "Skills",
     href: "/products/skills",
     track: "nav_products_skills",
-    // Featured Top-3 (Obsidian Vault Autopilot · Social Scrapers · IMAP Mailbox Cleanup) lead; remainder A→Z.
+    // Featured Top-3 (Obsidian Vault Autopilot · Social Scrapers · Mailbox Autopilot) lead; remainder A→Z.
+    // The Mailbox Autopilot keeps its old slug/URL (imap-mailbox-cleanup): the repo was renamed,
+    // the indexed page address stays.
     items: [
       {
         name: "Obsidian Vault Autopilot",
@@ -376,10 +378,10 @@ export const PORTFOLIO: PortfolioCategory[] = [
         hasOwnPage: true,
       },
       {
-        name: "IMAP Mailbox Cleanup",
+        name: "Mailbox Autopilot",
         slug: "imap-mailbox-cleanup",
         tagline:
-          "Hybrid CLI + Claude-Skill für IONOS-IMAP-Postfach-Triage — dry-run by default, audit-logged.",
+          "Hybrid CLI + Claude-Skill: räumt IMAP-Postfächer auf und entwirft Antworten — dry-run by default, sendet nie.",
         status: "preview",
         featured: true,
         href: "/products/imap-mailbox-cleanup",
@@ -405,6 +407,32 @@ export const PORTFOLIO: PortfolioCategory[] = [
         // [slug] skeleton route, enters the sitemap. Real public MIT OSS skill (like OVA), so
         // NOT noindex; the page emits SoftwareApplication (real url + free Offer) + FAQPage.
         hasOwnPage: true,
+      },
+      {
+        name: "Paperless Autopilot",
+        slug: "paperless-autopilot",
+        tagline:
+          "Claude-Skills für Paperless-ngx — ordnen Dokumente, werten aus und führen offene Rechnungen.",
+        status: "preview",
+        isExternal: false,
+        href: "/products/paperless-autopilot",
+        schemaType: "SoftwareApplication",
+        applicationCategory: "UtilitiesApplication",
+        // No own page yet → the skills overview links the in-page card (#slug). Private repo:
+        // the [slug] skeleton stays noindex (out of sitemap and llms.txt) until a real page lands.
+        noindex: true,
+      },
+      {
+        name: "Photo Autopilot",
+        slug: "photo-autopilot",
+        tagline: "Claude-Skill, der doppelte Fotos in einer lokalen Bibliothek findet.",
+        status: "preview",
+        isExternal: false,
+        href: "/products/photo-autopilot",
+        schemaType: "SoftwareApplication",
+        applicationCategory: "UtilitiesApplication",
+        // Same as Paperless Autopilot: private repo, card anchor only, noindex skeleton.
+        noindex: true,
       },
       {
         name: "Restaurant-Menüpflege",

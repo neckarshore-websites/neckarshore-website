@@ -253,7 +253,7 @@ const NEW_PAGES = [
   },
   {
     path: "/products/imap-mailbox-cleanup",
-    title: "IMAP Mailbox Cleanup",
+    title: "Mailbox Autopilot",
     canonical: "https://neckarshore.ai/products/imap-mailbox-cleanup",
   },
   {
@@ -322,20 +322,20 @@ test.describe("Skills on-page overview table @content", () => {
     await page.goto("/products/skills");
     const table = page.getByRole("table");
     await expect(table).toBeVisible();
-    // 5 portfolio skills → 5 body rows + 1 header row
-    await expect(table.getByRole("row")).toHaveCount(6);
+    // 7 portfolio skills → 7 body rows + 1 header row
+    await expect(table.getByRole("row")).toHaveCount(8);
   });
 
-  test("TC-CNT-033: every overview-table link is a detail-page route (all skills have graduated)", async ({
+  test("TC-CNT-033: overview-table links go to a detail page, or to the card when there is none", async ({
     page,
   }) => {
     await page.goto("/products/skills");
-    // One Tool link per skill row. Every skill now has a bespoke detail page, so each link
-    // points off-page to /products/<slug> — no in-page (#slug) bookmark fallbacks remain. (The
-    // #slug fallback stays in the code for any FUTURE skeleton skill; today there are none.)
+    // One Tool link per skill row. Five skills have a bespoke detail page (/products/<slug>);
+    // Paperless Autopilot and Photo Autopilot (added 2026-10-29, private repos) have none yet,
+    // so their rows jump to the matching card on the same page (#slug), which must exist.
     const links = page.locator("table tbody a");
     const n = await links.count();
-    expect(n).toBe(5);
+    expect(n).toBe(7);
     let anchors = 0;
     for (let i = 0; i < n; i++) {
       const href = await links.nth(i).getAttribute("href");
@@ -347,8 +347,7 @@ test.describe("Skills on-page overview table @content", () => {
         expect(href).toMatch(/^\/products\/[a-z0-9-]+$/);
       }
     }
-    // All skills have graduated to detail pages → zero in-page bookmarks.
-    expect(anchors).toBe(0);
+    expect(anchors, "exactly the two skills without a detail page jump in-page").toBe(2);
   });
 
   test("TC-CNT-034: a Tool link navigates to its product detail page", async ({ page }) => {

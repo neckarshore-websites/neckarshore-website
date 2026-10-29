@@ -44,7 +44,7 @@ export function SkillCard({
   const clickable = !!detailHref;
   const pill = card.badge ?? card.footerBadge;
 
-  const cardClass = `flex flex-col rounded-xl border border-primary/10 bg-white p-8 shadow-sm dark:border-text-secondary/10 dark:bg-surface${
+  const cardClass = `flex flex-col rounded-xl border border-primary/10 bg-white p-6 shadow-sm sm:p-8 dark:border-text-secondary/10 dark:bg-surface${
     clickable ? " group relative transition-all hover:border-accent/30 hover:shadow-md" : ""
   }`;
   const stretchedLink = "after:absolute after:inset-0 after:content-['']";

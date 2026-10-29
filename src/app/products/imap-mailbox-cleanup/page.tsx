@@ -4,18 +4,18 @@ import { pageMetadata } from "@/lib/seo";
 import { productOgImage } from "@/lib/product-og";
 import { entityId } from "@/lib/schema/webpage";
 
-const REPO = "https://github.com/neckarshore-skills/imap-mailbox-cleanup";
+const REPO = "https://github.com/neckarshore-skills/mailbox-autopilot";
 
 const DEFINITION =
-  "IMAP Mailbox Cleanup ist ein kostenloser Open-Source-Hybrid aus CLI und Claude-Skill, der ein großes IMAP-Postfach nach klaren Regeln aufräumt — Dry-run als Default, jede Aktion audit-logged, ausschließlich Soft-Delete. MIT-lizenziert.";
+  "Mailbox Autopilot ist ein kostenloser Open-Source-Hybrid aus CLI und Claude-Skill, der ein großes IMAP-Postfach nach klaren Regeln aufräumt — Dry-run als Default, jede Aktion audit-logged, ausschließlich Soft-Delete. MIT-lizenziert.";
 
 // Short SERP pitch (≤155, audit P2-2). DEFINITION stays long for the SoftwareApplication schema
 // description (GEO citation surface). AI-draft → Rauhut-edit.
 const META_DESCRIPTION =
-  "IMAP Mailbox Cleanup räumt große Postfächer regelbasiert auf — Dry-run als Default, jede Aktion audit-logged, nur Soft-Delete. Open Source, MIT-lizenziert.";
+  "Mailbox Autopilot räumt große Postfächer regelbasiert auf — Dry-run als Default, jede Aktion audit-logged, nur Soft-Delete. Open Source, MIT-lizenziert.";
 
 export const metadata: Metadata = pageMetadata({
-  title: "IMAP Mailbox Cleanup — regelbasierte Postfach-Triage | neckarshore.ai",
+  title: "Mailbox Autopilot — regelbasierte Postfach-Triage | neckarshore.ai",
   description: META_DESCRIPTION,
   path: "/products/imap-mailbox-cleanup",
   image: productOgImage("imap-mailbox-cleanup"),
@@ -46,7 +46,7 @@ const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "@id": entityId("/products/imap-mailbox-cleanup", "software"),
-  name: "IMAP Mailbox Cleanup",
+  name: "Mailbox Autopilot",
   description: DEFINITION,
   applicationCategory: "UtilitiesApplication",
   operatingSystem: "macOS, Linux",
@@ -60,7 +60,7 @@ const softwareSchema = {
 
 const faqItems = [
   {
-    q: "Was ist IMAP Mailbox Cleanup?",
+    q: "Was ist Mailbox Autopilot?",
     a: "Ein Hybrid aus Kommandozeilen-Tool und Claude-Code-Skill, der ein IMAP-Postfach nach konfigurierbaren Regeln triagiert und aufräumt. Die CLI macht die Arbeit (zustandslos, testbar), der Skill führt dich konversationell durch Discovery, Vorschau und Anwendung. Open Source unter MIT-Lizenz.",
   },
   {
@@ -80,10 +80,10 @@ const faqItems = [
 export default function ImapMailboxCleanupPage() {
   return (
     <SkillDetailPage slug="imap-mailbox-cleanup" softwareSchema={softwareSchema} faqItems={faqItems}>
-      <SkillSection heading="Was ist IMAP Mailbox Cleanup?" className="">
+      <SkillSection heading="Was ist Mailbox Autopilot?" className="">
         <p className="mt-3 text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
           Ein über Jahre gewachsenes Postfach lässt sich nicht in einer Sitzung von Hand bändigen.
-          IMAP Mailbox Cleanup macht die Triage zu einem regelbasierten, nachvollziehbaren Vorgang:
+          Mailbox Autopilot macht die Triage zu einem regelbasierten, nachvollziehbaren Vorgang:
           Du beschreibst, was weg soll — nach Absender, Alter, Betreff oder Ordner — und das Tool
           zeigt erst, was passieren würde, bevor irgendetwas bewegt wird. In einer realen Sitzung
           schrumpfte ein IONOS-Postfach so von 7.982 auf 690 Nachrichten (−91 %), ohne dass etwas

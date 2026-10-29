@@ -18,12 +18,12 @@ const REPO = "https://github.com/neckarshore-skills/obsidian-vault-autopilot";
 const card = SKILL_CARDS["obsidian-vault-autopilot"];
 
 const DEFINITION =
-  "Obsidian Vault Autopilot ist eine kostenlose Open-Source-Automatisierung für Obsidian-Vaults: vier Claude-Code-Skills sortieren die Inbox, benennen Notizen um und pflegen die Frontmatter — sicher by Design, MIT-lizenziert.";
+  "Obsidian Vault Autopilot ist eine kostenlose Open-Source-Automatisierung für Obsidian-Vaults: elf Claude-Code-Skills sortieren die Inbox, benennen Notizen um und pflegen die Frontmatter — sicher by Design, MIT-lizenziert.";
 
 // Short SERP pitch (≤155, audit P2-2). DEFINITION stays long for the SoftwareApplication schema
 // description (GEO citation surface). AI-draft → Rauhut-edit.
 const META_DESCRIPTION =
-  "Obsidian Vault Autopilot sortiert, benennt und taggt Notizen in Obsidian-Vaults automatisch — vier Claude-Code-Skills, sicher by Design. Open Source, MIT.";
+  "Obsidian Vault Autopilot sortiert, benennt und taggt Notizen in Obsidian-Vaults automatisch — elf Claude-Code-Skills, sicher by Design. Open Source, MIT.";
 
 export const metadata: Metadata = pageMetadata({
   title: "Obsidian Vault Autopilot — Open-Source-Automation | neckarshore.ai",
@@ -69,11 +69,11 @@ const safety = [
 const faqItems = [
   {
     q: "Was ist Obsidian Vault Autopilot?",
-    a: "Eine kostenlose Open-Source-Automatisierung für Obsidian-Vaults, die als Claude-Code-Plugin läuft. Vier Skills sortieren die Inbox, benennen Notizen um, füllen Frontmatter-Metadaten und schreiben Kurzbeschreibungen — automatisch im Hintergrund. MIT-lizenziert.",
+    a: "Eine kostenlose Open-Source-Automatisierung für Obsidian-Vaults, die als Claude-Code-Plugin läuft. Elf Skills sortieren die Inbox, benennen Notizen um, füllen Frontmatter-Metadaten und schreiben Kurzbeschreibungen — automatisch im Hintergrund. MIT-lizenziert.",
   },
   {
     q: "Welche Skills sind enthalten?",
-    a: "Vier Skills: inbox-sort (Inbox in Unterordner sortieren), note-rename (umbenennen und alle Backlinks fixen), property-enrich (fehlende Metadaten füllen) und property-describe (Beschreibung aus dem Inhalt erzeugen, Beta). Weitere Skills wie note-quality-check und tag-manage sind auf der Roadmap.",
+    a: "Elf Skills. Die vier Kern-Skills: inbox-sort (Inbox in Unterordner sortieren), note-rename (umbenennen und alle Backlinks fixen), property-enrich (fehlende Metadaten füllen) und property-describe (Beschreibung aus dem Inhalt erzeugen, Beta). Dazu kommen sieben weitere in Beta, darunter note-quality-check und tag-manage. Stabil sind inbox-sort, note-rename und property-enrich, die übrigen acht sind Beta.",
   },
   {
     q: "Sind meine Daten sicher?",
@@ -141,7 +141,7 @@ export default function ObsidianVaultAutopilotPage() {
             </h2>
             <p className="mt-3 text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
               Obsidian Vault Autopilot ist eine Open-Source-Automatisierung für Obsidian-Vaults, die
-              als Claude-Code-Plugin läuft. Vier Skills übernehmen die lästige Pflegearbeit am Second
+              als Claude-Code-Plugin läuft. Elf Skills übernehmen die lästige Pflegearbeit am Second
               Brain: Sie sortieren die Inbox in die passenden Ordner, benennen schlecht benannte
               Notizen um (und reparieren dabei alle Backlinks), füllen fehlende Frontmatter-Metadaten
               und schreiben knappe Beschreibungen aus dem Inhalt. Du sammelst, findest und denkst — der
@@ -153,7 +153,7 @@ export default function ObsidianVaultAutopilotPage() {
 
           <section className="mt-10">
             <h2 className="font-heading text-2xl font-bold text-primary dark:text-text-primary">
-              Die vier Skills
+              Die vier Kern-Skills
             </h2>
             <div className="mt-5 space-y-3">
               {skills.map((s) => (

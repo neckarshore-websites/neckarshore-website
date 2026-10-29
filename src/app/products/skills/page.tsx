@@ -143,6 +143,27 @@ export default function SkillsPage() {
             </tbody>
           </table>
         </div>
+        {/* Install path for the public plugins (2026-10-29). The marketplace repo is public
+            and lists obsidian-vault-autopilot + mailbox-autopilot (marketplace.json, measured). */}
+        <p className="mt-4 text-sm leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
+          Obsidian Vault Autopilot und Mailbox Autopilot installierst du in Claude Code über
+          unseren Plugin-Marketplace (
+          <a
+            href="https://github.com/neckarshore-skills/neckarshore-plugins"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-accent-hover dark:hover:text-accent-bright"
+            data-track="oss_plugin_marketplace"
+          >
+            Marketplace auf GitHub
+          </a>
+          ):
+        </p>
+        {/* Own line, so the command never breaks mid-word on desktop; on a 320px phone it may
+            still wrap, and overflow-wrap:anywhere keeps it inside the gutter. */}
+        <code className="mt-2 block w-fit max-w-full rounded bg-primary/5 px-2 py-1 text-xs font-semibold text-accent-hover [overflow-wrap:anywhere] dark:bg-text-secondary/10 dark:text-accent-bright">
+          /plugin marketplace add neckarshore-skills/neckarshore-plugins
+        </code>
       </section>
 
       {/* Rich skill cards (one per portfolio item, in portfolio order). Heading level
