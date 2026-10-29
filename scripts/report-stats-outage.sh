@@ -64,7 +64,11 @@ esac
 # Die Ausgabe wird deshalb erst vollstaendig eingesammelt und danach die erste Zeile genommen; sed
 # liest seine Eingabe zu Ende und schliesst die Leitung nicht vorzeitig. (Pruefagenten-Fund nach der
 # Auslieferung von PR #213.)
-REPO_SLUG=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
+# GH_REPO FIRST (planning #3022): the reporter must also run where NO tree is checked out — the
+# case it exists for is a checkout that failed. `gh repo view` with no argument does NOT honour
+# GH_REPO; it asks git and dies outside a repository (measured 2026-10-29: "failed to run git:
+# fatal: not a git repository"). The issue commands below do honour GH_REPO.
+REPO_SLUG="${GH_REPO:-$(gh repo view --json nameWithOwner --jq .nameWithOwner)}"
 TREFFER=$(gh api --paginate "repos/${REPO_SLUG}/issues?state=open&per_page=100" \
   --jq "[.[] | select(.pull_request == null) | select(.title | contains(\"${MARKER}\")) | .number] | first // empty")
 BESTEHEND=$(printf '%s\n' "$TREFFER" | sed -n '1p')
