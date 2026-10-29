@@ -245,7 +245,9 @@ jobs:
           # artifact. Stripping it keeps the served schema unchanged AND keeps per_repo[].repo +
           # missing[] the ONLY slug-bearing fields (TC-CNT-083's privacy scan assumes exactly those
           # two; a third served slug-bearing array would be an unscanned leak vector).
-          ESTATE_OUT=$(echo "$TEST_SCOPE" | jq --arg u "$NOW" 'del(.unstamped) + {updatedAt: $u}')
+          # slug_mismatch[] (2026-10-29) is transient for the same reason: slug-bearing pairs, already
+          # mapped by the withhold, surfaced in the job summary — never persisted to the served file.
+          ESTATE_OUT=$(echo "$TEST_SCOPE" | jq --arg u "$NOW" 'del(.unstamped, .slug_mismatch) + {updatedAt: $u}')
 
           if [ "$REPORTING" -lt "$EXPECTED" ]; then
             echo "WARN: only ${REPORTING}/${EXPECTED} stats producers reported — missing: $(echo "$TEST_SCOPE" | jq -c '.missing')"
@@ -272,6 +274,11 @@ jobs:
                 echo "- ⚠️ un-stamped (audited_sha:null): **${UNSTAMPED_N}**"
                 if [ "${UNSTAMPED_N:-0}" -gt 0 ] 2>/dev/null; then
                   echo "- offending: ${UNSTAMPED_LIST}"
+                fi
+                # slug_mismatch[] is withheld here too (both sides), so the summary may name it.
+                MISMATCH_LIST=$(echo "$TEST_SCOPE" | jq -r '(.slug_mismatch // []) | map("\(.config) → \(.emitted)") | join(", ")' 2>/dev/null || echo "?")
+                if [ -n "$MISMATCH_LIST" ]; then
+                  echo "- ⚠️ config slug ≠ emitted .repo (live-wins used the config slug): ${MISMATCH_LIST}"
                 fi
               } >> "$GITHUB_STEP_SUMMARY"
             fi

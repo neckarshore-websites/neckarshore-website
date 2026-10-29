@@ -261,6 +261,32 @@ test("unstamped[] absent → tolerated (defaults to [])", () => {
   assert.deepEqual(out.unstamped, []);
 });
 
+// --- slug_mismatch[] (aggregator 2026-10-29: {config, emitted} pairs) — BOTH sides mapped ------
+
+test("slug_mismatch[] maps BOTH sides with the 3-way — a private rename never surfaces raw", () => {
+  const out = run(
+    {
+      total: 0,
+      byType: {},
+      per_repo: [],
+      slug_mismatch: [
+        { config: "o/open-old", emitted: "o/open-new" }, // public on both sides → raw slugs
+        { config: "o/secret-old", emitted: "o/secret-new" }, // private → withheld on both sides
+      ],
+    },
+    ["o/open-old", "o/open-new"],
+  );
+  assert.deepEqual(out.slug_mismatch, [
+    { config: "o/open-old", emitted: "o/open-new" },
+    { config: "privates Repo", emitted: "privates Repo" },
+  ]);
+});
+
+test("slug_mismatch[] absent → tolerated (defaults to [])", () => {
+  const out = run({ total: 0, byType: {}, per_repo: [] }, ["o/open"]);
+  assert.deepEqual(out.slug_mismatch, []);
+});
+
 // --- Headline math + honesty invariants -----------------------------------------------------
 
 test("top-level total + byType are never touched (headline math intact)", () => {
