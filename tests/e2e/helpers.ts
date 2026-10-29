@@ -43,6 +43,9 @@ export const ALL_ROUTES: readonly string[] = (() => {
 
 /** Data-driven viewports from StatCounter Germany Feb 2026 */
 export const VIEWPORTS = [
+  // 320px: smallest phone width still in use (iPhone SE 1st gen, small Android). Added 2026-10-28
+  // after the CTA heading overflowed by 10px there and no viewport below 393px was checked.
+  { name: "Small phone", width: 320, height: 568 },
   { name: "iPhone 15 Pro", width: 393, height: 852 },
   { name: "iPhone 14 Plus", width: 414, height: 896 },
   { name: "iPad Mini", width: 768, height: 1024 },
