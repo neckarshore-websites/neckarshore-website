@@ -58,7 +58,9 @@ EXPECTED=$(jq '[.repos[] | select(.statsPath != null)] | length' "$CONFIG")
 
 PER_REPO_FILE=$(mktemp)
 MISSING_FILE=$(mktemp)
-trap 'rm -f "$PER_REPO_FILE" "$MISSING_FILE"' EXIT
+LIVE_SLUG_FILE=$(mktemp)
+MISMATCH_FILE=$(mktemp)
+trap 'rm -f "$PER_REPO_FILE" "$MISSING_FILE" "$LIVE_SLUG_FILE" "$MISMATCH_FILE"' EXIT
 
 while IFS=$'\t' read -r OWNER NAME SLUG; do
   FILE="${STATS_DIR}/${OWNER}__${NAME}.json"
@@ -80,14 +82,28 @@ while IFS=$'\t' read -r OWNER NAME SLUG; do
     lenses: (.tests.lenses // {}),
     endpoints: (.endpoints // 0)
   }' "$FILE" >> "$PER_REPO_FILE"
+
+  # The CONFIG slug is what live-wins matches on (see LIVE_SLUGS below). A producer whose emitted
+  # .repo differs from it (a repo renamed upstream, config not yet followed) is recorded as a pair —
+  # visible, never fatal. An absent .repo is not a mismatch (it falls back to the config slug).
+  printf '%s\n' "$SLUG" >> "$LIVE_SLUG_FILE"
+  jq -c --arg slug "$SLUG" 'select(.repo != null and .repo != $slug) | {config: $slug, emitted: .repo}' \
+    "$FILE" >> "$MISMATCH_FILE"
 done < <(jq -r '.repos[] | select(.statsPath != null) | [.owner, .name, (.owner + "/" + .name)] | @tsv' "$CONFIG")
 
 MISSING_JSON=$(sort "$MISSING_FILE" | jq -R . | jq -s .)
 
 # Floor-seed contribution (backlog #244): seed repos NOT already covered by a live producer.
-# Live wins by `repo` slug → a repo that starts self-reporting drops out of the seed (no
-# double-count). Seed entries carry no byType/endpoints (totals-only floor) and `seeded:true`.
-LIVE_SLUGS=$(jq -s -c '[.[].repo]' "$PER_REPO_FILE")
+# Live wins by slug → a repo that starts self-reporting drops out of the seed (no double-count).
+# Seed entries carry no byType/endpoints (totals-only floor) and `seeded:true`.
+# The match key is the CONFIG slug (owner/name from stats-config.json), NOT the .repo a producer
+# emits. Until 2026-10-29 it was the emitted .repo: imap-mailbox-cleanup was renamed to
+# mailbox-autopilot, its producer emitted the new slug, the seed still carried the old one, and the
+# old seed row (171) survived next to the live row — a double count from 2026-10-06 to 2026-10-29
+# (Lenin report 2026-10-29 e). The config slug is the key the fetch and the seed are both written
+# against; a divergence from the emitted .repo goes to slug_mismatch[] instead of deciding the match.
+LIVE_SLUGS=$(jq -R . "$LIVE_SLUG_FILE" | jq -s -c .)
+SLUG_MISMATCH_JSON=$(jq -s -c 'sort_by(.config)' "$MISMATCH_FILE")
 SEED_FLOOR=false
 SEED_JSON='[]'
 AUDITED_FLOOR='null'
@@ -126,6 +142,7 @@ OUT=$(jq -s -S \
   --argjson seed "$SEED_JSON" \
   --argjson floor "$SEED_FLOOR" \
   --argjson afloor "$AUDITED_FLOOR" \
+  --argjson mismatch "$SLUG_MISMATCH_JSON" \
   '. as $live
   | ($live + $seed) as $merged
   | {
@@ -149,6 +166,10 @@ OUT=$(jq -s -S \
     floor: $floor,
     repos: ($merged | length),
     unstamped: ([$merged[] | select(.audited_sha == null) | .repo] | sort),
+    # Pairs {config, emitted} where a live producer emits a .repo other than its config slug. A
+    # TRANSIENT pipeline field like unstamped[]: slug-bearing, so withhold-private-repos.sh maps
+    # both sides and update-stats.yml strips it from the served artifact.
+    slug_mismatch: $mismatch,
     per_repo: $merged
   }
   | (if $afloor == null then .
@@ -168,6 +189,14 @@ UNSTAMPED_N=$(printf '%s' "$OUT" | jq '.unstamped | length' 2>/dev/null || echo 
 if [ "${UNSTAMPED_N:-0}" -gt 0 ] 2>/dev/null; then
   UNSTAMPED_LIST=$(printf '%s' "$OUT" | jq -r '.unstamped | join(", ")' 2>/dev/null || echo "?")
   echo "WARN: ${UNSTAMPED_N} merged row(s) carry audited_sha:null (un-stamped): ${UNSTAMPED_LIST}" >&2
+fi
+
+# --- slug-mismatch warn: COUNT ONLY. This stderr reaches the public Actions log BEFORE the withhold
+# step, so it must not name a slug (a private repo's rename would leak). The pairs themselves live
+# in the output's slug_mismatch[], which the withhold maps. Fail-OPEN, like the unstamped warn.
+MISMATCH_N=$(printf '%s' "$SLUG_MISMATCH_JSON" | jq 'length' 2>/dev/null || echo 0)
+if [ "${MISMATCH_N:-0}" -gt 0 ] 2>/dev/null; then
+  echo "WARN: ${MISMATCH_N} live producer(s) emit a .repo that differs from their config slug — see slug_mismatch[] (live-wins matched on the config slug)" >&2
 fi
 
 printf '%s\n' "$OUT"

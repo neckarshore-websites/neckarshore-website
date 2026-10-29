@@ -466,3 +466,46 @@ test("EIN GREIFENDER audited_floor HEBT total AN — dann gilt die Zusicherung b
   assert.equal(json.untyped_total, 5, "untyped_total bleibt die ehrliche Saat-Summe, es wird NICHT mitgehoben");
   assert.ok(byTypeSum + json.untyped_total < json.total, "die Differenz ist der Boden, und applied sagt das");
 });
+
+// --- Live-wins matches on the CONFIG slug, not the emitted .repo (2026-10-29) ---
+// The defect this guards: imap-mailbox-cleanup was renamed to mailbox-autopilot, its live producer
+// started emitting the NEW slug while stats-config + seed still carried the OLD one, and live-wins
+// matched on the emitted .repo — so the old seed row (171) survived next to the live row and the
+// public estate number double-counted it for 23 days (Lenin report 2026-10-29 e; MASCHIN's cut on
+// planning PR #3727). The config slug is what both the fetch and the seed are keyed on.
+
+test("live-wins: a live row whose .repo differs from its config slug still drops that config slug's seed row", () => {
+  const { json, status } = runAggregator(
+    [
+      {
+        owner: "o",
+        name: "old",
+        statsPath: "s.json",
+        stats: { repo: "o/new", tests: { total: 1005, byType: { unit: 1005 } } },
+      },
+    ],
+    { floor: true, repos: [{ repo: "o/old", total: 171 }] },
+  );
+  assert.equal(status, 0, "a slug mismatch must never fail the build");
+  assert.equal(json.total, 1005, "the seed row of the config slug is dropped — no double count");
+  assert.equal(json.per_repo.length, 1);
+  assert.ok(!json.per_repo.some((r) => r.seeded), "no seeded row survives next to its live producer");
+  assert.deepEqual(json.slug_mismatch, [{ config: "o/old", emitted: "o/new" }]);
+});
+
+test("slug_mismatch is [] when the emitted .repo equals the config slug or is absent", () => {
+  const { json } = runAggregator([
+    { owner: "o", name: "same", statsPath: "s.json", stats: { repo: "o/same", tests: { total: 3 } } },
+    { owner: "o", name: "bare", statsPath: "s.json", stats: { tests: { total: 4 } } },
+  ]);
+  assert.deepEqual(json.slug_mismatch, []);
+});
+
+test("slug_mismatch WARN on stderr carries a count only, never a slug (the Actions log is public)", () => {
+  const { stderr } = runAggregator([
+    { owner: "o", name: "old", statsPath: "s.json", stats: { repo: "o/secret-new", audited_sha: "abc1234", tests: { total: 1 } } }, // stamped, so the pre-existing unstamped WARN stays silent
+  ]);
+  assert.match(stderr, /1 live producer\(s\) emit a \.repo that differs from their config slug/);
+  assert.ok(!stderr.includes("o/secret-new"), "the emitted slug must not reach the log");
+  assert.ok(!stderr.includes("o/old"), "the config slug must not reach the log");
+});
