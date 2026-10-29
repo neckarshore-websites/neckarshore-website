@@ -107,12 +107,16 @@ export default function Home() {
           {/* The Neckar line (Founder 2026-10-17) — behind the copy, which is `relative` below. */}
           <NeckarLinie />
           <div className="relative z-[2] mx-auto max-w-[1200px]">
-            <h1 className="font-heading text-4xl font-bold leading-[1.1] tracking-tight text-primary md:text-[56px] dark:text-text-primary">
-              Software Development.
-              <br />
-              Closer to Home.
+            {/*
+              VARIANT 2 (proposal A of the optics pilot, not yet decided): the headline larger,
+              tighter and offset, so the type itself becomes part of the picture. Same words;
+              the second line is indented by 0.62em. Size clamps from 40 px on phones to 96 px.
+            */}
+            <h1 className="max-w-[13.5ch] font-heading text-[clamp(40px,7.4vw,96px)] font-bold leading-[0.98] tracking-[-0.035em] text-primary dark:text-text-primary">
+              Software Development.{" "}
+              <span className="block pl-[0.62em]">Closer to Home.</span>
             </h1>
-            <p className="mt-3 text-sm font-medium text-muted dark:text-text-tertiary">
+            <p className="mt-6 text-sm font-medium text-muted dark:text-text-tertiary">
               <strong>Neckarshore AI</strong> — KI-beschleunigte Nearshore-Softwareentwicklung aus Stuttgart.
             </p>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-neutral-dark/80 md:text-xl dark:text-text-secondary">
