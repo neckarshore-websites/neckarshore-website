@@ -501,7 +501,7 @@ test("slug_mismatch is [] when the emitted .repo equals the config slug or is ab
   assert.deepEqual(json.slug_mismatch, []);
 });
 
-test("slug_mismatch WARN on stderr carries a count only, never a slug (the Actions log is public)", () => {
+test("slug_mismatch WARN on stderr carries a count only — the pairs belong in slug_mismatch[]", () => {
   const { stderr } = runAggregator([
     { owner: "o", name: "old", statsPath: "s.json", stats: { repo: "o/secret-new", audited_sha: "abc1234", tests: { total: 1 } } }, // stamped, so the pre-existing unstamped WARN stays silent
   ]);

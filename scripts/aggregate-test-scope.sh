@@ -191,9 +191,11 @@ if [ "${UNSTAMPED_N:-0}" -gt 0 ] 2>/dev/null; then
   echo "WARN: ${UNSTAMPED_N} merged row(s) carry audited_sha:null (un-stamped): ${UNSTAMPED_LIST}" >&2
 fi
 
-# --- slug-mismatch warn: COUNT ONLY. This stderr reaches the public Actions log BEFORE the withhold
-# step, so it must not name a slug (a private repo's rename would leak). The pairs themselves live
-# in the output's slug_mismatch[], which the withhold maps. Fail-OPEN, like the unstamped warn.
+# --- slug-mismatch warn: count only; the pairs live in slug_mismatch[] (mapped by the withhold,
+# named in the job summary). This is tidiness, NOT a privacy guarantee: the Actions log is not a
+# guarded surface — update-stats.yml already prints every config slug ("--- Processing ${REPO} ---"),
+# the same exposure as the public git source of stats-config.json (Founder decision 2026-07-01).
+# Fail-OPEN, like the unstamped warn.
 MISMATCH_N=$(printf '%s' "$SLUG_MISMATCH_JSON" | jq 'length' 2>/dev/null || echo 0)
 if [ "${MISMATCH_N:-0}" -gt 0 ] 2>/dev/null; then
   echo "WARN: ${MISMATCH_N} live producer(s) emit a .repo that differs from their config slug — see slug_mismatch[] (live-wins matched on the config slug)" >&2
