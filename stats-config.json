@@ -25,7 +25,7 @@
     { "owner": "neckarshore-mmps", "name": "snakeoil-check", "private": true, "statsPath": "stats.json" },
     { "owner": "neckarshore-mmps", "name": "trustscope", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
     { "owner": "neckarshore-skills", "name": "ai-phrase-check", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
-    { "owner": "neckarshore-skills", "name": "imap-mailbox-cleanup", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
+    { "owner": "neckarshore-skills", "name": "mailbox-autopilot", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
     { "owner": "neckarshore-skills", "name": "neckarshore-plugins", "private": false },
     { "owner": "neckarshore-skills", "name": "obsidian-vault-autopilot", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
     { "owner": "neckarshore-skills", "name": "ogc-autopilot", "private": true },

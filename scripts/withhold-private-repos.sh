@@ -35,6 +35,9 @@
 # The same 3-way mapping is applied to missing[] AND unstamped[] (both are bare slug-string arrays;
 # unstamped[] = merged rows carrying audited_sha:null, the SHA-stamp coverage gap). Mapping it here
 # keeps the persistent (public) job summary privacy-safe: a private un-stamped repo → "privates Repo".
+# slug_mismatch[] ({config, emitted} pairs — a live producer whose emitted .repo differs from its
+# config slug, 2026-10-29) gets the same mapping on BOTH sides: a private repo renamed upstream must
+# not surface either name raw.
 #
 # Top-level total/byType are never touched → the honest headline math is preserved. Output is
 # `-S` key-sorted to match the aggregator's `jq -s -S`, so committed == cron output byte-for-byte.
@@ -84,4 +87,5 @@ jq -S \
   .per_repo = ((.per_repo // []) | map(disclose_repo))
   | .missing = ((.missing // []) | map(disclose_missing))
   | .unstamped = ((.unstamped // []) | map(disclose_missing))
+  | .slug_mismatch = ((.slug_mismatch // []) | map({config: (.config | disclose_missing), emitted: (.emitted | disclose_missing)}))
 '
