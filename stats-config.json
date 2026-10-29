@@ -17,7 +17,7 @@
     { "owner": "neckarshore-mmps", "name": "coderabbit", "private": true },
     { "owner": "neckarshore-mmps", "name": "kaze", "private": true },
     { "owner": "neckarshore-mmps", "name": "lockedin", "private": true },
-    { "owner": "neckarshore-mmps", "name": "md-viewer", "private": false, "statsPath": "stats.json" },
+    { "owner": "neckarshore-mmps", "name": "md-viewer", "private": false, "statsPath": "stats.json", "statsRef": "stats-data" },
     { "owner": "neckarshore-mmps", "name": "musclecat", "private": true },
     { "owner": "neckarshore-mmps", "name": "phonesis-voicebank", "private": true },
     { "owner": "neckarshore-mmps", "name": "pony42", "private": true },
