@@ -262,6 +262,16 @@ const NEW_PAGES = [
     canonical: "https://neckarshore.ai/products/social-scrapers",
   },
   {
+    path: "/products/paperless-autopilot",
+    title: "Paperless Autopilot",
+    canonical: "https://neckarshore.ai/products/paperless-autopilot",
+  },
+  {
+    path: "/products/photo-autopilot",
+    title: "Photo Autopilot",
+    canonical: "https://neckarshore.ai/products/photo-autopilot",
+  },
+  {
     path: "/products/restaurant-menu-update",
     title: "Restaurant-Menüpflege",
     canonical: "https://neckarshore.ai/products/restaurant-menu-update",
@@ -326,13 +336,12 @@ test.describe("Skills on-page overview table @content", () => {
     await expect(table.getByRole("row")).toHaveCount(8);
   });
 
-  test("TC-CNT-033: overview-table links go to a detail page, or to the card when there is none", async ({
+  test("TC-CNT-033: every overview-table link is a detail-page route, rows sorted A→Z", async ({
     page,
   }) => {
     await page.goto("/products/skills");
-    // One Tool link per skill row. Five skills have a bespoke detail page (/products/<slug>);
-    // Paperless Autopilot and Photo Autopilot (added 2026-10-29, private repos) have none yet,
-    // so their rows jump to the matching card on the same page (#slug), which must exist.
+    // One Tool link per skill row; every skill has its own detail page, and the page shows no
+    // cards any more (Founder 2026-10-29), so an in-page #slug link would have no target.
     const links = page.locator("table tbody a");
     const n = await links.count();
     expect(n).toBe(7);
@@ -347,7 +356,11 @@ test.describe("Skills on-page overview table @content", () => {
         expect(href).toMatch(/^\/products\/[a-z0-9-]+$/);
       }
     }
-    expect(anchors, "exactly the two skills without a detail page jump in-page").toBe(2);
+    expect(anchors, "no in-page jumps: the overview page has no cards").toBe(0);
+    // A→Z by the shown name (Founder 2026-10-29).
+    const names = await links.allTextContents();
+    const sorted = [...names].sort((a, b) => a.localeCompare(b, "de", { sensitivity: "base" }));
+    expect(names).toEqual(sorted);
   });
 
   test("TC-CNT-034: a Tool link navigates to its product detail page", async ({ page }) => {
@@ -622,6 +635,8 @@ test.describe("Content surface — Product FAQ (GEO)", () => {
     "/products/prod-or-pretend",
     "/products/social-scrapers",
     "/products/imap-mailbox-cleanup",
+    "/products/paperless-autopilot",
+    "/products/photo-autopilot",
     "/products/websites/neckarshore",
     "/products/websites/ristorante-goldoni",
     "/products/websites/oakwood-golf-club",
@@ -674,7 +689,6 @@ test.describe("Content surface — cards are fully clickable", () => {
   const CARD_CASES = [
     { portal: "/products/mmps", detailHref: "/products/snakeoil-check" },
     { portal: "/products/websites", detailHref: "/products/websites/oakwood-golf-club" },
-    { portal: "/products/skills", detailHref: "/products/obsidian-vault-autopilot" },
   ] as const;
 
   for (const c of CARD_CASES) {
@@ -742,9 +756,12 @@ test.describe("Content surface — unified status pill", () => {
     await page.goto("/products/mmps");
     await expect(page.getByText("Live", { exact: true }).first()).toBeVisible();
     await expect(page.getByText("In Entwicklung", { exact: true }).first()).toBeVisible();
-    // Skills: OSS maturity ("Beta") + the private reference skill ("Referenz-Beispiel").
+    // Skills: the overview page carries no cards since 2026-10-29 (Founder), so its status
+    // lives in the table ("Beta", "Referenz"); the full card pill moved to the detail page.
     await page.goto("/products/skills");
-    await expect(page.getByText("Beta", { exact: true }).first()).toBeVisible();
+    await expect(page.getByRole("table").getByText("Beta", { exact: true }).first()).toBeVisible();
+    await expect(page.getByRole("table").getByText("Referenz", { exact: true }).first()).toBeVisible();
+    await page.goto("/products/restaurant-menu-update");
     await expect(page.getByText("Referenz-Beispiel", { exact: true }).first()).toBeVisible();
     // Websites: live external sites ("Live").
     await page.goto("/products/websites");
@@ -796,6 +813,8 @@ test.describe("Content surface — skill detail pages carry no GitHub CTA", () =
     "/products/ai-phrase-check",
     "/products/imap-mailbox-cleanup",
     "/products/obsidian-vault-autopilot",
+    "/products/paperless-autopilot",
+    "/products/photo-autopilot",
     "/products/social-scrapers",
   ] as const;
 

@@ -418,9 +418,10 @@ export const PORTFOLIO: PortfolioCategory[] = [
         href: "/products/paperless-autopilot",
         schemaType: "SoftwareApplication",
         applicationCategory: "UtilitiesApplication",
-        // No own page yet → the skills overview links the in-page card (#slug). Private repo:
-        // the [slug] skeleton stays noindex (out of sitemap and llms.txt) until a real page lands.
-        noindex: true,
+        // Bespoke indexable detail page (src/app/products/paperless-autopilot), Founder order
+        // 2026-10-29. Private repo → honest SoftwareApplication (no url, no free Offer), like
+        // social-scrapers.
+        hasOwnPage: true,
       },
       {
         name: "Photo Autopilot",
@@ -431,8 +432,9 @@ export const PORTFOLIO: PortfolioCategory[] = [
         href: "/products/photo-autopilot",
         schemaType: "SoftwareApplication",
         applicationCategory: "UtilitiesApplication",
-        // Same as Paperless Autopilot: private repo, card anchor only, noindex skeleton.
-        noindex: true,
+        // Bespoke indexable detail page (src/app/products/photo-autopilot), same pattern as
+        // Paperless Autopilot.
+        hasOwnPage: true,
       },
       {
         name: "Restaurant-Menüpflege",
