@@ -421,6 +421,8 @@ jobs:
         if: failure()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Without a checked-out tree gh has no repository context of its own (planning #3022).
+          GH_REPO: ${{ github.repository }}
           # ueber env statt direkt interpoliert — Script-Injection-Muster, siehe stats-watchdog.yml.
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           JOB_STATUS: ${{ job.status }}
@@ -442,7 +444,18 @@ jobs:
           Solange dieser Vorgang offen ist, kommentieren beide Melder hier hinein, statt neue Vorgaenge
           anzulegen. Schliessen, wenn wieder gruen — der Waechter meldet sich von selbst erneut.
           TXT
-          bash scripts/report-stats-outage.sh \
+          # DER MELDER DARF NICHT AM CHECKOUT HAENGEN (planning #3022). Am 2026-10-02 bis 10-04 scheiterte
+          # der Checkout (abgelaufener STATS_PAT), und dieser Schritt starb mit exit 127, weil das Skript
+          # aus genau dem Baum kommt, der fehlte. Fehlt es, wird es mit dem Job-Token (nicht STATS_PAT)
+          # ueber die API am Lauf-SHA geholt — dieselbe Datei, nur ohne Checkout.
+          MELDER=scripts/report-stats-outage.sh
+          if [ ! -f "$MELDER" ]; then
+            echo "Kein ausgecheckter Baum — hole den Melder ueber die API (${GITHUB_SHA})." >&2
+            gh api "repos/${GH_REPO}/contents/scripts/report-stats-outage.sh?ref=${GITHUB_SHA}" \
+              -H "Accept: application/vnd.github.v3.raw" > /tmp/report-stats-outage.sh
+            MELDER=/tmp/report-stats-outage.sh
+          fi
+          bash "$MELDER" \
             "[stats-ausfall]" \
             "[stats-ausfall] Estate-Zahl steht still" \
             /tmp/ausfall.md
