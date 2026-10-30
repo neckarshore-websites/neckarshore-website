@@ -343,7 +343,11 @@ export default function KiBeratungPage() {
               not as a ruling, because on a page that sells "keine Nachträge" a credit
               deadline without a starting point is exactly the clause a Mittelstands-Einkauf
               argues about later. Ratified by the Founder in acceptance round 2 (2026-08-15).
-              Do not soften it back into an open formulation. */}
+              Do not soften it back into an open formulation.
+              THE DIRECT ROUTE (Founder 2026-10-13 09:14, "6 ja", planning #3093): the
+              Kompakt-Analyse is also credited directly on the implementation, within six
+              months of the analysis. "Ohne Workshop-Tag" is what keeps it from stacking: it
+              is the alternative to the two sentences above, not a third credit on top. */}
           <p className="mt-5 max-w-[680px] text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
             <strong>Anrechnung, Stufe 1 auf Stufe 2:</strong> Buchen Sie nach der
             Kompakt-Analyse den Workshop-Tag, wird der Preis der Stufe 1 vollständig
@@ -353,6 +357,11 @@ export default function KiBeratungPage() {
             <strong>Und es geht weiter:</strong> Beauftragen Sie innerhalb von sechs
             Monaten nach dem Workshop-Tag die Umsetzung, rechnen wir den Workshop-Tag
             vollständig auf das Projekt an — auf die Umsetzung, nicht auf weitere Beratung.
+          </p>
+          <p className="mt-3 max-w-[680px] text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
+            <strong>Oder direkt in die Umsetzung:</strong> Beauftragen Sie ohne Workshop-Tag
+            innerhalb von sechs Monaten nach der Kompakt-Analyse die Umsetzung, rechnen wir die
+            Kompakt-Analyse vollständig auf das Projekt an.
           </p>
           <p className="mt-3 max-w-[680px] text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
             Der Einstieg ist damit risikofrei — Sie zahlen die Tiefe nur einmal.
