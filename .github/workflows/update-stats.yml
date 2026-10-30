@@ -466,3 +466,33 @@ jobs:
             "[stats-ausfall]" \
             "[stats-ausfall] Estate-Zahl steht still" \
             /tmp/ausfall.md
+
+      # --- Lebenszeichen fuer den Totmannschalter ---------------------------------------------
+      # WARUM ZUSAETZLICH ZU DEN ZWEI MELDERN OBEN: vom 2026-10-22 bis 10-28 stand die Zahl still,
+      # beide Melder haben korrekt 13-mal in Issue #323 geschrieben, und niemand hat es gelesen. Ein
+      # Issue in diesem Repo erreicht keinen Menschen von selbst. healthchecks.io schon, und es
+      # merkt auch den Lauf, der gar nicht startet (Zeile neckarshore-website-update-stats in
+      # dev-environment config/watchdogs.yaml, planning #3677).
+      #
+      # MUSS DER LETZTE SCHRITT BLEIBEN: job.status soll das Ergebnis des ganzen Jobs sein.
+      # DARF DEN JOB NIE ROT MACHEN: continue-on-error, und ein fehlendes Secret ist eine Warnung.
+      # BRAUCHT KEINEN CHECKOUT (planning #3022): der Schritt laeuft auch, wenn der Baum fehlt.
+      # Die Ping-Adresse steht im Secret, nicht hier: das Repo ist oeffentlich, und wer die Adresse
+      # kennt, kann den Schalter beruhigen.
+      - name: Lebenszeichen senden
+        if: always()
+        continue-on-error: true
+        env:
+          PING_URL: ${{ secrets.STATS_HEALTHCHECK_URL }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          if [ -z "${PING_URL}" ]; then
+            echo "::warning::STATS_HEALTHCHECK_URL ist nicht gesetzt, kein Lebenszeichen gesendet."
+            exit 0
+          fi
+          ZIEL="${PING_URL}"
+          if [ "${JOB_STATUS}" != "success" ]; then
+            ZIEL="${PING_URL}/fail"
+          fi
+          curl -fsS -m 10 --retry 3 -o /dev/null "${ZIEL}" \
+            || echo "::warning::Lebenszeichen konnte nicht gesendet werden."
