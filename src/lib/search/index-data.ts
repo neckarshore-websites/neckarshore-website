@@ -101,6 +101,13 @@ const PAGES: { id: string; title: string; text: string; category: string; url: s
     url: "/ki-beratung",
   },
   {
+    id: "page:/ki-fahrplan",
+    title: "Ihr 90-Tage-KI-Fahrplan",
+    text: "Selbstcheck und Fahrplan als PDF: sechs Fragen, drei Phasen, ein durchgerechnetes Beispiel, Freigabe und Erfolgskriterien. In 90 Tagen von einem gewählten Prozess zu einer ersten gebauten, gemessenen und abgenommenen Einheit.",
+    category: "Seite",
+    url: "/ki-fahrplan",
+  },
+  {
     id: "page:/impressum",
     title: "Impressum",
     text: "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart. Angaben gemäß § 5 DDG.",
