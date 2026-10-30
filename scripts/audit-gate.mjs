@@ -38,6 +38,7 @@
  */
 
 import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 
 /**
  * Advisories we consciously accept, each with a reason and a hard expiry.
@@ -76,6 +77,28 @@ export const ALLOWLIST = [
  * Recorded here because "why is this not on the list" is the question a reader of
  * an allowlist actually has.
  */
+
+/**
+ * `overrides` in package.json, each with a reason and a hard expiry (planning #1961).
+ *
+ * WHY THIS EXISTS: an override is an acceptance in disguise, and it ages AGAINST the repair.
+ * `nanoid` left the allowlist above on 2026-08-26 for an override, trading an entry that turned
+ * this gate red on its own for a pin that nothing ever mentioned again. By 2026-10-29 the
+ * `postcss: 8.5.23` pin held sanitize-html BELOW its own declared range (^8.5.27) — a lift had
+ * become a cap — and neither pin was needed any more: next@16.4.3 pins postcss 8.5.23 itself
+ * and nanoid resolves to 3.3.20 unaided. Both were removed in the same change as this register.
+ *
+ * THE RULE: every key under `overrides` needs an entry here, and every entry needs an override.
+ * An entry expires like an allowlist line; past its date the gate goes red until someone re-
+ * decides. The reason names the condition under which the override may go ("drop once every
+ * parent's range resolves >= x by itself"). Match on the override KEY exactly as written in
+ * package.json (`brace-expansion@^2` is its own key).
+ *
+ * Shape: { "<override key>": { expires: "YYYY-MM-DD", reason: "..." } }
+ */
+export const OVERRIDES = {
+  // Empty since 2026-10-29 (nanoid 3.3.18 and postcss 8.5.23 removed, see above).
+};
 
 const GATED = new Set(["high", "critical"]);
 
@@ -152,6 +175,35 @@ export function findExpired(allowlist, today) {
   return expired;
 }
 
+/**
+ * Holds package.json `overrides` against the OVERRIDES register. Returns the problems found;
+ * throws on a malformed register entry (fail closed, like findExpired).
+ *   unregistered: an override with no entry — nobody wrote down why or until when
+ *   expired:      an entry past its date — re-decide, do not just extend
+ *   orphaned:     an entry whose override is gone — drop the line
+ */
+export function checkOverrides(overrides, register, today) {
+  const keys = Object.keys(overrides ?? {});
+  const result = { unregistered: [], expired: [], orphaned: [] };
+  for (const [key, entry] of Object.entries(register)) {
+    if (!entry?.expires || !entry?.reason) {
+      throw new Error(`overrides register entry "${key}" is missing expires/reason`);
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(entry.expires)) {
+      throw new Error(`overrides register entry "${key}" has a malformed expires date: ${entry.expires}`);
+    }
+    if (!keys.includes(key)) result.orphaned.push(key);
+    else if (entry.expires < today) result.expired.push({ key, ...entry });
+  }
+  result.unregistered = keys.filter((k) => !Object.hasOwn(register, k));
+  return result;
+}
+
+/** package.json's `overrides`, read from the file the install actually used. */
+export function readOverrides(path = new URL("../package.json", import.meta.url)) {
+  return JSON.parse(readFileSync(path, "utf8")).overrides ?? {};
+}
+
 export function evaluate(raw, allowlist, today) {
   const found = collectAdvisories(raw);
   const expired = findExpired(allowlist, today);
@@ -170,8 +222,10 @@ export function evaluate(raw, allowlist, today) {
 function main() {
   const today = new Date().toISOString().slice(0, 10);
   let result;
+  let ov;
   try {
     result = evaluate(runAudit(), ALLOWLIST, today);
+    ov = checkOverrides(readOverrides(), OVERRIDES, today);
   } catch (err) {
     die(err.message);
     return;
@@ -216,10 +270,25 @@ function main() {
     }
   }
 
-  if (result.expired.length || result.unlisted.length) {
+  if (ov.unregistered.length) {
+    console.error("[31mOVERRIDES without a register entry (scripts/audit-gate.mjs OVERRIDES):[0m");
+    for (const k of ov.unregistered) console.error(`  [31mx[0m ${k}  — add { expires, reason }, or drop the override`);
+  }
+  if (ov.expired.length) {
+    console.error("[31mEXPIRED overrides — is the pin still needed, and is it now a cap?[0m");
+    for (const e of ov.expired) console.error(`  [31mx[0m ${e.key}  expired ${e.expires} — ${e.reason}`);
+  }
+  if (ov.orphaned.length) {
+    console.error("[31mRegister entries without an override — drop the line:[0m");
+    for (const k of ov.orphaned) console.error(`  [31mx[0m ${k}`);
+  }
+  const ovProblems = ov.unregistered.length + ov.expired.length + ov.orphaned.length;
+
+  if (result.expired.length || result.unlisted.length || ovProblems) {
     die(
       `${result.unlisted.length} unaccepted advisory/advisories, ` +
-        `${result.expired.length} expired allowlist entry/entries.`,
+        `${result.expired.length} expired allowlist entry/entries, ` +
+        `${ovProblems} override problem(s).`,
     );
   }
 

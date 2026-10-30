@@ -13,7 +13,15 @@
  * Run: node scripts/audit-gate.test.mjs
  */
 
-import { ALLOWLIST, collectAdvisories, evaluate, findExpired } from "./audit-gate.mjs";
+import {
+  ALLOWLIST,
+  OVERRIDES,
+  checkOverrides,
+  collectAdvisories,
+  evaluate,
+  findExpired,
+  readOverrides,
+} from "./audit-gate.mjs";
 
 let pass = 0;
 let fail = 0;
@@ -187,6 +195,44 @@ check("every shipped allowlist entry carries a substantive reason", () => {
 check("shipped allowlist ids are unique", () => {
   const ids = ALLOWLIST.map((e) => e.id);
   assert(new Set(ids).size === ids.length, "duplicate ids in the allowlist");
+});
+
+// --- overrides register (planning #1961) ------------------------------------
+
+const REG = { postcss: { expires: "2026-12-31", reason: "drop once every parent resolves >= 8.5.23 by itself" } };
+
+check("an override without a register entry is reported unregistered", () => {
+  const r = checkOverrides({ postcss: "8.5.23", nanoid: "3.3.18" }, REG, "2026-10-29");
+  assert(r.unregistered.join() === "nanoid", `unregistered: ${r.unregistered}`);
+  assert(r.expired.length === 0 && r.orphaned.length === 0, "nothing else may be reported");
+});
+
+check("a registered override past its date is reported expired", () => {
+  const r = checkOverrides({ postcss: "8.5.23" }, REG, "2027-01-01");
+  assert(r.expired.length === 1 && r.expired[0].key === "postcss", "postcss must be expired");
+});
+
+check("a register entry whose override is gone is reported orphaned", () => {
+  const r = checkOverrides({}, REG, "2026-10-29");
+  assert(r.orphaned.join() === "postcss", `orphaned: ${r.orphaned}`);
+});
+
+check("registered and unexpired → no problem", () => {
+  const r = checkOverrides({ postcss: "8.5.23" }, REG, "2026-10-29");
+  assert(r.unregistered.length + r.expired.length + r.orphaned.length === 0, "expected clean");
+});
+
+check("a register entry without expires/reason throws (fail closed)", () => {
+  throws(() => checkOverrides({ x: "1" }, { x: { reason: "r" } }, "2026-10-29"), "missing expires");
+  throws(() => checkOverrides({ x: "1" }, { x: { expires: "2026-12-31" } }, "2026-10-29"), "missing reason");
+  throws(() => checkOverrides({ x: "1" }, { x: { expires: "31.12.2026", reason: "r" } }, "2026-10-29"), "non-ISO date");
+});
+
+check("the SHIPPED package.json overrides and the SHIPPED register agree today", () => {
+  const today = new Date().toISOString().slice(0, 10);
+  const r = checkOverrides(readOverrides(), OVERRIDES, today);
+  const problems = [...r.unregistered, ...r.expired.map((e) => e.key), ...r.orphaned];
+  assert(problems.length === 0, `override problems: ${problems.join(", ")}`);
 });
 
 console.log(`\n${pass} passed, ${fail} failed`);
