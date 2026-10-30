@@ -105,6 +105,19 @@ test.describe("KI-Beratung offer page", () => {
     await expect(ladder).toContainText("nicht auf weitere Beratung");
   });
 
+  test("TC-CNT-105: the direct credit names its window, and it cannot stack on the Workshop-Tag", async ({
+    page,
+  }) => {
+    // Founder 2026-10-13 09:14, "6 ja" (planning #3093). The lead magnet's page 8 promises this
+    // and must not go live before the page says the same. "ohne Workshop-Tag" is the clause that
+    // stops a reader adding this to the two stages above: losing it widens the promise.
+    await page.goto("/ki-beratung");
+    const ladder = page.locator('section[aria-labelledby="ladder-heading"]');
+    await expect(ladder).toContainText(
+      "ohne Workshop-Tag innerhalb von sechs Monaten nach der Kompakt-Analyse",
+    );
+  });
+
   test("TC-CNT-091: the non-scope block is present with all three items", async ({
     page,
   }) => {
