@@ -1,9 +1,9 @@
 {
   "byType": {
-    "e2e": 1083,
-    "integration": 1156,
+    "e2e": 1093,
+    "integration": 1217,
     "smoke": 1,
-    "unit": 3578
+    "unit": 3931
   },
   "endpoints": 96,
   "expected": 18,
@@ -13,14 +13,14 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 1075,
+        "integration": 1136,
         "unit": 55
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 1130
+      "total": 1191
     },
     {
       "audited_sha": "7dbd5a1394e94b36ae3c018b42364c842742d6ed",
@@ -33,16 +33,16 @@
       "total": 77
     },
     {
-      "audited_sha": "9717c4fc43f9354559505cdf184c9fd5ecaa7e5f",
+      "audited_sha": "cccbabf4f47ad67b2994ccdd7d8c82bb10344352",
       "byType": {
-        "e2e": 62,
+        "e2e": 72,
         "integration": 17,
         "unit": 27
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-mmps/md-viewer",
-      "total": 106
+      "total": 116
     },
     {
       "audited_sha": null,
@@ -78,16 +78,15 @@
       "total": 34
     },
     {
-      "audited_sha": null,
+      "audited_sha": "c0310cc831f4ebbefc7148270a1bfb1e5e19cc2e",
       "byType": {
         "integration": 37,
-        "unit": 932
+        "unit": 1280
       },
       "endpoints": 0,
       "lenses": {},
-      "private": true,
-      "repo": "privates Repo",
-      "total": 969
+      "repo": "neckarshore-skills/mailbox-autopilot",
+      "total": 1317
     },
     {
       "audited_sha": "4856af11a8a2c1728ed602843cd8dce51108a743",
@@ -133,15 +132,15 @@
       "total": 9
     },
     {
-      "audited_sha": "55366f497176b232cd1e4625b18cd02cefb53160",
+      "audited_sha": "31fca16008e4de7e6d20b4b08d9e1d8b0d65eb51",
       "byType": {
         "e2e": 537,
-        "unit": 303
+        "unit": 308
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/neckarshore-website",
-      "total": 840
+      "total": 845
     },
     {
       "audited_sha": "29030c6ed1b62ab4ea1fc7b6d1727fc8c68dbdab",
@@ -214,15 +213,6 @@
       "total": 227
     },
     {
-      "audited_sha": null,
-      "byType": {},
-      "endpoints": 0,
-      "lenses": {},
-      "repo": "IMAP Mailbox Cleanup",
-      "seeded": true,
-      "total": 171
-    },
-    {
       "audited_sha": "893875d",
       "byType": {},
       "endpoints": 0,
@@ -253,8 +243,8 @@
     }
   ],
   "reporting": 18,
-  "repos": 22,
-  "total": 6071,
-  "untyped_total": 253,
-  "updatedAt": "2026-10-29T10:37:29Z"
+  "repos": 21,
+  "total": 6324,
+  "untyped_total": 82,
+  "updatedAt": "2026-10-30T10:38:58Z"
 }

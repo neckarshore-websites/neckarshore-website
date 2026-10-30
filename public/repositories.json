@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-29T10:37:29Z",
+  "updatedAt": "2026-10-30T10:38:58Z",
   "privateCount": 34,
   "repos": [
     {
@@ -40,7 +40,7 @@
     },
     {
       "owner": "neckarshore-skills",
-      "name": "imap-mailbox-cleanup",
+      "name": "mailbox-autopilot",
       "visibility": "public",
       "description": "Safely tidy an overflowing email mailbox — preview every change first, keep an audit trail, and nothing is deleted for good."
     },
