@@ -473,6 +473,16 @@ export default function KiBeratungPage() {
           >
             Erstgespräch vereinbaren
           </a>
+          <p className="mt-5 max-w-[640px] text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
+            Oder erst selbst prüfen:{" "}
+            <Link
+              href="/ki-fahrplan"
+              data-track="kiberatung_fahrplan"
+              className="font-semibold text-accent underline underline-offset-2 dark:text-accent-bright"
+            >
+              Ihr 90-Tage-KI-Fahrplan als PDF
+            </Link>
+          </p>
         </section>
       </main>
       <Footer />
