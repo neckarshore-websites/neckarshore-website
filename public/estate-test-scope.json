@@ -1,9 +1,9 @@
 {
   "byType": {
-    "e2e": 1093,
-    "integration": 1217,
+    "e2e": 1103,
+    "integration": 1259,
     "smoke": 1,
-    "unit": 3931
+    "unit": 3959
   },
   "endpoints": 96,
   "expected": 18,
@@ -13,24 +13,24 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 1136,
+        "integration": 1178,
         "unit": 55
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 1191
+      "total": 1233
     },
     {
-      "audited_sha": "7dbd5a1394e94b36ae3c018b42364c842742d6ed",
+      "audited_sha": "16e3c89ecaf5370b1b195025a15424a1020bec96",
       "byType": {
-        "unit": 77
+        "unit": 82
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "ClearPath",
-      "total": 77
+      "total": 82
     },
     {
       "audited_sha": "cccbabf4f47ad67b2994ccdd7d8c82bb10344352",
@@ -57,7 +57,7 @@
       "total": 241
     },
     {
-      "audited_sha": "07476dd59897e7e402c1036d1f10c1c0d152c907",
+      "audited_sha": "eef58ca2e76b8931669f44c7695630ba13b4676f",
       "byType": {
         "e2e": 74,
         "unit": 274
@@ -110,7 +110,7 @@
       "total": 214
     },
     {
-      "audited_sha": "3d910a65b8c0e10cc5f62b357fd3f12536704030",
+      "audited_sha": "9ddfc88fdd6132efacd0cd781c0ee680d555da88",
       "byType": {
         "e2e": 24,
         "unit": 138
@@ -132,29 +132,29 @@
       "total": 9
     },
     {
-      "audited_sha": "31fca16008e4de7e6d20b4b08d9e1d8b0d65eb51",
+      "audited_sha": "abf555d4123bb3789e267ceaeb9384ed610e8b19",
       "byType": {
-        "e2e": 537,
-        "unit": 308
+        "e2e": 547,
+        "unit": 326
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/neckarshore-website",
-      "total": 845
+      "total": 873
     },
     {
-      "audited_sha": "29030c6ed1b62ab4ea1fc7b6d1727fc8c68dbdab",
+      "audited_sha": "4011570e3b7852c3cb07c5a416211b85aa9c9f60",
       "byType": {
         "e2e": 54,
-        "unit": 105
+        "unit": 110
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/oakwoodgolfclub-website",
-      "total": 159
+      "total": 164
     },
     {
-      "audited_sha": "086abf037143cbd43d1c53b8fd34324e06ec4e52",
+      "audited_sha": "a455815292924b21fbd4b322e98f32aa085cae7f",
       "byType": {
         "e2e": 35,
         "unit": 46
@@ -244,7 +244,7 @@
   ],
   "reporting": 18,
   "repos": 21,
-  "total": 6324,
+  "total": 6404,
   "untyped_total": 82,
-  "updatedAt": "2026-10-30T10:38:58Z"
+  "updatedAt": "2026-10-31T10:05:33Z"
 }
