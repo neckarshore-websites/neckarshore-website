@@ -1,9 +1,9 @@
 {
   "byType": {
     "e2e": 1103,
-    "integration": 1259,
+    "integration": 1286,
     "smoke": 1,
-    "unit": 3959
+    "unit": 4080
   },
   "endpoints": 96,
   "expected": 18,
@@ -13,14 +13,14 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 1178,
+        "integration": 1205,
         "unit": 55
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 1233
+      "total": 1260
     },
     {
       "audited_sha": "16e3c89ecaf5370b1b195025a15424a1020bec96",
@@ -78,15 +78,15 @@
       "total": 34
     },
     {
-      "audited_sha": "c0310cc831f4ebbefc7148270a1bfb1e5e19cc2e",
+      "audited_sha": "c9c2bcb9793a2ff71d43d70e77b08795b7829d20",
       "byType": {
         "integration": 37,
-        "unit": 1280
+        "unit": 1401
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-skills/mailbox-autopilot",
-      "total": 1317
+      "total": 1438
     },
     {
       "audited_sha": "4856af11a8a2c1728ed602843cd8dce51108a743",
@@ -132,7 +132,7 @@
       "total": 9
     },
     {
-      "audited_sha": "abf555d4123bb3789e267ceaeb9384ed610e8b19",
+      "audited_sha": "e743f3dab01d58263da028bc25e729351e3aa6ca",
       "byType": {
         "e2e": 547,
         "unit": 326
@@ -244,7 +244,7 @@
   ],
   "reporting": 18,
   "repos": 21,
-  "total": 6404,
+  "total": 6552,
   "untyped_total": 82,
-  "updatedAt": "2026-10-31T10:05:33Z"
+  "updatedAt": "2026-11-01T10:57:36Z"
 }
