@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { beiErsterNutzung, submitHalten } from "@/lib/turnstile-nutzung";
 
 /**
  * Cloudflare Turnstile — Client-Widget (privacy-friendly CAPTCHA).
@@ -15,16 +16,12 @@ import { useEffect, useRef } from "react";
  * (kein Cookie, kein Cross-Site-Tracking), unsichtbar/non-interactive im
  * Normalfall. Server-Verifikation: lib/captcha/verify.ts (siteverify).
  *
- * Feature-Flag (dormant bis zur Aktivierung):
- *   - `NEXT_PUBLIC_CAPTCHA_ENABLED !== "true"` → Widget rendert null, kein
- *     Script-Load, kein Bundle-Impact. Spam-Schutz kommt dann allein aus dem
- *     Honeypot-Feld in der Server Action (src/app/actions/inquiry.ts).
- *   - Aktivierung = BEIDE Envs auf "true" (client `NEXT_PUBLIC_CAPTCHA_
- *     ENABLED` + server `CAPTCHA_ENABLED`) plus die beiden Keys
- *     (`NEXT_PUBLIC_TURNSTILE_SITEKEY` + `TURNSTILE_SECRET_KEY`).
+ * Das Script laedt erst bei der ersten Formular-Nutzung (lib/turnstile-nutzung.ts):
+ * wer die Startseite nur liest, sendet nichts an Cloudflare.
  *
- * Graceful degradation: Flag an, aber Sitekey fehlt → nichts rendern, Form
- * bleibt submit-fähig (Spiegelbild der Server-Seite in verify.ts).
+ * Schalter und Sitekey stehen in src/lib/kontakt-config.ts (#2879). `sitekey` kommt
+ * von der Server-Seite (`captchaSitekey()` in lib/captcha/verify.ts) und ist null,
+ * wo das Secret fehlt: dann rendert das Widget nichts und es laedt kein Script.
  *
  * CSP: das Script + der Challenge-iframe + die Challenge-Fetches laufen alle
  * gegen https://challenges.cloudflare.com — entsprechend in next.config.ts
@@ -97,28 +94,42 @@ export function Turnstile({ sitekey }: { sitekey: string | null }) {
     let cancelled = false;
     let widgetId: string | null = null;
 
-    loadTurnstileScript()
-      .then(() => {
-        if (cancelled || !mountRef.current || !window.turnstile) return;
-        widgetId = window.turnstile.render(mountRef.current, {
-          sitekey,
-          language: "de",
-          // interaction-only: the widget stays invisible while it auto-passes
-          // (the managed-mode happy path) and only surfaces if Cloudflare needs
-          // a real interactive challenge — no persistent box, so no light/dark
-          // mismatch with the page theme. theme:"dark" matches the dark-leaning
-          // brand for that rare visible case. (Linus 2026-06-12, Option B.)
-          theme: "dark",
-          appearance: "interaction-only",
+    const form = mountRef.current.closest("form");
+    if (!form) return;
+
+    const starte = () => {
+      loadTurnstileScript()
+        .then(() => {
+          if (cancelled || !mountRef.current || !window.turnstile) return;
+          widgetId = window.turnstile.render(mountRef.current, {
+            sitekey,
+            language: "de",
+            // interaction-only: the widget stays invisible while it auto-passes
+            // (the managed-mode happy path) and only surfaces if Cloudflare needs
+            // a real interactive challenge — no persistent box, so no light/dark
+            // mismatch with the page theme. theme:"dark" matches the dark-leaning
+            // brand for that rare visible case. (Linus 2026-06-12, Option B.)
+            theme: "dark",
+            appearance: "interaction-only",
+          });
+        })
+        .catch(() => {
+          // Script blocked / offline — fail open on the client; the server
+          // (verify.ts) is the authoritative gate when the flag is on.
         });
-      })
-      .catch(() => {
-        // Script blocked / offline — fail open on the client; the server
-        // (verify.ts) is the authoritative gate when the flag is on.
-      });
+    };
+
+    const nutzungAbbauen = beiErsterNutzung(form, starte);
+    const haltenAbbauen = submitHalten(form, {
+      token: () =>
+        form.querySelector<HTMLInputElement>('input[name="cf-turnstile-response"]')?.value ?? "",
+      absenden: () => form.requestSubmit(),
+    });
 
     return () => {
       cancelled = true;
+      nutzungAbbauen();
+      haltenAbbauen();
       if (widgetId && window.turnstile) {
         try {
           window.turnstile.remove(widgetId);
