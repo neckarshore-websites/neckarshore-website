@@ -18,7 +18,7 @@ test("nothing starts before the form is used, and scrolling is no use", () => {
   beiErsterNutzung(form, () => starts++);
   for (const name of ["scroll", "mouseover", "visibilitychange"]) form.dispatchEvent(new Event(name));
   assert.equal(starts, 0);
-  assert.deepEqual([...NUTZUNGS_EVENTS], ["focusin", "pointerdown", "keydown"]);
+  assert.deepEqual([...NUTZUNGS_EVENTS], ["focusin", "pointerdown", "keydown", "submit"]);
 });
 
 test("each kind of use starts it, once only", () => {
@@ -42,6 +42,14 @@ test("the component loads the script only through the first use", () => {
   assert.match(effekt.slice(anfang, ende), /loadTurnstileScript\(\)/, "load outside starte");
   assert.match(effekt, /beiErsterNutzung\(form, starte\)/);
   assert.doesNotMatch(effekt, /\bstarte\(\)/, "starte called directly, on mount");
+});
+
+test("a submit with no use before it still starts the script", () => {
+  const form = new EventTarget();
+  let starts = 0;
+  beiErsterNutzung(form, () => starts++);
+  form.dispatchEvent(new Event("submit", { cancelable: true }));
+  assert.equal(starts, 1);
 });
 
 function submitEreignis() {

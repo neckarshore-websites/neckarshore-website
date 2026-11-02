@@ -48,7 +48,7 @@ export default function Datenschutz() {
       <PageSchema path="/datenschutz" name="Datenschutzerklärung — neckarshore.ai" />
       <main className="mx-auto max-w-[800px] break-words px-4 pt-40 pb-20 md:px-6">
         <h1 className="font-heading text-3xl font-bold text-accent md:text-5xl">Datenschutzerklärung</h1>
-        <p className="mt-2 text-sm text-muted dark:text-text-tertiary">Stand: Juli 2026</p>
+        <p className="mt-2 text-sm text-muted dark:text-text-tertiary">Stand: November 2026</p>
 
         <div className="mt-10 space-y-8 text-neutral-dark/80 leading-relaxed dark:text-text-secondary">
           <section>
@@ -266,14 +266,13 @@ export default function Datenschutz() {
             <p className="mt-3">
               Sobald Sie das Kontaktformular nutzen (erstes Klicken oder Tippen),
               lädt Ihr Browser Skripte von Cloudflare
-              (<code>challenges.cloudflare.com</code>). Ohne Nutzung des
-              Formulars besteht keine Verbindung zu Cloudflare. Cloudflare
-              verarbeitet dabei Ihre IP-Adresse, technische Merkmale von Browser
-              und Verbindung (u. a. User-Agent, TLS-Fingerabdruck) sowie die
-              aufgerufene Website und erzeugt ein Prüf-Ergebnis (Token). Turnstile
-              setzt <strong>keine Cookies</strong>, legt aber im lokalen Speicher
-              Ihres Browsers einen Eintrag von Cloudflare an (cf.turnstile.u).
-              Ihre Eingaben im Formular erhält Cloudflare nicht.
+              (<code>challenges.cloudflare.com</code>) und übermittelt technische
+              Merkmale zur Unterscheidung von Mensch und Bot (u. a. IP-Adresse,
+              Browser- und Geräteinformationen sowie Interaktionssignale). Ohne
+              Nutzung des Formulars besteht keine Verbindung zu Cloudflare.
+              Turnstile setzt keine Cookies, legt aber im lokalen Speicher Ihres
+              Browsers einen Eintrag von Cloudflare an (cf.turnstile.u). Ihre
+              Eingaben im Formular erhält Cloudflare nicht.
             </p>
             <p className="mt-2">
               <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO
@@ -286,9 +285,8 @@ export default function Datenschutz() {
               Cloudflare erfolgt die Prüfung im Auftrag des Websitebetreibers.
               Zur Verbesserung seiner Bot-Erkennung verarbeitet Cloudflare diese
               Daten außerdem in eigener Verantwortung und stützt sich dafür auf
-              sein berechtigtes Interesse. Eine feste Speicherfrist nennt
-              Cloudflare nicht. Für die Prüfung im Auftrag sehen die Bedingungen
-              von Cloudflare vor, dass die Daten gespeichert werden, bis der
+              sein berechtigtes Interesse. Für die Prüfung im Auftrag sehen die
+              Bedingungen von Cloudflare vor, dass die Daten gespeichert werden, bis der
               Vertrag mit dem Websitebetreiber endet oder sie zur
               Vertragserfüllung nicht mehr nötig sind, je nachdem, was früher
               eintritt. Für die Verarbeitung in eigener Verantwortung richtet

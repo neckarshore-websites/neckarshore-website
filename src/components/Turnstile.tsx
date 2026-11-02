@@ -19,16 +19,9 @@ import { beiErsterNutzung, submitHalten } from "@/lib/turnstile-nutzung";
  * Das Script laedt erst bei der ersten Formular-Nutzung (lib/turnstile-nutzung.ts):
  * wer die Startseite nur liest, sendet nichts an Cloudflare.
  *
- * Feature-Flag (dormant bis zur Aktivierung):
- *   - `NEXT_PUBLIC_CAPTCHA_ENABLED !== "true"` → Widget rendert null, kein
- *     Script-Load, kein Bundle-Impact. Spam-Schutz kommt dann allein aus dem
- *     Honeypot-Feld in der Server Action (src/app/actions/inquiry.ts).
- *   - Aktivierung = BEIDE Envs auf "true" (client `NEXT_PUBLIC_CAPTCHA_
- *     ENABLED` + server `CAPTCHA_ENABLED`) plus die beiden Keys
- *     (`NEXT_PUBLIC_TURNSTILE_SITEKEY` + `TURNSTILE_SECRET_KEY`).
- *
- * Graceful degradation: Flag an, aber Sitekey fehlt → nichts rendern, Form
- * bleibt submit-fähig (Spiegelbild der Server-Seite in verify.ts).
+ * Schalter und Sitekey stehen in src/lib/kontakt-config.ts (#2879). `sitekey` kommt
+ * von der Server-Seite (`captchaSitekey()` in lib/captcha/verify.ts) und ist null,
+ * wo das Secret fehlt: dann rendert das Widget nichts und es laedt kein Script.
  *
  * CSP: das Script + der Challenge-iframe + die Challenge-Fetches laufen alle
  * gegen https://challenges.cloudflare.com — entsprechend in next.config.ts

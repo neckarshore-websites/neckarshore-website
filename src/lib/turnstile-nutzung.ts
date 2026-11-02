@@ -5,7 +5,7 @@
  * Whoever only reads the page sends nothing to Cloudflare. Scrolling is no use of the
  * form, so visibility is deliberately not a trigger.
  */
-export const NUTZUNGS_EVENTS = ["focusin", "pointerdown", "keydown"] as const;
+export const NUTZUNGS_EVENTS = ["focusin", "pointerdown", "keydown", "submit"] as const;
 
 /** Calls `starte` once, on the first use. Returns the cleanup. */
 export function beiErsterNutzung(form: EventTarget, starte: () => void): () => void {

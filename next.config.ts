@@ -40,9 +40,8 @@ import type { NextConfig } from "next";
 // keeping the live header strict. Without this dev-only carve-out, `next dev`
 // (and the Playwright e2e suite, which runs against the dev server) throws
 // "eval() is not supported" console errors under the CSP.
-// Cloudflare Turnstile (Spam-Schutz des Kontaktformulars, dormant bis zur
-// Aktivierung): das Widget-Script + der Challenge-iframe + die siteverify-
-// Fetches laufen gegen https://challenges.cloudflare.com → freigegeben in
+// Cloudflare Turnstile (Spam-Schutz des Kontaktformulars): das Widget-Script +
+// der Challenge-iframe + die siteverify-Fetches laufen gegen https://challenges.cloudflare.com → freigegeben in
 // script-src + frame-src + connect-src.
 const isDev = process.env.NODE_ENV !== "production";
 const scriptSrc = isDev
