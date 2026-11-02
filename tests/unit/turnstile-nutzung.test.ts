@@ -35,13 +35,13 @@ test("each kind of use starts it, once only", () => {
 test("the component loads the script only through the first use", () => {
   const quelle = readFileSync(join(hier, "../../src/components/Turnstile.tsx"), "utf8");
   const effekt = quelle.slice(quelle.indexOf("export function Turnstile"));
-  assert.match(effekt, /beiErsterNutzung\(/);
-  const vorStarte = effekt.slice(0, effekt.indexOf("const starte"));
-  assert.doesNotMatch(vorStarte, /loadTurnstileScript\(/, "script loads on mount");
-  const starte = effekt.slice(effekt.indexOf("const starte"), effekt.indexOf("beiErsterNutzung("));
-  assert.match(starte, /loadTurnstileScript\(\)/);
-  const danach = effekt.slice(effekt.indexOf("beiErsterNutzung("));
-  assert.doesNotMatch(danach, /loadTurnstileScript\(/, "script loads outside the first use");
+  const anfang = effekt.indexOf("const starte = () => {");
+  const ende = effekt.indexOf("\n    };\n", anfang);
+  assert.ok(anfang > 0 && ende > anfang, "starte not found");
+  assert.equal(effekt.match(/loadTurnstileScript\(/g)?.length, 1, "more than one load");
+  assert.match(effekt.slice(anfang, ende), /loadTurnstileScript\(\)/, "load outside starte");
+  assert.match(effekt, /beiErsterNutzung\(form, starte\)/);
+  assert.doesNotMatch(effekt, /\bstarte\(\)/, "starte called directly, on mount");
 });
 
 function submitEreignis() {
