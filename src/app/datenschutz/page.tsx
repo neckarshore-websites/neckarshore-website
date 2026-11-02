@@ -270,41 +270,14 @@ export default function Datenschutz() {
               Merkmale zur Unterscheidung von Mensch und Bot (u. a. IP-Adresse,
               Browser- und Geräteinformationen sowie Interaktionssignale). Ohne
               Nutzung des Formulars besteht keine Verbindung zu Cloudflare.
-              Turnstile setzt keine Cookies, legt aber im lokalen Speicher Ihres
-              Browsers einen Eintrag von Cloudflare an (cf.turnstile.u). Ihre
-              Eingaben im Formular erhält Cloudflare nicht.
+              Turnstile arbeitet »interaction-only«: Es setzt{" "}
+              <strong>keine Cookies</strong> und verwendet die Daten nicht zum
+              seitenübergreifenden Tracking.
             </p>
             <p className="mt-2">
               <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO
               (berechtigtes Interesse an der Abwehr von Spam und missbräuchlichen
-              Formularübermittlungen). Das Speichern im und das Auslesen aus
-              dem Browser beruhen auf § 25 Abs. 2 Nr. 2 TDDDG.
-            </p>
-            <p className="mt-2">
-              <strong>Rollen und Speicherdauer:</strong> Nach Angaben von
-              Cloudflare erfolgt die Prüfung im Auftrag des Websitebetreibers.
-              Zur Verbesserung seiner Bot-Erkennung verarbeitet Cloudflare diese
-              Daten außerdem in eigener Verantwortung und stützt sich dafür auf
-              sein berechtigtes Interesse. Für die Prüfung im Auftrag sehen die
-              Bedingungen von Cloudflare vor, dass die Daten gespeichert werden, bis der
-              Vertrag mit dem Websitebetreiber endet oder sie zur
-              Vertragserfüllung nicht mehr nötig sind, je nachdem, was früher
-              eintritt. Für die Verarbeitung in eigener Verantwortung richtet
-              sich die Dauer nach den Zwecken und nach gesetzlichen Pflichten.
-              Cloudflare berücksichtigt dabei den Erhebungszweck, Umfang, Art
-              und Sensibilität der Daten, das Risiko bei unbefugter Nutzung, ob
-              der Zweck auch mit weniger Daten erreichbar ist, und rechtliche
-              Vorgaben wie Verjährungsfristen. Näheres: Turnstile Privacy
-              Addendum (
-              <a
-                href="https://www.cloudflare.com/turnstile-privacy-policy/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-accent hover:text-accent-hover dark:text-accent-bright"
-              >
-                cloudflare.com/turnstile-privacy-policy
-              </a>
-              ).
+              Formularübermittlungen).
             </p>
             <p className="mt-2">
               Cloudflare kann Daten in die USA übermitteln. Cloudflare, Inc.
