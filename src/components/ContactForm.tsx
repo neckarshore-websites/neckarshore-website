@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { sendContact } from "@/app/actions/inquiry";
 import { CONTACT_INITIAL_STATE } from "@/app/actions/inquiry-state";
 import { Turnstile } from "@/components/Turnstile";
+import { HONEYPOT_FELD } from "@/lib/honeypot";
 
 /**
  * Contact form for the neckarshore.ai landing page (#kontakt section).
@@ -54,13 +55,17 @@ export default function ContactForm({
           overflow: "hidden",
         }}
       >
-        <label htmlFor="contact-website">Website (bitte leer lassen)</label>
+        <label htmlFor="contact-nicht-ausfuellen">Bitte leer lassen</label>
         <input
-          id="contact-website"
+          id="contact-nicht-ausfuellen"
           type="text"
-          name="website"
+          name={HONEYPOT_FELD}
           tabIndex={-1}
           autoComplete="off"
+          data-1p-ignore
+          data-lpignore="true"
+          data-bwignore
+          data-form-type="other"
         />
       </div>
 
