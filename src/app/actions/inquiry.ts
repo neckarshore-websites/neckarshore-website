@@ -4,6 +4,7 @@ import nodemailer from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
 import { CAPTCHA_FORM_FIELD, verifyCaptchaToken } from "@/lib/captcha/verify";
 import { KONTAKT } from "@/lib/kontakt-config";
+import { honeypotAusgeloest } from "@/lib/honeypot";
 import {
   CONFIRMATION_SUBJECT,
   buildConfirmationText,
@@ -16,7 +17,7 @@ import type { ContactFieldValues, ContactState } from "./inquiry-state";
  * Validation happens server-side; client-side `required` is only a UX hint.
  *
  * Anti-spam (defence-in-depth):
- *   1. Hidden `website` honeypot field — bots fill it, humans don't see it.
+ *   1. Hidden honeypot field (lib/honeypot.ts) — bots fill it, humans don't see it.
  *      If filled, we silently return success without sending mail.
  *   2. Cloudflare Turnstile (lib/captcha/verify.ts) — checked after field
  *      validation, before send. Graceful when unconfigured (dormant),
@@ -107,7 +108,7 @@ export async function sendContact(
   formData: FormData,
 ): Promise<ContactState> {
   // ----- Honeypot ---------------------------------------------------
-  if (clean(formData, "website")) {
+  if (honeypotAusgeloest(formData)) {
     // Bot detected — pretend success so they don't retry differently.
     return { status: "success" };
   }
