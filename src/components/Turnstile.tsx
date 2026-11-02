@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { beiErsterNutzung, submitHalten } from "@/lib/turnstile-nutzung";
 
 /**
  * Cloudflare Turnstile — Client-Widget (privacy-friendly CAPTCHA).
@@ -14,6 +15,9 @@ import { useEffect, useRef } from "react";
  * neckarshore.ai portiert (2026-06-12). Kostenlos + unbegrenzt, DSGVO-konform
  * (kein Cookie, kein Cross-Site-Tracking), unsichtbar/non-interactive im
  * Normalfall. Server-Verifikation: lib/captcha/verify.ts (siteverify).
+ *
+ * Das Script laedt erst bei der ersten Formular-Nutzung (lib/turnstile-nutzung.ts):
+ * wer die Startseite nur liest, sendet nichts an Cloudflare.
  *
  * Feature-Flag (dormant bis zur Aktivierung):
  *   - `NEXT_PUBLIC_CAPTCHA_ENABLED !== "true"` → Widget rendert null, kein
@@ -97,28 +101,42 @@ export function Turnstile({ sitekey }: { sitekey: string | null }) {
     let cancelled = false;
     let widgetId: string | null = null;
 
-    loadTurnstileScript()
-      .then(() => {
-        if (cancelled || !mountRef.current || !window.turnstile) return;
-        widgetId = window.turnstile.render(mountRef.current, {
-          sitekey,
-          language: "de",
-          // interaction-only: the widget stays invisible while it auto-passes
-          // (the managed-mode happy path) and only surfaces if Cloudflare needs
-          // a real interactive challenge — no persistent box, so no light/dark
-          // mismatch with the page theme. theme:"dark" matches the dark-leaning
-          // brand for that rare visible case. (Linus 2026-06-12, Option B.)
-          theme: "dark",
-          appearance: "interaction-only",
+    const form = mountRef.current.closest("form");
+    if (!form) return;
+
+    const starte = () => {
+      loadTurnstileScript()
+        .then(() => {
+          if (cancelled || !mountRef.current || !window.turnstile) return;
+          widgetId = window.turnstile.render(mountRef.current, {
+            sitekey,
+            language: "de",
+            // interaction-only: the widget stays invisible while it auto-passes
+            // (the managed-mode happy path) and only surfaces if Cloudflare needs
+            // a real interactive challenge — no persistent box, so no light/dark
+            // mismatch with the page theme. theme:"dark" matches the dark-leaning
+            // brand for that rare visible case. (Linus 2026-06-12, Option B.)
+            theme: "dark",
+            appearance: "interaction-only",
+          });
+        })
+        .catch(() => {
+          // Script blocked / offline — fail open on the client; the server
+          // (verify.ts) is the authoritative gate when the flag is on.
         });
-      })
-      .catch(() => {
-        // Script blocked / offline — fail open on the client; the server
-        // (verify.ts) is the authoritative gate when the flag is on.
-      });
+    };
+
+    const nutzungAbbauen = beiErsterNutzung(form, starte);
+    const haltenAbbauen = submitHalten(form, {
+      token: () =>
+        form.querySelector<HTMLInputElement>('input[name="cf-turnstile-response"]')?.value ?? "",
+      absenden: () => form.requestSubmit(),
+    });
 
     return () => {
       cancelled = true;
+      nutzungAbbauen();
+      haltenAbbauen();
       if (widgetId && window.turnstile) {
         try {
           window.turnstile.remove(widgetId);
