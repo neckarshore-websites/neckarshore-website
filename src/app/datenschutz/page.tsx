@@ -48,7 +48,7 @@ export default function Datenschutz() {
       <PageSchema path="/datenschutz" name="Datenschutzerklärung — neckarshore.ai" />
       <main className="mx-auto max-w-[800px] break-words px-4 pt-40 pb-20 md:px-6">
         <h1 className="font-heading text-3xl font-bold text-accent md:text-5xl">Datenschutzerklärung</h1>
-        <p className="mt-2 text-sm text-muted dark:text-text-tertiary">Stand: Juli 2026</p>
+        <p className="mt-2 text-sm text-muted dark:text-text-tertiary">Stand: November 2026</p>
 
         <div className="mt-10 space-y-8 text-neutral-dark/80 leading-relaxed dark:text-text-secondary">
           <section>
@@ -264,13 +264,15 @@ export default function Datenschutz() {
               San Francisco, CA 94107, USA
             </p>
             <p className="mt-3">
-              Beim Aufruf eines Formulars lädt Ihr Browser ein Script von
-              Cloudflare (<code>challenges.cloudflare.com</code>) und übermittelt
-              technische Merkmale zur Unterscheidung von Mensch und Bot (u. a.
-              IP-Adresse, Browser- und Geräteinformationen sowie
-              Interaktionssignale). Turnstile arbeitet »interaction-only«: Es
-              setzt <strong>keine Cookies</strong> und verwendet die Daten nicht
-              zum seitenübergreifenden Tracking.
+              Sobald Sie das Kontaktformular nutzen (erstes Klicken oder Tippen),
+              lädt Ihr Browser Skripte von Cloudflare
+              (<code>challenges.cloudflare.com</code>) und übermittelt technische
+              Merkmale zur Unterscheidung von Mensch und Bot (u. a. IP-Adresse,
+              Browser- und Geräteinformationen sowie Interaktionssignale). Ohne
+              Nutzung des Formulars besteht keine Verbindung zu Cloudflare.
+              Turnstile arbeitet »interaction-only«: Es setzt{" "}
+              <strong>keine Cookies</strong> und verwendet die Daten nicht zum
+              seitenübergreifenden Tracking.
             </p>
             <p className="mt-2">
               <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO

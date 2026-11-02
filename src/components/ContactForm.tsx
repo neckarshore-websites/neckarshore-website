@@ -11,7 +11,7 @@ import { HONEYPOT_FELD } from "@/lib/honeypot";
  *
  * A write-instead-of-book alternative to the Calendly CTA. Wraps the
  * `sendContact` Server Action via useActionState; spam protection = hidden
- * honeypot + Cloudflare Turnstile (dormant until the env vars are set).
+ * honeypot + Cloudflare Turnstile (loaded on the first use of the form).
  * Styled with the site's design tokens (navy/teal, dark-mode aware).
  */
 
