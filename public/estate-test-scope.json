@@ -1,9 +1,9 @@
 {
   "byType": {
     "e2e": 1103,
-    "integration": 1286,
+    "integration": 1296,
     "smoke": 1,
-    "unit": 4080
+    "unit": 4520
   },
   "endpoints": 96,
   "expected": 18,
@@ -23,14 +23,14 @@
       "total": 1260
     },
     {
-      "audited_sha": "16e3c89ecaf5370b1b195025a15424a1020bec96",
+      "audited_sha": "7360478fabf1750584acff9ea9756d5ed00f6523",
       "byType": {
-        "unit": 82
+        "unit": 110
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "ClearPath",
-      "total": 82
+      "total": 110
     },
     {
       "audited_sha": "cccbabf4f47ad67b2994ccdd7d8c82bb10344352",
@@ -78,18 +78,18 @@
       "total": 34
     },
     {
-      "audited_sha": "c9c2bcb9793a2ff71d43d70e77b08795b7829d20",
+      "audited_sha": "b3a534766e871399670b7f43cc7a3d03d6746f9d",
       "byType": {
-        "integration": 37,
-        "unit": 1401
+        "integration": 47,
+        "unit": 1787
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-skills/mailbox-autopilot",
-      "total": 1438
+      "total": 1834
     },
     {
-      "audited_sha": "4856af11a8a2c1728ed602843cd8dce51108a743",
+      "audited_sha": "9a4046a7014d4f9606392bd9c1b7dbecf3418ea0",
       "byType": {
         "unit": 493
       },
@@ -110,7 +110,7 @@
       "total": 214
     },
     {
-      "audited_sha": "03d28ecd834ae3aa8cf1cd9e77aeeef87eb26611",
+      "audited_sha": "b781a1c4b4d09a364e0595319c019244f58f9614",
       "byType": {
         "e2e": 24,
         "unit": 138
@@ -121,7 +121,7 @@
       "total": 162
     },
     {
-      "audited_sha": "3d8a3b74804ca14cd0b973950cf818b2e184976f",
+      "audited_sha": "b8a33e40e6a270eaee0b09e22773b5279ae5a279",
       "byType": {
         "e2e": 3,
         "unit": 6
@@ -132,15 +132,15 @@
       "total": 9
     },
     {
-      "audited_sha": "296fde743717412dce5a58917ea54d34d19999eb",
+      "audited_sha": "cb928c85f140a2481c051490c05bc46a2e322542",
       "byType": {
         "e2e": 547,
-        "unit": 326
+        "unit": 336
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/neckarshore-website",
-      "total": 873
+      "total": 883
     },
     {
       "audited_sha": "4011570e3b7852c3cb07c5a416211b85aa9c9f60",
@@ -154,15 +154,15 @@
       "total": 164
     },
     {
-      "audited_sha": "a455815292924b21fbd4b322e98f32aa085cae7f",
+      "audited_sha": "fa1bb912c77401e02f3ee16877152795bad0cc9f",
       "byType": {
         "e2e": 35,
-        "unit": 46
+        "unit": 62
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/rauhut-website",
-      "total": 81
+      "total": 97
     },
     {
       "audited_sha": null,
@@ -244,7 +244,7 @@
   ],
   "reporting": 18,
   "repos": 21,
-  "total": 6552,
+  "total": 7002,
   "untyped_total": 82,
-  "updatedAt": "2026-11-02T11:52:58Z"
+  "updatedAt": "2026-11-03T11:32:46Z"
 }
