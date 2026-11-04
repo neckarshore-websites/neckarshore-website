@@ -1,9 +1,9 @@
 {
   "byType": {
-    "e2e": 1103,
+    "e2e": 1105,
     "integration": 1296,
     "smoke": 1,
-    "unit": 4520
+    "unit": 4581
   },
   "endpoints": 96,
   "expected": 18,
@@ -68,7 +68,7 @@
       "total": 348
     },
     {
-      "audited_sha": "54b027f6dc5572ba72f81f36f194924c1103bd3b",
+      "audited_sha": "18a34d1172a435d7bf262787594f95072d8122b2",
       "byType": {
         "unit": 34
       },
@@ -78,15 +78,15 @@
       "total": 34
     },
     {
-      "audited_sha": "b3a534766e871399670b7f43cc7a3d03d6746f9d",
+      "audited_sha": "90aff493c7eeb1160b07e754bffe7a3450da644f",
       "byType": {
         "integration": 47,
-        "unit": 1787
+        "unit": 1848
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-skills/mailbox-autopilot",
-      "total": 1834
+      "total": 1895
     },
     {
       "audited_sha": "9a4046a7014d4f9606392bd9c1b7dbecf3418ea0",
@@ -110,15 +110,15 @@
       "total": 214
     },
     {
-      "audited_sha": "b781a1c4b4d09a364e0595319c019244f58f9614",
+      "audited_sha": "3b86dd148251d677ec9dc3a221791c70cead48c9",
       "byType": {
-        "e2e": 24,
+        "e2e": 25,
         "unit": 138
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/goldoni-website",
-      "total": 162
+      "total": 163
     },
     {
       "audited_sha": "b8a33e40e6a270eaee0b09e22773b5279ae5a279",
@@ -132,7 +132,7 @@
       "total": 9
     },
     {
-      "audited_sha": "cb928c85f140a2481c051490c05bc46a2e322542",
+      "audited_sha": "96b466c7cf4e74701387cc7d676a8f5df451314d",
       "byType": {
         "e2e": 547,
         "unit": 336
@@ -143,15 +143,15 @@
       "total": 883
     },
     {
-      "audited_sha": "4011570e3b7852c3cb07c5a416211b85aa9c9f60",
+      "audited_sha": "6f4c0d8d7539bd0835bb95f63dd97dfd0e3a974e",
       "byType": {
-        "e2e": 54,
+        "e2e": 55,
         "unit": 110
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/oakwoodgolfclub-website",
-      "total": 164
+      "total": 165
     },
     {
       "audited_sha": "fa1bb912c77401e02f3ee16877152795bad0cc9f",
@@ -244,7 +244,7 @@
   ],
   "reporting": 18,
   "repos": 21,
-  "total": 7002,
+  "total": 7065,
   "untyped_total": 82,
-  "updatedAt": "2026-11-03T11:32:46Z"
+  "updatedAt": "2026-11-04T11:48:56Z"
 }
