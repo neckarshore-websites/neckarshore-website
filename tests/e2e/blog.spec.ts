@@ -216,6 +216,35 @@ test.describe("Blog — OGC parity (Founder 2026-11-05)", () => {
   });
 });
 
+test.describe("Blog — TL;DR and the test-management list (Founder 2026-11-05)", () => {
+  test("TC-BLOG-035: the article opens with the TL;DR — after the cover, before the first section", async ({ page }) => {
+    await page.goto(POST);
+    const tldr = page.locator("article [data-tldr]");
+    await expect(tldr).toBeVisible();
+    await expect(tldr.locator("p").first()).toHaveText("TL;DR / Zusammenfassung");
+    await expect(tldr).toContainText("Der Upload ist das Tor.");
+    const order = await page.locator("article").evaluate((article) => {
+      const all = [...article.querySelectorAll("figure, [data-tldr], .prose-content h2")];
+      return all.slice(0, 3).map((el) => (el.matches("[data-tldr]") ? "tldr" : el.tagName.toLowerCase()));
+    });
+    expect(order, "cover, then TL;DR, then the first section heading").toEqual(["figure", "tldr", "h2"]);
+  });
+
+  test("TC-BLOG-037: /test-management lists every Testmanagement post and links the category", async ({ page }) => {
+    await page.goto("/blog/kategorie/testmanagement");
+    const inCategory = await page.locator("[data-post-card]").evaluateAll((cards) =>
+      cards.map((c) => `/blog/${c.getAttribute("data-post-card")}`),
+    );
+    expect(inCategory.length).toBeGreaterThan(0);
+    await page.goto("/test-management");
+    const listed = await page
+      .locator("[data-blog-pointer] li a")
+      .evaluateAll((as) => as.map((a) => a.getAttribute("href")));
+    expect(listed).toEqual(inCategory);
+    await expect(page.locator("[data-blog-pointer] a[href='/blog/kategorie/testmanagement']")).toHaveCount(1);
+  });
+});
+
 test.describe("Responsive — desktop nav row", () => {
   for (const width of [1024, 1280]) {
     test(`TC-RES-030 [${width}px]: the desktop nav fits one line, no label wraps`, async ({ page }) => {

@@ -9,8 +9,8 @@ import { PageSchema } from "@/components/PageSchema";
 import { pageMetadata } from "@/lib/seo";
 import { repoType } from "@/lib/repo-types";
 import { TOP_N } from "@/lib/test-board";
-import { getPost } from "@/lib/content/blog";
-import { postPath } from "@/lib/schema/blog";
+import { formatDate, getPostsInCategory } from "@/lib/content/blog";
+import { categoryPath, postPath } from "@/lib/schema/blog";
 
 const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
@@ -86,8 +86,11 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function TestManagementPage() {
-  // The article on the iOS test strategy, when the draft gate shows it here (lib/content/blog.ts).
-  const strategyPost = getPost("risikobasierte-teststrategie-ios");
+  // Every blog post in the category Testmanagement, newest first, through the draft gate
+  // (lib/content/blog.ts). Founder 2026-11-05: the test articles belong on this page, and more
+  // are coming — so this is the category, not one hand-picked slug.
+  const TEST_CATEGORY = "testmanagement";
+  const testPosts = getPostsInCategory(TEST_CATEGORY);
   const scope = loadEstateScope();
   const total = headlineTotal(scope);
   const repos = scope.repos;
@@ -293,20 +296,37 @@ export default function TestManagementPage() {
             </section>
           )}
 
-          {strategyPost && (
+          {testPosts.length > 0 && (
             <section className="mt-12" data-blog-pointer>
               <h2 className="font-heading text-2xl font-bold text-primary dark:text-text-primary">
                 Aus dem Blog
               </h2>
               <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                Wie wir die Teststrategie für zwei iOS-Apps neu aufgesetzt haben, nach Risiko statt
-                nach Datei:{" "}
+                Wie wir testen, ausführlich und mit Zahlen aus unseren Projekten:
+              </p>
+              <ul className="mt-4 divide-y divide-primary/10 border-y border-primary/10 dark:divide-white/10 dark:border-white/10">
+                {testPosts.map((post) => (
+                  <li key={post.slug} className="py-4">
+                    <Link
+                      href={postPath(post.slug)}
+                      data-track="testmgmt_blog_post"
+                      className="font-heading text-lg font-semibold text-primary transition-colors hover:text-accent dark:text-text-primary dark:hover:text-accent-bright"
+                    >
+                      {post.title}
+                    </Link>
+                    <p className="mt-1 text-sm text-muted dark:text-text-tertiary">
+                      <time dateTime={post.date}>{formatDate(post.date)}</time> · {post.readingMinutes} Min. Lesezeit
+                    </p>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-4 text-sm">
                 <Link
-                  href={postPath(strategyPost.slug)}
-                  data-track="testmgmt_blog_teststrategie"
-                  className="font-medium text-accent underline underline-offset-2 transition-colors hover:text-accent-hover dark:text-accent-bright"
+                  href={categoryPath(TEST_CATEGORY)}
+                  data-track="testmgmt_blog_category"
+                  className="inline-flex min-h-[44px] items-center font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
                 >
-                  {strategyPost.title}
+                  Alle Beiträge zu Testmanagement →
                 </Link>
               </p>
             </section>
