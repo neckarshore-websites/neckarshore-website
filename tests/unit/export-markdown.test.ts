@@ -16,6 +16,7 @@ import assert from "node:assert/strict";
 import { buildMarkdownDocument, faqToMarkdown, tableToMarkdown } from "../../src/lib/export/serialize";
 import { buildProductMarkdown } from "../../src/lib/export/builders/product";
 import { buildWebsiteMarkdown } from "../../src/lib/export/builders/website";
+import { buildBlogMarkdown } from "../../src/lib/export/builders/blog";
 import { extraSectionsForSlug } from "../../src/lib/export/product-sections";
 import { resolveExport } from "../../src/lib/export/resolve";
 
@@ -212,4 +213,40 @@ test("TC-EXP-U08: resolveExport returns null for non-exportable or malicious pat
   assert.equal(resolveExport("/products/../../etc/passwd", OPTS), null, "no path traversal");
   assert.equal(resolveExport("/products/websites/../../etc/passwd", OPTS), null, "no path traversal on the website route");
   assert.equal(resolveExport("/products/Clearpath", OPTS), null, "slug charset is lowercase a-z0-9-");
+});
+
+// ── builders/blog.ts ────────────────────────────────────────────────────────
+
+const DEV_ENV = { NODE_ENV: "development" };
+const PROD_ENV = { NODE_ENV: "production", VERCEL_ENV: "production" };
+const POST_SLUG = "risikobasierte-teststrategie-ios";
+
+test("TC-EXP-U20: buildBlogMarkdown exports the post with its figures as Markdown tables, never as markers", () => {
+  const result = buildBlogMarkdown(POST_SLUG, OPTS, DEV_ENV);
+  assert.ok(result, "the post must export in development");
+  const md = result.markdown;
+  assert.match(md, /^---\ntitle: "Wir testen nicht mehr alles\. Wir testen, was brechen kann\."/);
+  assert.match(md, /categories: "Testmanagement, KI-Agenten"/);
+  assert.match(md, /^# Wir testen nicht mehr alles/m);
+  assert.ok(!md.includes("<!--"), "no figure marker may survive into the export");
+  assert.ok(md.includes("| MuscleCat | Stufe |"), "register table");
+  assert.ok(md.includes("**Nutzungszählung und Einwilligung** | TM1"), "area 8 row");
+  assert.ok(md.includes("### Welcher Testlauf wann läuft"), "execution plan");
+  assert.ok(md.includes("| Bisher im Haus | Jetzt |"), "vocabulary table");
+  assert.ok(md.includes("## Weiterführend"), "further reading section");
+  assert.ok(md.includes("(https://neckarshore.ai/test-management)"), "internal further link made absolute");
+  assert.equal(result.filename, `neckarshore.ai - ${POST_SLUG}.md`);
+});
+
+test("TC-EXP-U21: the published post exports in production; an unknown slug does not", () => {
+  // Until 2026-11-05 this asserted that the then-draft post was NOT exportable in production.
+  // The gate itself is pinned by TC-BLOG-002/003 on filterVisible, which the export reads.
+  assert.ok(buildBlogMarkdown(POST_SLUG, OPTS, PROD_ENV), "the published post must export on neckarshore.ai");
+  assert.equal(buildBlogMarkdown("gibt-es-nicht", OPTS, PROD_ENV), null);
+});
+
+test("TC-EXP-U22: resolveExport keeps blog paths to the slug charset", () => {
+  for (const bad of ["/blog/../etc/passwd", "/blog/kategorie/ki-agenten", "/blog/Gross", "/blog/"]) {
+    assert.equal(resolveExport(bad, OPTS), null, bad);
+  }
 });

@@ -436,6 +436,8 @@ test.describe("SEO — per-route WebPage entity", () => {
     "/products/flagships",
     "/products/clearpath",
     "/products/websites/neckarshore",
+    "/blog",
+    "/blog/risikobasierte-teststrategie-ios",
   ];
 
   for (const path of WEBPAGE_ROUTES) {
