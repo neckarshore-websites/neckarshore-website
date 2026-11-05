@@ -10,6 +10,7 @@ import { Prose } from "@/components/Prose";
 import { ExportButton } from "@/components/export/ExportButton";
 import { FIGURES } from "@/components/blog/figures";
 import { FurtherReading } from "@/components/blog/FurtherReading";
+import { Tldr } from "@/components/blog/Tldr";
 import { PostNavigation } from "@/components/blog/PostNavigation";
 import { categorySlug, formatDate, getAdjacentPosts, getPost, getPosts } from "@/lib/content/blog";
 import { BLOG_PATH, blogPostingSchema, categoryPath, postPath } from "@/lib/schema/blog";
@@ -126,6 +127,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <span className="block">{post.cover.credit}</span>
             </figcaption>
           </figure>
+
+          {post.tldrHtml && (
+            <div className="mx-auto mt-10 max-w-[720px]">
+              <Tldr html={post.tldrHtml} />
+            </div>
+          )}
 
           <div className="mt-10">
             {post.segments.map((segment, index) => {
