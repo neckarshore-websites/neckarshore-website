@@ -257,10 +257,23 @@ test("TC-BLOG-018: a Weiterführend link is https or an internal path — nothin
   const withLink = (url: string) => ({ ...VALID, further: [{ title: "T", url }] });
   assert.doesNotThrow(() => validateFrontmatter("ok-https", withLink("https://glossary.istqb.org/")));
   assert.doesNotThrow(() => validateFrontmatter("ok-internal", withLink("/test-management")));
-  for (const bad of ["http://example.org", "javascript:alert(1)", "//evil.example", "mailto:a@b.c", "ftp://x"]) {
+  for (const bad of [
+    "http://example.org",
+    "javascript:alert(1)",
+    "//evil.example",
+    "/\\evil.example",
+    "/\t/evil.example",
+    "/\n/evil.example",
+    "mailto:a@b.c",
+    "ftp://x",
+  ]) {
     assert.throws(() => validateFrontmatter("bad", withLink(bad)), /further\[0\]\.url/, bad);
   }
   assert.throws(() => validateFrontmatter("no-cats", { ...VALID, categories: [] }), /categories/);
+  assert.throws(
+    () => validateFrontmatter("twice", { ...VALID, categories: ["KI-Agenten", "KI-Agenten"] }),
+    /lists "ki-agenten" twice/,
+  );
 });
 
 test("TC-BLOG-019: no post whose slug starts with test- is ever published", () => {

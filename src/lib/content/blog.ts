@@ -305,7 +305,11 @@ export function validateFrontmatter(slug: string, data: Record<string, unknown>)
     fail("categories", "must list at least one category");
   }
   const categories = (data.categories as unknown[]).map((c, i) => text(`categories[${i}]`, c));
-  categories.forEach(categorySlug); // a name that yields no valid slug stops the build here
+  // A name that yields no valid slug stops the build here, and so does one category twice:
+  // the post would count twice in the sidebar while its page lists it once (CodeRabbit, #355).
+  const categorySlugs = categories.map(categorySlug);
+  const twice = categorySlugs.find((slug, i) => categorySlugs.indexOf(slug) !== i);
+  if (twice) fail("categories", `lists "${twice}" twice`);
 
   const further = data.further === undefined ? [] : data.further;
   if (!Array.isArray(further)) fail("further", "must be a list of { title, url }");
@@ -343,7 +347,16 @@ export function validateFrontmatter(slug: string, data: Record<string, unknown>)
  * protocol-relative "//host" — all refused.
  */
 function safeLinkUrl(field: string, url: string, fail: (f: string, why: string) => never): string {
-  if (url.startsWith("/") && !url.startsWith("//")) return url;
+  if (url.startsWith("/")) {
+    // "/\\host" and "/<tab>/host" read as "//host" in a browser (CodeRabbit, #355): resolve the
+    // path with the WHATWG parser against our own origin and accept it only if it stays there.
+    // Backslashes and control characters are refused outright as well.
+    const origin = "https://neckarshore.ai";
+    if (/[\\\u0000-\u001f\u007f]/.test(url) || new URL(url, origin).origin !== origin) {
+      return fail(field, `is not an internal path: "${url}"`);
+    }
+    return url;
+  }
   let protocol = "";
   try {
     protocol = new URL(url).protocol;
