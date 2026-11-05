@@ -28,6 +28,8 @@
  * build and the result is served as a static CDN asset.
  */
 import { readFileSync } from "node:fs";
+import { formatDate, getPublishedPosts } from "@/lib/content/blog";
+import { BLOG_PATH, postPath } from "@/lib/schema/blog";
 import { join } from "node:path";
 
 import { MMP_CARDS } from "@/lib/mmp-cards";
@@ -95,6 +97,20 @@ function renderCategory(category: PortfolioCategory): string {
   );
 }
 
+/**
+ * The blog: published posts only (never a draft, whatever the build environment), newest
+ * first, each with its standfirst. Empty string when nothing is published, so the index has
+ * no "## Blog" heading over nothing.
+ */
+function renderBlog(): string {
+  const posts = getPublishedPosts();
+  if (posts.length === 0) return "";
+  const lines = posts.map(
+    (post) => `- [${post.title}](${SITE_URL}${postPath(post.slug)}) — ${post.dek} (${formatDate(post.date)})`,
+  );
+  return `## Blog\n\nArticles on building software with AI agents, with measured numbers from our own projects. Each one is inlined in full in llms-full.txt. Index: ${SITE_URL}${BLOG_PATH}\n\n${lines.join("\n")}\n\n`;
+}
+
 export function buildLlmsIndexText(): string {
   const tests = readAuditedTestFigure();
 
@@ -103,7 +119,7 @@ export function buildLlmsIndexText(): string {
 > Stuttgart-basiertes KI-Dokumentations- und Nearshore-Softwareentwicklungsunternehmen. Gründer: German Rauhut (Ex-Mercedes-Benz IT). Website: neckarshore.ai.
 
 Last updated: ${SITE_UPDATED}
-Full content for AI ingestion (all product pages inlined in one file): ${SITE_URL}/llms-full.txt
+Full content for AI ingestion (all product pages and blog articles inlined in one file): ${SITE_URL}/llms-full.txt
 
 ## About
 
@@ -127,7 +143,7 @@ Native iPhone apps (listed under MMPs, status per line below): ${appItems()
 
 ${PORTFOLIO.map(renderCategory).join("\n\n")}
 
-## Services
+${renderBlog()}## Services
 
 1. AI-Powered Development — NestJS, TypeScript, PostgreSQL production stack
 2. Documentation Automation — Omnopsis Documentor+X

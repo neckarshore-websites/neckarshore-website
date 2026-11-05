@@ -234,7 +234,7 @@ test("TC-EXP-U20: buildBlogMarkdown exports the post with its figures as Markdow
   assert.ok(md.includes("### Welcher Testlauf wann läuft"), "execution plan");
   assert.ok(md.includes("| Bisher im Haus | Jetzt |"), "vocabulary table");
   assert.ok(md.includes("## Weiterführend"), "further reading section");
-  assert.ok(md.includes("(https://neckarshore.ai/test-management)"), "internal further link made absolute");
+  assert.ok(md.includes("(https://glossary.istqb.org/)"), "further links carry their URLs");
   assert.equal(result.filename, `neckarshore.ai - ${POST_SLUG}.md`);
 });
 

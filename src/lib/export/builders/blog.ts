@@ -45,7 +45,7 @@ export function buildBlogMarkdown(
     },
     title: post.title,
     lead: post.dek,
-    body: bodyWithFigures(post.body),
+    body: (post.tldr ? `## TL;DR / Zusammenfassung\n\n${post.tldr}\n\n` : "") + bodyWithFigures(post.body),
     sections: further ? [{ heading: "Weiterführend", body: further }] : [],
   });
 
