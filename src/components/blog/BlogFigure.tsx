@@ -63,8 +63,11 @@ export function TierChip({ tier }: { tier: "TM1" | "TM2" | "TM3" }) {
 
 /** The "neu" marker of Lenin's sheets. */
 export function NewChip() {
+  // Solid fill, not a tint: the chip sits on white, on the light table rows AND on the teal
+  // Snapshot bar, and a 10% accent tint over that teal measured 3.81:1 (Lighthouse,
+  // 2026-11-05). accent-active on white holds on every one of those grounds.
   return (
-    <span className="ml-2 inline-flex rounded-full bg-accent/10 px-2 py-0.5 align-middle text-sm font-semibold text-accent dark:bg-accent-bright/15 dark:text-accent-bright">
+    <span className="ml-2 inline-flex rounded-full border border-accent/40 bg-white px-2 py-0.5 align-middle text-sm font-semibold text-accent-active dark:border-accent-bright/40 dark:bg-deep-space dark:text-accent-bright">
       neu
     </span>
   );

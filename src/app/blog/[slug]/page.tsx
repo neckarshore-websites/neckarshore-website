@@ -85,7 +85,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             {post.draft && (
               <p
                 data-draft-banner
-                className="mb-6 rounded-lg border border-accent/40 bg-accent/10 px-4 py-2 text-sm font-semibold text-accent dark:border-accent-bright/40 dark:text-accent-bright"
+                className="mb-6 rounded-lg border border-accent/40 bg-white px-4 py-2 text-sm font-semibold text-accent-active dark:border-accent-bright/40 dark:bg-surface dark:text-accent-bright"
               >
                 Entwurf: nur in der Vorschau sichtbar, nicht auf neckarshore.ai.
               </p>
