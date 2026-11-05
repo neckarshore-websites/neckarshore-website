@@ -27,7 +27,11 @@ const navLinksLead = [
   { href: "/ki-beratung", label: "KI-Beratung", track: "nav_ki-beratung" },
 ];
 
-const navLinksTail = [{ href: "/#founder", label: "Über uns", track: "nav_founder" }];
+const navLinksTail = [
+  // Blog (2026-11): the first page on the site that grows by content rather than by code.
+  { href: "/blog", label: "Blog", track: "nav_blog" },
+  { href: "/#founder", label: "Über uns", track: "nav_founder" },
+];
 
 // Produkte dropdown — one entry per portfolio category, linking to its sub-portal page.
 // Derived from the central PORTFOLIO config (single source of truth — add a category there).
@@ -76,7 +80,7 @@ function ProductsDropdown() {
         aria-expanded={open}
         aria-haspopup="menu"
         data-track="nav_products"
-        className="flex items-center gap-1 text-sm font-medium text-primary/70 transition-colors duration-150 hover:text-accent dark:text-text-tertiary dark:hover:text-accent"
+        className="flex items-center gap-1 whitespace-nowrap text-sm font-medium text-primary/70 transition-colors duration-150 hover:text-accent dark:text-text-tertiary dark:hover:text-accent"
       >
         Produkte
         <ChevronDown
@@ -152,7 +156,7 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
         </div>
       )}
 
-      <div className="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-3 md:px-6">
+      <div className="mx-auto flex max-w-[1200px] items-center justify-between gap-4 px-4 py-3 md:px-6">
         {/* Below 360px the logo is one step smaller and the buttons sit closer: at 320px
             logo (177px) + buttons (126px) did not fit the 288px row and the wordmark ran
             15px under the search button (TC-RES-016). From 360px nothing changes. */}
@@ -163,13 +167,18 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
         {/* Desktop nav — shown from lg (1024px). Below that the hamburger handles it:
             at tablet-portrait width (768px) the full desktop row crowds the logo + clips
             the CTA, so the breakpoint is lg, not md (matches the SkillCard grid). */}
-        <div className="hidden items-center gap-8 lg:flex">
+        {/* From 1024 to 1279px the row is tight: logo 177px + 691px of entries in 976px
+            (measured 2026-11-05, with "Blog"). gap-8 did not fit even before "Blog" and the
+            labels wrapped onto two lines. So the gaps are 16px until xl, entries never wrap,
+            and the ⌘K hint and the wide CTA padding return from xl (SearchButton, CTA below).
+            TC-RES-030 guards the row at 1024 and 1280. */}
+        <div className="hidden items-center gap-4 lg:flex xl:gap-8">
           {navLinksLead.map((link) => (
             <a
               key={link.href}
               href={link.href}
               data-track={link.track}
-              className="text-sm font-medium text-primary/70 transition-colors duration-150 hover:text-accent dark:text-text-tertiary dark:hover:text-accent"
+              className="whitespace-nowrap text-sm font-medium text-primary/70 transition-colors duration-150 hover:text-accent dark:text-text-tertiary dark:hover:text-accent"
             >
               {link.label}
             </a>
@@ -180,7 +189,7 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
               key={link.href}
               href={link.href}
               data-track={link.track}
-              className="text-sm font-medium text-primary/70 transition-colors duration-150 hover:text-accent dark:text-text-tertiary dark:hover:text-accent"
+              className="whitespace-nowrap text-sm font-medium text-primary/70 transition-colors duration-150 hover:text-accent dark:text-text-tertiary dark:hover:text-accent"
             >
               {link.label}
             </a>
@@ -191,7 +200,7 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
             href="https://calendly.com/german-rauhut/30min"
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-lg bg-accent px-6 py-2.5 text-sm font-medium text-white transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
+            className="whitespace-nowrap rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-white xl:px-6 transition-all duration-150 hover:bg-accent-hover hover:scale-[1.02] active:scale-[0.98]"
             data-track="cta_click"
           >
             Kennenlerntermin

@@ -16,7 +16,7 @@ export function SearchButton({ className = "" }: { className?: string }) {
       className={`inline-flex items-center gap-1.5 rounded-md p-2 text-primary/70 transition-colors duration-150 hover:text-accent dark:text-text-tertiary dark:hover:text-accent ${className}`}
     >
       <Search size={18} aria-hidden="true" />
-      <span className="hidden text-xs text-muted dark:text-text-tertiary lg:inline">⌘K</span>
+      <span className="hidden text-xs text-muted dark:text-text-tertiary xl:inline">⌘K</span>
     </button>
   );
 }

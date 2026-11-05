@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
+import { getPublishedPosts } from "@/lib/content/blog";
 import { allProductRoutes } from "@/lib/portfolio";
+import { BLOG_PATH, postPath } from "@/lib/schema/blog";
 import { SITE_UPDATED, SITE_URL } from "@/lib/site-config";
 
 /**
@@ -31,10 +33,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // /products, the 4 sub-portals, and the bespoke own-page details (omnopsis, clearpath).
     // External sites + noindex preview skeletons are excluded by allProductRoutes().
     ...allProductRoutes(),
+    // The blog: published posts only. getPublishedPosts() ignores the draft gate on purpose, so
+    // a draft never reaches the sitemap, not even from a preview build. /blog itself is listed
+    // once there is something to read.
+    ...blogRoutes(),
   ].sort((a, b) => a.localeCompare(b));
 
   return [
     { url: `${baseUrl}/`, lastModified },
     ...paths.map((path) => ({ url: `${baseUrl}${path}`, lastModified })),
   ];
+}
+
+function blogRoutes(): string[] {
+  const published = getPublishedPosts();
+  if (published.length === 0) return [];
+  return [BLOG_PATH, ...published.map((post) => postPath(post.slug))];
 }
