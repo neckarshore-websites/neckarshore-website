@@ -15,9 +15,8 @@ import { BlogFigure, FigureHeading, NewChip, TierChip } from "../BlogFigure";
  *     the residual risks are in the article text. Row 2 loses "Flaky-Regel siehe Seite 4",
  *     because the blog has no page 4. The source line, which cites the history rule that is
  *     left out, goes with it.
- *   - the register is as of the sheet (27.10.). MuscleCat's area 8 (usage counting and
- *     consent, TM1, added on 2026-10-27 in the plan on planning main) is not on the sheet and
- *     therefore not here.
+ *   - MuscleCat's area 8 (usage counting and consent, TM1) is not on the sheet; it was added
+ *     to the plan on 2026-10-27 and is included here on the Founder's word of 2026-11-05.
  */
 
 type Tier = "TM1" | "TM2" | "TM3";
@@ -27,6 +26,9 @@ const MUSCLECAT: Area[] = [
   { name: "Datenintegrität", detail: "Backup, Migration, Katalog, Seeds", tier: "TM1" },
   { name: "Training erfassen", detail: "Sätze, Pausentimer, Trainingsende", tier: "TM1" },
   { name: "Kauf und Berechtigung", detail: "Paywall, Gratismonat", tier: "TM1" },
+  // Area 8, not on the sheet of 27.10.: added to the plan by Wendy on 2026-10-27 (planning
+  // main, commit e39c6710). Founder 2026-11-05: include it. The wording is Linus' translation.
+  { name: "Nutzungszählung und Einwilligung", tier: "TM1" },
   { name: "Verlauf und Statistik", detail: "Verknüpfung per UUID", tier: "TM2" },
   { name: "Pläne, Stammdaten", tier: "TM2" },
   { name: "Navigation, Onboarding, Einstellungen", tier: "TM2" },
@@ -113,7 +115,7 @@ export function RisikoregisterFigure() {
     <BlogFigure
       id="teststrategie-risikoregister"
       caption="Risikoregister und Teststufen-Regel für Kaze und MuscleCat"
-      source="Startbelegung aus Wendys Impact-Ranking und dem Bug-Ledger seit 27.08.2026 · Kaze Erststart TM1 nach Wendy, 27.10."
+      source="Startbelegung aus Wendys Impact-Ranking und dem Bug-Ledger seit 27.08.2026 · Kaze Erststart TM1 nach Wendy, 27.10. · MuscleCat Nutzungszählung und Einwilligung TM1 nach Wendy, 27.10."
     >
       <FigureHeading>Risikoregister je App</FigureHeading>
       <div className="mt-4 grid gap-8 md:grid-cols-2 md:gap-6">
