@@ -7,9 +7,12 @@ import Footer from "@/components/Footer";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { PageSchema } from "@/components/PageSchema";
 import { Prose } from "@/components/Prose";
+import { ExportButton } from "@/components/export/ExportButton";
 import { FIGURES } from "@/components/blog/figures";
-import { formatDate, getPost, getPosts } from "@/lib/content/blog";
-import { blogPostingSchema, postPath } from "@/lib/schema/blog";
+import { FurtherReading } from "@/components/blog/FurtherReading";
+import { PostNavigation } from "@/components/blog/PostNavigation";
+import { categorySlug, formatDate, getAdjacentPosts, getPost, getPosts } from "@/lib/content/blog";
+import { BLOG_PATH, blogPostingSchema, categoryPath, postPath } from "@/lib/schema/blog";
 import { pageMetadata } from "@/lib/seo";
 
 /**
@@ -63,6 +66,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   if (!post) notFound();
 
   const path = postPath(post.slug);
+  const primary = post.categories[0];
+  const { prev, next } = getAdjacentPosts(post.slug);
 
   return (
     <>
@@ -74,7 +79,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <Breadcrumbs
             trail={[
               { name: "Start", href: "/" },
-              { name: "Blog", href: "/blog" },
+              { name: "Blog", href: BLOG_PATH },
+              { name: primary, href: categoryPath(categorySlug(primary)) },
               { name: post.seoTitle },
             ]}
           />
@@ -135,19 +141,52 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             })}
           </div>
 
-          <footer className="mx-auto mt-12 max-w-[720px] border-t border-primary/10 pt-6 dark:border-white/10">
-            <p data-ai-note className="text-sm leading-relaxed text-muted dark:text-text-tertiary">
-              {post.aiNote}
-            </p>
-            <p className="mt-6">
+          <div className="mx-auto mt-12 max-w-[720px]">
+            <FurtherReading links={post.further} />
+          </div>
+
+          {/* Foot, in OGC's order (Founder direction there, 2026-04-18): move on first (prev /
+              next), then where this post belongs (categories, export, all posts), the fine
+              print last. */}
+          <div className="mx-auto mt-14 max-w-[720px] border-t border-primary/10 pt-10 dark:border-white/10">
+            <PostNavigation prev={prev} next={next} />
+          </div>
+
+          <footer className="mx-auto mt-10 flex max-w-[720px] flex-wrap items-start justify-between gap-6 border-t border-primary/10 pt-8 dark:border-white/10">
+            <div data-post-categories>
+              <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-muted dark:text-text-tertiary">
+                Kategorien
+              </p>
+              <ul className="flex flex-wrap gap-2">
+                {post.categories.map((cat) => (
+                  <li key={cat}>
+                    <Link
+                      href={categoryPath(categorySlug(cat))}
+                      className="inline-flex min-h-[44px] items-center rounded-lg border border-primary/15 px-3 text-sm text-neutral-dark/80 transition-colors hover:border-accent hover:text-accent dark:border-white/15 dark:text-text-secondary dark:hover:border-accent-bright dark:hover:text-accent-bright"
+                    >
+                      {cat}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="flex flex-wrap items-center gap-4">
+              <ExportButton path={path} className="min-h-[44px]" />
               <Link
-                href="/blog"
-                className="inline-flex min-h-[44px] items-center font-semibold text-accent underline underline-offset-2 hover:text-accent-hover dark:text-accent-bright"
+                href={BLOG_PATH}
+                className="inline-flex min-h-[44px] items-center font-semibold text-accent underline-offset-4 hover:text-accent-hover hover:underline dark:text-accent-bright"
               >
-                Alle Beiträge
+                ← Alle Beiträge
               </Link>
-            </p>
+            </div>
           </footer>
+
+          <p
+            data-ai-note
+            className="mx-auto mt-10 max-w-[720px] border-t border-primary/10 pt-5 text-sm leading-relaxed text-muted dark:border-white/10 dark:text-text-tertiary"
+          >
+            {post.aiNote}
+          </p>
         </article>
       </main>
       <Footer />

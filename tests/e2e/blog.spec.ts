@@ -29,10 +29,10 @@ async function ldNodes(page: Page): Promise<Record<string, unknown>[]> {
 test.describe("Blog", () => {
   test("TC-BLOG-020: /blog lists the first post, the title is the card's link", async ({ page }) => {
     await page.goto("/blog");
-    await expect(page.locator("h1")).toHaveText("Blog");
+    await expect(page.locator("h1")).toHaveCount(1);
     const card = page.locator(`[data-post-card="${SLUG}"]`);
     await expect(card).toBeVisible();
-    await expect(card.locator(`a[href="${POST}"]`)).toHaveCount(1);
+    await expect(card.locator("h2 a")).toHaveAttribute("href", POST);
   });
 
   test("TC-BLOG-021: the article has exactly one H1 and its BlogPosting names author and publisher", async ({ page }) => {
@@ -129,6 +129,90 @@ test.describe("Blog", () => {
     expect((await cover.getAttribute("alt"))?.length ?? 0).toBeGreaterThan(40);
     expect(await cover.getAttribute("width")).toBe("1920");
     expect(await cover.getAttribute("height")).toBe("1080");
+  });
+});
+
+test.describe("Blog — OGC parity (Founder 2026-11-05)", () => {
+  // Written so they hold with one published post as well as with the preview's test drafts:
+  // they check what IS rendered, never how many posts exist.
+
+  test("TC-BLOG-030: /blog has the category column, every entry ≥44px, and every card a Weiterlesen link", async ({ page }) => {
+    await page.goto("/blog");
+    const nav = page.locator("[data-category-nav]");
+    await expect(nav).toBeVisible();
+    await expect(nav.getByRole("link", { name: "Alle Beiträge" })).toHaveAttribute("aria-current", "page");
+    for (const box of await nav.locator("a").evaluateAll((as) => as.map((a) => a.getBoundingClientRect().height))) {
+      expect(box, "category entry tap height").toBeGreaterThanOrEqual(44);
+    }
+    const cards = page.locator("[data-post-card]");
+    const n = await cards.count();
+    expect(n).toBeGreaterThan(0);
+    for (let i = 0; i < n; i++) {
+      const slug = await cards.nth(i).getAttribute("data-post-card");
+      // Both halves: the VISIBLE text (what the Founder asked for) and the accessible name
+      // (which must contain the visible text — WCAG 2.5.3). Probing showed that checking the
+      // accessible name alone stays green when the visible label changes.
+      const cta = cards.nth(i).locator("a[data-track='blog_card_cta']");
+      await expect(cta).toHaveText(/^Weiterlesen/);
+      await expect(cta).toHaveAccessibleName(/^Weiterlesen/);
+      await expect(cta).toHaveAttribute("href", `/blog/${slug}`);
+      expect((await cta.boundingBox())?.height ?? 0).toBeGreaterThanOrEqual(44);
+    }
+  });
+
+  test("TC-BLOG-031: a category page names its category, marks it current, and its count matches its cards", async ({ page }) => {
+    await page.goto("/blog");
+    const first = page.locator("[data-category-nav] a[href^='/blog/kategorie/']").first();
+    const href = await first.getAttribute("href");
+    await page.goto(href!);
+    const current = page.locator("[data-category-nav] a[aria-current='page']");
+    await expect(current).toHaveAttribute("href", href!);
+    const name = (await page.locator("h1").textContent())?.trim();
+    expect((await current.textContent())?.startsWith(name!)).toBe(true);
+    const count = Number((await current.locator("span").textContent())?.replace(/\D/g, ""));
+    await expect(page.locator("[data-post-card]")).toHaveCount(count);
+  });
+
+  test("TC-BLOG-032: the article foot — category chips, Markdown export and 'Alle Beiträge'; neighbours render title and category", async ({ page }) => {
+    await page.goto(POST);
+    const chips = page.locator("[data-post-categories] a");
+    expect(await chips.count()).toBeGreaterThan(0);
+    for (const href of await chips.evaluateAll((as) => as.map((a) => a.getAttribute("href")))) {
+      expect(href).toMatch(/^\/blog\/kategorie\/[a-z0-9-]+$/);
+    }
+    await expect(page.locator(`a[href="/api/export?path=${encodeURIComponent(POST)}"]`)).toHaveCount(1);
+    await expect(page.getByRole("link", { name: "← Alle Beiträge" })).toHaveAttribute("href", "/blog");
+    for (const nav of await page.locator("[data-post-nav]").all()) {
+      await expect(nav).toHaveAttribute("href", /^\/blog\/[a-z0-9-]+$/);
+      expect((await nav.locator("span").nth(1).textContent())?.trim().length ?? 0).toBeGreaterThan(0);
+      expect((await nav.locator("span").nth(2).textContent())?.trim().length ?? 0).toBeGreaterThan(0);
+    }
+  });
+
+  test("TC-BLOG-033: the Markdown export of the article carries the figure tables and no marker", async ({ request }) => {
+    const res = await request.get(`/api/export?path=${encodeURIComponent(POST)}`);
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toContain("text/markdown");
+    const md = await res.text();
+    expect(md).toContain("| MuscleCat | Stufe |");
+    expect(md).toContain("## Weiterführend");
+    expect(md).not.toContain("<!--");
+  });
+
+  test("TC-BLOG-034: Weiterführend — external links open safely in a new tab, internal ones stay", async ({ page }) => {
+    await page.goto(POST);
+    const links = page.locator("[data-further] a");
+    expect(await links.count()).toBeGreaterThan(0);
+    for (const a of await links.all()) {
+      const href = (await a.getAttribute("href"))!;
+      if (href.startsWith("https://")) {
+        await expect(a).toHaveAttribute("target", "_blank");
+        await expect(a).toHaveAttribute("rel", /noopener/);
+      } else {
+        expect(href).toMatch(/^\/[a-z0-9-/]*$/);
+        expect(await a.getAttribute("target")).toBeNull();
+      }
+    }
   });
 });
 

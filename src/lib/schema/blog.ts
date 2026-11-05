@@ -19,6 +19,11 @@ export function postPath(slug: string): string {
   return `${BLOG_PATH}/${encodeURIComponent(slug)}`;
 }
 
+/** A category page's path. categorySlug() already allows only [a-z0-9-]; encoding is the second belt. */
+export function categoryPath(slug: string): string {
+  return `${BLOG_PATH}/kategorie/${encodeURIComponent(slug)}`;
+}
+
 export function blogPostingSchema(post: BlogPost) {
   const path = postPath(post.slug);
   return {
@@ -30,6 +35,7 @@ export function blogPostingSchema(post: BlogPost) {
     datePublished: post.date,
     dateModified: post.date,
     inLanguage: "de-DE",
+    keywords: post.categories.join(", "),
     url: `${BASE_URL}${path}`,
     image: `${BASE_URL}${post.cover.src}`,
     author: { "@id": PERSON_ID },

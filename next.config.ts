@@ -90,7 +90,10 @@ const nextConfig: NextConfig = {
   // present in dev/build but ENOENT on Vercel at runtime. Keys are route globs; values
   // are globs from the project root (Next 16 outputFileTracingIncludes).
   outputFileTracingIncludes: {
-    "/api/export": ["src/content/products/**/*.md"],
+    // Blog posts (2026-11): the slug is known only at request time. Whether Next would trace the
+    // directory on its own is unmeasured (website case studies export live without an entry
+    // here); listing it costs nothing, and the export is checked on the preview with vc curl.
+    "/api/export": ["src/content/products/**/*.md", "src/content/blog/**/*.md"],
   },
   async headers() {
     return [

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
-import { getPublishedPosts } from "@/lib/content/blog";
+import { getPublishedCategories, getPublishedPosts } from "@/lib/content/blog";
 import { allProductRoutes } from "@/lib/portfolio";
-import { BLOG_PATH, postPath } from "@/lib/schema/blog";
+import { BLOG_PATH, categoryPath, postPath } from "@/lib/schema/blog";
 import { SITE_UPDATED, SITE_URL } from "@/lib/site-config";
 
 /**
@@ -48,5 +48,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 function blogRoutes(): string[] {
   const published = getPublishedPosts();
   if (published.length === 0) return [];
-  return [BLOG_PATH, ...published.map((post) => postPath(post.slug))];
+  return [
+    BLOG_PATH,
+    ...published.map((post) => postPath(post.slug)),
+    ...getPublishedCategories().map((cat) => categoryPath(cat.slug)),
+  ];
 }

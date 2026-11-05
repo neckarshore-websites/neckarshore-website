@@ -14,6 +14,35 @@ cover:
   credit: "Grafik: neckarshore.ai, erstellt mit KI-Unterstützung (Claude)"
 ogImage: "/blog/risikobasierte-teststrategie-ios/og.jpg"
 aiNote: "Dieser Artikel ist mit KI-Unterstützung entstanden und von mir redigiert."
+categories:
+  - "Testmanagement"
+  - "KI-Agenten"
+# Weiterführend: the sources of Lenin's sheet 6, each URL checked on 2026-11-05 (HTTP 200 and
+# page title; the ACM DOI via Crossref, since dl.acm.org blocks automated fetches). Our own
+# page leads, the rest is A→Z by title.
+further:
+  - title: "Wie wir testen – neckarshore.ai"
+    url: "/test-management"
+  - title: "Author fast and reliable tests for Xcode Cloud – Apple, WWDC22"
+    url: "https://developer.apple.com/videos/play/wwdc2022/110361/"
+  - title: "Certified Tester Foundation Level (CTFL) v4.0 – ISTQB"
+    url: "https://istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/"
+  - title: "Diagnose unreliable code with test repetitions – Apple, WWDC21"
+    url: "https://developer.apple.com/videos/play/wwdc2021/10296/"
+  - title: "ISTQB Glossary – ISTQB"
+    url: "https://glossary.istqb.org/"
+  - title: "Meet Swift Testing – Apple, WWDC24"
+    url: "https://developer.apple.com/videos/play/wwdc2024/10179/"
+  - title: "Predictive test selection – Engineering at Meta"
+    url: "https://engineering.fb.com/2018/11/21/developer-tools/predictive-test-selection/"
+  - title: "Record, replay, and review: UI automation with Xcode – Apple, WWDC25"
+    url: "https://developer.apple.com/videos/play/wwdc2025/344/"
+  - title: "swift-snapshot-testing – Point-Free, GitHub"
+    url: "https://github.com/pointfreeco/swift-snapshot-testing"
+  - title: "Taming Google-Scale Continuous Testing – Google Research"
+    url: "https://research.google/pubs/taming-google-scale-continuous-testing/"
+  - title: "Techniques for improving regression testing in continuous integration development environments – Elbaum, Rothermel, Penix, FSE 2014"
+    url: "https://doi.org/10.1145/2635868.2635910"
 draft: true
 ---
 

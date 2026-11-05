@@ -24,10 +24,15 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   DESCRIPTION_MAX,
+  adjacent,
+  aggregateCategories,
   assertSlug,
+  categorySlug,
   SEO_TITLE_MAX,
   draftsVisible,
   filterVisible,
+  getAdjacentPosts,
+  getCategories,
   getPost,
   getPosts,
   getPublishedPosts,
@@ -59,6 +64,8 @@ const VALID = {
   },
   ogImage: "/blog/x/og.jpg",
   aiNote: "Hinweis.",
+  categories: ["Testmanagement"],
+  further: [{ title: "Quelle", url: "https://example.org/a" }],
   draft: false,
 };
 
@@ -175,5 +182,91 @@ test("TC-BLOG-013: a slug outside [a-z0-9-] stops the build (it becomes an href)
   assert.equal(assertSlug("risikobasierte-teststrategie-ios"), "risikobasierte-teststrategie-ios");
   for (const bad of ["Entwurf (2)", "javascript:alert(1)", "a--b", "-a", "a/b", "ä", ""]) {
     assert.throws(() => assertSlug(bad), /not a valid slug/, `"${bad}" must be refused`);
+  }
+});
+
+test("TC-BLOG-014: category slugs normalise umlauts and stay inside the slug rule", () => {
+  assert.equal(categorySlug("Künstliche Intelligenz"), "kuenstliche-intelligenz");
+  assert.equal(categorySlug("KI-Agenten"), "ki-agenten");
+  assert.equal(categorySlug("Größe & Maß"), "groesse-mass");
+  assert.throws(() => categorySlug("!!!"), /not a valid slug/);
+});
+
+test("TC-BLOG-015: categories are counted by slug, sorted A→Z, and a slug collision stops the build", () => {
+  const cats = aggregateCategories([
+    { categories: ["Testmanagement", "KI-Agenten"] },
+    { categories: ["KI-Agenten"] },
+  ]);
+  assert.deepEqual(
+    cats.map((c) => [c.name, c.slug, c.count]),
+    [
+      ["KI-Agenten", "ki-agenten", 2],
+      ["Testmanagement", "testmanagement", 1],
+    ],
+  );
+  assert.throws(
+    () => aggregateCategories([{ categories: ["KI-Agenten"] }, { categories: ["KI Agenten"] }]),
+    /share the slug/,
+  );
+});
+
+test("TC-BLOG-016: derived views read through the gate — a draft is never a neighbour and never a category in production (synthetic)", () => {
+  // The test drafts are dated before the real post; a derivation from every file instead of
+  // the gate would make a draft the published post's "next" and put its category in the
+  // production sidebar — both 404 links. Checked on the pure functions with the gate applied.
+  const posts = [
+    { slug: "neu", draft: false, categories: ["Testmanagement"] },
+    { slug: "entwurf", draft: true, categories: ["Nur im Entwurf"] },
+    { slug: "alt", draft: false, categories: ["Testmanagement"] },
+  ];
+  const live = filterVisible(posts, PRODUCTION);
+  assert.deepEqual(adjacent(live, "neu").next?.slug, "alt", "the draft is skipped as a neighbour");
+  assert.deepEqual(adjacent(live, "alt").prev?.slug, "neu");
+  assert.ok(
+    !aggregateCategories(live).some((c) => c.slug === "nur-im-entwurf"),
+    "a draft-only category must not exist in production",
+  );
+  const preview = filterVisible(posts, PREVIEW);
+  assert.equal(adjacent(preview, "neu").next?.slug, "entwurf", "on a preview the draft is a neighbour");
+});
+
+test("TC-BLOG-016b: the real wiring — while drafts exist, production categories and neighbours contain none of them", () => {
+  // Meaningful exactly while drafts exist, which is the only time anything can leak.
+  const drafts = getPosts(DEV).filter((p) => p.draft);
+  const live = getPosts(PRODUCTION);
+  const liveCategorySlugs = new Set(live.flatMap((p) => p.categories.map(categorySlug)));
+  for (const cat of getCategories(PRODUCTION)) {
+    assert.ok(liveCategorySlugs.has(cat.slug), `category ${cat.slug} exists in production without a live post`);
+  }
+  const draftSlugs = new Set(drafts.map((d) => d.slug));
+  for (const post of live) {
+    const { prev, next } = getAdjacentPosts(post.slug, PRODUCTION);
+    assert.ok(!prev || !draftSlugs.has(prev.slug), `${post.slug}: prev is a draft`);
+    assert.ok(!next || !draftSlugs.has(next.slug), `${post.slug}: next is a draft`);
+  }
+});
+
+test("TC-BLOG-017: adjacency has no wrap-around and is empty for an unknown slug", () => {
+  const posts = [{ slug: "a" }, { slug: "b" }];
+  assert.deepEqual(adjacent(posts, "a"), { prev: null, next: posts[1] });
+  assert.deepEqual(adjacent(posts, "b"), { prev: posts[0], next: null });
+  assert.deepEqual(adjacent(posts, "x"), { prev: null, next: null });
+});
+
+test("TC-BLOG-018: a Weiterführend link is https or an internal path — nothing else reaches an href", () => {
+  const withLink = (url: string) => ({ ...VALID, further: [{ title: "T", url }] });
+  assert.doesNotThrow(() => validateFrontmatter("ok-https", withLink("https://glossary.istqb.org/")));
+  assert.doesNotThrow(() => validateFrontmatter("ok-internal", withLink("/test-management")));
+  for (const bad of ["http://example.org", "javascript:alert(1)", "//evil.example", "mailto:a@b.c", "ftp://x"]) {
+    assert.throws(() => validateFrontmatter("bad", withLink(bad)), /further\[0\]\.url/, bad);
+  }
+  assert.throws(() => validateFrontmatter("no-cats", { ...VALID, categories: [] }), /categories/);
+});
+
+test("TC-BLOG-019: no post whose slug starts with test- is ever published", () => {
+  // Test posts exist only to fill the preview; they are drafts by rule, and this keeps a
+  // flipped flag from putting one on neckarshore.ai.
+  for (const post of getPublishedPosts()) {
+    assert.ok(!post.slug.startsWith("test-"), `${post.slug} is a test post and must stay a draft`);
   }
 });
