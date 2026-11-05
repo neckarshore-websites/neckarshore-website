@@ -117,3 +117,37 @@ test.describe("Privacy — opt-out signal on /api/track", () => {
     await expect.poll(() => sent.length, { timeout: 10_000 }).toBeGreaterThanOrEqual(1);
   });
 });
+
+// ---------------------------------------------------------------------------
+// /datenschutz section 7 — what the page says about Cloudflare Turnstile
+// ---------------------------------------------------------------------------
+// Until 2026-11-05 section 7 said only "keine Cookies" and named no storage entry, no
+// section 25 TDDDG basis and no second role. Wording: Dr. Sommer, report
+// 2026-11-02-dr-sommer-25tinx-turnstile (texts.turnstile_sie), released for neckarshore.ai
+// by the Founder on 2026-11-02 (question tool). Same guard as goldoni-website and
+// oakwoodgolfclub-website: it reads the RENDERED page, not the source file.
+// WHAT THIS CANNOT DO: tell whether Cloudflare still behaves as described.
+
+const SECTION_7_MUST_NOT = ["interaction-only"];
+
+const SECTION_7_MUST = [
+  "legt aber im lokalen Speicher Ihres Browsers einen Eintrag von Cloudflare an (cf.turnstile.u)",
+  "Ihre Eingaben im Formular erhält Cloudflare nicht.",
+  "Das Speichern im und das Auslesen aus dem Browser beruhen auf § 25 Abs. 2 Nr. 2 TDDDG.",
+  "Rollen und Speicherdauer:",
+  "verarbeitet Cloudflare diese Daten außerdem in eigener Verantwortung",
+  "Näheres: Turnstile Privacy Addendum (cloudflare.com/turnstile-privacy-policy).",
+];
+
+test("TC-PRIV-008: /datenschutz names Turnstile's storage entry, section 25 TDDDG and both roles", async ({
+  page,
+}) => {
+  await page.goto("/datenschutz");
+  const text = (await page.locator("main").innerText()).replace(/\s+/g, " ");
+  for (const phrase of SECTION_7_MUST_NOT) {
+    expect(text, `must not say: ${phrase}`).not.toContain(phrase);
+  }
+  for (const phrase of SECTION_7_MUST) {
+    expect(text, `must say: ${phrase}`).toContain(phrase);
+  }
+});
