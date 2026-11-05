@@ -20,7 +20,9 @@
  * is ClearPath's domain, not neckarshore's) — the biases now live as a table on
  * /products/clearpath, covered by that product's doc.
  */
+import { getPublishedPosts } from "@/lib/content/blog";
 import { allCategories } from "@/lib/portfolio";
+import { postPath } from "@/lib/schema/blog";
 import type { SearchDoc } from "./types";
 
 // Curated page index — every route + the stable home sections. Mirrors each page's
@@ -108,6 +110,13 @@ const PAGES: { id: string; title: string; text: string; category: string; url: s
     url: "/ki-fahrplan",
   },
   {
+    id: "page:/blog",
+    title: "Blog",
+    text: "Was wir beim Bauen von Software mit KI-Agenten messen, entscheiden und lernen: Teststrategie, Qualität und Werkzeuge, mit echten Zahlen aus unseren Projekten.",
+    category: "Seite",
+    url: "/blog",
+  },
+  {
     id: "page:/impressum",
     title: "Impressum",
     text: "Impressum von neckarshore.ai — German Rauhut, IT Consulting & Digital Ventures, Stuttgart. Angaben gemäß § 5 DDG.",
@@ -161,6 +170,19 @@ export function buildSearchDocs(): SearchDoc[] {
         ...(isExternalLink ? { external: true } : {}),
       });
     }
+  }
+
+  // 3) Blog posts — published ones only, like the sitemap: a draft is never searchable, not
+  //    even from a preview build (getPublishedPosts ignores the draft gate on purpose).
+  for (const post of getPublishedPosts()) {
+    docs.push({
+      id: `post:${post.slug}`,
+      type: "page",
+      title: post.title,
+      text: `${post.dek} ${post.description}`,
+      category: "Blog",
+      url: postPath(post.slug),
+    });
   }
 
   return docs;

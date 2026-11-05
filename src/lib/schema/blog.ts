@@ -14,8 +14,9 @@ const BASE_URL = "https://neckarshore.ai";
 
 export const BLOG_PATH = "/blog";
 
+/** The article's path. The loader already allows only [a-z0-9-] slugs; encoding is the second belt. */
 export function postPath(slug: string): string {
-  return `${BLOG_PATH}/${slug}`;
+  return `${BLOG_PATH}/${encodeURIComponent(slug)}`;
 }
 
 export function blogPostingSchema(post: BlogPost) {

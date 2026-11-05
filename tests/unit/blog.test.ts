@@ -24,6 +24,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   DESCRIPTION_MAX,
+  assertSlug,
   SEO_TITLE_MAX,
   draftsVisible,
   filterVisible,
@@ -168,4 +169,11 @@ test("TC-BLOG-012: the first post is present, carries all three figures and is r
     "teststrategie-vokabular",
   ]);
   assert.ok(post.readingMinutes >= 1, "reading time is computed");
+});
+
+test("TC-BLOG-013: a slug outside [a-z0-9-] stops the build (it becomes an href)", () => {
+  assert.equal(assertSlug("risikobasierte-teststrategie-ios"), "risikobasierte-teststrategie-ios");
+  for (const bad of ["Entwurf (2)", "javascript:alert(1)", "a--b", "-a", "a/b", "ä", ""]) {
+    assert.throws(() => assertSlug(bad), /not a valid slug/, `"${bad}" must be refused`);
+  }
 });

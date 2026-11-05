@@ -37,6 +37,21 @@ const WORDS_PER_MINUTE = 200;
 
 const MARKER = /<!--\s*figur:\s*([a-z0-9-]+)\s*-->/g;
 
+/**
+ * A slug is the file name, and it ends up in an `href`. Only lower-case letters, digits and
+ * single hyphens pass; anything else stops the build. The files are ours, so this is not about
+ * a hostile author — it keeps a stray name ("Entwurf (2).md", "javascript:…") from ever
+ * reaching a link, and it is the guard CodeQL's js/stored-xss asked for on PR #355.
+ */
+const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+export function assertSlug(slug: string): string {
+  if (!SLUG.test(slug)) {
+    throw new Error(`[blog] "${slug}" is not a valid slug: use a-z, 0-9 and single hyphens (file name = slug)`);
+  }
+  return slug;
+}
+
 type Env = Record<string, string | undefined>;
 
 export interface BlogCover {
@@ -114,9 +129,10 @@ export function getPublishedPosts(): BlogPost[] {
 function loadAll(): BlogPost[] {
   return readCollection<Record<string, unknown>>(DIR)
     .map((entry) => {
-      const data = validateFrontmatter(entry.slug, entry.data);
+      const slug = assertSlug(entry.slug);
+      const data = validateFrontmatter(slug, entry.data);
       return {
-        slug: entry.slug,
+        slug,
         ...data,
         body: entry.body,
         segments: splitBody(entry.body),
