@@ -3,7 +3,7 @@ title: "Wir testen nicht mehr alles. Wir testen, was brechen kann."
 seoTitle: "Risikobasierte Teststrategie für iOS-Apps mit KI-Agenten"
 description: "Über 99 % unserer Testzeit steckten in UI-Tests. Mit Risikobereichen, Test-first und ISTQB-Vokabular soll der Testlauf je Story auf 15 Minuten sinken."
 dek: "Wie wir die Teststrategie für zwei iOS-Apps neu aufgesetzt haben, mit KI-Agenten als Entwicklern und ISTQB als gemeinsamer Sprache."
-date: "2026-11-10"
+date: "2026-11-05"
 author: "German Rauhut"
 cover:
   src: "/blog/risikobasierte-teststrategie-ios/titelbild.webp"
@@ -43,7 +43,7 @@ further:
     url: "https://research.google/pubs/taming-google-scale-continuous-testing/"
   - title: "Techniques for improving regression testing in continuous integration development environments – Elbaum, Rothermel, Penix, FSE 2014"
     url: "https://doi.org/10.1145/2635868.2635910"
-draft: true
+draft: false
 ---
 
 Bei neckarshore.ai entwickeln wir zwei iOS-Apps: Kaze, eine App für digitale Selbstbeschränkung, und MuscleCat, ein Trainingstagebuch fürs Fitnessstudio. Gebaut werden beide überwiegend von KI-Agenten. Tests sind für uns deshalb kein Nebenthema. Sie sind das Sicherheitsnetz, das zwischen einem Agenten und dem Kunden steht.

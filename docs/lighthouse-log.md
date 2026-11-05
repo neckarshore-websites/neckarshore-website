@@ -74,6 +74,9 @@ See `CLAUDE.md` → "Lighthouse Device Matrix" for profile definitions and gate 
 | 53 | 2026-11-05 | linus/blog-teststrategie @c4f7c25 | desktop | 100 | 100 | 100 | 69 | 0.6 s | 0 ms | 0.002 | ad-hoc (/blog/risikobasierte-teststrategie-ios, VERCEL_ENV=preview build); SEO 69 = is-crawlable only, the draft's noindex |
 | 54 | 2026-11-05 | linus/blog-teststrategie @c4f7c25 | mobile-5g | 100 | 100 | 100 | 69 | 0.3 s | 40 ms | 0.001 | ad-hoc (/blog/risikobasierte-teststrategie-ios, VERCEL_ENV=preview build); SEO 69 = is-crawlable only, the draft's noindex |
 | 55 | 2026-11-05 | linus/blog-teststrategie @c4f7c25 | mobile-4g | 96 | 100 | 100 | 69 | 2.8 s | 20 ms | 0.001 | ad-hoc (/blog/risikobasierte-teststrategie-ios, VERCEL_ENV=preview build); SEO 69 = is-crawlable only, the draft's noindex |
+| 56 | 2026-11-05 | linus/blog-teststrategie (publishing commit) | desktop | 100 | 100 | 100 | 100 | 0.6s | 0ms | 0.002 | ad-hoc (/blog/risikobasierte-teststrategie-ios, production-like build, post published: SEO 100 now that noindex is gone) |
+| 57 | 2026-11-05 | linus/blog-teststrategie (publishing commit) | mobile-5g | 100 | 100 | 100 | 100 | 0.3s | 0ms | 0.001 | ad-hoc (/blog/risikobasierte-teststrategie-ios, production-like build, post published: SEO 100 now that noindex is gone) |
+| 58 | 2026-11-05 | linus/blog-teststrategie (publishing commit) | mobile-4g | 96 | 100 | 100 | 100 | 2.8s | 0ms | 0.001 | ad-hoc (/blog/risikobasierte-teststrategie-ios, production-like build, post published: SEO 100 now that noindex is gone) |
 
 > **Baseline established 2026-04-10 (local, rows 1/3).** Mobile Slow (Edge-5G) reveals the blind spot: Perf 70-71, LCP 9.6s. This is the scenario a colleague reported from France on weak 5G. CI vs local delta is minimal (±1 point).
 

@@ -13,9 +13,9 @@ import { pageMetadata } from "@/lib/seo";
  * development and Vercel previews.
  */
 const PAGE_TITLE = "Blog — Testen, Bauen und Entscheiden mit KI-Agenten";
-/** At or under 155 characters — TC-SEO-037. */
+/** At or under 155 characters — TC-SEO-037 (145; the first version had 158 under an unchecked comment). */
 const PAGE_DESCRIPTION =
-  "Was wir beim Bauen von Software mit KI-Agenten messen, entscheiden und lernen: Teststrategie, " +
+  "Was wir beim Bauen mit KI-Agenten messen, entscheiden und lernen: Teststrategie, " +
   "Qualität und Werkzeuge, mit echten Zahlen aus unseren Projekten.";
 
 export const metadata = pageMetadata({ title: PAGE_TITLE, description: PAGE_DESCRIPTION, path: BLOG_PATH });

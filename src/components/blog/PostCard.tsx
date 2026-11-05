@@ -7,7 +7,9 @@ import { categoryPath, postPath } from "@/lib/schema/blog";
  * Listing card, ported from OGC's components/blog/PostCard.tsx: date + primary category →
  * title (the card's main link) → standfirst → "Weiterlesen". The card is not one big link, so a
  * screen reader meets the title as the target; the CTA names its post in its accessible name.
- * Unlike OGC, the card shows the cover (alt="" — the title next to it says what it is).
+ * Unlike OGC, the card shows the cover. Its link is aria-hidden and out of the tab order (the
+ * title is the target), and the image still carries the cover's alt text: the site rule is
+ * that every image has one (TC-A11Y-<route>-alt).
  */
 export function PostCard({ post }: { post: BlogPost }) {
   const primary = post.categories[0];
@@ -22,7 +24,7 @@ export function PostCard({ post }: { post: BlogPost }) {
           src={post.cover.src}
           width={post.cover.width}
           height={post.cover.height}
-          alt=""
+          alt={post.cover.alt}
           sizes="(min-width: 640px) 200px, calc(100vw - 32px)"
           className="h-auto w-full rounded-lg"
         />

@@ -238,8 +238,11 @@ test("TC-EXP-U20: buildBlogMarkdown exports the post with its figures as Markdow
   assert.equal(result.filename, `neckarshore.ai - ${POST_SLUG}.md`);
 });
 
-test("TC-EXP-U21: a draft is not exportable in production (the gate also holds at request time)", () => {
-  assert.equal(buildBlogMarkdown(POST_SLUG, OPTS, PROD_ENV) === null, true);
+test("TC-EXP-U21: the published post exports in production; an unknown slug does not", () => {
+  // Until 2026-11-05 this asserted that the then-draft post was NOT exportable in production.
+  // The gate itself is pinned by TC-BLOG-002/003 on filterVisible, which the export reads.
+  assert.ok(buildBlogMarkdown(POST_SLUG, OPTS, PROD_ENV), "the published post must export on neckarshore.ai");
+  assert.equal(buildBlogMarkdown("gibt-es-nicht", OPTS, PROD_ENV), null);
 });
 
 test("TC-EXP-U22: resolveExport keeps blog paths to the slug charset", () => {
