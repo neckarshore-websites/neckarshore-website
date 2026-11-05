@@ -20,7 +20,7 @@ import { ORG_ID, WEBSITE_ID } from "@/lib/schema/organization";
 const BASE_URL = "https://neckarshore.ai";
 
 /** The kind of standalone entity an `@id` identifies on a route. */
-export type EntityKind = "webpage" | "software" | "collection" | "creativework";
+export type EntityKind = "webpage" | "software" | "collection" | "creativework" | "article";
 
 /**
  * The single source for cross-reference `@id`s. For `path="/"` this yields `…/#webpage`

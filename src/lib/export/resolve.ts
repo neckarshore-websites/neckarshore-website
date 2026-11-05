@@ -9,6 +9,7 @@
  * (`/products/../x` never matches) — defence in depth alongside readEntry's fixed root.
  */
 import { buildProductMarkdown, type ExportOptions, type ExportResult } from "./builders/product";
+import { buildBlogMarkdown } from "./builders/blog";
 import { buildWebsiteMarkdown } from "./builders/website";
 
 // Two-segment website case studies are matched FIRST and are mutually exclusive with the
@@ -18,10 +19,15 @@ import { buildWebsiteMarkdown } from "./builders/website";
 // path-traversal on both patterns.
 const WEBSITE_PATH = /^\/products\/websites\/([a-z0-9-]+)\/?$/;
 const PRODUCT_PATH = /^\/products\/([a-z0-9-]+)\/?$/;
+// Blog posts: the same [a-z0-9-] charset as every slug (assertSlug in lib/content/blog.ts).
+const BLOG_PATH = /^\/blog\/([a-z0-9-]+)\/?$/;
 
 export function resolveExport(pathname: string, opts: ExportOptions): ExportResult | null {
   const website = pathname.match(WEBSITE_PATH);
   if (website) return buildWebsiteMarkdown(website[1], opts);
+
+  const post = pathname.match(BLOG_PATH);
+  if (post) return buildBlogMarkdown(post[1], opts);
 
   const product = pathname.match(PRODUCT_PATH);
   if (product) return buildProductMarkdown(product[1], opts);

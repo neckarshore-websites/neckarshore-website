@@ -9,6 +9,8 @@ import { PageSchema } from "@/components/PageSchema";
 import { pageMetadata } from "@/lib/seo";
 import { repoType } from "@/lib/repo-types";
 import { TOP_N } from "@/lib/test-board";
+import { getPost } from "@/lib/content/blog";
+import { postPath } from "@/lib/schema/blog";
 
 const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
@@ -84,6 +86,8 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function TestManagementPage() {
+  // The article on the iOS test strategy, when the draft gate shows it here (lib/content/blog.ts).
+  const strategyPost = getPost("risikobasierte-teststrategie-ios");
   const scope = loadEstateScope();
   const total = headlineTotal(scope);
   const repos = scope.repos;
@@ -284,6 +288,25 @@ export default function TestManagementPage() {
                   className="font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
                 >
                   Alle Repositories ansehen →
+                </Link>
+              </p>
+            </section>
+          )}
+
+          {strategyPost && (
+            <section className="mt-12" data-blog-pointer>
+              <h2 className="font-heading text-2xl font-bold text-primary dark:text-text-primary">
+                Aus dem Blog
+              </h2>
+              <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
+                Wie wir die Teststrategie für zwei iOS-Apps neu aufgesetzt haben, nach Risiko statt
+                nach Datei:{" "}
+                <Link
+                  href={postPath(strategyPost.slug)}
+                  data-track="testmgmt_blog_teststrategie"
+                  className="font-medium text-accent underline underline-offset-2 transition-colors hover:text-accent-hover dark:text-accent-bright"
+                >
+                  {strategyPost.title}
                 </Link>
               </p>
             </section>

@@ -28,7 +28,8 @@ const BASE_URL = "https://neckarshore.ai";
 // These two are the ONE accepted cross-`<script>`-block reference class (AD per
 // L-NECK-ENTITY-WEBPAGE-ID 3d) — the route-invariant Organization/Person/WebSite stay here.
 export const ORG_ID = `${BASE_URL}/#organization`;
-const PERSON_ID = `${BASE_URL}/#founder`;
+// PERSON_ID is exported for the blog: a BlogPosting names its author by this @id (lib/schema/blog.ts).
+export const PERSON_ID = `${BASE_URL}/#founder`;
 export const WEBSITE_ID = `${BASE_URL}/#website`;
 
 export const organizationSchema = {

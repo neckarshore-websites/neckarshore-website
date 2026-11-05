@@ -22,8 +22,8 @@ export const SITE_URL = "https://neckarshore.ai";
  * NOT on every build, and NOT for a stats-only commit. Mirrors OGC's `SITE_UPDATED`
  * (oakwoodgolfclub-website, audit #69).
  *
- * Value = the date of the last content-bearing commit (the /products content + GEO
- * pass, #68–#71, 2026-06-22).
+ * Value = the date of the last content-bearing commit (the first blog post goes live,
+ * #355, 2026-11-05).
  *
  * Deferred upgrade (additive, not a rewrite): per-page freshness via an optional
  * `updated` field per content entry, `entry.updated ?? SITE_UPDATED`. The report's
@@ -31,4 +31,4 @@ export const SITE_URL = "https://neckarshore.ai";
  * shallow clone, so `git log` collapses to the single deploy commit and the per-page
  * signal is lost. Frontmatter dates are the robust path when the value justifies it.
  */
-export const SITE_UPDATED = "2026-10-30";
+export const SITE_UPDATED = "2026-11-05";
