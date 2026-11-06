@@ -60,7 +60,10 @@ jobs:
         run: npm ci
 
       - name: Install Playwright browser (chromium)
-        run: npx playwright install --with-deps chromium
+        # No --with-deps: the runner image already carries Chromium's libraries. The flag only fetched
+        # font packages from an Ubuntu mirror that stalled this step for 5 to 14 minutes
+        # in 26 of 524 runs across the websites, 2026-10-23 to 2026-11-06.
+        run: npx playwright install chromium
 
       - name: Kontrast-Waechter (baut, bedient und misst sich selbst)
         run: npm run check:contrast
