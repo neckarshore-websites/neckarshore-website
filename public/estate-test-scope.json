@@ -1,9 +1,9 @@
 {
   "byType": {
-    "e2e": 1105,
-    "integration": 1296,
+    "e2e": 1152,
+    "integration": 1333,
     "smoke": 1,
-    "unit": 4583
+    "unit": 4619
   },
   "endpoints": 96,
   "expected": 18,
@@ -13,14 +13,14 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 1205,
+        "integration": 1242,
         "unit": 55
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 1260
+      "total": 1297
     },
     {
       "audited_sha": "7360478fabf1750584acff9ea9756d5ed00f6523",
@@ -78,15 +78,15 @@
       "total": 34
     },
     {
-      "audited_sha": "fdd1ebea06dbf714d030775cae7b07fa704c6ad0",
+      "audited_sha": "5fc6f26b254dde8e69f984a3a470e131a0ad24b7",
       "byType": {
         "integration": 47,
-        "unit": 1850
+        "unit": 1859
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-skills/mailbox-autopilot",
-      "total": 1897
+      "total": 1906
     },
     {
       "audited_sha": "9a4046a7014d4f9606392bd9c1b7dbecf3418ea0",
@@ -110,7 +110,7 @@
       "total": 214
     },
     {
-      "audited_sha": "6f450df5aed57c1012b28b03fe9ece23a3496923",
+      "audited_sha": "bbe07b48740a59337e0ded7a11fdc73049aed0c6",
       "byType": {
         "e2e": 25,
         "unit": 138
@@ -132,15 +132,15 @@
       "total": 9
     },
     {
-      "audited_sha": "407fbc41ba7641e96ef6e1b23bed45dae8347ec8",
+      "audited_sha": "a13e32f025e133672d675d5710ae8893647778aa",
       "byType": {
-        "e2e": 547,
-        "unit": 336
+        "e2e": 593,
+        "unit": 362
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/neckarshore-website",
-      "total": 883
+      "total": 955
     },
     {
       "audited_sha": "6f4c0d8d7539bd0835bb95f63dd97dfd0e3a974e",
@@ -154,15 +154,15 @@
       "total": 165
     },
     {
-      "audited_sha": "fa1bb912c77401e02f3ee16877152795bad0cc9f",
+      "audited_sha": "dab59f2c2b99f1b5efe69a23f78429e287e45dbc",
       "byType": {
-        "e2e": 35,
-        "unit": 62
+        "e2e": 36,
+        "unit": 63
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/rauhut-website",
-      "total": 97
+      "total": 99
     },
     {
       "audited_sha": null,
@@ -244,7 +244,7 @@
   ],
   "reporting": 18,
   "repos": 21,
-  "total": 7067,
+  "total": 7187,
   "untyped_total": 82,
-  "updatedAt": "2026-11-05T11:47:31Z"
+  "updatedAt": "2026-11-06T11:45:29Z"
 }
