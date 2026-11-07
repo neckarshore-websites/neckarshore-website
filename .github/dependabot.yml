@@ -39,6 +39,14 @@ updates:
       - dependency-name: "@types/node"
         update-types:
           - version-update:semver-major
+      # Playwright follows the estate number in neckarshore-websites/.github
+      # toolchain/toolchain.json, for every website at once
+      # (toolchain/bump-playwright.sh). A bump here alone would leave this site
+      # off the number and, as a dev minor, auto-merge (Founder 2026-11-06).
+      # REMOVAL CRITERION: the day the estate drops the shared number.
+      - dependency-name: "@playwright/test"
+      - dependency-name: "playwright"
+      - dependency-name: "playwright-core"
     groups:
       # Grouping is aligned with the auto-merge safe class (dependabot-auto-merge.yml)
       # so the boring class self-clears atomically and only the review-worthy bumps
