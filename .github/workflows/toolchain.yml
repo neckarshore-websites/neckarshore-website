@@ -1,0 +1,22 @@
+# Holds this site to the estate's Playwright version
+# (neckarshore-websites/.github, toolchain/toolchain.json).
+#
+# Runs on pull requests, on every push to main (sites that push straight to
+# main are covered too) and once a week, so an idle site notices a moved
+# estate number without anyone touching it.
+name: Toolchain
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "23 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  toolchain:
+    uses: neckarshore-websites/.github/.github/workflows/toolchain-check.yml@main
