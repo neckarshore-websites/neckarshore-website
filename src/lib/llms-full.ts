@@ -18,9 +18,11 @@
  * (where `public/` and `src/content/` exist) and the result is served as a static CDN
  * asset — no runtime compute, no file-tracing, no cookies.
  */
+import { getPublishedPosts } from "@/lib/content/blog";
 import { resolveExport } from "@/lib/export/resolve";
 import { buildLlmsIndexText } from "@/lib/llms-index";
 import { allProductRoutes } from "@/lib/portfolio";
+import { postPath } from "@/lib/schema/blog";
 import { SITE_UPDATED, SITE_URL } from "@/lib/site-config";
 
 const PAGE_SEPARATOR = "\n\n---\n\n";
@@ -39,7 +41,9 @@ export function buildLlmsFullText(): string {
   // file is byte-deterministic across deploys — same rationale as sitemap lastModified.
   const opts = { baseUrl: SITE_URL, exportedAt: SITE_UPDATED };
 
-  const pages = allProductRoutes()
+  // Product pages, then the published blog articles (figures as Markdown tables, TL;DR first),
+  // through the same export path as the "Als Markdown" button.
+  const pages = [...allProductRoutes(), ...getPublishedPosts().map((post) => postPath(post.slug))]
     .map((path) => resolveExport(path, opts))
     .filter((result): result is NonNullable<typeof result> => result !== null)
     .map((result) => result.markdown.trim());

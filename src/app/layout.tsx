@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import TrackerScript from "@/components/TrackerScript";
 import { JsonLd } from "@/components/JsonLd";
 import { SearchProvider } from "@/components/search/SearchProvider";
+import { ThemeColorSync } from "@/components/ThemeColorSync";
 import { organizationSchema } from "@/lib/schema/organization";
 import "./globals.css";
 
@@ -60,6 +61,17 @@ export const metadata: Metadata = {
   },
 };
 
+// Browser chrome tint: the page ground, --color-neutral-light / --color-deep-space
+// in globals.css. The media tags cover the "system" setting; ThemeColorSync
+// follows an explicit choice in the ThemeToggle. tests/e2e/theme-color.spec.ts
+// holds the tag against the painted background.
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F1F5F9" },
+    { media: "(prefers-color-scheme: dark)", color: "#0F172A" },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -74,6 +86,7 @@ export default function RootLayout({
         <JsonLd data={organizationSchema} id="schema-org" />
         <SearchProvider>{children}</SearchProvider>
         <TrackerScript />
+        <ThemeColorSync />
       </body>
     </html>
   );
