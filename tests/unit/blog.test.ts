@@ -40,6 +40,9 @@ import {
   validateFrontmatter,
 } from "../../src/lib/content/blog";
 import { FIGURE_IDS } from "../../src/lib/content/blog-figures";
+import { buildLlmsIndexText } from "../../src/lib/llms-index";
+import { buildLlmsFullText } from "../../src/lib/llms-full";
+import { postPath } from "../../src/lib/schema/blog";
 
 const DEV = { NODE_ENV: "development" };
 const PREVIEW = { NODE_ENV: "production", VERCEL_ENV: "preview" };
@@ -281,5 +284,29 @@ test("TC-BLOG-019: no post whose slug starts with test- is ever published", () =
   // flipped flag from putting one on neckarshore.ai.
   for (const post of getPublishedPosts()) {
     assert.ok(!post.slug.startsWith("test-"), `${post.slug} is a test post and must stay a draft`);
+  }
+});
+
+test("TC-BLOG-019b: a TL;DR is optional, but when present it must be text", () => {
+  assert.equal(validateFrontmatter("no-tldr", VALID).tldr, null);
+  assert.equal(validateFrontmatter("tldr", { ...VALID, tldr: "Kurz." }).tldr, "Kurz.");
+  assert.throws(() => validateFrontmatter("empty-tldr", { ...VALID, tldr: "" }), /tldr/);
+  const post = getPost("risikobasierte-teststrategie-ios", DEV);
+  assert.ok(post?.tldrHtml?.includes("<strong>"), "the first post's TL;DR is rendered, bold runs included");
+});
+
+test("TC-BLOG-036: llms.txt lists every published post, llms-full.txt carries each in full", () => {
+  const index = buildLlmsIndexText();
+  const full = buildLlmsFullText();
+  const published = getPublishedPosts();
+  assert.ok(published.length > 0, "at least one published post");
+  assert.match(index, /^## Blog$/m, "llms.txt has a Blog section");
+  for (const post of published) {
+    assert.ok(index.includes(`https://neckarshore.ai${postPath(post.slug)}`), `${post.slug} listed in llms.txt`);
+    assert.ok(full.includes(`# ${post.title}`), `${post.slug} inlined in llms-full.txt`);
+    if (post.tldr) assert.ok(full.includes(post.tldr), `${post.slug}: its TL;DR is in llms-full.txt`);
+  }
+  for (const draft of getPosts(DEV).filter((p) => p.draft)) {
+    assert.ok(!index.includes(postPath(draft.slug)), `draft ${draft.slug} must not be in llms.txt`);
   }
 });

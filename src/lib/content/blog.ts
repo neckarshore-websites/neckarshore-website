@@ -74,6 +74,11 @@ export interface BlogFrontmatter {
   description: string;
   /** Standfirst under the H1. */
   dek: string;
+  /**
+   * Optional "TL;DR / Zusammenfassung" at the top of the article (OGC's callout, Founder
+   * 2026-11-05). Markdown, rendered and sanitised like the body; null when the post has none.
+   */
+  tldr: string | null;
   /** Publication date, `YYYY-MM-DD`. Set it on the commit that sets `draft: false`. */
   date: string;
   /** Byline. Must be the Person in lib/schema/organization.ts for the schema link to hold. */
@@ -110,6 +115,8 @@ export type BodySegment = { kind: "html"; html: string } | { kind: "figure"; id:
 
 export interface BlogPost extends BlogFrontmatter {
   slug: string;
+  /** The TL;DR rendered to sanitised HTML, or null. */
+  tldrHtml: string | null;
   /** Raw Markdown body, markers included (the unit tests read it). */
   body: string;
   segments: BodySegment[];
@@ -229,6 +236,7 @@ function loadAll(): BlogPost[] {
       return {
         slug,
         ...data,
+        tldrHtml: data.tldr ? renderMarkdown(data.tldr) : null,
         body: entry.body,
         segments: splitBody(entry.body),
         readingMinutes: readingMinutes(entry.body),
@@ -323,6 +331,7 @@ export function validateFrontmatter(slug: string, data: Record<string, unknown>)
     seoTitle,
     description,
     dek: text("dek", data.dek),
+    tldr: data.tldr === undefined ? null : text("tldr", data.tldr),
     date,
     author: text("author", data.author),
     cover: {
