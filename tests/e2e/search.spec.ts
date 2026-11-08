@@ -97,4 +97,18 @@ test.describe("Cmd+K Search @search", () => {
     await opt.click();
     await expect(page).toHaveURL(/\/products\/websites\/ristorante-goldoni/, { timeout: 15_000 });
   });
+
+  // WCAG 2.5.3 Label in Name (Lighthouse label-content-name-mismatch): where the ⌘K
+  // hint is visible (xl, 1280px+), it must be part of the button's accessible name;
+  // below xl the hint is display:none and the name is the plain label.
+  test("TC-SRCH-009: the visible ⌘K hint is part of the search button's name", async ({ page }) => {
+    const trigger = () =>
+      page.getByRole("button", { name: /^Suche öffnen/ }).filter({ visible: true }).first();
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/");
+    await expect(trigger()).toHaveAccessibleName("Suche öffnen ⌘K");
+    await expect(trigger()).toHaveAttribute("aria-keyshortcuts", "Meta+K Control+K");
+    await page.setViewportSize({ width: 390, height: 800 });
+    await expect(trigger()).toHaveAccessibleName("Suche öffnen");
+  });
 });
