@@ -45,7 +45,7 @@ test.describe("Responsive", () => {
           logo.getBoundingClientRect().right,
           ...[...logo.querySelectorAll("*")].map((e) => e.getBoundingClientRect().right),
         );
-        const search = [...document.querySelectorAll('nav button[aria-label="Suche öffnen"]')]
+        const search = [...document.querySelectorAll('nav button[aria-keyshortcuts]')]
           .find((e) => e.getBoundingClientRect().width > 0)!;
         return search.getBoundingClientRect().left - ink;
       });
