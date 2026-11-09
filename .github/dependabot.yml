@@ -47,6 +47,18 @@ updates:
       - dependency-name: "@playwright/test"
       - dependency-name: "playwright"
       - dependency-name: "playwright-core"
+      # TypeScript majors wait for the linter (#349, 2026-11-09). ESLint loads
+      # typescript-eslint through eslint-config-next, and typescript-eslint
+      # 8.72.1 declares peer typescript ">=4.8.4 <6.1.0"; on 7.0.2 it throws
+      # "typescript-eslint does not support TS 7.0" and the lint gate goes red.
+      # tsc, tests and the build were green on 7.0.2 — the linter is the only block.
+      # Minor and patch inside 5.x keep coming.
+      # REMOVAL CRITERION: `npm view typescript-eslint peerDependencies` admits
+      # the next TypeScript major (upstream tracking:
+      # https://github.com/typescript-eslint/typescript-eslint/issues/10940).
+      - dependency-name: "typescript"
+        update-types:
+          - version-update:semver-major
     groups:
       # Grouping is aligned with the auto-merge safe class (dependabot-auto-merge.yml)
       # so the boring class self-clears atomically and only the review-worthy bumps
