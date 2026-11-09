@@ -55,7 +55,7 @@ DISPLAY_OVERRIDES='{
   "neckarshore-mmps/snakeoil-check": "Snakeoil-Check",
   "neckarshore-mmps/trustscope": "TrustScope",
   "neckarshore-skills/ai-phrase-check": "AI Phrase Check",
-  "neckarshore-skills/imap-mailbox-cleanup": "IMAP Mailbox Cleanup",
+  "neckarshore-skills/mailbox-autopilot": "Mailbox Autopilot",
   "neckarshore-skills/obsidian-vault-autopilot": "Obsidian Vault Autopilot",
   "omnopsis-ai/omnopsis-backend": "Omnopsis",
   "omnopsis-ai/omnopsis-contracts": "Omnopsis",
