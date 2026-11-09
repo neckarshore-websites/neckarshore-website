@@ -53,9 +53,13 @@ updates:
       # "typescript-eslint does not support TS 7.0" and the lint gate goes red.
       # tsc, tests and the build were green on 7.0.2 — the linter is the only block.
       # Minor and patch inside 5.x keep coming.
-      # REMOVAL CRITERION: `npm view typescript-eslint peerDependencies` admits
-      # the next TypeScript major (upstream tracking:
-      # https://github.com/typescript-eslint/typescript-eslint/issues/10940).
+      # REMOVAL CRITERION: the typescript-eslint version RESOLVED in this
+      # repo's package-lock.json (the one eslint-config-next loads) declares a
+      # peer range that admits the TypeScript version Dependabot last proposed
+      # (7.0.2 on #349) — not merely "the next major", since its range already
+      # admits 6.0. Check: `npm ls typescript-eslint` for the version, then its
+      # peerDependencies. Upstream tracking:
+      # https://github.com/typescript-eslint/typescript-eslint/issues/10940
       - dependency-name: "typescript"
         update-types:
           - version-update:semver-major
