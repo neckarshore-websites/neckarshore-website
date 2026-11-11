@@ -1,9 +1,9 @@
 {
   "byType": {
     "e2e": 1219,
-    "integration": 1471,
+    "integration": 1488,
     "smoke": 1,
-    "unit": 4741
+    "unit": 4781
   },
   "endpoints": 96,
   "expected": 18,
@@ -13,14 +13,14 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 1370,
+        "integration": 1387,
         "unit": 55
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 1425
+      "total": 1442
     },
     {
       "audited_sha": "7360478fabf1750584acff9ea9756d5ed00f6523",
@@ -78,15 +78,15 @@
       "total": 34
     },
     {
-      "audited_sha": "5735b7ae8287471028258d945f2ef272106eb6f4",
+      "audited_sha": "be973084ce3ca4c15ab7fa62bc030963bf78cccc",
       "byType": {
         "integration": 47,
-        "unit": 1923
+        "unit": 1963
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "Mailbox Autopilot",
-      "total": 1970
+      "total": 2010
     },
     {
       "audited_sha": "40c648b0dcc10e66285b74f407b08dcfeb8d3c81",
@@ -132,7 +132,7 @@
       "total": 9
     },
     {
-      "audited_sha": "6fd410775a6c38185f1b3c675c5d19d289ad4f62",
+      "audited_sha": "676320d5f9eae0fda43020771cac1c7bedb5a080",
       "byType": {
         "e2e": 598,
         "unit": 362
@@ -244,7 +244,7 @@
   ],
   "reporting": 18,
   "repos": 21,
-  "total": 7514,
+  "total": 7571,
   "untyped_total": 82,
-  "updatedAt": "2026-11-10T12:01:16Z"
+  "updatedAt": "2026-11-11T11:37:08Z"
 }
