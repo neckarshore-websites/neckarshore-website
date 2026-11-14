@@ -155,7 +155,7 @@ export default function TestManagementPage() {
             <strong className="text-accent dark:text-accent-bright">
               {total} automatisierte Tests
             </strong>{" "}
-            über <strong>{repos} unserer Repositories</strong>. Wir nennen die exakte Zahl,
+            in <strong>{repos} unserer Repositories</strong>. Wir nennen die exakte Zahl,
             die die Test-Runner melden. Das „+{"“"} steht dort, weil einige Skripte Tests
             ausführen, die sich nicht automatisch zählen lassen — die tatsächliche Zahl liegt
             also höher. Wir nennen lieber eine kleinere Zahl, die stimmt, als eine größere,
