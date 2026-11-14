@@ -1,7 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
-import { TOP_N } from "../../src/lib/test-board";
 
 /**
  * /test-management — "Wie wir testen" detail surface (backlog #245, UD5 Front-10).
@@ -9,9 +8,10 @@ import { TOP_N } from "../../src/lib/test-board";
  * Verifies the page is DATA-BOUND to the same single source as the homepage tile
  * (public/estate-test-scope.json) — never a second hardcoded figure that can drift — and
  * holds the honesty guardrails (EXACT aggregate + load-bearing "+" per the 2026-07-10 Founder
- * directive, backed by a dated audited_floor when it exceeds Σ per_repo; Top-N + rest-rollup
- * so the 0-test scaffold repo and the known-red repo are not individually spotlighted). Also
- * checks the 13-test-type scope, the per-repo Typ column, and the /tests→/test-management 308.
+ * directive, backed by a dated audited_floor when it exceeds Σ per_repo). Since #370 (Founder
+ * order 2026-11-14) the table lists EVERY repository with tests, split by test level, and the
+ * levels are totalled; the old Top-N rollup is retired. Also checks the test-purpose list, the
+ * per-repo Typ column, and the /tests→/test-management 308.
  */
 
 const ROUTE = "/test-management";
@@ -24,7 +24,13 @@ function loadScope() {
     total: raw.total as number,
     repos: raw.repos as number,
     floor: Boolean(raw.floor),
-    per_repo: (raw.per_repo ?? []) as { repo: string; total: number }[],
+    per_repo: (raw.per_repo ?? []) as {
+      repo: string;
+      total: number;
+      byType?: Record<string, number>;
+    }[],
+    byType: (raw.byType ?? {}) as Record<string, number>,
+    untyped_total: (raw.untyped_total ?? 0) as number,
     // Optional audited floor (Founder directive 2026-07-10): when the headline exceeds Σ per_repo,
     // this dated + sourced field is the ONLY legitimate reason (TC-CNT-085).
     audited_floor: (raw.audited_floor ?? null) as {
@@ -133,51 +139,104 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     expect(body).toContain("gegengeprüft"); // the re-check method, framed generically
   });
 
-  test("TC-CNT-071: per-repo table has a Typ column, Top-N + rest-rollup (no 0-row / no red-test spotlight)", async ({
+  test("TC-CNT-071: per-repo table lists EVERY repository with tests, split by level (#370)", async ({
     page,
   }) => {
     await page.goto(ROUTE);
     const scope = loadScope();
-    const table = page.locator("main table");
+    const table = page.locator("[data-repo-breakdown] table");
     await expect(table).toBeVisible();
-    // Three columns now: Repository · Typ · Tests.
-    await expect(table.locator("thead th")).toHaveCount(3);
-    await expect(table.locator("thead")).toContainText("Typ");
-    // Top-6 + at most one rollup row.
-    expect(await table.locator("tbody tr").count()).toBeLessThanOrEqual(7);
-    await expect(table).toContainText("weitere Repositories");
+    // Repository · Typ · Unit · Integration · End-to-End · Smoke · Gesamt.
+    const head = (await table.locator("thead").textContent()) ?? "";
+    for (const h of ["Repository", "Typ", "Unit", "Integration", "End-to-End", "Smoke", "Gesamt"]) {
+      expect(head).toContain(h);
+    }
+    // All rows, no rollup.
+    const rows = table.locator("tbody tr[data-repo-row]");
+    await expect(rows).toHaveCount(scope.per_repo.length);
+    expect(scope.per_repo.length).toBe(scope.repos);
+    await expect(table).not.toContainText("weitere Repositories");
+    // A row without a split says so, once per such row, and never shows zeros in its place.
+    const unsplit = scope.per_repo.filter((r) => Object.keys(r.byType ?? {}).length === 0).length;
+    await expect(table.locator("td[data-unsplit]")).toHaveCount(unsplit);
+    for (const cell of await table.locator("td[data-unsplit]").all()) {
+      await expect(cell).toHaveText("nicht aufgeteilt");
+    }
+    // The Gesamt column carries every row's real count, largest first.
+    const totals = (await rows.locator("td:last-child").allTextContents()).map((t) =>
+      Number(t.replace(/\./g, "")),
+    );
+    expect(totals).toEqual([...scope.per_repo].map((r) => r.total).sort((a, b) => b - a));
     const tableText = (await table.textContent()) ?? "";
-    // Post-disclosure-config (Pass-2a): the top rows carry product/slug names per the allow-list.
-    // Public non-product rows keep their slug + a real Typ (neckarshore-website → Webseite). Rows
-    // rewritten to a product display-name (approved-private OR public product) show Typ "—" — the
-    // raw slug is gone, so the type is not guessed.
+    // Public non-product rows keep their slug's last segment + a real Typ.
     expect(tableText).toContain("Webseite");
-    // Withholding is active: the served data carries anonymized rows ("privates Repo", count kept,
-    // no name). They render as such WHERE they surface — but this assertion must not depend on
-    // RANKING: as the estate grew, the top withheld-private repo (126 tests) now ranks below the
-    // Top-6 (behind oakwood at 129) and folds into the rollup, so the literal label need not appear
-    // in the visible top rows (#111). The ranking-independent invariant is that the withholding
-    // transform ran and produced anonymized rows in the source data; raw private slugs are guarded
-    // by TC-CNT-084's canary loop.
-    expect(scope.per_repo.some((r) => r.repo === "privates Repo")).toBe(true);
-    // §5b: the 0-test scaffold repo and the known-red repo (#257) stay in the rollup, not spotlit.
-    // Their RAW slugs must never appear (clearpath-52 is now rendered "ClearPath" and lives in the rollup).
+    // Rows that share a display name are told apart ("Omnopsis · 1 von 3"), withheld rows stay
+    // anonymous; every other rendered name is unique.
+    const names = (await rows.locator("th").allTextContents()).filter((n) => n !== "privates Repo");
+    expect(new Set(names).size).toBe(names.length);
+    // Raw slugs that must never appear.
     expect(tableText).not.toContain("clearpath-52");
-    expect(tableText).not.toContain("oakwoodgolfclub-website");
   });
 
-  test("TC-CNT-074: 'Was abgedeckt ist' lists the full 13-test-type scope (no per-type numbers)", async ({
+  test("TC-CNT-109: per-level totals are data-bound and sum to the headline (#370)", async ({
+    page,
+  }) => {
+    const scope = loadScope();
+    const typed = Object.values(scope.byType).reduce((s, n) => s + n, 0);
+    // The invariant the page asserts at build time, checked on the data the e2e run serves.
+    expect(typed + scope.untyped_total).toBe(scope.total);
+
+    await page.goto(ROUTE);
+    const block = page.locator("[data-level-totals]");
+    const labels: Record<string, string> = {
+      unit: "Unit",
+      integration: "Integration",
+      e2e: "End-to-End",
+      smoke: "Smoke",
+    };
+    for (const [key, label] of Object.entries(labels)) {
+      const row = block.locator(`tr[data-level="${key}"]`);
+      await expect(row).toContainText(label);
+      await expect(row).toContainText((scope.byType[key] ?? 0).toLocaleString("de-DE"));
+    }
+    await expect(block.locator('tr[data-level="untyped"]')).toContainText("ohne Zuordnung");
+    await expect(block.locator('tr[data-level="untyped"]')).toContainText(
+      scope.untyped_total.toLocaleString("de-DE"),
+    );
+    const headline = scope.total.toLocaleString("de-DE") + (scope.floor ? "+" : "");
+    await expect(block.locator('tr[data-level="sum"]')).toContainText(headline);
+  });
+
+  test("TC-CNT-110: the overtaken sentences are gone (#370 corrections 1 and 3)", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    const body = (await page.locator("main").textContent()) ?? "";
+    // The figure is exact since the Founder directive of 2026-07-10, not rounded down.
+    expect(body).not.toContain("nach unten");
+    expect(body).not.toContain("gerundet");
+    // The level split exists now.
+    expect(body).not.toContain("nur teilweise verfügbar");
+    expect(body).toContain("exakte Zahl");
+  });
+
+  test("TC-CNT-074: 'Was abgedeckt ist' separates counted levels from test purposes (#370)", async ({
     page,
   }) => {
     await page.goto(ROUTE);
     const main = page.locator("main");
-    await expect(main).toContainText("13 Testarten");
-    const types = page.locator('ul[aria-label="Abgedeckte Testarten"] li');
-    await expect(types).toHaveCount(13);
-    // A representative span of the 13 is present.
-    for (const t of ["Unit", "End-to-End", "Security", "Accessibility", "AI-Eval"]) {
-      await expect(types.filter({ hasText: t }).first()).toBeVisible();
+    // No count of purposes in the text (Engels' wording rule 1, #370): the list speaks for itself.
+    await expect(main).not.toContainText("13 Testarten");
+    const purposes = page.locator('ul[aria-label="Prüfzwecke"] li');
+    // Only purposes with evidence in the estate; the four counted levels are not repeated here.
+    const texts = await purposes.allTextContents();
+    expect(texts.length).toBeGreaterThan(0);
+    for (const level of ["Unit", "Integration", "End-to-End", "Smoke"]) {
+      expect(texts).not.toContain(level);
     }
+    for (const t of ["Accessibility", "Security", "SEO/GEO"]) expect(texts).toContain(t);
+    // A→Z, case-insensitive (global sorting rule).
+    expect(texts).toEqual([...texts].sort((a, b) => a.localeCompare(b, "de", { sensitivity: "base" })));
   });
 
   test("TC-CNT-072: sitemap lists /test-management", async ({ request }) => {
@@ -264,9 +323,8 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
       ).not.toContain(name);
     }
     // Withholding is active: the served data carries anonymized rows ("privates Repo", count kept,
-    // no name/Typ). The label renders where those rows surface; post-estate-growth the withheld
-    // repos fold into the Top-N rollup, so the literal string need not appear on the visible page
-    // (#111). The hard privacy guarantee is the canary loop above (no raw private name ever renders);
+    // no name/Typ). Since #370 every row renders, so the label is on the page whenever the data has
+    // such rows; the hard privacy guarantee is still the canary loop above (no raw private name ever renders);
     // this positive assertion verifies — ranking-independently — that the withholding transform ran.
     expect(loadScope().per_repo.some((r) => r.repo === "privates Repo")).toBe(true);
   });
@@ -312,13 +370,11 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
       expect(mainText, `named_private slug leaked raw on the page: ${slug}`).not.toContain(slug);
     }
 
-    // POSITIVE (drift-safe): whichever approved-private products the board LISTS are shown by
-    // their product name. The board lists only the TOP_N repos by test count; everything else
-    // rolls up into one line. Checking every product in the data broke on a correct page the day
-    // Snakeoil-Check (241) fell out of the top six as other repos grew (2026-09-29/30). If no
-    // approved-private product is in the top N, the loop is empty and the HARD RULE above holds alone.
+    // POSITIVE: since #370 the board lists every repository, so every approved-private product in
+    // the data is shown by its product name (shared names carry "· k von n", which still contains
+    // the name).
     const privateProductNames = new Set(cfg.named_private.map((s) => cfg.display_overrides[s]));
-    const listed = [...scope.per_repo].sort((a, b) => b.total - a.total).slice(0, TOP_N);
+    const listed = scope.per_repo;
     const rendered = new Set(
       listed.map((r) => r.repo).filter((name) => privateProductNames.has(name)),
     );
