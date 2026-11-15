@@ -7,14 +7,10 @@ import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import { PageSchema } from "@/components/PageSchema";
 import { pageMetadata } from "@/lib/seo";
-import {
-  assertBreakdown,
-  displayRows,
-  levelColumns,
-  unsplitCount,
-  type RepoRow,
-  type ScopeTotals,
-} from "@/lib/test-breakdown";
+import { assertBreakdown, type RepoRow, type ScopeTotals } from "@/lib/test-breakdown";
+import { andereParts, grandTotal, tableGroups, type Cells } from "@/lib/test-table";
+import TestGroupTable from "@/components/TestGroupTable";
+import disclosure from "../../../disclosure-config.json";
 import { formatDate, getPostsInCategory } from "@/lib/content/blog";
 import { categoryPath, postPath } from "@/lib/schema/blog";
 
@@ -50,6 +46,7 @@ interface EstateScope extends ScopeTotals {
   // shown by product name) — it is NOT the anonymized signal (the literal "privates Repo" is).
   // The count is always real, whichever shape the name takes.
   per_repo: RepoRow[];
+  updatedAt?: string;
 }
 
 function loadEstateScope(): EstateScope {
@@ -62,6 +59,7 @@ function loadEstateScope(): EstateScope {
     per_repo: Array.isArray(raw.per_repo) ? raw.per_repo : [],
     byType: raw.byType ?? {},
     untyped_total: raw.untyped_total ?? 0,
+    updatedAt: typeof raw.updatedAt === "string" ? raw.updatedAt : undefined,
   };
 }
 
@@ -101,15 +99,49 @@ const TEST_PURPOSES = [
   "Visual/UAT",
 ] as const;
 
-const TH =
-  "whitespace-nowrap px-3 py-2.5 font-heading text-xs font-semibold uppercase tracking-wider text-muted dark:text-text-tertiary md:px-4";
-const TH_NUM = `${TH} text-right`;
-const ROW_BORDER = "border-t border-primary/10 dark:border-text-secondary/10";
-const NUM = "whitespace-nowrap px-3 py-3 text-right tabular-nums md:px-4";
-// The name column stays put while the table scrolls sideways on a phone. Opaque page background
-// (the body's own tokens) so scrolled cells do not show through; a hairline marks the edge.
-const STICKY =
-  "sticky left-0 z-[1] bg-neutral-light shadow-[inset_-1px_0_0_rgb(10_37_64/0.1)] dark:bg-deep-space dark:shadow-[inset_-1px_0_0_rgb(203_213_225/0.1)]";
+// The level bar and its legend, in column order. Swatches use the brand tokens; dark mode swaps to
+// the lighter shades so each segment stays distinguishable on the dark surface.
+const LEVEL_SEGMENTS: { key: keyof Omit<Cells, "total">; label: string; swatch: string }[] = [
+  { key: "unit", label: "Unit", swatch: "bg-accent dark:bg-accent-bright" },
+  { key: "integration", label: "Integration", swatch: "bg-[#3AA6BF] dark:bg-accent" },
+  { key: "e2e", label: "End-to-End", swatch: "bg-primary dark:bg-text-secondary" },
+  { key: "andere", label: "Andere", swatch: "bg-text-tertiary dark:bg-muted" },
+];
+
+/** "Stand" as people read it in Germany, in Berlin time, e.g. "15. November 2026, 07:58 Uhr". */
+function formatStand(iso: string | undefined): string | null {
+  if (!iso) return null;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  const date = new Intl.DateTimeFormat("de-DE", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "Europe/Berlin",
+  }).format(d);
+  const time = new Intl.DateTimeFormat("de-DE", {
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Europe/Berlin",
+  }).format(d);
+  return `${date}, ${time} Uhr`;
+}
+
+/** The note under the bar: what "Andere" consists of, every figure derived from the data. */
+function andereNote(p: ReturnType<typeof andereParts>): string {
+  const parts: string[] = [];
+  if (p.smokeAndOther > 0) {
+    parts.push(`${fmt(p.smokeAndOther)} ${p.smokeAndOther === 1 ? "Smoke-Test" : "Smoke-Tests"}`);
+  }
+  if (p.unsplit > 0) {
+    parts.push(
+      `${fmt(p.unsplit)} Tests aus ${p.unsplitRepos} ${
+        p.unsplitRepos === 1 ? "Repository, dessen" : "Repositories, deren"
+      } Zählung noch nicht nach Stufe aufteilt`,
+    );
+  }
+  return `„Andere“ sind ${parts.join(" und ")}.`;
+}
 
 export const metadata: Metadata = pageMetadata({
   title: "Wie wir testen — nachprüfbar gezählt | neckarshore.ai",
@@ -131,9 +163,15 @@ export default function TestManagementPage() {
   // Throws while prerendering when the parts do not add up or the page and the tile disagree,
   // so `next build` fails instead of a wrong sum reaching the public page (#370).
   assertBreakdown(scope, loadTileScope());
-  const columns = levelColumns(scope.byType, scope.per_repo);
-  const rows = displayRows(scope.per_repo);
-  const unsplitRepos = unsplitCount(scope.per_repo);
+  const groups = tableGroups(scope.per_repo, disclosure.display_overrides);
+  const grand = grandTotal(groups);
+  if (grand.total !== scope.total) {
+    throw new Error(
+      `/test-management: the grouped table sums to ${grand.total}, the headline is ${scope.total}; refusing to render it`,
+    );
+  }
+  const andere = andereParts(scope.per_repo);
+  const stand = formatStand(scope.updatedAt);
 
   return (
     <>
@@ -201,79 +239,71 @@ export default function TestManagementPage() {
             <h2 className="font-heading text-2xl font-bold text-primary dark:text-text-primary">
               Was abgedeckt ist
             </h2>
-            <div className="mt-4 max-w-sm overflow-hidden rounded-xl border border-primary/10 dark:border-text-secondary/10">
-              <table className="w-full text-left text-sm">
-                <caption className="sr-only">Tests nach Teststufe</caption>
-                <tbody>
-                  {columns.map((c, i) => (
-                    <tr key={c.key} className={i === 0 ? undefined : ROW_BORDER} data-level={c.key}>
-                      <th
-                        scope="row"
-                        className="px-4 py-2.5 font-medium text-neutral-dark/80 dark:text-text-secondary"
-                      >
-                        {c.label}
-                      </th>
-                      <td className="px-4 py-2.5 text-right tabular-nums text-primary dark:text-text-primary">
-                        {fmt(scope.byType[c.key] ?? 0)}
-                      </td>
-                    </tr>
-                  ))}
-                  <tr className={ROW_BORDER} data-level="untyped">
-                    <th
-                      scope="row"
-                      className="px-4 py-2.5 font-medium text-muted dark:text-text-tertiary"
-                    >
-                      ohne Zuordnung
-                    </th>
-                    <td className="px-4 py-2.5 text-right tabular-nums text-primary dark:text-text-primary">
-                      {fmt(scope.untyped_total)}
-                    </td>
-                  </tr>
-                  <tr
-                    className="border-t-2 border-primary/20 dark:border-text-secondary/20"
-                    data-level="sum"
-                  >
-                    <th
-                      scope="row"
-                      className="px-4 py-2.5 font-semibold text-primary dark:text-text-primary"
-                    >
-                      Summe
-                    </th>
-                    <td className="px-4 py-2.5 text-right font-semibold tabular-nums text-accent dark:text-accent-bright">
-                      {total}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <p className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-1">
+              <span
+                className="font-heading text-5xl font-bold tracking-tight text-accent tabular-nums md:text-6xl dark:text-accent-bright"
+                data-headline-total
+              >
+                {total}
+              </span>
+              <span className="text-lg text-muted dark:text-text-secondary">
+                automatisierte Tests in {repos} Repositories
+              </span>
+            </p>
+            <div
+              className="mt-5 flex h-3.5 overflow-hidden rounded-full bg-primary/10 dark:bg-text-secondary/10"
+              role="img"
+              aria-label={`Verteilung nach Teststufe: ${LEVEL_SEGMENTS.map((l) => `${l.label} ${fmt(grand[l.key])}`).join(", ")}`}
+            >
+              {LEVEL_SEGMENTS.map((l) => (
+                <span
+                  key={l.key}
+                  className={`block h-full ${l.swatch}`}
+                  style={{ width: `${((grand[l.key] / scope.total) * 100).toFixed(2)}%` }}
+                />
+              ))}
             </div>
-            {scope.untyped_total > 0 && (
-              <p className="mt-3 text-sm text-muted dark:text-text-tertiary">
-                Ohne Zuordnung: {fmt(scope.untyped_total)} Tests aus {unsplitRepos}{" "}
-                {unsplitRepos === 1 ? "Repository, dessen" : "Repositories, deren"} Zählung
-                noch nicht nach Teststufe aufteilt.
-              </p>
-            )}
-            <p className="mt-6 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-              Gezählt wird nach Teststufe: Unit, Integration, End-to-End und Smoke. Diese
-              vier Zahlen stehen oben und ergeben zusammen mit den Tests ohne Zuordnung die
-              Gesamtzahl.
-            </p>
-            <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-              Geprüft wird außerdem nach Zweck. Die Zwecke liegen quer zu den Stufen: Ein
-              Accessibility-Test dieser Website ist technisch ein End-to-End-Test und steckt
-              deshalb in der End-to-End-Zahl, nicht in einer eigenen.
-            </p>
-            <ul className="mt-4 flex flex-wrap gap-2" aria-label="Prüfzwecke">
-              {TEST_PURPOSES.map((t) => (
-                <li
-                  key={t}
-                  className="rounded-full bg-primary/5 px-3 py-1 text-sm font-medium text-accent-hover dark:bg-text-secondary/10 dark:text-accent-bright"
-                >
-                  {t}
+            <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-4">
+              {LEVEL_SEGMENTS.map((l) => (
+                <li key={l.key} className="flex items-center gap-2" data-level={l.key}>
+                  <i className={`h-2.5 w-2.5 flex-none rounded-sm ${l.swatch}`} aria-hidden="true" />
+                  <span className="text-neutral-dark/80 dark:text-text-secondary">{l.label}</span>
+                  <b className="ml-auto font-semibold tabular-nums text-primary dark:text-text-primary">
+                    {fmt(grand[l.key])}
+                  </b>
                 </li>
               ))}
             </ul>
-            <p className="mt-4 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
+            {grand.andere > 0 && (
+              <p className="mt-3 text-sm text-muted dark:text-text-tertiary" data-andere-note>
+                {andereNote(andere)}
+              </p>
+            )}
+            <p className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted dark:text-text-tertiary">
+              <span className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-medium text-primary dark:bg-accent-bright/15 dark:text-text-primary">
+                Täglich automatisch aktualisiert
+              </span>
+              {stand && (
+                <span data-stand>
+                  Stand: <time dateTime={scope.updatedAt}>{stand}</time>
+                </span>
+              )}
+            </p>
+            <p className="mt-6 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
+              Gezählt wird nach Teststufe: Unit, Integration und End-to-End. Smoke-Tests und
+              Tests, deren Zählung nicht nach Stufe aufteilt, stehen unter „Andere{"“"}. Zusammen
+              ergeben die vier Zahlen die Gesamtzahl.
+            </p>
+            <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
+              Geprüft wird außerdem nach Zweck:{" "}
+              <span className="text-primary dark:text-text-primary" data-purposes>
+                {TEST_PURPOSES.join(" · ")}
+              </span>
+              . Die Zwecke liegen quer zu den Stufen: Ein Accessibility-Test dieser Website ist
+              technisch ein End-to-End-Test und steckt deshalb in der End-to-End-Zahl, nicht in
+              einer eigenen.
+            </p>
+            <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
               Manche Prüfungen laufen als Schritt in der Pipeline oder von Hand und haben
               keinen Zähler, etwa Docs-Lint, Performance-Messung und visuelle Abnahme. Sie
               stehen in keiner Zahl. Eine Zahl pro Zweck nennen wir bewusst nicht: Sie würde
@@ -281,97 +311,27 @@ export default function TestManagementPage() {
             </p>
           </section>
 
-          {rows.length > 0 && (
+          {groups.length > 0 && (
             <section className="mt-12" data-repo-breakdown>
               <h2 className="font-heading text-2xl font-bold text-primary dark:text-text-primary">
                 Pro Repository
               </h2>
               <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                Alle Repositories mit Tests, jeweils mit der Zahl, die ihr Test-Runner meldet,
-                aufgeteilt nach Teststufe. Private Repositories erscheinen ohne Namen oder nur
-                mit dem Produktnamen; ihre Zahlen sind trotzdem die gemessenen. Hat ein Produkt
+                Jede Zahl stammt vom Test-Runner des Repositorys. Die Gruppen lassen sich auf-
+                und zuklappen. Private Repositories zählen mit: Sie erscheinen mit ihrem
+                Produktnamen oder, ohne Namen, zusammengefasst in einer Zeile. Hat ein Produkt
                 mehrere Repositories, sind sie nach Größe nummeriert.
               </p>
-              {/* Scrolls sideways on a phone; focusable + labelled so keyboard users can scroll it
-                  (axe: scrollable-region-focusable). */}
-              <div
-                className="mt-4 overflow-x-auto rounded-xl border border-primary/10 dark:border-text-secondary/10"
-                role="region"
-                aria-label="Tests pro Repository und Teststufe"
-                tabIndex={0}
-              >
-                <table className="w-full min-w-[640px] text-left text-sm">
-                  <thead>
-                    <tr className="bg-primary/5 dark:bg-text-secondary/5">
-                      <th
-                        scope="col"
-                        className={`${TH} ${STICKY} bg-linear-to-r from-primary/5 to-primary/5 dark:from-text-secondary/5 dark:to-text-secondary/5`}
-                      >
-                        Repository
-                      </th>
-                      <th scope="col" className={TH}>
-                        Typ
-                      </th>
-                      {columns.map((c) => (
-                        <th key={c.key} scope="col" className={TH_NUM}>
-                          {c.label}
-                        </th>
-                      ))}
-                      <th scope="col" className={TH_NUM}>
-                        Gesamt
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {rows.map((r) => (
-                      <tr key={r.key} className={ROW_BORDER} data-repo-row>
-                        <th
-                          scope="row"
-                          className={`${STICKY} ${
-                            r.withheld
-                              ? "px-3 py-3 font-normal italic text-muted dark:text-text-tertiary md:px-4"
-                              : "px-3 py-3 font-mono font-normal text-neutral-dark/80 dark:text-text-secondary md:px-4"
-                          }`}
-                        >
-                          {r.name}
-                        </th>
-                        <td className="px-3 py-3 text-muted dark:text-text-tertiary md:px-4">
-                          {r.type ?? "—"}
-                        </td>
-                        {r.split ? (
-                          columns.map((c) => {
-                            const n = r.split?.[c.key] ?? 0;
-                            return (
-                              <td
-                                key={c.key}
-                                className={`${NUM} ${
-                                  n === 0
-                                    ? "text-muted dark:text-text-tertiary"
-                                    : "text-neutral-dark/80 dark:text-text-secondary"
-                                }`}
-                              >
-                                {fmt(n)}
-                              </td>
-                            );
-                          })
-                        ) : (
-                          <td
-                            colSpan={columns.length}
-                            className="px-3 py-3 text-left italic text-muted dark:text-text-tertiary md:px-4"
-                            data-unsplit
-                          >
-                            nicht aufgeteilt
-                          </td>
-                        )}
-                        <td
-                          className={`${NUM} font-medium text-primary dark:text-text-primary`}
-                        >
-                          {fmt(r.total)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <TestGroupTable groups={groups} total={grand} totalLabel={total} />
+              <div className="mt-3 space-y-1.5 text-sm text-muted dark:text-text-tertiary">
+                {groups.some((g) => g.rows.some((r) => r.seeded)) && (
+                  <p data-seed-note>
+                    <span className="font-semibold text-accent dark:text-accent-bright">°</span>{" "}
+                    Von Hand mit dem Test-Runner gezählt. Dieses Repository meldet seine Zahl
+                    noch nicht selbst, sie wird deshalb nicht täglich neu erhoben.
+                  </p>
+                )}
+                <p>„Andere{"“"}: Smoke-Tests und Tests, deren Zählung nicht nach Stufe aufteilt.</p>
               </div>
               {/* No count in the link text on purpose: this page's repo span is "repos with
                   tests", /repositories lists ALL repos — a number here would mismatch.
@@ -383,7 +343,7 @@ export default function TestManagementPage() {
                 <Link
                   href="/repositories"
                   data-track="testmgmt_all_repositories"
-                  className="font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
+                  className="inline-flex min-h-[44px] items-center font-medium text-accent transition-colors hover:text-accent-hover dark:text-accent-bright"
                 >
                   Alle Repositories ansehen →
                 </Link>
