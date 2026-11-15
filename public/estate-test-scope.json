@@ -1,9 +1,9 @@
 {
   "byType": {
-    "e2e": 1221,
-    "integration": 1498,
+    "e2e": 1222,
+    "integration": 1532,
     "smoke": 1,
-    "unit": 4792
+    "unit": 4799
   },
   "endpoints": 96,
   "expected": 18,
@@ -13,14 +13,14 @@
     {
       "audited_sha": null,
       "byType": {
-        "integration": 1397,
+        "integration": 1431,
         "unit": 55
       },
       "endpoints": 0,
       "lenses": {},
       "private": true,
       "repo": "privates Repo",
-      "total": 1452
+      "total": 1486
     },
     {
       "audited_sha": "7360478fabf1750584acff9ea9756d5ed00f6523",
@@ -132,15 +132,15 @@
       "total": 9
     },
     {
-      "audited_sha": "9ac13abff4301cd65b11c47d8cb0e51febc8ecda",
+      "audited_sha": "e81c033eea8165c7edecda7ef818e8eaaca91bd6",
       "byType": {
-        "e2e": 600,
-        "unit": 373
+        "e2e": 601,
+        "unit": 380
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/neckarshore-website",
-      "total": 973
+      "total": 981
     },
     {
       "audited_sha": "cf510aaef59c17597cfcfcf00aaef6099c1bcd26",
@@ -213,13 +213,13 @@
       "total": 227
     },
     {
-      "audited_sha": "893875d",
+      "audited_sha": "831a43c",
       "byType": {},
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-ai/test-stats-action",
       "seeded": true,
-      "total": 40
+      "total": 50
     },
     {
       "audited_sha": null,
@@ -229,22 +229,12 @@
       "private": true,
       "repo": "privates Repo",
       "seeded": true,
-      "total": 33
-    },
-    {
-      "audited_sha": null,
-      "byType": {},
-      "endpoints": 0,
-      "lenses": {},
-      "private": true,
-      "repo": "privates Repo",
-      "seeded": true,
-      "total": 9
+      "total": 109
     }
   ],
   "reporting": 18,
-  "repos": 21,
-  "total": 7594,
-  "untyped_total": 82,
-  "updatedAt": "2026-11-14T11:08:53Z"
+  "repos": 20,
+  "total": 7713,
+  "untyped_total": 159,
+  "updatedAt": "2026-11-15T11:42:30Z"
 }

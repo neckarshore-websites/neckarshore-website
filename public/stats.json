@@ -1,25 +1,25 @@
 {
-  "days": 237,
-  "commits": 13346,
-  "tests": 7594,
+  "days": 238,
+  "commits": 13380,
+  "tests": 7713,
   "endpoints": 96,
-  "linesOfCode": 1629415,
+  "linesOfCode": 1631974,
   "repos": 48,
   "testScope": {
-    "total": 7594,
+    "total": 7713,
     "byType": {
-      "e2e": 1221,
-      "integration": 1498,
+      "e2e": 1222,
+      "integration": 1532,
       "smoke": 1,
-      "unit": 4792
+      "unit": 4799
     },
-    "untyped_total": 82,
+    "untyped_total": 159,
     "reporting": 18,
     "expected": 18,
     "missing": [],
-    "repos": 21,
+    "repos": 20,
     "floor": true,
     "audited_floor": null
   },
-  "updatedAt": "2026-11-14T11:08:53Z"
+  "updatedAt": "2026-11-15T11:42:30Z"
 }
