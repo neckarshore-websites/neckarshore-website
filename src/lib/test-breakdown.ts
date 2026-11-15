@@ -15,6 +15,8 @@ export interface RepoRow {
   total: number;
   byType?: Record<string, number>;
   private?: boolean;
+  /** Set by the aggregator on rows from the hand-audited seed (no live producer yet). */
+  seeded?: boolean;
 }
 
 /** The fields the page and the homepage tile both read; they must agree. */

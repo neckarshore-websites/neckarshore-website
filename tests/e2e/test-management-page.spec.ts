@@ -10,8 +10,9 @@ import path from "node:path";
  * holds the honesty guardrails (EXACT aggregate + load-bearing "+" per the 2026-07-10 Founder
  * directive, backed by a dated audited_floor when it exceeds Σ per_repo). Since #370 (Founder
  * order 2026-11-14) the table lists EVERY repository with tests, split by test level, and the
- * levels are totalled; the old Top-N rollup is retired. Also checks the test-purpose list, the
- * per-repo Typ column, and the /tests→/test-management 308.
+ * levels are totalled; the old Top-N rollup is retired. Since variant B (Founder-approved
+ * 2026-11-14) the table is grouped and collapsible. Also checks the test-purpose list and the
+ * /tests→/test-management 308.
  */
 
 const ROUTE = "/test-management";
@@ -139,46 +140,63 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     expect(body).toContain("gegengeprüft"); // the re-check method, framed generically
   });
 
-  test("TC-CNT-071: per-repo table lists EVERY repository with tests, split by level (#370)", async ({
+  test("TC-CNT-071: grouped table lists every repository with tests, split by level (#370, variant B)", async ({
     page,
   }) => {
     await page.goto(ROUTE);
     const scope = loadScope();
     const table = page.locator("[data-repo-breakdown] table");
     await expect(table).toBeVisible();
-    // Repository · Typ · Unit · Integration · End-to-End · Smoke · Gesamt.
+    // Repository · Unit · Integration · End-to-End · Andere · Gesamt (Typ and Smoke retired).
     const head = (await table.locator("thead").textContent()) ?? "";
-    for (const h of ["Repository", "Typ", "Unit", "Integration", "End-to-End", "Smoke", "Gesamt"]) {
+    for (const h of ["Repository", "Unit", "Integration", "End-to-End", "Andere", "Gesamt"]) {
       expect(head).toContain(h);
     }
-    // All rows, no rollup.
-    const rows = table.locator("tbody tr[data-repo-row]");
-    await expect(rows).toHaveCount(scope.per_repo.length);
-    expect(scope.per_repo.length).toBe(scope.repos);
-    await expect(table).not.toContainText("weitere Repositories");
-    // A row without a split says so, once per such row, and never shows zeros in its place.
-    const unsplit = scope.per_repo.filter((r) => Object.keys(r.byType ?? {}).length === 0).length;
-    await expect(table.locator("td[data-unsplit]")).toHaveCount(unsplit);
-    for (const cell of await table.locator("td[data-unsplit]").all()) {
-      await expect(cell).toHaveText("nicht aufgeteilt");
+    expect(head).not.toContain("Typ");
+    expect(head).not.toContain("Smoke");
+    // Every named repository is a row; the withheld ones are summed into ONE line. Collapsed
+    // groups still render their rows (hidden), so crawlers and no-JS readers get all of them.
+    const withheld = scope.per_repo.filter((r) => r.repo === "privates Repo").length;
+    const rows = table.locator("tr[data-repo-row]");
+    await expect(rows).toHaveCount(scope.per_repo.length - withheld + (withheld > 0 ? 1 : 0));
+    if (withheld > 0) {
+      await expect(table).toContainText(
+        withheld === 1 ? "1 privates Repository" : `${withheld} private Repositories`,
+      );
     }
-    // The Gesamt column carries every row's real count, largest first.
     const totals = (await rows.locator("td:last-child").allTextContents()).map((t) =>
       Number(t.replace(/\./g, "")),
     );
-    expect(totals).toEqual([...scope.per_repo].map((r) => r.total).sort((a, b) => b - a));
+    expect(totals.reduce((s, n) => s + n, 0)).toBe(scope.total);
+    // The grand total repeats the headline, with its "+".
+    const headline = scope.total.toLocaleString("de-DE") + (scope.floor ? "+" : "");
+    await expect(table.locator("[data-grand-total]")).toHaveText(headline);
+    // A row without a split says so instead of showing zeros.
+    const unsplitNamed = scope.per_repo.filter(
+      (r) => r.repo !== "privates Repo" && Object.keys(r.byType ?? {}).length === 0,
+    ).length;
+    await expect(table.locator("td[data-unsplit]")).toHaveCount(unsplitNamed);
     const tableText = (await table.textContent()) ?? "";
-    // Public non-product rows keep their slug's last segment + a real Typ.
-    expect(tableText).toContain("Webseite");
-    // Rows that share a display name are told apart ("Omnopsis · 1 von 3"), withheld rows stay
-    // anonymous; every other rendered name is unique.
-    const names = (await rows.locator("th").allTextContents()).filter((n) => n !== "privates Repo");
-    expect(new Set(names).size).toBe(names.length);
-    // Raw slugs that must never appear.
+    // Shared display names are told apart; raw private slugs never appear.
+    expect(tableText).toContain("1\u00a0von\u00a0");
     expect(tableText).not.toContain("clearpath-52");
+    expect(tableText).not.toContain("privates Repo ");
   });
 
-  test("TC-CNT-109: per-level totals are data-bound and sum to the headline (#370)", async ({
+  test("TC-CNT-111: groups open and close; MMPs and websites start open", async ({ page }) => {
+    await page.goto(ROUTE);
+    const mmp = page.locator('[data-test-group="mmp"]');
+    const skills = page.locator('[data-test-group="skill"]');
+    await expect(mmp.locator("button")).toHaveAttribute("aria-expanded", "true");
+    await expect(mmp.locator("tr[data-repo-row]").first()).toBeVisible();
+    await expect(skills.locator("button")).toHaveAttribute("aria-expanded", "false");
+    await expect(skills.locator("tr[data-repo-row]").first()).toBeHidden();
+    await skills.locator("button").click();
+    await expect(skills.locator("button")).toHaveAttribute("aria-expanded", "true");
+    await expect(skills.locator("tr[data-repo-row]").first()).toBeVisible();
+  });
+
+  test("TC-CNT-109: the level bar and legend are data-bound and sum to the headline (#370)", async ({
     page,
   }) => {
     const scope = loadScope();
@@ -188,23 +206,22 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
 
     await page.goto(ROUTE);
     const block = page.locator("[data-level-totals]");
-    const labels: Record<string, string> = {
-      unit: "Unit",
-      integration: "Integration",
-      e2e: "End-to-End",
-      smoke: "Smoke",
+    const main3 = (scope.byType.unit ?? 0) + (scope.byType.integration ?? 0) + (scope.byType.e2e ?? 0);
+    const expected: Record<string, [string, number]> = {
+      unit: ["Unit", scope.byType.unit ?? 0],
+      integration: ["Integration", scope.byType.integration ?? 0],
+      e2e: ["End-to-End", scope.byType.e2e ?? 0],
+      andere: ["Andere", scope.total - main3],
     };
-    for (const [key, label] of Object.entries(labels)) {
-      const row = block.locator(`tr[data-level="${key}"]`);
-      await expect(row).toContainText(label);
-      await expect(row).toContainText((scope.byType[key] ?? 0).toLocaleString("de-DE"));
+    for (const [key, [label, n]] of Object.entries(expected)) {
+      const item = block.locator(`li[data-level="${key}"]`);
+      await expect(item).toContainText(label);
+      await expect(item).toContainText(n.toLocaleString("de-DE"));
     }
-    await expect(block.locator('tr[data-level="untyped"]')).toContainText("ohne Zuordnung");
-    await expect(block.locator('tr[data-level="untyped"]')).toContainText(
-      scope.untyped_total.toLocaleString("de-DE"),
-    );
     const headline = scope.total.toLocaleString("de-DE") + (scope.floor ? "+" : "");
-    await expect(block.locator('tr[data-level="sum"]')).toContainText(headline);
+    await expect(block.locator("[data-headline-total]")).toHaveText(headline);
+    await expect(block).toContainText("Täglich automatisch aktualisiert");
+    await expect(block.locator("[data-stand]")).toContainText("Uhr");
   });
 
   test("TC-CNT-110: the overtaken sentences are gone (#370 corrections 1 and 3)", async ({
@@ -227,9 +244,8 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     const main = page.locator("main");
     // No count of purposes in the text (Engels' wording rule 1, #370): the list speaks for itself.
     await expect(main).not.toContainText("13 Testarten");
-    const purposes = page.locator('ul[aria-label="Prüfzwecke"] li');
-    // Only purposes with evidence in the estate; the four counted levels are not repeated here.
-    const texts = await purposes.allTextContents();
+    // Plain text, not chips: they looked clickable and were not (design critique 2026-11-14).
+    const texts = ((await page.locator("[data-purposes]").textContent()) ?? "").split(" · ");
     expect(texts.length).toBeGreaterThan(0);
     for (const level of ["Unit", "Integration", "End-to-End", "Smoke"]) {
       expect(texts).not.toContain(level);
