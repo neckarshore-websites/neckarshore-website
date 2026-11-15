@@ -87,7 +87,7 @@ const PAGES: { id: string; title: string; text: string; category: string; url: s
   {
     id: "page:/test-management",
     title: "Wie wir testen",
-    text: "Wie wir unser Test-Estate zählen und prüfen: jede Zahl kommt vom Test-Runner selbst, nie geschätzt oder gegrep't, unabhängig gegengeprüft und nach unten gerundet. Die Story hinter der Automatisierte-Tests-Kachel — nachprüfbar statt nach Bauchgefühl.",
+    text: "Wie wir unser Test-Estate zählen und prüfen: jede Zahl kommt vom Test-Runner selbst, nie geschätzt oder gegrep't, unabhängig gegengeprüft und exakt genannt, aufgeschlüsselt nach Repository und Teststufe. Die Story hinter der Automatisierte-Tests-Kachel — nachprüfbar statt nach Bauchgefühl.",
     category: "Seite",
     url: "/test-management",
   },
