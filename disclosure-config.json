@@ -1,21 +1,31 @@
 {
   "display_overrides": {
     "neckarshore-mmps/clearpath": "ClearPath",
+    "neckarshore-mmps/kaze": "Kaze",
     "neckarshore-mmps/mmp-local-seo-performance-hub": "Local SEO Hub",
-    "neckarshore-mmps/mmp-prod-or-pretend": "Prod or Pretend",
+    "neckarshore-mmps/musclecat": "MuscleCat",
     "neckarshore-mmps/phonesis-voicebank": "Phonesis",
+    "neckarshore-mmps/prod-or-pretend": "Prod or Pretend",
     "neckarshore-mmps/snakeoil-check": "Snakeoil-Check",
     "neckarshore-mmps/trustscope": "TrustScope",
     "neckarshore-skills/ai-phrase-check": "AI Phrase Check",
     "neckarshore-skills/mailbox-autopilot": "Mailbox Autopilot",
     "neckarshore-skills/obsidian-vault-autopilot": "Obsidian Vault Autopilot",
+    "neckarshore-skills/paperless-autopilot": "Paperless Autopilot",
+    "neckarshore-websites/kaze-website": "Kaze Website",
+    "neckarshore-websites/musclecat-website": "MuscleCat Website",
     "omnopsis-ai/omnopsis-backend": "Omnopsis",
     "omnopsis-ai/omnopsis-contracts": "Omnopsis",
     "omnopsis-ai/omnopsis-frontend": "Omnopsis"
   },
   "named_private": [
+    "neckarshore-mmps/kaze",
+    "neckarshore-mmps/musclecat",
     "neckarshore-mmps/phonesis-voicebank",
     "neckarshore-mmps/snakeoil-check",
+    "neckarshore-skills/paperless-autopilot",
+    "neckarshore-websites/kaze-website",
+    "neckarshore-websites/musclecat-website",
     "omnopsis-ai/omnopsis-backend",
     "omnopsis-ai/omnopsis-contracts",
     "omnopsis-ai/omnopsis-frontend"
