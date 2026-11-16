@@ -31,7 +31,7 @@ import { execFileSync, spawn } from "node:child_process";
 import { readFileSync, existsSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { PROFILES } from "./lighthouse-profiles.mjs";
+import { PAGES, PROFILES, reportFileFor } from "./lighthouse-profiles.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -46,6 +46,10 @@ const selectedProfile = profileArg ? profileArg.split("=")[1] : null;
 const PROFILES_TO_RUN = selectedProfile
   ? PROFILES.filter((p) => p.name === selectedProfile)
   : PROFILES;
+
+// Optional: measure one page only via --page=/path (default: every page in PAGES).
+const pageArg = process.argv.find((a) => a.startsWith("--page="));
+const PAGES_TO_RUN = pageArg ? [pageArg.slice("--page=".length)] : PAGES;
 
 if (selectedProfile && PROFILES_TO_RUN.length === 0) {
   console.error(`Unknown profile: ${selectedProfile}`);
@@ -94,7 +98,9 @@ function runLighthouse(lhBin, targetUrl, outputPath, extraArgs = []) {
       execFileSync(lhBin, args, { cwd: ROOT, stdio: "pipe" });
       const report = JSON.parse(readFileSync(outputPath, "utf-8"));
       if (report.categories?.performance?.score === null) {
-        throw new Error("Performance score is null (likely NO_LCP trace error)");
+        throw new Error(
+          "Performance score is null (likely NO_LCP trace error)",
+        );
       }
       return;
     } catch {
@@ -183,63 +189,77 @@ try {
   const softWarnings = [];
   const summary = [];
 
-  for (const profile of PROFILES_TO_RUN) {
-    const reportPath = resolve(reportDir, profile.reportFile);
+  for (const page of PAGES_TO_RUN) {
+    const pageUrl = new globalThis.URL(page, URL).href;
+    for (const profile of PROFILES_TO_RUN) {
+      const reportPath = resolve(
+        reportDir,
+        reportFileFor(page, profile.reportFile),
+      );
 
-    // Capture previous scores for delta-awareness BEFORE overwriting the file.
-    let previousScores = null;
-    if (existsSync(reportPath)) {
-      try {
-        previousScores = getScores(JSON.parse(readFileSync(reportPath, "utf-8")));
-      } catch {
-        // Ignore malformed previous report.
-      }
-    }
-
-    log(`Running Lighthouse audit (${profile.label})...`);
-    runLighthouse(lhBin, URL, reportPath, profile.lhArgs);
-
-    const report = JSON.parse(readFileSync(reportPath, "utf-8"));
-    const scores = getScores(report);
-    const metrics = getMetrics(report);
-
-    console.log(`\n── ${profile.label} [${profile.gate}] ──`);
-
-    for (const [key, score] of Object.entries(scores)) {
-      const delta = fmtDelta(score, previousScores?.[key]);
-      const threshold = profile.thresholds?.[key];
-
-      if (threshold != null) {
-        const pass = score >= threshold;
-        // A metric is soft if the whole profile is soft OR it is listed in the
-        // profile's per-metric softMetrics override (e.g. performance everywhere).
-        const isSoftMetric =
-          profile.gate === "soft" || profile.softMetrics?.includes(key);
-        const icon = pass ? "  ✓" : isSoftMetric ? "  ⚠" : "  ✗";
-        console.log(
-          `${icon} ${capitalizeKey(key)}: ${score} (threshold: ${threshold})${delta}`
-        );
-        if (!pass) {
-          const failure = `${profile.label} ${capitalizeKey(key)}: ${score} < ${threshold}`;
-          if (isSoftMetric) {
-            softWarnings.push(failure);
-          } else {
-            hardFailures.push(failure);
-          }
+      // Capture previous scores for delta-awareness BEFORE overwriting the file.
+      let previousScores = null;
+      if (existsSync(reportPath)) {
+        try {
+          previousScores = getScores(
+            JSON.parse(readFileSync(reportPath, "utf-8")),
+          );
+        } catch {
+          // Ignore malformed previous report.
         }
-      } else {
-        // No threshold set (soft profile, Stage 2 pending) — report only.
-        console.log(`  · ${capitalizeKey(key)}: ${score}${delta}`);
       }
+
+      log(`Running Lighthouse audit (${profile.label}, ${page})...`);
+      runLighthouse(lhBin, pageUrl, reportPath, profile.lhArgs);
+
+      const report = JSON.parse(readFileSync(reportPath, "utf-8"));
+      const scores = getScores(report);
+      const metrics = getMetrics(report);
+
+      console.log(`\n── ${page} · ${profile.label} [${profile.gate}] ──`);
+
+      for (const [key, score] of Object.entries(scores)) {
+        const delta = fmtDelta(score, previousScores?.[key]);
+        const threshold = profile.thresholds?.[key];
+
+        if (threshold != null) {
+          const pass = score >= threshold;
+          // A metric is soft if the whole profile is soft OR it is listed in the
+          // profile's per-metric softMetrics override (e.g. performance everywhere).
+          const isSoftMetric =
+            profile.gate === "soft" || profile.softMetrics?.includes(key);
+          const icon = pass ? "  ✓" : isSoftMetric ? "  ⚠" : "  ✗";
+          console.log(
+            `${icon} ${capitalizeKey(key)}: ${score} (threshold: ${threshold})${delta}`,
+          );
+          if (!pass) {
+            const failure = `${page} ${profile.label} ${capitalizeKey(key)}: ${score} < ${threshold}`;
+            if (isSoftMetric) {
+              softWarnings.push(failure);
+            } else {
+              hardFailures.push(failure);
+            }
+          }
+        } else {
+          // No threshold set (soft profile, Stage 2 pending) — report only.
+          console.log(`  · ${capitalizeKey(key)}: ${score}${delta}`);
+        }
+      }
+
+      console.log(
+        `    LCP: ${fmtMs(metrics.lcp)} | FCP: ${fmtMs(metrics.fcp)} | ` +
+          `TBT: ${fmtMs(metrics.tbt)} | CLS: ${fmtCls(metrics.cls)} | ` +
+          `SI: ${fmtMs(metrics.si)}`,
+      );
+
+      summary.push({
+        page,
+        profile: profile.label,
+        gate: profile.gate,
+        scores,
+        metrics,
+      });
     }
-
-    console.log(
-      `    LCP: ${fmtMs(metrics.lcp)} | FCP: ${fmtMs(metrics.fcp)} | ` +
-        `TBT: ${fmtMs(metrics.tbt)} | CLS: ${fmtCls(metrics.cls)} | ` +
-        `SI: ${fmtMs(metrics.si)}`
-    );
-
-    summary.push({ profile: profile.label, gate: profile.gate, scores, metrics });
   }
 
   if (softWarnings.length > 0) {

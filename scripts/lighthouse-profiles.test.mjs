@@ -11,7 +11,7 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { PROFILES } from "./lighthouse-profiles.mjs";
+import { PAGES, PROFILES, reportFileFor } from "./lighthouse-profiles.mjs";
 
 const byName = Object.fromEntries(PROFILES.map((p) => [p.name, p]));
 
@@ -80,4 +80,21 @@ test("accessibility / best-practices / seo are HARD @95 on every profile", () =>
       );
     }
   }
+});
+
+test("PAGES: the homepage first, then one page per template, all site paths", () => {
+  assert.equal(PAGES[0], "/", "the homepage stays first so its report names and deltas survive");
+  assert.ok(PAGES.length >= 2, "more than the homepage is measured");
+  assert.equal(new Set(PAGES).size, PAGES.length, "no page twice");
+  for (const p of PAGES) assert.match(p, /^\/[a-z0-9/-]*$/, `${p} is a site path`);
+});
+
+test("reportFileFor: the homepage keeps its name, other pages are prefixed and distinct", () => {
+  assert.equal(reportFileFor("/", "report-desktop.json"), "report-desktop.json");
+  assert.equal(
+    reportFileFor("/products/omnopsis", "report-desktop.json"),
+    "products-omnopsis--report-desktop.json",
+  );
+  const names = PAGES.flatMap((p) => PROFILES.map((pr) => reportFileFor(p, pr.reportFile)));
+  assert.equal(new Set(names).size, names.length, "every page x profile writes its own file");
 });

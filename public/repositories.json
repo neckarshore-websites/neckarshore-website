@@ -1,7 +1,13 @@
 {
-  "updatedAt": "2026-11-15T11:42:30Z",
-  "privateCount": 34,
+  "updatedAt": "2026-11-16T12:19:12Z",
+  "privateCount": 37,
   "repos": [
+    {
+      "owner": "neckarshore-ai",
+      "name": "live-checks",
+      "visibility": "public",
+      "description": "Scheduled availability checks for the public surfaces of Neckarshore AI (AD-65 layer 1)"
+    },
     {
       "owner": "neckarshore-ai",
       "name": "test-stats-action",
