@@ -365,6 +365,15 @@ jobs:
         run: |
           node scripts/append-test-scope-history.mjs || echo "::warning::append-test-scope-history failed — history not updated this run (stats publish continues)"
 
+      # --- The test page's sum check, before anything reaches main (MASCHIN 2026-11-14, point 4) ---
+      # /test-management asserts its sums while it is prerendered, so `next build` fails on a wrong
+      # sum. This job commits to main without a build: without this step a broken sum would land
+      # and fail every deploy after it. Fail-CLOSED on purpose: the job stops, nothing is
+      # committed, yesterday's numbers stay live, and "Ausfall melden" below reports it.
+      # tsx is fetched pinned (no npm ci in this job); it reads the @/ paths from tsconfig.json.
+      - name: Check test page data
+        run: npx --yes tsx@4.23.15 scripts/check-test-page-data.ts
+
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
