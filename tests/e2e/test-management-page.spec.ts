@@ -19,7 +19,10 @@ const ROUTE = "/test-management";
 
 function loadScope() {
   const raw = JSON.parse(
-    fs.readFileSync(path.join(process.cwd(), "public", "estate-test-scope.json"), "utf-8"),
+    fs.readFileSync(
+      path.join(process.cwd(), "public", "estate-test-scope.json"),
+      "utf-8",
+    ),
   );
   return {
     total: raw.total as number,
@@ -46,10 +49,15 @@ function loadScope() {
 /** The live public-repo set — the same single source the withholder keeps named (#94/#525). */
 function publicRepoSet(): Set<string> {
   const raw = JSON.parse(
-    fs.readFileSync(path.join(process.cwd(), "public", "repositories.json"), "utf-8"),
+    fs.readFileSync(
+      path.join(process.cwd(), "public", "repositories.json"),
+      "utf-8",
+    ),
   );
   return new Set(
-    (raw.repos ?? []).map((r: { owner: string; name: string }) => `${r.owner}/${r.name}`),
+    (raw.repos ?? []).map(
+      (r: { owner: string; name: string }) => `${r.owner}/${r.name}`,
+    ),
   );
 }
 
@@ -73,7 +81,10 @@ function loadDisclosureConfig(): {
   display_overrides: Record<string, string>;
 } {
   return JSON.parse(
-    fs.readFileSync(path.join(process.cwd(), "disclosure-config.json"), "utf-8"),
+    fs.readFileSync(
+      path.join(process.cwd(), "disclosure-config.json"),
+      "utf-8",
+    ),
   );
 }
 
@@ -85,7 +96,9 @@ async function ldNodes(page: Page): Promise<Record<string, unknown>[]> {
     const txt = await blocks.nth(i).textContent();
     if (txt) {
       const parsed = JSON.parse(txt);
-      nodes.push(...((parsed["@graph"] ?? [parsed]) as Record<string, unknown>[]));
+      nodes.push(
+        ...((parsed["@graph"] ?? [parsed]) as Record<string, unknown>[]),
+      );
     }
   }
   return nodes;
@@ -102,7 +115,9 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
       "href",
       "https://neckarshore.ai/test-management",
     );
-    const webpages = (await ldNodes(page)).filter((n) => n["@type"] === "WebPage");
+    const webpages = (await ldNodes(page)).filter(
+      (n) => n["@type"] === "WebPage",
+    );
     expect(webpages.length).toBeGreaterThanOrEqual(1);
     expect(
       webpages.some(
@@ -116,7 +131,8 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
   }) => {
     const scope = loadScope();
     // Exact figure (Founder directive 2026-07-10 — round-down framing retired) + load-bearing "+".
-    const expected = scope.total.toLocaleString("de-DE") + (scope.floor ? "+" : "");
+    const expected =
+      scope.total.toLocaleString("de-DE") + (scope.floor ? "+" : "");
 
     await page.goto(ROUTE);
     const main = page.locator("main");
@@ -140,6 +156,34 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     expect(body).toContain("gegengeprüft"); // the re-check method, framed generically
   });
 
+  test("TC-CNT-112: block 3 explains the repositories without a count, sums read from the data (#370)", async ({
+    page,
+  }) => {
+    await page.goto(ROUTE);
+    const read = (f: string) =>
+      JSON.parse(
+        fs.readFileSync(path.join(process.cwd(), "public", f), "utf-8"),
+      );
+    const all = read("stats.json").repos as number;
+    const counted = read("estate-test-scope.json").repos as number;
+    const reasons = read("test-scope-reasons.json") as {
+      groups: { key: string; rows: unknown[]; private_count: number }[];
+    };
+    const section = page.locator("[data-scope-reasons]");
+    await expect(section.getByRole("heading", { level: 2 })).toContainText(
+      String(all - counted),
+    );
+    for (const g of reasons.groups) {
+      await expect(
+        section.locator(`[data-reason-group="${g.key}"] h3`),
+      ).toContainText(String(g.rows.length + g.private_count));
+    }
+    await expect(section.locator("[data-reasons-mismatch]")).toHaveCount(0);
+    expect((await section.textContent()) ?? "").not.toContain(
+      "phonesis-voicebank",
+    );
+  });
+
   test("TC-CNT-071: grouped table lists every repository with tests, split by level (#370, variant B)", async ({
     page,
   }) => {
@@ -149,31 +193,46 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     await expect(table).toBeVisible();
     // Repository · Unit · Integration · End-to-End · Andere · Gesamt (Typ and Smoke retired).
     const head = (await table.locator("thead").textContent()) ?? "";
-    for (const h of ["Repository", "Unit", "Integration", "End-to-End", "Andere", "Gesamt"]) {
+    for (const h of [
+      "Repository",
+      "Unit",
+      "Integration",
+      "End-to-End",
+      "Andere",
+      "Gesamt",
+    ]) {
       expect(head).toContain(h);
     }
     expect(head).not.toContain("Typ");
     expect(head).not.toContain("Smoke");
     // Every named repository is a row; the withheld ones are summed into ONE line. Collapsed
     // groups still render their rows (hidden), so crawlers and no-JS readers get all of them.
-    const withheld = scope.per_repo.filter((r) => r.repo === "privates Repo").length;
+    const withheld = scope.per_repo.filter(
+      (r) => r.repo === "privates Repo",
+    ).length;
     const rows = table.locator("tr[data-repo-row]");
-    await expect(rows).toHaveCount(scope.per_repo.length - withheld + (withheld > 0 ? 1 : 0));
+    await expect(rows).toHaveCount(
+      scope.per_repo.length - withheld + (withheld > 0 ? 1 : 0),
+    );
     if (withheld > 0) {
       await expect(table).toContainText(
-        withheld === 1 ? "1 privates Repository" : `${withheld} private Repositories`,
+        withheld === 1
+          ? "1 privates Repository"
+          : `${withheld} private Repositories`,
       );
     }
-    const totals = (await rows.locator("td:last-child").allTextContents()).map((t) =>
-      Number(t.replace(/\./g, "")),
+    const totals = (await rows.locator("td:last-child").allTextContents()).map(
+      (t) => Number(t.replace(/\./g, "")),
     );
     expect(totals.reduce((s, n) => s + n, 0)).toBe(scope.total);
     // The grand total repeats the headline, with its "+".
-    const headline = scope.total.toLocaleString("de-DE") + (scope.floor ? "+" : "");
+    const headline =
+      scope.total.toLocaleString("de-DE") + (scope.floor ? "+" : "");
     await expect(table.locator("[data-grand-total]")).toHaveText(headline);
     // A row without a split says so instead of showing zeros.
     const unsplitNamed = scope.per_repo.filter(
-      (r) => r.repo !== "privates Repo" && Object.keys(r.byType ?? {}).length === 0,
+      (r) =>
+        r.repo !== "privates Repo" && Object.keys(r.byType ?? {}).length === 0,
     ).length;
     await expect(table.locator("td[data-unsplit]")).toHaveCount(unsplitNamed);
     const tableText = (await table.textContent()) ?? "";
@@ -183,16 +242,27 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     expect(tableText).not.toContain("privates Repo ");
   });
 
-  test("TC-CNT-111: groups open and close; MMPs and websites start open", async ({ page }) => {
+  test("TC-CNT-111: groups open and close; MMPs and websites start open", async ({
+    page,
+  }) => {
     await page.goto(ROUTE);
     const mmp = page.locator('[data-test-group="mmp"]');
     const skills = page.locator('[data-test-group="skill"]');
-    await expect(mmp.locator("button")).toHaveAttribute("aria-expanded", "true");
+    await expect(mmp.locator("button")).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
     await expect(mmp.locator("tr[data-repo-row]").first()).toBeVisible();
-    await expect(skills.locator("button")).toHaveAttribute("aria-expanded", "false");
+    await expect(skills.locator("button")).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
     await expect(skills.locator("tr[data-repo-row]").first()).toBeHidden();
     await skills.locator("button").click();
-    await expect(skills.locator("button")).toHaveAttribute("aria-expanded", "true");
+    await expect(skills.locator("button")).toHaveAttribute(
+      "aria-expanded",
+      "true",
+    );
     await expect(skills.locator("tr[data-repo-row]").first()).toBeVisible();
   });
 
@@ -206,7 +276,10 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
 
     await page.goto(ROUTE);
     const block = page.locator("[data-level-totals]");
-    const main3 = (scope.byType.unit ?? 0) + (scope.byType.integration ?? 0) + (scope.byType.e2e ?? 0);
+    const main3 =
+      (scope.byType.unit ?? 0) +
+      (scope.byType.integration ?? 0) +
+      (scope.byType.e2e ?? 0);
     const expected: Record<string, [string, number]> = {
       unit: ["Unit", scope.byType.unit ?? 0],
       integration: ["Integration", scope.byType.integration ?? 0],
@@ -218,7 +291,8 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
       await expect(item).toContainText(label);
       await expect(item).toContainText(n.toLocaleString("de-DE"));
     }
-    const headline = scope.total.toLocaleString("de-DE") + (scope.floor ? "+" : "");
+    const headline =
+      scope.total.toLocaleString("de-DE") + (scope.floor ? "+" : "");
     await expect(block.locator("[data-headline-total]")).toHaveText(headline);
     await expect(block).toContainText("Täglich automatisch aktualisiert");
     await expect(block.locator("[data-stand]")).toContainText("Uhr");
@@ -245,14 +319,21 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     // No count of purposes in the text (Engels' wording rule 1, #370): the list speaks for itself.
     await expect(main).not.toContainText("13 Testarten");
     // Plain text, not chips: they looked clickable and were not (design critique 2026-11-14).
-    const texts = ((await page.locator("[data-purposes]").textContent()) ?? "").split(" · ");
+    const texts = (
+      (await page.locator("[data-purposes]").textContent()) ?? ""
+    ).split(" · ");
     expect(texts.length).toBeGreaterThan(0);
     for (const level of ["Unit", "Integration", "End-to-End", "Smoke"]) {
       expect(texts).not.toContain(level);
     }
-    for (const t of ["Accessibility", "Security", "SEO/GEO"]) expect(texts).toContain(t);
+    for (const t of ["Accessibility", "Security", "SEO/GEO"])
+      expect(texts).toContain(t);
     // A→Z, case-insensitive (global sorting rule).
-    expect(texts).toEqual([...texts].sort((a, b) => a.localeCompare(b, "de", { sensitivity: "base" })));
+    expect(texts).toEqual(
+      [...texts].sort((a, b) =>
+        a.localeCompare(b, "de", { sensitivity: "base" }),
+      ),
+    );
   });
 
   test("TC-CNT-072: sitemap lists /test-management", async ({ request }) => {
@@ -309,9 +390,10 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
 
     // Named canary: none of the 4 R2-confirmed private names anywhere in the raw public file.
     for (const name of PRIVATE_CANARIES) {
-      expect(raw, `private repo "${name}" must not appear in estate-test-scope.json`).not.toContain(
-        name,
-      );
+      expect(
+        raw,
+        `private repo "${name}" must not appear in estate-test-scope.json`,
+      ).not.toContain(name);
     }
 
     // The page still has data to render (we did not anonymize the file into uselessness).
@@ -342,7 +424,9 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     // no name/Typ). Since #370 every row renders, so the label is on the page whenever the data has
     // such rows; the hard privacy guarantee is still the canary loop above (no raw private name ever renders);
     // this positive assertion verifies — ranking-independently — that the withholding transform ran.
-    expect(loadScope().per_repo.some((r) => r.repo === "privates Repo")).toBe(true);
+    expect(loadScope().per_repo.some((r) => r.repo === "privates Repo")).toBe(
+      true,
+    );
   });
 
   test("TC-CNT-085: HONESTY INVARIANT — headline total is Σ per_repo OR a dated, sourced audited floor", () => {
@@ -374,22 +458,28 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
 
     // HARD RULE (data-driven, always holds): no named_private SLUG in the committed public file …
     for (const slug of cfg.named_private) {
-      expect(rawEstate, `named_private slug leaked raw in estate-test-scope.json: ${slug}`).not.toContain(
-        slug,
-      );
+      expect(
+        rawEstate,
+        `named_private slug leaked raw in estate-test-scope.json: ${slug}`,
+      ).not.toContain(slug);
     }
 
     await page.goto(ROUTE);
     const mainText = (await page.locator("main").textContent()) ?? "";
     // … nor on the rendered page.
     for (const slug of cfg.named_private) {
-      expect(mainText, `named_private slug leaked raw on the page: ${slug}`).not.toContain(slug);
+      expect(
+        mainText,
+        `named_private slug leaked raw on the page: ${slug}`,
+      ).not.toContain(slug);
     }
 
     // POSITIVE: since #370 the board lists every repository, so every approved-private product in
     // the data is shown by its product name (shared names carry "· k von n", which still contains
     // the name).
-    const privateProductNames = new Set(cfg.named_private.map((s) => cfg.display_overrides[s]));
+    const privateProductNames = new Set(
+      cfg.named_private.map((s) => cfg.display_overrides[s]),
+    );
     const listed = scope.per_repo;
     const rendered = new Set(
       listed.map((r) => r.repo).filter((name) => privateProductNames.has(name)),

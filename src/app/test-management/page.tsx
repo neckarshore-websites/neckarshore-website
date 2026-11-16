@@ -13,6 +13,13 @@ import {
 } from "@/lib/test-page-data";
 import { andereParts, type Cells } from "@/lib/test-table";
 import TestGroupTable from "@/components/TestGroupTable";
+import {
+  groupSize,
+  loadAllRepos,
+  sharedReason,
+  loadScopeReasons,
+  reasonsAddUp,
+} from "@/lib/test-scope-reasons";
 import disclosure from "../../../disclosure-config.json";
 import { formatDate, getPostsInCategory } from "@/lib/content/blog";
 import { categoryPath, postPath } from "@/lib/schema/blog";
@@ -66,10 +73,22 @@ const TEST_PURPOSES = [
 
 // The level bar and its legend, in column order. Swatches use the brand tokens; dark mode swaps to
 // the lighter shades so each segment stays distinguishable on the dark surface.
-const LEVEL_SEGMENTS: { key: keyof Omit<Cells, "total">; label: string; swatch: string }[] = [
+const LEVEL_SEGMENTS: {
+  key: keyof Omit<Cells, "total">;
+  label: string;
+  swatch: string;
+}[] = [
   { key: "unit", label: "Unit", swatch: "bg-accent dark:bg-accent-bright" },
-  { key: "integration", label: "Integration", swatch: "bg-[#3AA6BF] dark:bg-accent" },
-  { key: "e2e", label: "End-to-End", swatch: "bg-primary dark:bg-text-secondary" },
+  {
+    key: "integration",
+    label: "Integration",
+    swatch: "bg-[#3AA6BF] dark:bg-accent",
+  },
+  {
+    key: "e2e",
+    label: "End-to-End",
+    swatch: "bg-primary dark:bg-text-secondary",
+  },
   { key: "andere", label: "Andere", swatch: "bg-text-tertiary dark:bg-muted" },
 ];
 
@@ -96,7 +115,9 @@ function formatStand(iso: string | undefined): string | null {
 function andereNote(p: ReturnType<typeof andereParts>): string {
   const parts: string[] = [];
   if (p.smokeAndOther > 0) {
-    parts.push(`${fmt(p.smokeAndOther)} ${p.smokeAndOther === 1 ? "Smoke-Test" : "Smoke-Tests"}`);
+    parts.push(
+      `${fmt(p.smokeAndOther)} ${p.smokeAndOther === 1 ? "Smoke-Test" : "Smoke-Tests"}`,
+    );
   }
   if (p.unsplit > 0) {
     parts.push(
@@ -133,6 +154,11 @@ export default function TestManagementPage() {
     disclosure.display_overrides,
   );
   const andere = andereParts(scope.per_repo);
+  // Block 3 (#370): read, never stored — the gap is whatever the tile's two numbers say today.
+  const reasons = loadScopeReasons();
+  const allRepos = loadAllRepos();
+  const uncounted = allRepos - repos;
+  const reasonsOk = reasonsAddUp(reasons, allRepos, repos);
   const stand = formatStand(scope.updatedAt);
 
   return (
@@ -155,11 +181,12 @@ export default function TestManagementPage() {
             <strong className="text-accent dark:text-accent-bright">
               {total} automatisierte Tests
             </strong>{" "}
-            in <strong>{repos} unserer Repositories</strong>. Wir nennen die exakte Zahl,
-            die die Test-Runner melden. Das „+{"“"} steht dort, weil einige Skripte Tests
-            ausführen, die sich nicht automatisch zählen lassen — die tatsächliche Zahl liegt
-            also höher. Wir nennen lieber eine kleinere Zahl, die stimmt, als eine größere,
-            die nur gut klingt.
+            in <strong>{repos} unserer Repositories</strong>. Wir nennen die
+            exakte Zahl, die die Test-Runner melden. Das „+{"“"} steht dort,
+            weil einige Skripte Tests ausführen, die sich nicht automatisch
+            zählen lassen — die tatsächliche Zahl liegt also höher. Wir nennen
+            lieber eine kleinere Zahl, die stimmt, als eine größere, die nur gut
+            klingt.
           </p>
 
           <section className="mt-12">
@@ -167,11 +194,12 @@ export default function TestManagementPage() {
               Wie wir zählen
             </h2>
             <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-              Jede Zahl stammt vom <strong>Test-Runner selbst</strong> — jest, vitest,
-              Playwright, pytest, bats, node:test. Nichts wird von Hand gezählt, nichts per
-              Textsuche (<code>grep</code>) geschätzt. Wo ein Skript keine Zählung ausgibt,
-              zählen wir es lieber gar nicht mit. Dafür steht das „+{"“"}: der tatsächliche
-              Wert liegt höher, aber wir behaupten nur, was ein Runner bestätigt.
+              Jede Zahl stammt vom <strong>Test-Runner selbst</strong> — jest,
+              vitest, Playwright, pytest, bats, node:test. Nichts wird von Hand
+              gezählt, nichts per Textsuche (<code>grep</code>) geschätzt. Wo
+              ein Skript keine Zählung ausgibt, zählen wir es lieber gar nicht
+              mit. Dafür steht das „+{"“"}: der tatsächliche Wert liegt höher,
+              aber wir behaupten nur, was ein Runner bestätigt.
             </p>
           </section>
 
@@ -182,15 +210,18 @@ export default function TestManagementPage() {
             <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
               Wir haben das gesamte Test-Estate neu gezählt — und{" "}
               <strong>
-                jede einzelne Zahl unabhängig gegengeprüft, bevor wir sie akzeptiert haben.
+                jede einzelne Zahl unabhängig gegengeprüft, bevor wir sie
+                akzeptiert haben.
               </strong>{" "}
-              Zwei Zählungen stellten sich dabei als falsch heraus und wurden korrigiert,{" "}
-              <em>bevor</em> irgendetwas veröffentlicht wurde. Der Grundsatz dahinter: die
-              Zahl, die stimmt, schlägt die schnelle Zahl an jedem Tor.
+              Zwei Zählungen stellten sich dabei als falsch heraus und wurden
+              korrigiert, <em>bevor</em> irgendetwas veröffentlicht wurde. Der
+              Grundsatz dahinter: die Zahl, die stimmt, schlägt die schnelle
+              Zahl an jedem Tor.
             </p>
             <blockquote className="mt-6 border-l-2 border-accent/40 pl-5 text-lg italic leading-relaxed text-primary/80 dark:text-text-primary/90">
-              „Das erste Prinzip ist, dass man sich nicht selbst täuschen darf — und man
-              selbst ist die Person, die am leichtesten zu täuschen ist.{"“"}
+              „Das erste Prinzip ist, dass man sich nicht selbst täuschen darf —
+              und man selbst ist die Person, die am leichtesten zu täuschen ist.
+              {"“"}
               <footer className="mt-2 text-sm not-italic text-muted dark:text-text-tertiary">
                 — Richard Feynman
               </footer>
@@ -221,15 +252,26 @@ export default function TestManagementPage() {
                 <span
                   key={l.key}
                   className={`block h-full ${l.swatch}`}
-                  style={{ width: `${((grand[l.key] / scope.total) * 100).toFixed(2)}%` }}
+                  style={{
+                    width: `${((grand[l.key] / scope.total) * 100).toFixed(2)}%`,
+                  }}
                 />
               ))}
             </div>
             <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-4">
               {LEVEL_SEGMENTS.map((l) => (
-                <li key={l.key} className="flex items-center gap-2" data-level={l.key}>
-                  <i className={`h-2.5 w-2.5 flex-none rounded-sm ${l.swatch}`} aria-hidden="true" />
-                  <span className="text-neutral-dark/80 dark:text-text-secondary">{l.label}</span>
+                <li
+                  key={l.key}
+                  className="flex items-center gap-2"
+                  data-level={l.key}
+                >
+                  <i
+                    className={`h-2.5 w-2.5 flex-none rounded-sm ${l.swatch}`}
+                    aria-hidden="true"
+                  />
+                  <span className="text-neutral-dark/80 dark:text-text-secondary">
+                    {l.label}
+                  </span>
                   <b className="ml-auto font-semibold tabular-nums text-primary dark:text-text-primary">
                     {fmt(grand[l.key])}
                   </b>
@@ -237,7 +279,10 @@ export default function TestManagementPage() {
               ))}
             </ul>
             {grand.andere > 0 && (
-              <p className="mt-3 text-sm text-muted dark:text-text-tertiary" data-andere-note>
+              <p
+                className="mt-3 text-sm text-muted dark:text-text-tertiary"
+                data-andere-note
+              >
                 {andereNote(andere)}
               </p>
             )}
@@ -252,24 +297,29 @@ export default function TestManagementPage() {
               )}
             </p>
             <p className="mt-6 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-              Gezählt wird nach Teststufe: Unit, Integration und End-to-End. Smoke-Tests und
-              Tests, deren Zählung nicht nach Stufe aufteilt, stehen unter „Andere{"“"}. Zusammen
-              ergeben die vier Zahlen die Gesamtzahl.
+              Gezählt wird nach Teststufe: Unit, Integration und End-to-End.
+              Smoke-Tests und Tests, deren Zählung nicht nach Stufe aufteilt,
+              stehen unter „Andere{"“"}. Zusammen ergeben die vier Zahlen die
+              Gesamtzahl.
             </p>
             <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
               Geprüft wird außerdem nach Zweck:{" "}
-              <span className="text-primary dark:text-text-primary" data-purposes>
+              <span
+                className="text-primary dark:text-text-primary"
+                data-purposes
+              >
                 {TEST_PURPOSES.join(" · ")}
               </span>
-              . Die Zwecke liegen quer zu den Stufen: Ein Accessibility-Test dieser Website ist
-              technisch ein End-to-End-Test und steckt deshalb in der End-to-End-Zahl, nicht in
-              einer eigenen.
+              . Die Zwecke liegen quer zu den Stufen: Ein Accessibility-Test
+              dieser Website ist technisch ein End-to-End-Test und steckt
+              deshalb in der End-to-End-Zahl, nicht in einer eigenen.
             </p>
             <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-              Manche Prüfungen laufen als Schritt in der Pipeline oder von Hand und haben
-              keinen Zähler, etwa Docs-Lint, Performance-Messung und visuelle Abnahme. Sie
-              stehen in keiner Zahl. Eine Zahl pro Zweck nennen wir bewusst nicht: Sie würde
-              Tests doppelt zählen oder Prüfungen mitzählen, die kein Test-Runner bestätigt.
+              Manche Prüfungen laufen als Schritt in der Pipeline oder von Hand
+              und haben keinen Zähler, etwa Docs-Lint, Performance-Messung und
+              visuelle Abnahme. Sie stehen in keiner Zahl. Eine Zahl pro Zweck
+              nennen wir bewusst nicht: Sie würde Tests doppelt zählen oder
+              Prüfungen mitzählen, die kein Test-Runner bestätigt.
             </p>
           </section>
 
@@ -279,21 +329,32 @@ export default function TestManagementPage() {
                 Pro Repository
               </h2>
               <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                Jede Zahl stammt vom Test-Runner des Repositorys. Die Gruppen lassen sich auf-
-                und zuklappen. Private Repositories zählen mit: Sie erscheinen mit ihrem
-                Produktnamen oder, ohne Namen, zusammengefasst in einer Zeile. Hat ein Produkt
-                mehrere Repositories, sind sie nach Größe nummeriert.
+                Jede Zahl stammt vom Test-Runner des Repositorys. Die Gruppen
+                lassen sich auf- und zuklappen. Private Repositories zählen mit:
+                Sie erscheinen mit ihrem Produktnamen oder, ohne Namen,
+                zusammengefasst in einer Zeile. Hat ein Produkt mehrere
+                Repositories, sind sie nach Größe nummeriert.
               </p>
-              <TestGroupTable groups={groups} total={grand} totalLabel={total} />
+              <TestGroupTable
+                groups={groups}
+                total={grand}
+                totalLabel={total}
+              />
               <div className="mt-3 space-y-1.5 text-sm text-muted dark:text-text-tertiary">
                 {groups.some((g) => g.rows.some((r) => r.seeded)) && (
                   <p data-seed-note>
-                    <span className="font-semibold text-accent dark:text-accent-bright">°</span>{" "}
-                    Von Hand mit dem Test-Runner gezählt. Dieses Repository meldet seine Zahl
-                    noch nicht selbst, sie wird deshalb nicht täglich neu erhoben.
+                    <span className="font-semibold text-accent dark:text-accent-bright">
+                      °
+                    </span>{" "}
+                    Von Hand mit dem Test-Runner gezählt. Dieses Repository
+                    meldet seine Zahl noch nicht selbst, sie wird deshalb nicht
+                    täglich neu erhoben.
                   </p>
                 )}
-                <p>„Andere{"“"}: Smoke-Tests und Tests, deren Zählung nicht nach Stufe aufteilt.</p>
+                <p>
+                  „Andere{"“"}: Smoke-Tests und Tests, deren Zählung nicht nach
+                  Stufe aufteilt.
+                </p>
               </div>
               {/* No count in the link text on purpose: this page's repo span is "repos with
                   tests", /repositories lists ALL repos — a number here would mismatch.
@@ -313,13 +374,100 @@ export default function TestManagementPage() {
             </section>
           )}
 
+          {uncounted > 0 && (
+            <section className="mt-12" data-scope-reasons>
+              <h2 className="font-heading text-2xl font-bold text-primary dark:text-text-primary">
+                Warum {fmt(uncounted)} Repositories nicht mitzählen
+              </h2>
+              {reasonsOk ? (
+                <>
+                  <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
+                    Von {fmt(allRepos)} Repositories liefern {fmt(repos)} eine
+                    Testzahl. Die übrigen {fmt(uncounted)} fallen in drei
+                    Gruppen. Private Repositories ohne freigegebenen Namen
+                    stehen als Anzahl.
+                  </p>
+                  <div className="mt-6 space-y-8">
+                    {reasons.groups.map((g) => (
+                      <div key={g.key} data-reason-group={g.key}>
+                        <h3 className="font-heading text-lg font-semibold text-primary dark:text-text-primary">
+                          {g.title}{" "}
+                          <span className="whitespace-nowrap font-normal text-muted dark:text-text-tertiary">
+                            · {fmt(groupSize(g))}
+                          </span>
+                        </h3>
+                        {g.rule && (
+                          <p className="mt-1 text-sm text-muted dark:text-text-tertiary">
+                            {g.rule}
+                          </p>
+                        )}
+                        <ul className="mt-3 divide-y divide-primary/10 border-y border-primary/10 dark:divide-text-secondary/10 dark:border-text-secondary/10">
+                          {sharedReason(g) ? (
+                            <li
+                              className="py-2.5 sm:flex sm:gap-6"
+                              data-shared-reason
+                            >
+                              <span className="font-medium text-primary sm:w-48 sm:shrink-0 dark:text-text-primary">
+                                {g.rows.map((r) => r.name).join(", ")}
+                              </span>
+                              <span className="block text-neutral-dark/80 dark:text-text-secondary">
+                                {sharedReason(g)}
+                              </span>
+                            </li>
+                          ) : (
+                            g.rows.map((r) => (
+                              <li
+                                key={r.name}
+                                className="py-2.5 sm:flex sm:gap-6"
+                              >
+                                <span className="font-medium text-primary sm:w-48 sm:shrink-0 dark:text-text-primary">
+                                  {r.name}
+                                </span>
+                                <span className="block text-neutral-dark/80 dark:text-text-secondary">
+                                  {r.reason}
+                                </span>
+                              </li>
+                            ))
+                          )}
+                          {g.private_count > 0 && (
+                            <li
+                              className="py-2.5 sm:flex sm:gap-6"
+                              data-private-count
+                            >
+                              <span className="font-medium text-primary sm:w-48 sm:shrink-0 dark:text-text-primary">
+                                {g.private_count === 1
+                                  ? "1 privates Repository"
+                                  : `${fmt(g.private_count)} private Repositories`}
+                              </span>
+                              <span className="block text-neutral-dark/80 dark:text-text-secondary">
+                                {g.private_sentence}
+                              </span>
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <p
+                  className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary"
+                  data-reasons-mismatch
+                >
+                  {reasons.mismatch_line}
+                </p>
+              )}
+            </section>
+          )}
+
           {testPosts.length > 0 && (
             <section className="mt-12" data-blog-pointer>
               <h2 className="font-heading text-2xl font-bold text-primary dark:text-text-primary">
                 Aus dem Blog
               </h2>
               <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                Wie wir testen, ausführlich und mit Zahlen aus unseren Projekten:
+                Wie wir testen, ausführlich und mit Zahlen aus unseren
+                Projekten:
               </p>
               <ul className="mt-4 divide-y divide-primary/10 border-y border-primary/10 dark:divide-white/10 dark:border-white/10">
                 {testPosts.map((post) => (
@@ -332,7 +480,8 @@ export default function TestManagementPage() {
                       {post.title}
                     </Link>
                     <p className="mt-1 text-sm text-muted dark:text-text-tertiary">
-                      <time dateTime={post.date}>{formatDate(post.date)}</time> · {post.readingMinutes} Min. Lesezeit
+                      <time dateTime={post.date}>{formatDate(post.date)}</time>{" "}
+                      · {post.readingMinutes} Min. Lesezeit
                     </p>
                   </li>
                 ))}
@@ -350,10 +499,12 @@ export default function TestManagementPage() {
           )}
 
           <p className="mt-12 text-sm italic text-muted dark:text-text-tertiary">
-            <span className="font-medium not-italic">Wie dieser Text entstand:</span> Diese
-            Seite über nachprüfbares Testen wurde selbst KI-entworfen und menschlich
-            editiert — dieselbe Disziplin, die unsere Tests zählt, hat auch diesen Text
-            geschrieben.
+            <span className="font-medium not-italic">
+              Wie dieser Text entstand:
+            </span>{" "}
+            Diese Seite über nachprüfbares Testen wurde selbst KI-entworfen und
+            menschlich editiert — dieselbe Disziplin, die unsere Tests zählt,
+            hat auch diesen Text geschrieben.
           </p>
         </article>
       </main>
