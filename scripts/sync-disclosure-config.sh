@@ -34,12 +34,18 @@ OUT="disclosure-config.json"
 MODE="${1:-file}"
 
 # --- Hand-synced from repo-attribution-matrix.yaml `disclosure` (Founder-signed 2026-07-01) ---
-# named_private: the 5 approved private products (Omnopsis ×3 + Phonesis + Snakeoil-Check). Nothing
+# named_private: the approved private products (Omnopsis ×3, Phonesis, Snakeoil-Check; Kaze, MuscleCat,
+# Paperless Autopilot and the two app websites since 2026-11-14, planning #4140). Nothing
 # else private is ever named. Adding here without a matching display_overrides entry is a FAILURE
 # (HARD RULE).
 NAMED_PRIVATE='[
+  "neckarshore-mmps/kaze",
+  "neckarshore-mmps/musclecat",
   "neckarshore-mmps/phonesis-voicebank",
   "neckarshore-mmps/snakeoil-check",
+  "neckarshore-skills/paperless-autopilot",
+  "neckarshore-websites/kaze-website",
+  "neckarshore-websites/musclecat-website",
   "omnopsis-ai/omnopsis-backend",
   "omnopsis-ai/omnopsis-contracts",
   "omnopsis-ai/omnopsis-frontend"
@@ -49,14 +55,19 @@ NAMED_PRIVATE='[
 # approved-private products (disclose the announced fact, withhold the private slug).
 DISPLAY_OVERRIDES='{
   "neckarshore-mmps/clearpath": "ClearPath",
+  "neckarshore-mmps/kaze": "Kaze",
   "neckarshore-mmps/mmp-local-seo-performance-hub": "Local SEO Hub",
-  "neckarshore-mmps/mmp-prod-or-pretend": "Prod or Pretend",
+  "neckarshore-mmps/musclecat": "MuscleCat",
+  "neckarshore-mmps/prod-or-pretend": "Prod or Pretend",
   "neckarshore-mmps/phonesis-voicebank": "Phonesis",
   "neckarshore-mmps/snakeoil-check": "Snakeoil-Check",
   "neckarshore-mmps/trustscope": "TrustScope",
   "neckarshore-skills/ai-phrase-check": "AI Phrase Check",
   "neckarshore-skills/mailbox-autopilot": "Mailbox Autopilot",
   "neckarshore-skills/obsidian-vault-autopilot": "Obsidian Vault Autopilot",
+  "neckarshore-skills/paperless-autopilot": "Paperless Autopilot",
+  "neckarshore-websites/kaze-website": "Kaze Website",
+  "neckarshore-websites/musclecat-website": "MuscleCat Website",
   "omnopsis-ai/omnopsis-backend": "Omnopsis",
   "omnopsis-ai/omnopsis-contracts": "Omnopsis",
   "omnopsis-ai/omnopsis-frontend": "Omnopsis"
