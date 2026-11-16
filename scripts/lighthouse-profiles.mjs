@@ -98,3 +98,21 @@ export const PROFILES = [
     reportFile: "report-mobile-4g.json",
   },
 ];
+
+/**
+ * Pages the Lighthouse job measures, one per page template (MASCHIN 2026-11-14, point 3).
+ * Until 2026-11-16 the job measured the homepage only, so a green run said nothing about
+ * subpages; /test-management was measured by hand. "/" stays first and keeps its report file
+ * names, so the delta against the previous run still works for it.
+ */
+export const PAGES = ["/", "/test-management", "/products/omnopsis", "/blog"];
+
+/** Report file for a page: "/" keeps the plain name, other pages get a slug prefix. */
+export function reportFileFor(page, reportFile) {
+  if (page === "/") return reportFile;
+  const slug = page
+    .replace(/^\/+|\/+$/g, "")
+    .replace(/[^a-z0-9]+/gi, "-")
+    .toLowerCase();
+  return `${slug}--${reportFile}`;
+}
