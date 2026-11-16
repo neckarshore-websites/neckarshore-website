@@ -3,7 +3,7 @@
     "e2e": 1222,
     "integration": 1532,
     "smoke": 1,
-    "unit": 4799
+    "unit": 4809
   },
   "endpoints": 96,
   "expected": 18,
@@ -33,7 +33,7 @@
       "total": 110
     },
     {
-      "audited_sha": "70be72ad49e65348b9bb3ef984345e46f87af477",
+      "audited_sha": "8656f94aad87dbc6ad1ea801b4e2a365359263b1",
       "byType": {
         "e2e": 104,
         "integration": 27,
@@ -57,7 +57,7 @@
       "total": 241
     },
     {
-      "audited_sha": "f0528d5b1b63c6f71ea15992881c42f4208c2c56",
+      "audited_sha": "8d173184edbc3ffe9d168dc4b6a9d42b99ee3c3b",
       "byType": {
         "e2e": 74,
         "unit": 274
@@ -110,15 +110,15 @@
       "total": 214
     },
     {
-      "audited_sha": "c2a21f0b9de3437013d847b77b7d586a55e88d1f",
+      "audited_sha": "8a386163d8b573807f3d99a1365b2a915dfe1871",
       "byType": {
         "e2e": 27,
-        "unit": 138
+        "unit": 148
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/goldoni-website",
-      "total": 165
+      "total": 175
     },
     {
       "audited_sha": "95f784f573a2b7daa6d7fdbbcfa35c955b5c87ca",
@@ -132,7 +132,7 @@
       "total": 9
     },
     {
-      "audited_sha": "e81c033eea8165c7edecda7ef818e8eaaca91bd6",
+      "audited_sha": "eeebf94249ac51bcc8b41d9240e9f9a195e91c97",
       "byType": {
         "e2e": 601,
         "unit": 380
@@ -143,7 +143,7 @@
       "total": 981
     },
     {
-      "audited_sha": "cf510aaef59c17597cfcfcf00aaef6099c1bcd26",
+      "audited_sha": "ac7388c12133f5902e9129fd3e936d75bad7bcc3",
       "byType": {
         "e2e": 56,
         "unit": 110
@@ -154,7 +154,7 @@
       "total": 166
     },
     {
-      "audited_sha": "a61c3f3c9278f3cf03c6ba4986fef6fe8a5263e1",
+      "audited_sha": "a0d5073cf2393b2cbf70cf8dbc96f8b72f28f528",
       "byType": {
         "e2e": 63,
         "unit": 71
@@ -234,7 +234,7 @@
   ],
   "reporting": 18,
   "repos": 20,
-  "total": 7713,
+  "total": 7723,
   "untyped_total": 159,
-  "updatedAt": "2026-11-15T11:42:30Z"
+  "updatedAt": "2026-11-16T12:19:12Z"
 }
