@@ -102,7 +102,7 @@ export const MMP_CARDS: Record<string, MmpCardData> = {
   "prod-or-pretend": {
     description:
       'Ein konstruktiver Qualitäts-Spiegel für Tech-Hype. Prüft „an-einem-Wochenende-gebaut"-Claims gegen echte Produktionsstandards — Tests, Security, Skalierbarkeit, Doku. Kein Debunker, sondern eine Substanz-von-Luft-Unterscheidung für Entscheider.',
-    repoUrl: "https://github.com/neckarshore-mmps/mmp-prod-or-pretend",
+    repoUrl: "https://github.com/neckarshore-mmps/prod-or-pretend",
   },
   // NOTE: unlike the other MMP repos above, trustscope is PUBLIC (MIT) — the GitHub link
   // resolves for logged-out visitors, no sign-in/404 wall.
