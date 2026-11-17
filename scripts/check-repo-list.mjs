@@ -39,14 +39,23 @@
  *     run is reported as such, not as a mystery mismatch, because that is the
  *     single most likely reason this gate ever goes red.
  *  5. ASYMMETRIC VERDICT (Founder 2026-09-29). Two kinds of mismatch are NOT
- *     equally dangerous. A configured repo that is missing, renamed, archived
- *     or duplicated means numbers we publish could be WRONG -> halt, exactly as
+ *     equally dangerous. A configured repo that is missing, archived or
+ *     duplicated means numbers we publish could be WRONG -> halt, exactly as
  *     before. A live repo that is merely NOT YET in the config means the
  *     published set is complete-but-short by the new repo -> publish anyway,
  *     warn, and hand the repo list to the workflow, which files a
  *     dispatch:linus issue. Origin: acceptor-gate (created 2026-09-23) halted
  *     the whole pipeline from 09-24 to 09-29 and froze the public number for a
  *     one-line config gap, while the watchdog's daily issue went unread.
+ *     RENAMED moved to the warning side (Founder 2026-11-17, question tool,
+ *     "Warnen + Ticket"). The 09-29 text listed it as a halt, but it never
+ *     halted: GitHub answers an old slug with the new full_name, so the
+ *     resolved set matched and a rename passed silently (seen 2026-11-15, run
+ *     43709891771). The numbers are right in that case; only the NAME in
+ *     stats-config is stale, and it shows on /repositories and in the test
+ *     page's naming. So a rename now warns and hands `renamed` to the
+ *     workflow, which files a dispatch:linus issue. A rename kept ALONGSIDE
+ *     its old slug still halts as a duplicate (rule 1).
  *  6. NO NEW DEPENDENCY. Zero-dep Node with fetch, same house style as
  *     scripts/audit-gate.mjs.
  *
@@ -80,7 +89,7 @@ export const EXCLUDED_NAMES = [".github"];
  * what GitHub reports today, `configured` is stats-config resolved through
  * any renames. `archived` lists configured entries GitHub reports as archived.
  */
-export function evaluate({ configured, live, archived = [] }) {
+export function evaluate({ configured, live, archived = [], renamed = [] }) {
   const liveSet = new Set(live);
   const configuredSet = new Set(configured);
 
@@ -88,6 +97,7 @@ export function evaluate({ configured, live, archived = [] }) {
   const stale = [...configuredSet].filter((r) => !liveSet.has(r)).sort();
   const duplicates = configured.filter((r, i) => configured.indexOf(r) !== i).sort();
   const archivedInConfig = [...archived].sort();
+  const renamedInConfig = [...renamed].sort((a, b) => a.from.localeCompare(b.from));
 
   // HALT = the published numbers could be wrong. Missing-only is NOT a halt.
   const halt =
@@ -103,13 +113,36 @@ export function evaluate({ configured, live, archived = [] }) {
       missing.length === 0 &&
       stale.length === 0 &&
       duplicates.length === 0 &&
-      archivedInConfig.length === 0,
+      archivedInConfig.length === 0 &&
+      renamedInConfig.length === 0,
     missing,
     stale,
     duplicates,
     archivedInConfig,
+    renamed: renamedInConfig,
     counts: { configured: configuredSet.size, live: liveSet.size },
   };
+}
+
+/**
+ * Pure. Each entry pairs the slug written in stats-config with the full_name
+ * GitHub resolved it to. A different full_name is a rename or an org move.
+ * Letter case alone is not: GitHub resolves slugs case-insensitively.
+ */
+export function findRenames(pairs) {
+  return pairs
+    .filter((p) => p.configured.toLowerCase() !== p.resolved.toLowerCase())
+    .map((p) => ({ from: p.configured, to: p.resolved }));
+}
+
+function renamedLines(renamed) {
+  if (!renamed.length) return [];
+  return [
+    "",
+    "Umbenannt oder verschoben (GitHub leitet um, die Zahlen stimmen; den Eintrag",
+    "in stats-config auf den neuen Namen AENDERN, nicht einen zweiten anlegen):",
+    ...renamed.map((r) => `  ~> ${r.from} -> ${r.to}`),
+  ];
 }
 
 /** Render a verdict for a CI log. Returns a string; the caller decides on exit. */
@@ -118,13 +151,22 @@ export function report(v) {
     return `OK: stats-config listet genau die ${v.counts.live} lebenden Repos der sechs Orgs.`;
   }
   if (!v.halt) {
-    const out = [
-      `WARNUNG: ${v.missing.length} lebende(s) Repo(s) noch nicht in stats-config ` +
-        `(${v.counts.configured} gelistet, ${v.counts.live} live).`,
-      "Veroeffentlicht wird trotzdem, mit der bekannten Liste — die Repo-Zahl liegt",
-      "bis zur Aufnahme um diese Anzahl zu niedrig. Aufnehmen:",
-    ];
-    v.missing.forEach((r) => out.push(`  + ${r}`));
+    const out = [];
+    if (v.missing.length) {
+      out.push(
+        `WARNUNG: ${v.missing.length} lebende(s) Repo(s) noch nicht in stats-config ` +
+          `(${v.counts.configured} gelistet, ${v.counts.live} live).`,
+        "Veroeffentlicht wird trotzdem, mit der bekannten Liste — die Repo-Zahl liegt",
+        "bis zur Aufnahme um diese Anzahl zu niedrig. Aufnehmen:",
+      );
+      v.missing.forEach((r) => out.push(`  + ${r}`));
+    } else {
+      out.push(
+        `WARNUNG: ${v.renamed.length} Eintrag/Eintraege in stats-config tragen einen alten Namen.`,
+        "Veroeffentlicht wird trotzdem — die Zahlen stimmen, nur der Name ist veraltet.",
+      );
+    }
+    out.push(...renamedLines(v.renamed));
     return out.join("\n");
   }
   const out =
@@ -155,6 +197,7 @@ export function report(v) {
     out.push("", "Archiviert und trotzdem gelistet:");
     v.archivedInConfig.forEach((r) => out.push(`  ~ ${r}`));
   }
+  out.push(...renamedLines(v.renamed));
   return out.join("\n");
 }
 
@@ -196,13 +239,15 @@ async function fetchLive(token) {
 async function resolveConfigured(entries, token) {
   const resolved = [];
   const archived = [];
+  const pairs = [];
   for (const e of entries) {
     // Resolves renames: GitHub answers the old slug with the current full_name.
     const meta = await gh(`/repos/${e.owner}/${e.name}`, token);
     resolved.push(meta.full_name);
+    pairs.push({ configured: `${e.owner}/${e.name}`, resolved: meta.full_name });
     if (meta.archived) archived.push(meta.full_name);
   }
-  return { resolved, archived };
+  return { resolved, archived, renamed: findRenames(pairs) };
 }
 
 async function main() {
@@ -223,28 +268,35 @@ async function main() {
   }
 
   const live = await fetchLive(token);
-  const { resolved, archived } = await resolveConfigured(config.repos, token);
-  const verdict = evaluate({ configured: resolved, live, archived });
+  const { resolved, archived, renamed } = await resolveConfigured(config.repos, token);
+  const verdict = evaluate({ configured: resolved, live, archived, renamed });
 
   console.log(report(verdict));
   if (verdict.halt) process.exit(1);
   if (!verdict.ok) {
-    // Missing-only: publish, but make it loud and hand the list to the workflow.
-    console.log(`::warning::Nicht in stats-config: ${verdict.missing.join(", ")}`);
-    writeUnconfigured(verdict.missing);
+    // Missing and/or renamed only: publish, but make it loud and hand the lists to the workflow.
+    if (verdict.missing.length) {
+      console.log(`::warning::Nicht in stats-config: ${verdict.missing.join(", ")}`);
+      writeOutput("unconfigured", verdict.missing.join(" "));
+    }
+    if (verdict.renamed.length) {
+      const pairs = verdict.renamed.map((r) => `${r.from}>${r.to}`);
+      console.log(`::warning::Alter Name in stats-config: ${pairs.join(", ")}`);
+      writeOutput("renamed", pairs.join(" "));
+    }
   }
 }
 
 /**
- * Hands the unconfigured repos to the next workflow step via $GITHUB_OUTPUT
- * (`unconfigured=<space-separated list>`). Outside Actions the variable is
- * absent and the warning above is the whole signal — that is the local-run case,
- * not a skipped gate: the verdict was still computed and printed.
+ * Hands a list to the next workflow step via $GITHUB_OUTPUT
+ * (`unconfigured=<owner/name ...>`, `renamed=<old>new ...>`). Outside Actions the
+ * variable is absent and the warning above is the whole signal — that is the
+ * local-run case, not a skipped gate: the verdict was still computed and printed.
  */
-function writeUnconfigured(missing) {
+function writeOutput(key, value) {
   const out = process.env.GITHUB_OUTPUT;
   if (!out) return;
-  appendFileSync(out, `unconfigured=${missing.join(" ")}\n`);
+  appendFileSync(out, `${key}=${value}\n`);
 }
 
 const invokedDirectly = process.argv[1] && process.argv[1].endsWith("check-repo-list.mjs");

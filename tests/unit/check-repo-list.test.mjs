@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { evaluate, report, ORGS, EXCLUDED_NAMES } from "../../scripts/check-repo-list.mjs";
+import { evaluate, report, findRenames, ORGS, EXCLUDED_NAMES } from "../../scripts/check-repo-list.mjs";
 
 /**
  * The network half of check-repo-list.mjs needs a cross-org PAT and therefore
@@ -147,4 +147,71 @@ test("a clean match neither halts nor warns", () => {
   const v = evaluate({ configured: ["neckarshore-ai/vault"], live: ["neckarshore-ai/vault"] });
   assert.equal(v.ok, true);
   assert.equal(v.halt, false);
+});
+
+// Renamed entries (Founder 2026-11-17, question tool: "Warnen + Ticket").
+// GitHub answers an old slug with the new full_name, so the resolved set stays
+// right and the published numbers too; only the NAME in stats-config is stale
+// (it reaches /repositories and the test page's naming). Seen 2026-11-15
+// (run 43709891771): it passed silently. Now it warns and files an issue.
+// ---------------------------------------------------------------------------
+
+test("findRenames names an entry whose slug resolves to another full_name", () => {
+  const r = findRenames([
+    { configured: "neckarshore-mmps/mmp-prod-or-pretend", resolved: "neckarshore-mmps/prod-or-pretend" },
+    { configured: "neckarshore-ai/vault", resolved: "neckarshore-ai/vault" },
+  ]);
+  assert.deepEqual(r, [
+    { from: "neckarshore-mmps/mmp-prod-or-pretend", to: "neckarshore-mmps/prod-or-pretend" },
+  ]);
+});
+
+test("findRenames ignores a difference in letter case only", () => {
+  assert.deepEqual(
+    findRenames([{ configured: "neckarshore-ai/Vault", resolved: "neckarshore-ai/vault" }]),
+    [],
+  );
+});
+
+test("findRenames sees a move to another org as a rename", () => {
+  assert.deepEqual(
+    findRenames([{ configured: "neckarshore-ai/kaze", resolved: "neckarshore-mmps/kaze" }]),
+    [{ from: "neckarshore-ai/kaze", to: "neckarshore-mmps/kaze" }],
+  );
+});
+
+test("a renamed entry does NOT halt — publish, warn, name both slugs", () => {
+  const v = evaluate({
+    configured: ["neckarshore-mmps/prod-or-pretend"],
+    live: ["neckarshore-mmps/prod-or-pretend"],
+    renamed: [{ from: "neckarshore-mmps/mmp-prod-or-pretend", to: "neckarshore-mmps/prod-or-pretend" }],
+  });
+  assert.equal(v.halt, false, "a stale name with correct numbers must not stop publishing");
+  assert.equal(v.ok, false, "a stale name is not a clean match");
+  const text = report(v);
+  assert.match(text, /^WARNUNG:/);
+  assert.match(text, /mmp-prod-or-pretend -> neckarshore-mmps\/prod-or-pretend/);
+  assert.doesNotMatch(text, /^FAIL/);
+});
+
+test("a rename next to a real halt reason is listed in the FAIL report too", () => {
+  const v = evaluate({
+    configured: ["neckarshore-mmps/prod-or-pretend", "neckarshore-ai/observatory"],
+    live: ["neckarshore-mmps/prod-or-pretend"],
+    renamed: [{ from: "neckarshore-mmps/mmp-prod-or-pretend", to: "neckarshore-mmps/prod-or-pretend" }],
+  });
+  assert.equal(v.halt, true);
+  assert.match(report(v), /mmp-prod-or-pretend -> neckarshore-mmps\/prod-or-pretend/);
+});
+
+test("renamed and unconfigured together: one warning carries both", () => {
+  const v = evaluate({
+    configured: ["neckarshore-mmps/prod-or-pretend"],
+    live: ["neckarshore-mmps/prod-or-pretend", "neckarshore-mmps/acceptor-gate"],
+    renamed: [{ from: "neckarshore-mmps/mmp-prod-or-pretend", to: "neckarshore-mmps/prod-or-pretend" }],
+  });
+  assert.equal(v.halt, false);
+  const text = report(v);
+  assert.match(text, /\+ neckarshore-mmps\/acceptor-gate/);
+  assert.match(text, /mmp-prod-or-pretend -> /);
 });
