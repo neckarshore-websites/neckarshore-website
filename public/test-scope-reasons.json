@@ -1,0 +1,66 @@
+{
+  "groups": [
+    {
+      "key": "no-tests-needed",
+      "private_count": 7,
+      "private_sentence": "Dokumentation, Planung und Inhalte ohne ausführbaren Code.",
+      "rows": [
+        {
+          "name": "Prod or Pretend",
+          "reason": "Enthält nur Beschreibung und Konfiguration, keinen ausführbaren Code."
+        },
+        {
+          "name": "neckarshore-plugins",
+          "reason": "Verzeichnis von Erweiterungen: nur Beschreibung und Konfiguration, kein ausführbarer Code."
+        }
+      ],
+      "rule": "Kein ausführbarer Code im Hauptzweig (keine .ts-, .js-, .py-, .sh- oder .swift-Datei) und kein automatischer Ablauf, der Code startet.",
+      "title": "Braucht keine Tests"
+    },
+    {
+      "key": "tests-not-counted",
+      "private_count": 10,
+      "private_sentence": "Tests sind vorhanden, der Zähler ist noch nicht angeschlossen; bei zwei davon laufen sie noch nicht automatisch.",
+      "rows": [
+        {
+          "name": "Kaze",
+          "reason": "Automatische Tests laufen bei jeder Änderung; ihre Zahl wird noch nicht an die Gesamtzahl gemeldet."
+        },
+        {
+          "name": "Kaze Website",
+          "reason": "Automatische Tests laufen bei jeder Änderung; ihre Zahl wird noch nicht an die Gesamtzahl gemeldet."
+        },
+        {
+          "name": "live-checks",
+          "reason": "Automatische Tests laufen bei jeder Änderung; ihre Zahl wird noch nicht an die Gesamtzahl gemeldet."
+        },
+        {
+          "name": "MuscleCat",
+          "reason": "Automatische Tests laufen bei jeder Änderung; ihre Zahl wird noch nicht an die Gesamtzahl gemeldet."
+        },
+        {
+          "name": "MuscleCat Website",
+          "reason": "Automatische Tests laufen bei jeder Änderung; ihre Zahl wird noch nicht an die Gesamtzahl gemeldet."
+        },
+        {
+          "name": "Paperless Autopilot",
+          "reason": "Automatische Tests laufen bei jeder Änderung; ihre Zahl wird noch nicht an die Gesamtzahl gemeldet."
+        },
+        {
+          "name": "Phonesis",
+          "reason": "Automatische Tests laufen bei jeder Änderung; ihre Zahl wird noch nicht an die Gesamtzahl gemeldet."
+        }
+      ],
+      "title": "Tests vorhanden, noch nicht gezählt"
+    },
+    {
+      "key": "no-tests-yet",
+      "private_count": 6,
+      "private_sentence": "Hilfsskripte (Prüf-, Berichts- und Abgleichskripte), kein Produktcode.",
+      "rows": [],
+      "title": "Noch keine Tests"
+    }
+  ],
+  "measured": "2026-11-16",
+  "mismatch_line": "Diese Aufschlüsselung wird gerade neu gemessen. Die Testzahlen weiter oben sind davon nicht betroffen."
+}
