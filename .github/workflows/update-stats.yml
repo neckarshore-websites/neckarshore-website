@@ -52,10 +52,13 @@ jobs:
       # keep serving yesterday's honest numbers.
       #
       # ASYMMETRIC since 2026-09-29 (Founder): only a configured repo that is
-      # missing / renamed / archived / duplicated HALTS. A live repo that is
-      # merely not yet configured publishes with the known set and sets the
-      # `unconfigured` output; "Neues Repo melden" below files the issue.
+      # missing / archived / duplicated HALTS. A live repo that is merely not
+      # yet configured publishes with the known set and sets the `unconfigured`
+      # output; "Neues Repo melden" below files the issue.
       # Origin: acceptor-gate froze the public number from 09-24 to 09-29.
+      # Since 2026-11-17 (Founder, "Warnen + Ticket") a RENAMED entry also
+      # publishes: the numbers use the resolved name, only stats-config's name
+      # is stale. It sets `renamed`; "Umbenanntes Repo melden" files the issue.
       - name: Repo-Liste gegen GitHub pruefen
         id: repoliste
         env:
@@ -424,6 +427,34 @@ jobs:
             "[stats-repo-fehlt]" \
             "[stats-repo-fehlt] Neues Repo nicht in stats-config" \
             /tmp/neues-repo.md
+
+      # --- Umbenanntes Repo: veroeffentlicht, aber gemeldet (Founder 2026-11-17) ----------------
+      # Gleiche Form wie "Neues Repo melden": nach dem Push, eigener Titel-Marker, dispatch:linus.
+      # Die Zahlen stimmen (GitHub leitet den alten Namen um); veraltet ist nur der Name in
+      # stats-config, und der erscheint auf /repositories und in der Benennung der Test-Seite.
+      - name: Umbenanntes Repo melden
+        if: steps.repoliste.outputs.renamed != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RENAMED: ${{ steps.repoliste.outputs.renamed }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          {
+            echo "**Eintraege in \`stats-config.json\` mit altem Namen.**"
+            echo ""
+            for r in ${RENAMED}; do echo "- \`${r%%>*}\` heisst jetzt \`${r#*>}\`"; done
+            echo ""
+            echo "Die Statistik wurde trotzdem veroeffentlicht; GitHub leitet den alten Namen um, die"
+            echo "Zahlen stimmen. Den Eintrag in stats-config AENDERN (owner/name), nicht einen zweiten"
+            echo "anlegen — ein zweiter zaehlt doppelt und haelt den Lauf an."
+            echo ""
+            echo "Lauf: ${RUN_URL}"
+          } > /tmp/umbenanntes-repo.md
+          bash scripts/report-stats-outage.sh \
+            "[stats-repo-umbenannt]" \
+            "[stats-repo-umbenannt] Alter Repo-Name in stats-config" \
+            /tmp/umbenanntes-repo.md
 
       # --- Ausfallmeldung: der Melder fuer den ROTEN Lauf ---------------------------------------
       # WARUM DIESER SCHRITT EXISTIERT: bis 2026-08-27 trug dieser Workflow keinen einzigen
