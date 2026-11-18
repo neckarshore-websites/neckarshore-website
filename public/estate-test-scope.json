@@ -3,7 +3,7 @@
     "e2e": 1227,
     "integration": 1560,
     "smoke": 1,
-    "unit": 4841
+    "unit": 4847
   },
   "endpoints": 96,
   "expected": 18,
@@ -132,15 +132,15 @@
       "total": 9
     },
     {
-      "audited_sha": "daea64159d3b7bf8b61bd5d8b6c4aebf14aab539",
+      "audited_sha": "1075907960229fd4fbfb22791e4c79a4ddd1e235",
       "byType": {
         "e2e": 602,
-        "unit": 389
+        "unit": 395
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/neckarshore-website",
-      "total": 991
+      "total": 997
     },
     {
       "audited_sha": "fe6e7bb66aaba7eb7b1c4372616bb317b167131b",
@@ -234,7 +234,7 @@
   ],
   "reporting": 18,
   "repos": 20,
-  "total": 7788,
+  "total": 7794,
   "untyped_total": 159,
-  "updatedAt": "2026-11-17T12:42:10Z"
+  "updatedAt": "2026-11-18T12:33:37Z"
 }
