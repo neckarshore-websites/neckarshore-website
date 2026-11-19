@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 /**
  * THE NECKAR LINE in the home hero (src/components/NeckarLinie.tsx, Founder 2026-10-17):

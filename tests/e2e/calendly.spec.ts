@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import { PAGES, CALENDLY_URL } from "./helpers";
 
 test.describe("Calendly CTAs", () => {

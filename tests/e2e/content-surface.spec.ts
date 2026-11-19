@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page } from "./fixtures";
 
 // JSON-LD helper: collect all parsed ld+json blocks on the current page (one entry per
 // <script> block — used where the per-block wrapper matters, e.g. the @context check).

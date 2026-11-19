@@ -1,7 +1,8 @@
 /**
  * `test` with a `page` whose every document navigation is checked against the site identity
  * (see live-target.ts for why). Specs that can run against production (`@smoke`, via
- * `npm run test:smoke`) import `test` from here instead of from "@playwright/test".
+ * `npm run test:smoke`) import `test` from here instead of from "./fixtures". It extends
+ * ./fixtures, so the Umami stub applies here too.
  *
  * Checked on EVERY `page.goto`, not once before the run: the Vercel mitigation reacts to
  * traffic patterns, and a smoke run is traffic. A single pre-flight fetch can pass while the
@@ -11,7 +12,7 @@
  * deliberate: that keeps the positive path exercised on every PR instead of only on the rare
  * manual live run.
  */
-import { test as base, expect } from "@playwright/test";
+import { test as base, expect } from "./fixtures";
 import { classifyTargetResponse } from "./live-target";
 
 export const test = base.extend({

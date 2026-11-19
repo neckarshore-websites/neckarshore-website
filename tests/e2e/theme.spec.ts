@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import { PAGES, WCAG_AA_RATIO, contrastRatio } from "./helpers";
 
 /**

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 /** Lead-magnet landing page (planning #3336). */
 test.describe("KI-Fahrplan landing page", () => {

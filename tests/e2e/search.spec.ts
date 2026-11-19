@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page } from "./fixtures";
 
 /**
  * Cmd+K search (TC-SRCH-*). Client-side MiniSearch over the static /api/search-index.

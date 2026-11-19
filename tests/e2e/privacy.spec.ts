@@ -1,4 +1,4 @@
-import { test, expect, type APIRequestContext } from "@playwright/test";
+import { test, expect, type APIRequestContext } from "./fixtures";
 import { TEST_ANALYTICS_READ_TOKEN } from "./analytics-test-token";
 
 // Cookies the site is permitted to set on first load WITHOUT prior user consent.
@@ -148,6 +148,46 @@ test("TC-PRIV-008: /datenschutz names Turnstile's storage entry, section 25 TDDD
     expect(text, `must not say: ${phrase}`).not.toContain(phrase);
   }
   for (const phrase of SECTION_7_MUST) {
+    expect(text, `must say: ${phrase}`).toContain(phrase);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// TC-PRIV-009 — Umami in § 4 (planning #4006 row 6)
+// ---------------------------------------------------------------------------
+// Wording: Dr. Sommer, planning #4003 comments 6983850360 (common paragraph, neckarshore
+// row) and 6985352394 (the umami.disabled correction and the two narrowed sentences).
+// The MUST_NOT list holds the two sentences he withdrew: both claim no access to the
+// device at all, which is false once the tracker reads umami.disabled.
+// WHAT THIS CANNOT DO: tell whether the box is configured as the text says (daily salt,
+// 13-month deletion); that is Bob's box check on planning #3208.
+
+const UMAMI_MUST_NOT = [
+  "kein Speicherzugriff auf Ihr Endgerät",
+  "nichts auf Ihrem Gerät gespeichert oder von dort ausgelesen",
+];
+
+const UMAMI_MUST = [
+  "Beide Systeme laufen nebeneinander",
+  "Wir zählen die Besuche dieser Webseite mit Umami",
+  "Hostinger International Ltd., Larnaca (Zypern)",
+  "Hostinger ist dabei unser Auftragsverarbeiter",
+  "(Eintrag „umami.disabled“); diese Abfrage dient allein Ihrem Widerspruch und beruht auf § 25 Abs. 2 Nr. 2 TDDDG",
+  "Die Daten löschen wir nach 13 Monaten automatisch.",
+  "Das eigene System setzt keine Cookies und greift nicht auf Ihr Endgerät zu.",
+  "weil kein Zugriff auf Ihr Endgerät erfolgt, der einer Einwilligung nach § 25 TDDDG bedürfte",
+  "zum ersten Mal anklicken, antippen oder mit der Tastatur ansteuern",
+];
+
+test("TC-PRIV-009: /datenschutz describes Umami beside the own system, with the umami.disabled read", async ({
+  page,
+}) => {
+  await page.goto("/datenschutz");
+  const text = (await page.locator("main").innerText()).replace(/\s+/g, " ");
+  for (const phrase of UMAMI_MUST_NOT) {
+    expect(text, `must not say: ${phrase}`).not.toContain(phrase);
+  }
+  for (const phrase of UMAMI_MUST) {
     expect(text, `must say: ${phrase}`).toContain(phrase);
   }
 });

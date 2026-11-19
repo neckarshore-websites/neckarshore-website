@@ -47,6 +47,10 @@ export default defineConfig({
           env: {
             ...(process.env as Record<string, string>),
             ANALYTICS_READ_TOKEN: TEST_ANALYTICS_READ_TOKEN,
+            // A test Umami id makes the layout render the tracker in e2e; the
+            // host is answered by the stub in tests/e2e/fixtures.ts, which every
+            // spec imports (tests/unit/e2e-fixture-imports.test.mjs guards that).
+            NEXT_PUBLIC_UMAMI_WEBSITE_ID: "e2e00000-0000-4000-8000-000000000000",
           },
         },
       }

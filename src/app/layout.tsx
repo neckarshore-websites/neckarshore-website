@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import TrackerScript from "@/components/TrackerScript";
 import { JsonLd } from "@/components/JsonLd";
 import { SearchProvider } from "@/components/search/SearchProvider";
 import { ThemeColorSync } from "@/components/ThemeColorSync";
 import { organizationSchema } from "@/lib/schema/organization";
+import { UMAMI_HOST, UMAMI_WEBSITE_ID } from "@/lib/umami";
 import "./globals.css";
 
 const spaceGrotesk = localFont({
@@ -82,10 +84,32 @@ export default function RootLayout({
       lang="de"
       className={`${spaceGrotesk.variable} ${inter.variable} antialiased`}
     >
+      <head>
+        {/* Umami's before-send hook must exist before the tracker's first
+            request, so it loads beforeInteractive, ahead of the tracker. */}
+        {UMAMI_WEBSITE_ID ? (
+          <Script src="/umami-before-send.js" strategy="beforeInteractive" />
+        ) : null}
+      </head>
       <body className="min-h-screen bg-neutral-light text-primary dark:bg-deep-space dark:text-text-primary">
         <JsonLd data={organizationSchema} id="schema-org" />
         <SearchProvider>{children}</SearchProvider>
         <TrackerScript />
+        {/* Umami visitor counting (planning #4006 row 6): cookieless, on our
+            own box, beside the own tracker above. Rendered on Vercel
+            production only (src/lib/umami.ts). Query strings, screen size,
+            GPC and DNT are handled by the hook loaded in <head>; DNT and the
+            #fragment also natively. */}
+        {UMAMI_WEBSITE_ID ? (
+          <Script
+            src={`${UMAMI_HOST}/script.js`}
+            strategy="afterInteractive"
+            data-website-id={UMAMI_WEBSITE_ID}
+            data-before-send="umamiBeforeSend"
+            data-do-not-track="true"
+            data-exclude-hash="true"
+          />
+        ) : null}
         <ThemeColorSync />
       </body>
     </html>
