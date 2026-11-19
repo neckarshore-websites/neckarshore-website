@@ -9,7 +9,7 @@ techStack:
   - "TypeScript"
   - "Tailwind CSS v4"
   - "Self-hosted Variable Fonts (next/font/local)"
-  - "Cookieless First-Party Analytics (sendBeacon → /api/track, Upstash Redis)"
+  - "Cookieless First-Party Analytics (sendBeacon → /api/track, Upstash Redis; Umami auf dem eigenen Server)"
   - "Vercel Hosting"
 status: "Live"
 ---
@@ -32,7 +32,7 @@ Die Architektur im Detail — was hinter den Bausteinen oben steckt:
 | Styling | Tailwind CSS v4 |
 | Hosting | Vercel |
 | Schriften | Inter und Space Grotesk als Variable Fonts, subgesetzt und selbst ausgeliefert (`next/font/local`) — kein externer Font-Host, kein Datentransfer in Drittstaaten |
-| Analytik | Cookielos und First-Party: `navigator.sendBeacon` an die eigene Route `/api/track`, persistiert in Upstash Redis — kein externer Analytics-Anbieter |
+| Analytik | Cookielos und First-Party: `navigator.sendBeacon` an die eigene Route `/api/track`, persistiert in Upstash Redis; daneben zählt Umami die Besuche auf dem eigenen Server (`stats.neckarshore.ai`) — kein externer Analytics-Anbieter |
 | Sicherheit | OWASP-Baseline-Header plus eine bewusst pragmatische Content-Security-Policy: Die statisch-first-Auslieferung (und damit die Lighthouse-Werte) hat Vorrang vor einer nonce-basierten Strict-CSP, die jede Route aus der statischen Generierung herausnehmen würde |
 | SEO | Strukturdaten (JSON-LD) als native, Server-gerenderte `<script>`-Tags — im SSR-HTML für den Crawler sichtbar |
 

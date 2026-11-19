@@ -258,7 +258,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
     },
     {
       q: "Warum braucht die Seite kein Cookie-Banner?",
-      a: "Weil es nichts zuzustimmen gibt: keine Tracking-Cookies, keine externen Ressourcen. Die Reichweiten-Messung läuft cookielos als First-Party-Analytik über die eigene Route — per navigator.sendBeacon an /api/track, ohne externen Analytics-Anbieter.",
+      a: "Weil es nichts zuzustimmen gibt: keine Tracking-Cookies und kein Zugriff auf das Endgerät, der eine Einwilligung bräuchte. Die Reichweiten-Messung läuft cookielos auf eigener Infrastruktur — per navigator.sendBeacon an die eigene Route /api/track und mit Umami auf dem eigenen Server, ohne externen Analytics-Anbieter.",
     },
     {
       q: "Was heißt „DSGVO-by-Design“ hier konkret?",
