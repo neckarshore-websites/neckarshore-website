@@ -42,6 +42,11 @@ export default defineConfig({
           // starts the server itself. To run these tests against a prestarted
           // server, export the same token first
           // (`export ANALYTICS_READ_TOKEN=…`), or the /api/track GET paths 401.
+          // The same holds for NEXT_PUBLIC_UMAMI_WEBSITE_ID below: start a
+          // prestarted server with
+          // `NEXT_PUBLIC_UMAMI_WEBSITE_ID=e2e00000-0000-4000-8000-000000000000`,
+          // or the layout renders no Umami tracker and tests/e2e/umami.spec.ts
+          // fails (restart the server after setting it).
           // In CI `reuseExistingServer` is false, so the server is always fresh
           // and always gets the token.
           env: {

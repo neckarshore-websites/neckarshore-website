@@ -35,7 +35,7 @@ test("the first request already carries no screen size and only the utm keys", a
 
 test("the hook loads before the tracker", async ({ page }) => {
   await page.goto("/");
-  // afterInteractive: Next inserts the tracker tag after hydration.
+  // UmamiTracker appends the tracker tag after hydration.
   await expect(page.locator(`script[src="${UMAMI_HOST}/script.js"]`)).toHaveCount(1);
   const order = await page.evaluate(() =>
     [...document.querySelectorAll("script[src]")]
@@ -46,6 +46,18 @@ test("the hook loads before the tracker", async ({ page }) => {
   const tracker = order.findIndex((src) => src === `${UMAMI_HOST}/script.js`);
   expect(hook, "hook script present").toBeGreaterThanOrEqual(0);
   expect(tracker, "tracker script present").toBeGreaterThan(hook);
+});
+
+test("without the hook the tracker is not loaded and nothing is sent", async ({ page }) => {
+  // CodeRabbit on #389: a failed hook request must not let the tracker send
+  // unfiltered (screen, full query, a send under GPC).
+  await page.route("**/umami-before-send.js", (route) => route.abort());
+  const sends = captureSends(page);
+  await page.goto("/?utm_source=a&foo=b");
+  await page.waitForLoadState("load");
+  await page.waitForTimeout(1000);
+  await expect(page.locator(`script[src="${UMAMI_HOST}/script.js"]`)).toHaveCount(0);
+  expect(sends).toHaveLength(0);
 });
 
 test("Global Privacy Control: nothing is sent", async ({ page }) => {

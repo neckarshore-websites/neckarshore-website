@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
 import TrackerScript from "@/components/TrackerScript";
+import UmamiTracker from "@/components/UmamiTracker";
 import { JsonLd } from "@/components/JsonLd";
 import { SearchProvider } from "@/components/search/SearchProvider";
 import { ThemeColorSync } from "@/components/ThemeColorSync";
@@ -99,16 +100,10 @@ export default function RootLayout({
             own box, beside the own tracker above. Rendered on Vercel
             production only (src/lib/umami.ts). Query strings, screen size,
             GPC and DNT are handled by the hook loaded in <head>; DNT and the
-            #fragment also natively. */}
+            #fragment also natively. UmamiTracker loads the tracker only when
+            that hook is present, so a failed hook request counts nothing. */}
         {UMAMI_WEBSITE_ID ? (
-          <Script
-            src={`${UMAMI_HOST}/script.js`}
-            strategy="afterInteractive"
-            data-website-id={UMAMI_WEBSITE_ID}
-            data-before-send="umamiBeforeSend"
-            data-do-not-track="true"
-            data-exclude-hash="true"
-          />
+          <UmamiTracker host={UMAMI_HOST} websiteId={UMAMI_WEBSITE_ID} />
         ) : null}
         <ThemeColorSync />
       </body>
