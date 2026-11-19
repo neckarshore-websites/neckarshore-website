@@ -62,7 +62,7 @@ const faqItems = [
   },
   {
     q: "Ist neckarshore.ai DSGVO-konform?",
-    a: "Ja, DSGVO-Konformität ist bei uns Architekturentscheidung, keine Checkliste. Verschlüsselung, Tenant-Isolation und BYOLLM — eure Daten bleiben bei euch. Diese Website setzt keine Tracking-Cookies und zählt Besuche nur auf eigenen Servern.",
+    a: "Ja, DSGVO-Konformität ist bei uns Architekturentscheidung, keine Checkliste. Verschlüsselung, Tenant-Isolation und BYOLLM — eure Daten bleiben bei euch. Diese Website setzt keine Tracking-Cookies; Besuche zählt sie mit einem eigenen Analysesystem und mit Umami auf unserem eigenen Server.",
   },
 ];
 
