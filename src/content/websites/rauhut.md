@@ -8,18 +8,18 @@ techStack:
   - "React 19"
   - "Tailwind CSS v4"
   - "TypeScript (strict)"
-  - "Vercel (Hosting + Web Analytics)"
+  - "Vercel (Hosting), Umami auf eigenem Server (Besucherzählung)"
   - "Playwright (E2E)"
 status: "Live"
 ---
 
 ## Was war die Ausgangslage?
 
-`rauhut.com` ist die persönliche Web-Präsenz des Gründers — die Person, nicht die Firma (`neckarshore.ai` ist das Unternehmen). Gebraucht wurde ein schlanker, schneller One-Pager als Proof of Work: Profil, Kernkompetenzen, Projekte und Kontakt, zweisprachig in Deutsch und Englisch. Anspruch: kein Cookie-Banner, keine Third-Party-Tracker, voll DSGVO-konform — eine Visitenkarte, die in Sekunden lädt und nichts an Dritte abgibt.
+`rauhut.com` ist die persönliche Web-Präsenz des Gründers — die Person, nicht die Firma (`neckarshore.ai` ist das Unternehmen). Gebraucht wurde ein schlanker, schneller One-Pager als Proof of Work: Profil, Kernkompetenzen, Projekte und Kontakt, zweisprachig in Deutsch und Englisch. Anspruch: kein Cookie-Banner, keine Third-Party-Tracker, voll DSGVO-konform — eine Visitenkarte, die in Sekunden lädt und Besuche nur auf dem eigenen Server zählt.
 
 ## Wie sind wir vorgegangen?
 
-Die Seite entstand KI-beschleunigt im selben Multi-Agent-Workflow, mit dem Neckarshore arbeitet. Architektonisch konsequent statisch: ein vorab gerenderter One-Pager ohne CMS, Dark Mode als Default mit Light-Toggle. Datenschutz ist by Design eingebaut — Schrift (Inter Variable) self-hosted statt über ein CDN, Analytics ausschließlich über die cookielose Vercel Web Analytics, daher kein Banner nötig. Das Impressum (§5 DDG) liegt auf `noindex`.
+Die Seite entstand KI-beschleunigt im selben Multi-Agent-Workflow, mit dem Neckarshore arbeitet. Architektonisch konsequent statisch: ein vorab gerenderter One-Pager ohne CMS, Dark Mode als Default mit Light-Toggle. Datenschutz ist by Design eingebaut — Schrift (Inter Variable) self-hosted statt über ein CDN, Besucherzählung cookielos über Umami auf dem eigenen Server, daher kein Banner nötig. Das Impressum (§5 DDG) liegt auf `noindex`.
 
 ## Wie ist die Website technisch gebaut?
 
@@ -29,7 +29,7 @@ Die Architektur im Detail — was hinter den Bausteinen oben steckt:
 | --- | --- |
 | Framework | Next.js 16 (App Router, Turbopack), React 19, TypeScript im Strict-Mode |
 | Styling | Tailwind CSS v4 (PostCSS-only, `@theme`-Tokens) |
-| Hosting | Vercel (inkl. cookieloser Web Analytics); HSTS automatisch für die verifizierte Domain |
+| Hosting | Vercel; HSTS automatisch für die verifizierte Domain |
 | Internationalisierung | Statisch gelöst: Deutsch als Default unter `/`, Englisch unter `/en` — hreflang-Alternates in Metadata und Sitemap |
 | Kontaktformular | Serverseitig über Nodemailer (Cloudflare Turnstile als Spam-Schutz vorgesehen, derzeit dormant) |
 | Sicherheit | OWASP-Baseline-Header inkl. einer pragmatischen Content-Security-Policy und ein `www`→Apex-Redirect (308) |
@@ -46,4 +46,4 @@ Live auf Vercel unter `rauhut.com`; der DNS-Cutover von IONOS zu Vercel ist seit
 
 ## Was kommt als Nächstes?
 
-Eine eigentliche Roadmap gibt es nicht — offen ist nur ein kleiner Feinschliff-Backlog, der größtenteils schon abgearbeitet ist. Vorbereitet und noch zu aktivieren: ein Spam-Schutz für das Kontaktformular. Bewusst nicht geplant sind ein Blog, fremde Analyse-Werkzeuge und ein Cookie-Banner.
+Eine eigentliche Roadmap gibt es nicht — offen ist nur ein kleiner Feinschliff-Backlog, der größtenteils schon abgearbeitet ist. Bewusst nicht geplant sind ein Blog, fremde Analyse-Werkzeuge und ein Cookie-Banner.
