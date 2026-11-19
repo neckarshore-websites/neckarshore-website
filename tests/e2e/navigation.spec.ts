@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import { SCROLL_TIMEOUT } from "./helpers";
 
 test.describe("Navigation", () => {

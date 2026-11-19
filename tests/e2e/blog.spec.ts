@@ -1,4 +1,5 @@
-import { test, expect, type Page } from "@playwright/test";
+import { type Page } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 /**
  * Blog — TC-BLOG-020 to TC-BLOG-029 (the unit tests of the loader are TC-BLOG-001 to -012).

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import { PAGES } from "./helpers";
 
 // Hardcoded stable IDs — 3 tests per page

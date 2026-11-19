@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import { PAGES, VIEWPORTS } from "./helpers";
 
 // Hardcoded stable IDs — 4 tests per viewport (3 overflow + 1 nav)

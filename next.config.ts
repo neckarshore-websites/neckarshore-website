@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { UMAMI_HOST } from "./src/lib/umami.ts";
 
 // OWASP-baseline security headers — parity with oakwoodgolfclub-website.
 // Applied globally to every route via async headers(). Per Linus Bundle-A
@@ -29,6 +30,10 @@ import type { NextConfig } from "next";
 //   - connect-src 'self': the custom analytics tracker (TrackerScript.tsx)
 //     posts via navigator.sendBeacon to the same-origin /api/track — no
 //     external analytics host (verified: no @vercel/analytics dependency).
+//   - Umami (planning #4006 row 6, 2026-11-19) runs beside it: the tracker
+//     loads from UMAMI_HOST/script.js and posts to UMAMI_HOST/api/send, so
+//     that one host is in script-src AND connect-src. Its before-send hook is
+//     a same-origin file (/umami-before-send.js), covered by 'self'.
 //   - frame-ancestors 'self': mirrors X-Frame-Options=SAMEORIGIN above
 //     (goldoni uses 'none'/DENY; neckarshore keeps the same-origin posture).
 //   - Calendly CTA is a plain redirect <a href>, NOT an embedded widget, so
@@ -45,8 +50,8 @@ import type { NextConfig } from "next";
 // script-src + frame-src + connect-src.
 const isDev = process.env.NODE_ENV !== "production";
 const scriptSrc = isDev
-  ? "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com"
-  : "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com";
+  ? `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com ${UMAMI_HOST}`
+  : `script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com ${UMAMI_HOST}`;
 
 const contentSecurityPolicy = [
   "default-src 'self'",
@@ -54,7 +59,7 @@ const contentSecurityPolicy = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self'",
-  "connect-src 'self' https://challenges.cloudflare.com",
+  `connect-src 'self' https://challenges.cloudflare.com ${UMAMI_HOST}`,
   "frame-src https://challenges.cloudflare.com",
   "form-action 'self'",
   "frame-ancestors 'self'",

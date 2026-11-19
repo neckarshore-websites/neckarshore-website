@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 /**
  * THE 404 "NECKAR-KILOMETER 404" (src/app/not-found.tsx): the status, the tab title, the page,
