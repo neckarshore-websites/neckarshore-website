@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { SearchProvider } from "@/components/search/SearchProvider";
 import { ThemeColorSync } from "@/components/ThemeColorSync";
 import { organizationSchema } from "@/lib/schema/organization";
+import UmamiTracker from "@/components/UmamiTracker";
 import { UMAMI_HOST, UMAMI_WEBSITE_ID } from "@/lib/umami";
 import "./globals.css";
 
@@ -97,14 +98,7 @@ export default function RootLayout({
         {UMAMI_WEBSITE_ID ? (
           <>
             <Script src="/umami-before-send.js" strategy="beforeInteractive" />
-            <Script
-              src={`${UMAMI_HOST}/script.js`}
-              strategy="afterInteractive"
-              data-website-id={UMAMI_WEBSITE_ID}
-              data-before-send="umamiBeforeSend"
-              data-do-not-track="true"
-              data-exclude-hash="true"
-            />
+            <UmamiTracker host={UMAMI_HOST} websiteId={UMAMI_WEBSITE_ID} />
           </>
         ) : null}
         <ThemeColorSync />

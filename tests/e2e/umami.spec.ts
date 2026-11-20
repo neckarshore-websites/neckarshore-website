@@ -86,3 +86,18 @@ test("the CSP admits the Umami host for script and connect, and nothing else new
   expect(directive("img-src")).not.toContain(UMAMI_HOST);
   expect(directive("frame-src")).not.toContain(UMAMI_HOST);
 });
+
+test("without the before-send hook the tracker is not loaded and nothing is sent", async ({ page }) => {
+  // Umami would send unfiltered without the hook (fail open); UmamiTracker fails closed.
+  await page.route("**/umami-before-send.js", (route) => route.abort());
+  const sends = captureSends(page);
+  const trackerLoads: string[] = [];
+  page.on("request", (req) => {
+    if (req.url() === `${UMAMI_HOST}/script.js`) trackerLoads.push(req.url());
+  });
+  await page.goto("/");
+  await page.waitForLoadState("load");
+  await page.waitForTimeout(1000);
+  expect(trackerLoads).toHaveLength(0);
+  expect(sends).toHaveLength(0);
+});
