@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 // Hardcoded stable IDs — 2 tests per page + 3 global
 const META_TESTS = [

@@ -1,7 +1,7 @@
 ---
 name: "neckarshore.ai"
 headline: "Die eigene Marketing-Präsenz — KI-beschleunigt gebaut, DSGVO-by-Design, Made in Germany."
-lead: "KI-beschleunigte Softwareentwicklung aus Stuttgart — statisch, schnell, ohne Tracking-Cookies und ohne externe Ressourcen, DSGVO-by-Design."
+lead: "KI-beschleunigte Softwareentwicklung aus Stuttgart — statisch, schnell, ohne Tracking-Cookies und ohne Cookie-Banner, DSGVO-by-Design."
 liveUrl: "https://neckarshore.ai"
 techStack:
   - "Next.js 16 (App Router)"
@@ -20,7 +20,7 @@ neckarshore.ai ist die eigene Marketing-Präsenz von Neckarshore AI — die Land
 
 ## Wie sind wir vorgegangen?
 
-Gebaut wurde die Seite KI-beschleunigt und vom Gründer redigiert — dieselbe Arbeitsweise, mit der Neckarshore Kundenprojekte liefert. Datenschutz ist Architekturentscheidung, nicht Checkliste: keine Tracking-Cookies, keine externen Ressourcen, selbst gehostete Schriften statt eingebundener Google Fonts. Der Fokus liegt auf einer statischen, schnellen Auslieferung mit minimaler Drittanbieter-Abhängigkeit.
+Gebaut wurde die Seite KI-beschleunigt und vom Gründer redigiert — dieselbe Arbeitsweise, mit der Neckarshore Kundenprojekte liefert. Datenschutz ist Architekturentscheidung, nicht Checkliste: keine Tracking-Cookies, selbst gehostete Schriften statt eingebundener Google Fonts, Besucherzählung auf dem eigenen Server; einen fremden Anbieter lädt die Seite nur für den Spam-Schutz des Kontaktformulars. Der Fokus liegt auf einer statischen, schnellen Auslieferung mit minimaler Drittanbieter-Abhängigkeit.
 
 ## Wie ist die Website technisch gebaut?
 
@@ -32,7 +32,7 @@ Die Architektur im Detail — was hinter den Bausteinen oben steckt:
 | Styling | Tailwind CSS v4 |
 | Hosting | Vercel |
 | Schriften | Inter und Space Grotesk als Variable Fonts, subgesetzt und selbst ausgeliefert (`next/font/local`) — kein externer Font-Host, kein Datentransfer in Drittstaaten |
-| Analytik | Cookielos und First-Party: `navigator.sendBeacon` an die eigene Route `/api/track`, persistiert in Upstash Redis — kein externer Analytics-Anbieter |
+| Analytik | Cookielos: `navigator.sendBeacon` an die eigene Route `/api/track` (Upstash Redis) und Umami auf dem eigenen Server (`stats.neckarshore.ai`), kein fremder Analytics-Anbieter |
 | Sicherheit | OWASP-Baseline-Header plus eine bewusst pragmatische Content-Security-Policy: Die statisch-first-Auslieferung (und damit die Lighthouse-Werte) hat Vorrang vor einer nonce-basierten Strict-CSP, die jede Route aus der statischen Generierung herausnehmen würde |
 | SEO | Strukturdaten (JSON-LD) als native, Server-gerenderte `<script>`-Tags — im SSR-HTML für den Crawler sichtbar |
 

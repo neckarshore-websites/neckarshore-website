@@ -11,7 +11,9 @@
  * deliberate: that keeps the positive path exercised on every PR instead of only on the rare
  * manual live run.
  */
-import { test as base, expect } from "@playwright/test";
+// Built on ./fixtures, so smoke and stats runs (also against the live site)
+// answer the Umami host with the stub and never count a visit on the box.
+import { test as base, expect } from "./fixtures";
 import { classifyTargetResponse } from "./live-target";
 
 export const test = base.extend({

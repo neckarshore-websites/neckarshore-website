@@ -1,4 +1,5 @@
-import { test, expect, type APIRequestContext } from "@playwright/test";
+import { type APIRequestContext } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import { TEST_ANALYTICS_READ_TOKEN } from "./analytics-test-token";
 
 // Cookies the site is permitted to set on first load WITHOUT prior user consent.

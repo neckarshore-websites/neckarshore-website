@@ -258,7 +258,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
     },
     {
       q: "Warum braucht die Seite kein Cookie-Banner?",
-      a: "Weil es nichts zuzustimmen gibt: keine Tracking-Cookies, keine externen Ressourcen. Die Reichweiten-Messung läuft cookielos als First-Party-Analytik über die eigene Route — per navigator.sendBeacon an /api/track, ohne externen Analytics-Anbieter.",
+      a: "Weil es nichts zuzustimmen gibt: keine Cookies und kein Zugriff auf Ihr Gerät, der eine Einwilligung bräuchte. Die Reichweiten-Messung läuft cookielos über die eigene Route, per navigator.sendBeacon an /api/track. Daneben zählt Umami auf unserem eigenen Server (stats.neckarshore.ai) die Besuche, ebenfalls ohne Cookies. Einen fremden Anbieter lädt die Seite nur für den Spam-Schutz des Kontaktformulars, und erst, wenn Sie es benutzen.",
     },
     {
       q: "Was heißt „DSGVO-by-Design“ hier konkret?",
@@ -319,7 +319,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
     },
     {
       q: "Wie steht es um Datenschutz?",
-      a: "Voll DSGVO-konform und ohne Cookie-Banner: die Schrift (Inter Variable) ist self-hosted statt über ein CDN, und die Analytik läuft ausschließlich über die cookielose Vercel Web Analytics — daher ist kein Banner nötig.",
+      a: "Voll DSGVO-konform und ohne Cookie-Banner: die Schrift (Inter Variable) ist self-hosted statt über ein CDN, und die Besuche zählt Umami cookielos auf unserem eigenen Server. Daher ist kein Banner nötig.",
     },
     {
       q: "Welche Lighthouse-Werte erreicht die Seite?",

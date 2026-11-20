@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 /**
  * /ki-beratung — the buyer-visible offer page (funnel Wave 1).

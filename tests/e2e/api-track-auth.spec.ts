@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import { TEST_ANALYTICS_READ_TOKEN } from "./analytics-test-token";
 
 const ENDPOINT = "/api/track";

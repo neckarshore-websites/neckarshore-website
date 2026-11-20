@@ -140,6 +140,14 @@ export default function Datenschutz() {
 
           <section>
             <h2 className="font-heading text-xl font-semibold text-primary dark:text-text-primary">4. Webanalyse</h2>
+            {/* Wording: Dr. Sommer, planning #4003 comments 6983850360 (neckarshore row)
+                and 6985352394; location and operator from the Founder's Hostinger
+                read, worded by Dr. Sommer on rauhut-website #120 (2026-11-19). */}
+            <p className="mt-3">
+              Beide Systeme laufen nebeneinander: das eigene misst, wie die Seiten genutzt werden und
+              wie schnell sie laden; Umami zählt die Besuche und ihre Herkunft.
+            </p>
+            <h3 className="mt-4 font-heading text-lg font-semibold text-primary dark:text-text-primary">Eigenes System</h3>
             <p className="mt-3">
               Wir betreiben auf dieser Website ein eigenes, cookiefreies Webanalyse-System. Erfasst
               werden: aufgerufene Seite, die Website, von der Sie kommen (Referrer, nur der Hostname),
@@ -176,8 +184,8 @@ export default function Datenschutz() {
               Eintrag dieses Tages automatisch gelöscht.
             </p>
             <p className="mt-2">
-              Es werden <strong>keine Cookies</strong> gesetzt und kein Speicherzugriff auf Ihr
-              Endgerät vorgenommen.
+              Das eigene System setzt <strong>keine Cookies</strong> und greift nicht auf Ihr
+              Endgerät zu.
             </p>
             <p className="mt-2">
               <strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an
@@ -194,6 +202,30 @@ export default function Datenschutz() {
               wiedererkennen. Sendet Ihr Browser das Signal „Global Privacy Control“ oder „Do Not
               Track“, werten wir das als Widerspruch: Für solche Aufrufe speichern wir keine
               Analysedaten.
+            </p>
+            <h3 className="mt-4 font-heading text-lg font-semibold text-primary dark:text-text-primary">Besucherzahlen der Webseite (Umami)</h3>
+            <p className="mt-3">
+              Wir zählen die Besuche dieser Webseite mit Umami, einer Software, die auf unserem
+              eigenen Server läuft. Der Server steht in einem Rechenzentrum in Düsseldorf und wird von
+              der Hostinger International Ltd., Larnaca (Zypern), betrieben; Hostinger ist dabei unser
+              Auftragsverarbeiter. Beim Aufruf einer Seite sendet ein kleines Skript an diesen Server:
+              die aufgerufene Adresse, die Seite, von der Sie kamen (ohne deren Suchteil), den
+              Seitentitel und die Sprache Ihres Browsers. Von den Zusätzen einer Adresse behalten wir
+              nur die Kampagnenangaben <code>utm_source</code>, <code>utm_medium</code>,{" "}
+              <code>utm_campaign</code>, <code>utm_content</code> und <code>utm_term</code>, mit
+              denen wir sehen, über welchen unserer Links Sie kamen; alles andere entfernt das Skript,
+              bevor es sendet. Aus Ihrer Verbindung (IP-Adresse und Browserkennung) bildet der Server
+              eine Kennung, die jeden Tag wechselt; die IP-Adresse selbst speichert er nicht.
+              Gespeichert werden Browser, Betriebssystem, Geräteart, Land, Region und Stadt. Es werden
+              keine Cookies gesetzt und nichts auf Ihrem Gerät gespeichert. Das Skript prüft lediglich
+              im Speicher Ihres Browsers, ob Sie die Zählung dort abgeschaltet haben (Eintrag
+              „umami.disabled“); diese Abfrage dient allein Ihrem Widerspruch und beruht auf § 25
+              Abs. 2 Nr. 2 TDDDG. Sendet Ihr Browser „Do Not Track“ oder „Global Privacy Control“,
+              zählen wir Sie nicht. Die Daten löschen wir nach 13 Monaten automatisch.
+              Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO, unser Interesse ist zu wissen, welche
+              Seiten gelesen werden und über welche Wege Besucher kommen. Sie können dem jederzeit
+              widersprechen; am einfachsten, indem Sie in Ihrem Browser „Global Privacy Control“
+              einschalten.
             </p>
           </section>
 
@@ -264,8 +296,8 @@ export default function Datenschutz() {
               San Francisco, CA 94107, USA
             </p>
             <p className="mt-3">
-              Sobald Sie das Kontaktformular nutzen (erstes Klicken oder Tippen),
-              lädt Ihr Browser Skripte von Cloudflare
+              Sobald Sie das Kontaktformular zum ersten Mal anklicken, antippen oder
+              mit der Tastatur ansteuern, lädt Ihr Browser Skripte von Cloudflare
               (<code>challenges.cloudflare.com</code>) und übermittelt technische
               Merkmale zur Unterscheidung von Mensch und Bot (u. a. IP-Adresse,
               Browser- und Geräteinformationen sowie Interaktionssignale). Ohne
@@ -344,15 +376,18 @@ export default function Datenschutz() {
             <p className="mt-3">
               Diese Website setzt <strong>keine Cookies</strong> (weder technisch
               notwendige noch Tracking- oder Marketing-Cookies). Es erscheint kein
-              Cookie-Banner, weil kein Speicherzugriff auf Ihr Endgerät erfolgt, der
-              einer Einwilligung nach § 25 TDDDG bedürfte.
+              Cookie-Banner, weil kein Zugriff auf Ihr Endgerät erfolgt, der einer
+              Einwilligung nach § 25 TDDDG bedürfte.
             </p>
             <p className="mt-2">
               Für die von Ihnen aktiv gewählte Designvariante (hell/dunkel) speichert
               die Website Ihre Auswahl im lokalen Speicher Ihres Browsers
               (»localStorage«). Diese Auswahl verbleibt ausschließlich auf Ihrem
               Gerät und wird nicht an uns oder Dritte übermittelt. Sie können diese
-              Information jederzeit über die Browser-Einstellungen löschen.
+              Information jederzeit über die Browser-Einstellungen löschen. Außerdem
+              prüft das Zählskript, ob Sie die Zählung im Speicher Ihres Browsers
+              abgeschaltet haben (Eintrag „umami.disabled“); es legt selbst nichts an.
+              Näheres in Abschnitt 4.
             </p>
             <p className="mt-2">
               <strong>Rechtsgrundlage:</strong> § 25 Abs. 2 Nr. 2 TDDDG (technisch

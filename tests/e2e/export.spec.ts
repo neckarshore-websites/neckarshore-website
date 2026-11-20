@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 /**
  * Markdown export (TC-EXP-*) — the "Als Markdown" download on content pages.
