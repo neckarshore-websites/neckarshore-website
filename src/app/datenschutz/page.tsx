@@ -384,7 +384,10 @@ export default function Datenschutz() {
               die Website Ihre Auswahl im lokalen Speicher Ihres Browsers
               (»localStorage«). Diese Auswahl verbleibt ausschließlich auf Ihrem
               Gerät und wird nicht an uns oder Dritte übermittelt. Sie können diese
-              Information jederzeit über die Browser-Einstellungen löschen. Außerdem
+              Information jederzeit über die Browser-Einstellungen löschen. Solange
+              Sie nichts wählen, richtet sich die Darstellung nach der Einstellung
+              Ihres Geräts; diese wird nur in Ihrem Browser ausgewertet, weder
+              gespeichert noch übertragen. Außerdem
               prüft das Zählskript, ob Sie die Zählung im Speicher Ihres Browsers
               abgeschaltet haben (Eintrag „umami.disabled“); es legt selbst nichts an.
               Näheres in Abschnitt 4.
