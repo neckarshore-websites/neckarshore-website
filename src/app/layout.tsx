@@ -10,6 +10,9 @@ import UmamiTracker from "@/components/UmamiTracker";
 import { UMAMI_HOST, UMAMI_WEBSITE_ID } from "@/lib/umami";
 import "./globals.css";
 
+const THEME_BEFORE_PAINT =
+  "try{var t=localStorage.getItem('theme');document.documentElement.classList.toggle('dark',t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches))}catch(e){}";
+
 const spaceGrotesk = localFont({
   src: "../fonts/SpaceGrotesk-Variable-subset.woff2",
   variable: "--font-space-grotesk",
@@ -81,10 +84,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    // suppressHydrationWarning: theme-init.js adds the "dark" class before
+    // React hydrates; this is expected.
     <html
       lang="de"
       className={`${spaceGrotesk.variable} ${inter.variable} antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        {/* Anti-flash: light/dark before first paint, same rule as
+            ThemeToggle — a stored choice wins, otherwise the device setting.
+            Inline on purpose: a next/script beforeInteractive file is loaded
+            by the Next runtime and runs only once its chunks arrive
+            (tests/e2e/system-theme.spec.ts blocks them to prove this one does
+            not wait). Fixed text, no outside value; reads only, sends nothing. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BEFORE_PAINT }} />
+      </head>
       <body className="min-h-screen bg-neutral-light text-primary dark:bg-deep-space dark:text-text-primary">
         <JsonLd data={organizationSchema} id="schema-org" />
         <SearchProvider>{children}</SearchProvider>
