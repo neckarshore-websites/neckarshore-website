@@ -1,6 +1,6 @@
 {
   "byType": {
-    "e2e": 1239,
+    "e2e": 1255,
     "integration": 1560,
     "smoke": 1,
     "unit": 4891
@@ -110,15 +110,15 @@
       "total": 214
     },
     {
-      "audited_sha": "7c87c8f97299bdba39771b013a58e2f99eb7353f",
+      "audited_sha": "95988d46708f00c663b024aecff869048547ffa2",
       "byType": {
-        "e2e": 27,
+        "e2e": 33,
         "unit": 158
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/goldoni-website",
-      "total": 185
+      "total": 191
     },
     {
       "audited_sha": "b8c4907c7293eac1330b68194eabeaa0e386482d",
@@ -132,15 +132,15 @@
       "total": 9
     },
     {
-      "audited_sha": "ba9316f80e6c639e0aa43421dce12a1c6b57efa5",
+      "audited_sha": "5fe880e7e2761711ae2c3f01298a63a7d890fb0d",
       "byType": {
-        "e2e": 608,
+        "e2e": 612,
         "unit": 408
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/neckarshore-website",
-      "total": 1016
+      "total": 1020
     },
     {
       "audited_sha": "5dd11a8fa446927e87ae09ac097d9cc29f1674b1",
@@ -154,15 +154,15 @@
       "total": 179
     },
     {
-      "audited_sha": "464186cd038596f175ad6abcc24d63fd30ee7be1",
+      "audited_sha": "1cca52457c2cf176fac32c14814d22c3c40cb907",
       "byType": {
-        "e2e": 73,
+        "e2e": 79,
         "unit": 84
       },
       "endpoints": 0,
       "lenses": {},
       "repo": "neckarshore-websites/rauhut-website",
-      "total": 157
+      "total": 163
     },
     {
       "audited_sha": null,
@@ -234,7 +234,7 @@
   ],
   "reporting": 18,
   "repos": 20,
-  "total": 7850,
+  "total": 7866,
   "untyped_total": 159,
-  "updatedAt": "2026-11-21T11:58:20Z"
+  "updatedAt": "2026-11-22T12:12:31Z"
 }
