@@ -335,6 +335,19 @@ export default function Home() {
                   Ein Entwickler, mehrere KI-Assistenten, und die Überzeugung dass Kontext das neue
                   Öl (in alten Schläuchen) ist.
                 </p>
+                {/* agent-bridge #28: a visible path to the founder's own site, so
+                    search engines tie neckarshore.ai and rauhut.com to one person. */}
+                <p className="mt-6 text-base">
+                  <a
+                    href="https://rauhut.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent underline-offset-4 hover:underline dark:text-accent-bright"
+                    data-track="founder_site_click"
+                  >
+                    Mein Profil als Freelance Technical Product Owner: rauhut.com →
+                  </a>
+                </p>
               </div>
             </div>
 

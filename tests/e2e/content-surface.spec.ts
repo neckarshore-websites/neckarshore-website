@@ -1035,3 +1035,14 @@ test.describe("Content surface — iPhone apps in the App Store", () => {
     });
   }
 });
+
+test.describe("Content surface — founder identity (agent-bridge #28)", () => {
+  test("founder section links to rauhut.com and the Person points there", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator('#founder a[href="https://rauhut.com"]')).toBeVisible();
+    const person = (await ldNodes(page)).find((n) => n["@type"] === "Person");
+    expect(person, "Person node on the homepage").toBeTruthy();
+    expect(person!.url).toBe("https://rauhut.com/");
+    expect(person!.sameAs as string[]).toContain("https://rauhut.com/");
+  });
+});
