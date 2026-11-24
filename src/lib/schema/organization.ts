@@ -92,8 +92,11 @@ export const organizationSchema = {
       familyName: "Rauhut",
       jobTitle: "Founder",
       worksFor: { "@id": ORG_ID },
-      url: `${BASE_URL}/`,
+      // agent-bridge #28: the person's own homepage is rauhut.com, the company
+      // site is worksFor. Before, url pointed back at neckarshore.ai.
+      url: "https://rauhut.com/",
       sameAs: [
+        "https://rauhut.com/",
         "https://www.linkedin.com/in/german-rauhut/",
         "https://github.com/GmanFooFoo",
       ],
