@@ -340,6 +340,8 @@ export default function Home() {
                 <p className="mt-6 text-base">
                   <a
                     href="https://rauhut.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-accent underline-offset-4 hover:underline dark:text-accent-bright"
                     data-track="founder_site_click"
                   >
