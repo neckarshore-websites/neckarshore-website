@@ -14,7 +14,10 @@
  *      "tests/unit/*.test.ts"                     -> a test file no runner executes;
  *   2. `test:unit` or a `test:<name>:unit` script is not run, on a line of its own,
  *      by a workflow that triggers on pull_request -> a suite that cannot turn a
- *      pull request red. A line such as `npm run test:unit || true` does not count.
+ *      pull request red. A line such as `npm run test:unit || true` does not count,
+ *      nor one continued by a trailing `\` or by a next line starting with `||`, `&&`
+ *      or `|` (a folded `run: >` block). The workflow is read as text, not parsed as
+ *      YAML; those are the continuations it recognises.
  *
  * The same file is copied into each website repository; keep the copies identical.
  *
@@ -69,9 +72,10 @@ function globToRegExp(glob) {
 
 const scripts = JSON.parse(readFileSync(join(root, "package.json"), "utf8")).scripts ?? {};
 
-// Every whitespace-separated word of every script, quotes and a leading ./ removed.
+// Every word of every script, split on whitespace and shell operators (`;`, `&&`, `|`,
+// parentheses, redirects), quotes and a leading ./ removed.
 const words = Object.values(scripts)
-  .flatMap((cmd) => cmd.split(/\s+/))
+  .flatMap((cmd) => cmd.split(/[\s;&|()<>]+/))
   .map((w) => w.replace(/^["']|["']$/g, "").replace(/^\.\//, ""))
   .filter(Boolean);
 const named = new Set(words.filter((w) => !/[*?]/.test(w)));
@@ -81,8 +85,9 @@ const workflowDir = join(root, ".github/workflows");
 const prWorkflows = (existsSync(workflowDir) ? readdirSync(workflowDir) : [])
   .filter((n) => /\.ya?ml$/.test(n))
   .map((n) => readFileSync(join(workflowDir, n), "utf8"))
-  // `on: pull_request`, `on: [push, pull_request]` or a `pull_request:` key; not pull_request_target.
-  .filter((text) => /^\s*(?:on:.*\bpull_request\b(?!_)|pull_request\s*:)/m.test(text));
+  // `on: pull_request`, `on: [push, pull_request]`, a `- pull_request` list item or a
+  // `pull_request:` key; not pull_request_target.
+  .filter((text) => /^\s*(?:on:.*\bpull_request\b(?!_)|-\s*pull_request\s*$|pull_request\s*:)/m.test(text));
 
 const problems = [];
 
@@ -92,8 +97,12 @@ for (const file of SEARCHED_DIRS.flatMap((d) => walk(join(root, d))).sort()) {
 
 for (const name of Object.keys(scripts).filter((n) => /^test:(?:.+:)?unit$/.test(n)).sort()) {
   // Anchored: a commented-out `# npm run x` line, or `npm run x || true`, does not count.
-  const runs = new RegExp(`^[ \\t]*(?:-[ \\t]*)?(?:run:[ \\t]*)?npm run ${escapeRegExp(name)}\\s*$`, "m");
-  if (!prWorkflows.some((text) => runs.test(text))) problems.push(`no pull_request workflow runs ${name}`);
+  const runs = new RegExp(`^[ \\t]*(?:-[ \\t]*)?(?:run:[ \\t]*)?npm run ${escapeRegExp(name)}[ \\t]*$`);
+  const runsAlone = (text) => {
+    const lines = text.split(/\r?\n/);
+    return lines.some((line, i) => runs.test(line) && !/^\s*(?:\|\||&&|\|)/.test(lines[i + 1] ?? ""));
+  };
+  if (!prWorkflows.some(runsAlone)) problems.push(`no pull_request workflow runs ${name}`);
 }
 
 if (problems.length) {

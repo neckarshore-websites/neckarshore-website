@@ -151,3 +151,38 @@ test("a unit script only in a workflow without pull_request does not count", () 
   assert.equal(r.status, 1);
   assert.match(r.stderr, /no pull_request workflow runs test:a:unit/);
 });
+
+test("a path followed by a shell operator still names the file", () => {
+  const r = run(
+    fixture({
+      scripts: { "test:a:unit": "node --test tests/a.test.mjs; node --test tests/b.test.mjs&&echo ok" },
+      files: [...files, "tests/b.test.mjs"],
+      unitYml: "      - run: npm run test:a:unit\n",
+    }),
+  );
+  assert.equal(r.status, 0, r.stderr);
+});
+
+test("an on: block list with - pull_request counts", () => {
+  const r = run(
+    fixture({
+      scripts,
+      files,
+      unitYml: "  npm run lint\n",
+      workflows: { "other.yml": "on:\n  - push\n  - pull_request\njobs:\n      - run: npm run test:a:unit\n" },
+    }),
+  );
+  assert.equal(r.status, 0, r.stderr);
+});
+
+test("a folded run block continued by || true does not count", () => {
+  const r = run(fixture({ scripts, files, unitYml: "      - run: >\n          npm run test:a:unit\n          || true\n" }));
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /no pull_request workflow runs test:a:unit/);
+});
+
+test("a line continued by a trailing backslash does not count", () => {
+  const r = run(fixture({ scripts, files, unitYml: "        run: |\n          npm run test:a:unit \\\n            || true\n" }));
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /no pull_request workflow runs test:a:unit/);
+});
