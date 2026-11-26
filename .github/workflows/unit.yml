@@ -61,3 +61,7 @@ jobs:
           # accompanying unit test covers the pure verdict and would go green without
           # ever opening the config, so both have to run.
           npm run check:agent-files
+          # Completeness guard (Lenin report 2026-10-17-f row 17, ported from
+          # oakwoodgolfclub-website#258): every *.test file is named by a package.json
+          # script, and every test:*:unit script runs here.
+          npm run check:unit-suites
