@@ -21,7 +21,8 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+// CHECK_UNIT_SUITES_ROOT lets the unit test point the guard at a fixture checkout.
+const root = process.env.CHECK_UNIT_SUITES_ROOT ?? join(dirname(fileURLToPath(import.meta.url)), "..");
 
 function walk(dir) {
   const out = [];
@@ -45,7 +46,8 @@ for (const file of [...walk(join(root, "tests")), ...walk(join(root, "scripts"))
 }
 
 for (const name of Object.keys(scripts).filter((n) => /^test:.+:unit$/.test(n)).sort()) {
-  if (!new RegExp(`npm run ${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "m").test(unitYml)) {
+  // Anchored: a commented-out `# npm run test:x:unit` line does not count as running it.
+  if (!new RegExp(`^[ \\t]*(?:-[ \\t]*)?(?:run:[ \\t]*)?npm run ${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "m").test(unitYml)) {
     problems.push(`unit.yml does not run ${name}`);
   }
 }
