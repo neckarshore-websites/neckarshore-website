@@ -29,12 +29,6 @@ function loadRepos() {
   };
 }
 
-/** Total repos under stats management = the source-of-truth denominator (named-public + counted-private). */
-function configRepoTotal(): number {
-  const raw = JSON.parse(fs.readFileSync(path.join(process.cwd(), "stats-config.json"), "utf-8"));
-  return (raw.repos ?? []).length;
-}
-
 /**
  * High-sensitivity private repo names that must NEVER appear on the public surface (the crown
  * jewels — product backend/frontend, the importer, agent infra, the voicebank). A curated canary,
@@ -84,8 +78,10 @@ test.describe("Content surface — /repositories (inventory)", () => {
       privateCount,
       "private repos must be represented by a positive aggregate count",
     ).toBeGreaterThan(0);
-    // Denominator: every managed repo is accounted for as named-public OR counted-private.
-    expect(repos.length + privateCount).toBe(configRepoTotal());
+    // The denominator (repos.length + privateCount === stats-config.json total) is checked where
+    // the file is generated: scripts/check-repo-inventory.mjs in update-stats.yml, before the
+    // commit. Asserting it here made every PR that adds a repository red until two served numbers
+    // were edited by hand (MASCHIN routing 2026-10-06, point 4). Moved, not dropped.
 
     // Named canary: no high-sensitivity private name may appear anywhere in the raw file.
     for (const name of PRIVATE_CANARIES) {
