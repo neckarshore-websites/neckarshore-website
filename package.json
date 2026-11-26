@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "check:unit-suites": "node scripts/check-unit-suites.mjs",
     "test:e2e": "playwright test",
     "test:e2e:ci": "playwright test --grep-invert @external",
     "test:e2e:ui": "playwright test --ui",
