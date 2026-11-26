@@ -186,3 +186,61 @@ test("a line continued by a trailing backslash does not count", () => {
   assert.equal(r.status, 1);
   assert.match(r.stderr, /no pull_request workflow runs test:a:unit/);
 });
+
+const JOB = "  unit:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v5\n";
+
+test("pull_request inside a comment on the on: line does not count", () => {
+  const r = run(
+    fixture({
+      scripts,
+      files,
+      unitYml: "  npm run lint\n",
+      workflows: { "push.yml": `on: push # pull_request disabled\njobs:\n${JOB}      - run: npm run test:a:unit\n` },
+    }),
+  );
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /no pull_request workflow runs test:a:unit/);
+});
+
+test("a step name that mentions the script does not count", () => {
+  const r = run(
+    fixture({
+      scripts,
+      files,
+      unitYml: `${JOB}      - name: |\n          npm run test:a:unit\n        run: npm run lint\n`,
+    }),
+  );
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /no pull_request workflow runs test:a:unit/);
+});
+
+test("a step with continue-on-error: true does not count", () => {
+  const r = run(
+    fixture({ scripts, files, unitYml: `${JOB}      - name: unit\n        continue-on-error: true\n        run: npm run test:a:unit\n` }),
+  );
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /no pull_request workflow runs test:a:unit/);
+});
+
+test("a job with continue-on-error does not count", () => {
+  const r = run(
+    fixture({
+      scripts,
+      files,
+      unitYml: "  unit:\n    runs-on: ubuntu-latest\n    continue-on-error: ${{ matrix.experimental }}\n    steps:\n      - run: npm run test:a:unit\n",
+    }),
+  );
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /no pull_request workflow runs test:a:unit/);
+});
+
+test("continue-on-error: false and a tolerant sibling step leave the run counted", () => {
+  const r = run(
+    fixture({
+      scripts,
+      files,
+      unitYml: `${JOB}      - name: lint\n        continue-on-error: true\n        run: npm run lint\n      - name: unit\n        continue-on-error: false\n        run: |\n          npm run test:a:unit # gate\n`,
+    }),
+  );
+  assert.equal(r.status, 0, r.stderr);
+});

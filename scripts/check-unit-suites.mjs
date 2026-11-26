@@ -13,11 +13,10 @@
  *      named by no package.json script, neither by its path nor by a glob such as
  *      "tests/unit/*.test.ts"                     -> a test file no runner executes;
  *   2. `test:unit` or a `test:<name>:unit` script is not run, on a line of its own,
- *      by a workflow that triggers on pull_request -> a suite that cannot turn a
- *      pull request red. A line such as `npm run test:unit || true` does not count,
- *      nor one continued by a trailing `\` or by a next line starting with `||`, `&&`
- *      or `|` (a folded `run: >` block). The workflow is read as text, not parsed as
- *      YAML; those are the continuations it recognises.
+ *      as a whole `run:` command by a workflow that triggers on pull_request -> a suite
+ *      that cannot turn a pull request red. `npm run test:unit || true` does not count,
+ *      nor a continued or folded line, a `name:` or a comment that mentions the script,
+ *      nor a step or job with `continue-on-error`.
  *
  * The same file is copied into each website repository; keep the copies identical.
  *
@@ -81,13 +80,121 @@ const words = Object.values(scripts)
 const named = new Set(words.filter((w) => !/[*?]/.test(w)));
 const globs = words.filter((w) => /[*?]/.test(w)).map(globToRegExp);
 
+// ---- Reading the workflows -------------------------------------------------------------------
+// The workflows are read by indentation, not by a YAML library (no dependency in six repos). What
+// is understood: comments, the `on:` trigger in its three spellings, `run:` values (single line,
+// literal `|` and folded `>` blocks), and `continue-on-error` on the step or on the job.
+
+const indentOf = (line) => line.match(/^ */)[0].length;
+
+// Drop a YAML comment: `#` at the start or after whitespace, outside quotes on that line.
+function stripComment(line) {
+  let quote = null;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (quote) {
+      if (c === quote) quote = null;
+    } else if (c === '"' || c === "'") quote = c;
+    else if (c === "#" && (i === 0 || /\s/.test(line[i - 1]))) return line.slice(0, i).trimEnd();
+  }
+  return line.trimEnd();
+}
+
+// True when the top-level `on:` names pull_request (not pull_request_target).
+function triggersOnPullRequest(lines) {
+  const at = lines.findIndex((l) => /^["']?on["']?\s*:/.test(l));
+  if (at < 0) return false;
+  const rest = lines[at].replace(/^["']?on["']?\s*:\s*/, "");
+  if (rest) return /\bpull_request\b(?!_)/.test(rest);
+  let child = -1;
+  for (const line of lines.slice(at + 1)) {
+    if (!line.trim()) continue;
+    const ind = indentOf(line);
+    if (ind === 0) break;
+    if (child < 0) child = ind;
+    if (ind === child && /^\s*(?:-\s*pull_request\s*$|pull_request\s*:)/.test(line)) return true;
+  }
+  return false;
+}
+
+const tolerant = (value) => value.trim() !== "" && value.trim() !== "false";
+
+// Every shell command a `run:` executes, with whether a failure of it can be swallowed by
+// `continue-on-error` on its step or its job.
+function runCommands(lines) {
+  const out = [];
+  lines.forEach((line, i) => {
+    const m = line.match(/^(\s*)(-\s+)?run:\s*(.*)$/);
+    if (!m) return;
+    const keyIndent = m[1].length + (m[2] ? m[2].length : 0);
+    const rest = m[3];
+    let cmds;
+    if (/^[|>][-+0-9]*$/.test(rest)) {
+      const body = [];
+      for (const l of lines.slice(i + 1)) {
+        if (l.trim() && indentOf(l) <= keyIndent) break;
+        if (l.trim()) body.push(l.trim());
+      }
+      // Folded: the lines are one command. Literal: one command per line, joined where a line
+      // ends in `\` or the next one starts with `||`, `&&` or `|`.
+      cmds = [];
+      for (const l of rest.startsWith(">") ? [body.join(" ")] : body) {
+        const prev = cmds.length - 1;
+        if (prev >= 0 && (/\\$/.test(cmds[prev]) || /^(?:\|\||&&|\|)/.test(l))) cmds[prev] = `${cmds[prev]} ${l}`;
+        else cmds.push(l);
+      }
+    } else cmds = [rest.replace(/^(["'])(.*)\1$/, "$2")];
+
+    // The step: its `- ` line sits two columns left of the keys.
+    const dashIndent = keyIndent - 2;
+    let stepStart = m[2] ? i : -1;
+    for (let j = i - 1; stepStart < 0 && j >= 0; j--) {
+      const l = lines[j];
+      if (!l.trim()) continue;
+      const ind = indentOf(l);
+      if (ind === dashIndent && /^\s*-\s/.test(l)) stepStart = j;
+      else if (ind < keyIndent) break;
+    }
+    let swallowed = false;
+    if (stepStart >= 0) {
+      for (let j = stepStart; j < lines.length; j++) {
+        const l = lines[j];
+        if (j > stepStart && l.trim() && indentOf(l) <= dashIndent) break;
+        const k = l.match(/^(\s*)(-\s+)?continue-on-error:\s*(.*)$/);
+        if (k && k[1].length + (k[2] ? k[2].length : 0) === keyIndent && tolerant(k[3])) swallowed = true;
+      }
+      // The job: the `steps:` key above the step, and its siblings.
+      let steps = -1;
+      for (let j = stepStart - 1; j >= 0; j--) {
+        const l = lines[j];
+        if (l.trim() && indentOf(l) < dashIndent) {
+          if (/^\s*steps\s*:/.test(l)) steps = j;
+          break;
+        }
+      }
+      if (steps >= 0) {
+        const jobIndent = indentOf(lines[steps]);
+        let from = steps;
+        while (from > 0 && !(lines[from - 1].trim() && indentOf(lines[from - 1]) < jobIndent)) from--;
+        for (let j = from; j < lines.length; j++) {
+          const l = lines[j];
+          if (j > steps && l.trim() && indentOf(l) < jobIndent) break;
+          const k = l.match(/^(\s*)continue-on-error:\s*(.*)$/);
+          if (k && k[1].length === jobIndent && tolerant(k[2])) swallowed = true;
+        }
+      }
+    }
+    for (const cmd of cmds) out.push({ cmd: cmd.trim(), swallowed });
+  });
+  return out;
+}
+
 const workflowDir = join(root, ".github/workflows");
-const prWorkflows = (existsSync(workflowDir) ? readdirSync(workflowDir) : [])
+const prCommands = (existsSync(workflowDir) ? readdirSync(workflowDir) : [])
   .filter((n) => /\.ya?ml$/.test(n))
-  .map((n) => readFileSync(join(workflowDir, n), "utf8"))
-  // `on: pull_request`, `on: [push, pull_request]`, a `- pull_request` list item or a
-  // `pull_request:` key; not pull_request_target.
-  .filter((text) => /^\s*(?:on:.*\bpull_request\b(?!_)|-\s*pull_request\s*$|pull_request\s*:)/m.test(text));
+  .map((n) => readFileSync(join(workflowDir, n), "utf8").split(/\r?\n/).map(stripComment))
+  .filter(triggersOnPullRequest)
+  .flatMap(runCommands);
 
 const problems = [];
 
@@ -96,13 +203,11 @@ for (const file of SEARCHED_DIRS.flatMap((d) => walk(join(root, d))).sort()) {
 }
 
 for (const name of Object.keys(scripts).filter((n) => /^test:(?:.+:)?unit$/.test(n)).sort()) {
-  // Anchored: a commented-out `# npm run x` line, or `npm run x || true`, does not count.
-  const runs = new RegExp(`^[ \\t]*(?:-[ \\t]*)?(?:run:[ \\t]*)?npm run ${escapeRegExp(name)}[ \\t]*$`);
-  const runsAlone = (text) => {
-    const lines = text.split(/\r?\n/);
-    return lines.some((line, i) => runs.test(line) && !/^\s*(?:\|\||&&|\|)/.test(lines[i + 1] ?? ""));
-  };
-  if (!prWorkflows.some(runsAlone)) problems.push(`no pull_request workflow runs ${name}`);
+  // The whole command must be `npm run <name>`: not `... || true`, not inside a step or job
+  // whose failure is swallowed by continue-on-error.
+  if (!prCommands.some(({ cmd, swallowed }) => !swallowed && cmd === `npm run ${name}`)) {
+    problems.push(`no pull_request workflow runs ${name}`);
+  }
 }
 
 if (problems.length) {
