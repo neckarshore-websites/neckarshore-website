@@ -386,6 +386,14 @@ jobs:
       - name: Check test page data
         run: npx --no-install tsx scripts/check-test-page-data.ts
 
+      # The three repository counts (stats-config.json, public/repositories.json, the tile in
+      # public/stats.json) must agree. Checked HERE, after the write and before the commit, because
+      # these files are generated only by this job; the PR suite (TC-CNT-078) used to demand it and
+      # so turned every PR that adds a repository red (MASCHIN routing 2026-10-06, point 4).
+      # Fail-CLOSED like the step above: nothing is committed, yesterday's numbers stay live.
+      - name: Check repository counts
+        run: node scripts/check-repo-inventory.mjs
+
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
