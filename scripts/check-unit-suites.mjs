@@ -3,57 +3,101 @@
  * Completeness guard for the hand-written unit-suite lists.
  *
  * WHY: the unit suites are wired by hand in two places (package.json scripts and
- * .github/workflows/unit.yml). test:unit names its files one by one, so a new
- * test file that nobody adds to that line runs nowhere and CI stays green. Ported
- * from oakwoodgolfclub-website#258, where tests/search/route.test.ts had sat unrun
- * from June to November (Lenin report 2026-10-17-f, row 17).
+ * the workflows under .github/workflows). A test file that nobody adds to a script
+ * runs nowhere and CI stays green. Ported from oakwoodgolfclub-website#258, where
+ * tests/search/route.test.ts had sat unrun from June to November (Lenin report
+ * 2026-10-17-f, row 17).
  *
  * It fails when:
- *   1. a *.test.ts / *.test.mjs file under tests/ or scripts/ is named by no
- *      package.json script                      -> a test file no runner executes;
- *   2. a `test:<name>:unit` script is not run by unit.yml -> a suite that cannot
- *      turn a pull request red.
+ *   1. a *.test.{ts,tsx,mts,mjs,js,cjs} file under tests/, scripts/ or src/ is
+ *      named by no package.json script, neither by its path nor by a glob such as
+ *      "tests/unit/*.test.ts"                     -> a test file no runner executes;
+ *   2. `test:unit` or a `test:<name>:unit` script is not run, on a line of its own,
+ *      by a workflow that triggers on pull_request -> a suite that cannot turn a
+ *      pull request red. A line such as `npm run test:unit || true` does not count.
+ *
+ * The same file is copied into each website repository; keep the copies identical.
  *
  * Usage:  npm run check:unit-suites
  */
 
-import { readdirSync, readFileSync, statSync } from "node:fs";
-import { dirname, join, relative } from "node:path";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 // CHECK_UNIT_SUITES_ROOT lets the unit test point the guard at a fixture checkout.
 const root = process.env.CHECK_UNIT_SUITES_ROOT ?? join(dirname(fileURLToPath(import.meta.url)), "..");
 
+const TEST_FILE = /\.test\.(ts|tsx|mts|mjs|js|cjs)$/;
+const SEARCHED_DIRS = ["tests", "scripts", "src"];
+
 function walk(dir) {
+  if (!existsSync(dir)) return [];
   const out = [];
   for (const name of readdirSync(dir)) {
-    if (name === "node_modules") continue;
+    if (name === "node_modules" || name === ".next") continue;
     const full = join(dir, name);
     if (statSync(full).isDirectory()) out.push(...walk(full));
-    else if (/\.test\.(ts|mjs)$/.test(name)) out.push(relative(root, full));
+    else if (TEST_FILE.test(name)) out.push(relative(root, full).split(sep).join("/"));
   }
   return out;
 }
 
-const scripts = JSON.parse(readFileSync(join(root, "package.json"), "utf8")).scripts;
-const scriptText = Object.values(scripts).join("\n");
-const unitYml = readFileSync(join(root, ".github/workflows/unit.yml"), "utf8");
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// Minimal glob: `**/` any depth (also none), `**` anything, `*` within one segment, `?` one char.
+function globToRegExp(glob) {
+  let re = "";
+  for (let i = 0; i < glob.length; i++) {
+    const c = glob[i];
+    if (c === "*" && glob[i + 1] === "*") {
+      if (glob[i + 2] === "/") {
+        re += "(?:.*/)?";
+        i += 2;
+      } else {
+        re += ".*";
+        i += 1;
+      }
+    } else if (c === "*") re += "[^/]*";
+    else if (c === "?") re += "[^/]";
+    else re += escapeRegExp(c);
+  }
+  return new RegExp(`^${re}$`);
+}
+
+const scripts = JSON.parse(readFileSync(join(root, "package.json"), "utf8")).scripts ?? {};
+
+// Every whitespace-separated word of every script, quotes and a leading ./ removed.
+const words = Object.values(scripts)
+  .flatMap((cmd) => cmd.split(/\s+/))
+  .map((w) => w.replace(/^["']|["']$/g, "").replace(/^\.\//, ""))
+  .filter(Boolean);
+const named = new Set(words.filter((w) => !/[*?]/.test(w)));
+const globs = words.filter((w) => /[*?]/.test(w)).map(globToRegExp);
+
+const workflowDir = join(root, ".github/workflows");
+const prWorkflows = (existsSync(workflowDir) ? readdirSync(workflowDir) : [])
+  .filter((n) => /\.ya?ml$/.test(n))
+  .map((n) => readFileSync(join(workflowDir, n), "utf8"))
+  // `on: pull_request`, `on: [push, pull_request]` or a `pull_request:` key; not pull_request_target.
+  .filter((text) => /^\s*(?:on:.*\bpull_request\b(?!_)|pull_request\s*:)/m.test(text));
 
 const problems = [];
 
-for (const file of [...walk(join(root, "tests")), ...walk(join(root, "scripts"))].sort()) {
-  if (!scriptText.includes(file)) problems.push(`no package.json script runs ${file}`);
+for (const file of SEARCHED_DIRS.flatMap((d) => walk(join(root, d))).sort()) {
+  if (!named.has(file) && !globs.some((g) => g.test(file))) problems.push(`no package.json script runs ${file}`);
 }
 
-for (const name of Object.keys(scripts).filter((n) => /^test:.+:unit$/.test(n)).sort()) {
-  // Anchored: a commented-out `# npm run test:x:unit` line does not count as running it.
-  if (!new RegExp(`^[ \\t]*(?:-[ \\t]*)?(?:run:[ \\t]*)?npm run ${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "m").test(unitYml)) {
-    problems.push(`unit.yml does not run ${name}`);
-  }
+for (const name of Object.keys(scripts).filter((n) => /^test:(?:.+:)?unit$/.test(n)).sort()) {
+  // Anchored: a commented-out `# npm run x` line, or `npm run x || true`, does not count.
+  const runs = new RegExp(`^[ \\t]*(?:-[ \\t]*)?(?:run:[ \\t]*)?npm run ${escapeRegExp(name)}\\s*$`, "m");
+  if (!prWorkflows.some((text) => runs.test(text))) problems.push(`no pull_request workflow runs ${name}`);
 }
 
 if (problems.length) {
   for (const p of problems) console.error(`check-unit-suites: ${p}`);
   process.exit(1);
 }
-console.log("check-unit-suites: every test file has a script, every unit script runs in unit.yml");
+console.log("check-unit-suites: every test file has a script, every unit script runs in a pull_request workflow");
