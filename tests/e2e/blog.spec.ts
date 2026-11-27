@@ -39,7 +39,7 @@ test.describe("Blog", () => {
   test("TC-BLOG-021: the article has exactly one H1 and its BlogPosting names author and publisher", async ({ page }) => {
     await page.goto(POST);
     await expect(page.locator("h1")).toHaveCount(1);
-    await expect(page.locator("h1")).toHaveText("Wir testen nicht mehr alles. Wir testen, was brechen kann.");
+    await expect(page.locator("h1")).toHaveText("Ich teste nicht mehr alles. Ich teste, was brechen kann.");
 
     const nodes = await ldNodes(page);
     const posting = nodes.find((n) => n["@type"] === "BlogPosting");

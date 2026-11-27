@@ -1,8 +1,8 @@
 ---
-title: "Wir testen nicht mehr alles. Wir testen, was brechen kann."
+title: "Ich teste nicht mehr alles. Ich teste, was brechen kann."
 seoTitle: "Risikobasierte Teststrategie für iOS-Apps mit KI-Agenten"
 description: "Über 99 % unserer Testzeit steckten in UI-Tests. Mit Risikobereichen, Test-first und ISTQB-Vokabular soll der Testlauf je Story auf 15 Minuten sinken."
-dek: "Wie wir die Teststrategie für zwei iOS-Apps neu aufgesetzt haben, mit KI-Agenten als Entwicklern und ISTQB als gemeinsamer Sprache."
+dek: "Wie ich die Teststrategie für zwei iOS-Apps neu aufgesetzt habe, mit KI-Agenten als Entwicklern und ISTQB als gemeinsamer Sprache."
 # TL;DR (Founder 2026-11-05): Linus' summary, every fact taken from the article below.
 tldr: "Über 99 Prozent unserer Testzeit steckten in UI-Tests, und eine kleine Änderung kostete 77 Minuten Testlauf. Jetzt wählen wir Tests nach fachlichen **Risikobereichen** statt nach Dateien, prüfen jedes Kriterium auf der tiefsten möglichen Teststufe und schreiben den Test vor dem Code. Der vollständige Regressionstest bleibt, und zwar vor jedem Upload: **Der Upload ist das Tor.** Ziel sind 15 Minuten Testlauf pro Story statt über einer Stunde."
 date: "2026-11-05"
