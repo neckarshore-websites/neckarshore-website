@@ -2,7 +2,7 @@ import { BlogFigure, FigureHeading, NewChip, TierChip } from "../BlogFigure";
 import { REGISTER, RUNS, VOCABULARY, type Area, type Rich } from "./teststrategie-data";
 
 /**
- * The three figures of "Wir testen nicht mehr alles", rendered from teststrategie-data.ts —
+ * The three figures of "Ich teste nicht mehr alles", rendered from teststrategie-data.ts —
  * the same data the Markdown export reads (markdown.ts). Wording, provenance and the named
  * deviations from Lenin's sheets live in that data file.
  */

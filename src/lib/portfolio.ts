@@ -113,7 +113,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
     id: "flagships",
     title: "Flagships",
     metaTitle: "Flagships — KI-Software made in Germany | neckarshore.ai",
-    subtitle: "Unsere Hauptprodukte",
+    subtitle: "Meine Hauptprodukte",
     intro:
       "Produkte, die einen Markt gewinnen sollen. Omnopsis ist das erste — weitere folgen.",
     navLabel: "Flagships",

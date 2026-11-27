@@ -251,7 +251,7 @@ export default function CommitsPage() {
               Commits über {weeks.length} Wochen. Deshalb zeigt diese Seite die{" "}
               <em>Verteilung</em> der Arbeit und nicht eine zweite Gesamtzahl: zwei
               unterschiedliche Commit-Zahlen auf einer Website wären genau die Art Widerspruch,
-              die wir gerade abschaffen.
+              die ich gerade abschaffe.
             </p>
             {activity.reposMissing > 0 && (
               <p className="mt-2">

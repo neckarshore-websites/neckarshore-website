@@ -1,5 +1,5 @@
 /**
- * The content of the three figures of "Wir testen nicht mehr alles" — ONE source for the page
+ * The content of the three figures of "Ich teste nicht mehr alles" — ONE source for the page
  * (Teststrategie.tsx) and for the Markdown export (markdown.ts), so a reader's AI gets the same
  * tables the reader sees, not an empty marker.
  *
@@ -121,7 +121,7 @@ export const RUNS = {
 };
 
 export const VOCABULARY = {
-  caption: "Unser Vokabular nach ISTQB-Glossar v4.8.1",
+  caption: "Mein Vokabular nach ISTQB-Glossar v4.8.1",
   lead: "Geprüft gegen das offizielle ISTQB-Glossar v4.8.1 (API, 1129 Begriffe). Umbenannt wird nur vorwärts: neue Texte, Skripte beim nächsten Anfassen, Tickets ab jetzt. „Progressionstest“ und „Flaky Test“ stehen nicht im Glossar.",
   renamedHeader: ["Bisher im Haus", "Jetzt"] as const,
   renamed: [

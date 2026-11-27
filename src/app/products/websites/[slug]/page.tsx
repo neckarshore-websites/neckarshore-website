@@ -136,8 +136,8 @@ export default async function WebsiteCaseStudyPage({
 
           <p className="mt-10 text-sm italic text-muted dark:text-text-tertiary">
             <span className="font-medium not-italic">Wie dieser Text entstand:</span>{" "}
-            KI-beschleunigt aus dem Projekt-Repository zusammengestellt, vom Gründer
-            redigiert — dieselbe Arbeitsweise, mit der wir bauen.
+            KI-beschleunigt aus dem Projekt-Repository zusammengestellt, von mir
+            redigiert — dieselbe Arbeitsweise, mit der ich baue.
           </p>
         </article>
 
@@ -151,8 +151,8 @@ export default async function WebsiteCaseStudyPage({
             Sie planen ein ähnliches Projekt?
           </p>
           <p className="mx-auto mt-2 max-w-md text-base text-muted dark:text-text-tertiary">
-            Im 30-minütigen Kennenlerntermin klären wir unverbindlich, ob und wie wir
-            helfen können — gleiche Zeitzone, gleiche Sprache, gleiche
+            Im 30-minütigen Kennenlerntermin kläre ich mit Ihnen unverbindlich, ob und wie ich
+            helfen kann — gleiche Zeitzone, gleiche Sprache, gleiche
             Datenschutzstandards.
           </p>
           <a

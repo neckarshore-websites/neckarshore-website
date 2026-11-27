@@ -26,7 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/impressum",
     "/datenschutz",
     "/commits", // commit activity over time — the "how this was built" proof surface
-    "/test-management", // the "Wie wir testen" detail surface (#245) — a citable GEO target
+    "/test-management", // the "Wie ich teste" detail surface (#245) — a citable GEO target
     "/repositories", // the public repository inventory (#7), auto-synced from GitHub
     "/ki-beratung", // the buyer-visible page for the KI-Potenzialanalyse (funnel Wave 1)
     "/ki-fahrplan", // the lead magnet's landing page (planning #3336)

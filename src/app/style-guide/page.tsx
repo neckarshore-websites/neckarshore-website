@@ -423,7 +423,7 @@ export default function StyleGuidePage() {
                   Small / Meta · text-sm · text-muted
                 </p>
                 <p className="text-sm text-muted dark:text-text-tertiary">
-                  Stuttgart, Deutschland — wir antworten zeitnah.
+                  Stuttgart, Deutschland — ich antworte zeitnah.
                 </p>
               </div>
             </div>
@@ -524,7 +524,7 @@ export default function StyleGuidePage() {
                   <textarea
                     id="sg-msg"
                     rows={4}
-                    placeholder="Was sollten wir wissen?"
+                    placeholder="Was sollte ich wissen?"
                     className={`${fieldClass} resize-y`}
                   />
                 </div>
@@ -536,7 +536,7 @@ export default function StyleGuidePage() {
                     Success-Banner
                   </p>
                   <p className="mt-3 text-base text-primary dark:text-text-primary">
-                    Danke für Ihre Nachricht — wir melden uns zeitnah zurück.
+                    Danke für Ihre Nachricht — ich melde mich zeitnah zurück.
                   </p>
                 </div>
                 <div className="flex items-start gap-3 rounded-lg border border-primary/10 bg-white p-4 dark:border-text-secondary/15 dark:bg-surface">

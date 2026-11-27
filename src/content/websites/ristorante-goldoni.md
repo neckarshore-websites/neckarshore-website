@@ -17,9 +17,9 @@ status: "Live"
 
 Das Ristorante Goldoni, ein italienisches Restaurant im Stuttgarter Westen, lief zuvor auf einer WordPress-Installation (PHP 8.2). Gebraucht wurde eine moderne, schnelle Web-Präsenz, die die Speisekarte, die wöchentliche Empfehlungskarte, Kontakt- und Feier-Anfragen sowie die Anfahrt sauber abbildet. Anspruch: eine Seite, die ohne laufenden Wartungsaufwand stabil bleibt und sich datenschutzkonform betreiben lässt — keine fremden Tracker, keine Cookie-Banner-Pflicht.
 
-## Wie sind wir vorgegangen?
+## Wie bin ich vorgegangen?
 
-Wir haben die Seite KI-beschleunigt neu gebaut — als statische Next.js-Anwendung statt CMS-Monolith. Inhalte (Speisekarte, Weinempfehlungen, FAQ, Empfehlungskarte) liegen als strukturierte Daten im Repository und werden zur Build-Zeit gerendert; ein Push deployt automatisch. Restaurant-Stammdaten (Adresse, Telefon, Öffnungszeiten) leben an einer einzigen Stelle (`site.ts`) und propagieren von dort in UI, Metadaten und JSON-LD. DSGVO-by-Design: selbst gehostete Fonts, kein Analytics, keine Drittanbieter-Embeds im Standardpfad.
+Ich habe die Seite KI-beschleunigt neu gebaut — als statische Next.js-Anwendung statt CMS-Monolith. Inhalte (Speisekarte, Weinempfehlungen, FAQ, Empfehlungskarte) liegen als strukturierte Daten im Repository und werden zur Build-Zeit gerendert; ein Push deployt automatisch. Restaurant-Stammdaten (Adresse, Telefon, Öffnungszeiten) leben an einer einzigen Stelle (`site.ts`) und propagieren von dort in UI, Metadaten und JSON-LD. DSGVO-by-Design: selbst gehostete Fonts, kein Analytics, keine Drittanbieter-Embeds im Standardpfad.
 
 ## Wie ist die Website technisch gebaut?
 

@@ -27,7 +27,7 @@ import { categoryPath, postPath } from "@/lib/schema/blog";
 const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
 /**
- * /test-management — "Wie wir testen, und warum die Zahl der Realität entspricht"
+ * /test-management — "Wie ich teste, und warum die Zahl der Realität entspricht"
  * (backlog #245, UD5 Front-10).
  *
  * The detail surface behind the homepage "Automatisierte Tests" tile: the STORY behind the
@@ -130,9 +130,9 @@ function andereNote(p: ReturnType<typeof andereParts>): string {
 }
 
 export const metadata: Metadata = pageMetadata({
-  title: "Wie wir testen — nachprüfbar gezählt | neckarshore.ai",
+  title: "Wie ich teste — nachprüfbar gezählt | neckarshore.ai",
   description:
-    "Wie wir unser Test-Estate zählen und prüfen: jede Zahl vom Test-Runner, nie geschätzt, unabhängig gegengeprüft — nachprüfbar statt nach Bauchgefühl.",
+    "Wie ich mein Test-Estate zähle und prüfe: jede Zahl vom Test-Runner, nie geschätzt, unabhängig gegengeprüft — nachprüfbar statt nach Bauchgefühl.",
   path: "/test-management",
 });
 
@@ -166,52 +166,52 @@ export default function TestManagementPage() {
       <Nav showOssLaunch={showOssLaunch} />
       <PageSchema
         path="/test-management"
-        name="Wie wir testen — der Realität entspricht"
+        name="Wie ich teste — der Realität entspricht"
       />
       <main className="mx-auto max-w-[760px] px-4 pt-40 pb-20 md:px-6">
         <article>
           <header className="mb-8">
             <h1 className="font-heading text-4xl font-bold text-accent md:text-5xl">
-              Wie wir testen, und warum die Zahl der Realität entspricht
+              Wie ich teste, und warum die Zahl der Realität entspricht
             </h1>
           </header>
 
           <p className="text-xl leading-relaxed text-primary/90 dark:text-text-primary">
-            Über unser Ökosystem laufen{" "}
+            Über mein Ökosystem laufen{" "}
             <strong className="text-accent dark:text-accent-bright">
               {total} automatisierte Tests
             </strong>{" "}
-            in <strong>{repos} unserer Repositories</strong>. Wir nennen die
+            in <strong>{repos} meiner Repositories</strong>. Ich nenne die
             exakte Zahl, die die Test-Runner melden. Das „+{"“"} steht dort,
             weil einige Skripte Tests ausführen, die sich nicht automatisch
-            zählen lassen — die tatsächliche Zahl liegt also höher. Wir nennen
+            zählen lassen — die tatsächliche Zahl liegt also höher. Ich nenne
             lieber eine kleinere Zahl, die stimmt, als eine größere, die nur gut
             klingt.
           </p>
 
           <section className="mt-12">
             <h2 className="font-heading text-2xl font-bold text-primary dark:text-text-primary">
-              Wie wir zählen
+              Wie ich zähle
             </h2>
             <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
               Jede Zahl stammt vom <strong>Test-Runner selbst</strong> — jest,
               vitest, Playwright, pytest, bats, node:test. Nichts wird von Hand
               gezählt, nichts per Textsuche (<code>grep</code>) geschätzt. Wo
-              ein Skript keine Zählung ausgibt, zählen wir es lieber gar nicht
+              ein Skript keine Zählung ausgibt, zähle ich es lieber gar nicht
               mit. Dafür steht das „+{"“"}: der tatsächliche Wert liegt höher,
-              aber wir behaupten nur, was ein Runner bestätigt.
+              aber ich behaupte nur, was ein Runner bestätigt.
             </p>
           </section>
 
           <section className="mt-12">
             <h2 className="font-heading text-2xl font-bold text-primary dark:text-text-primary">
-              Wie wir prüfen
+              Wie ich prüfe
             </h2>
             <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-              Wir haben das gesamte Test-Estate neu gezählt — und{" "}
+              Ich habe das gesamte Test-Estate neu gezählt — und{" "}
               <strong>
-                jede einzelne Zahl unabhängig gegengeprüft, bevor wir sie
-                akzeptiert haben.
+                jede einzelne Zahl unabhängig gegengeprüft, bevor ich sie
+                akzeptiert habe.
               </strong>{" "}
               Zwei Zählungen stellten sich dabei als falsch heraus und wurden
               korrigiert, <em>bevor</em> irgendetwas veröffentlicht wurde. Der
@@ -318,7 +318,7 @@ export default function TestManagementPage() {
               Manche Prüfungen laufen als Schritt in der Pipeline oder von Hand
               und haben keinen Zähler, etwa Docs-Lint, Performance-Messung und
               visuelle Abnahme. Sie stehen in keiner Zahl. Eine Zahl pro Zweck
-              nennen wir bewusst nicht: Sie würde Tests doppelt zählen oder
+              nenne ich bewusst nicht: Sie würde Tests doppelt zählen oder
               Prüfungen mitzählen, die kein Test-Runner bestätigt.
             </p>
           </section>
@@ -466,7 +466,7 @@ export default function TestManagementPage() {
                 Aus dem Blog
               </h2>
               <p className="mt-3 leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                Wie wir testen, ausführlich und mit Zahlen aus unseren
+                Wie ich teste, ausführlich und mit Zahlen aus meinen
                 Projekten:
               </p>
               <ul className="mt-4 divide-y divide-primary/10 border-y border-primary/10 dark:divide-white/10 dark:border-white/10">
@@ -503,7 +503,7 @@ export default function TestManagementPage() {
               Wie dieser Text entstand:
             </span>{" "}
             Diese Seite über nachprüfbares Testen wurde selbst KI-entworfen und
-            menschlich editiert — dieselbe Disziplin, die unsere Tests zählt,
+            menschlich editiert — dieselbe Disziplin, die meine Tests zählt,
             hat auch diesen Text geschrieben.
           </p>
         </article>

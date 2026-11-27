@@ -4,7 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 /**
- * /test-management — "Wie wir testen" detail surface (backlog #245, UD5 Front-10).
+ * /test-management — "Wie ich teste" detail surface (backlog #245, UD5 Front-10).
  *
  * Verifies the page is DATA-BOUND to the same single source as the homepage tile
  * (public/estate-test-scope.json) — never a second hardcoded figure that can drift — and
@@ -139,7 +139,7 @@ test.describe("Content surface — /test-management (KI-Testen detail)", () => {
     const main = page.locator("main");
     // Same single source as the tile → no second literal that can drift.
     await expect(main).toContainText(`${expected} automatisierte Tests`);
-    await expect(main).toContainText(`${scope.repos} unserer Repositories`);
+    await expect(main).toContainText(`${scope.repos} meiner Repositories`);
   });
 
   test("TC-CNT-070: public-safe — phonesis absent; runner-counted + re-check passage present", async ({

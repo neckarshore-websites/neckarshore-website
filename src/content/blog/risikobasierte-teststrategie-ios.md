@@ -1,10 +1,10 @@
 ---
 title: "Ich teste nicht mehr alles. Ich teste, was brechen kann."
 seoTitle: "Risikobasierte Teststrategie für iOS-Apps mit KI-Agenten"
-description: "Über 99 % unserer Testzeit steckten in UI-Tests. Mit Risikobereichen, Test-first und ISTQB-Vokabular soll der Testlauf je Story auf 15 Minuten sinken."
+description: "Über 99 % meiner Testzeit steckten in UI-Tests. Mit Risikobereichen, Test-first und ISTQB-Vokabular soll der Testlauf je Story auf 15 Minuten sinken."
 dek: "Wie ich die Teststrategie für zwei iOS-Apps neu aufgesetzt habe, mit KI-Agenten als Entwicklern und ISTQB als gemeinsamer Sprache."
 # TL;DR (Founder 2026-11-05): Linus' summary, every fact taken from the article below.
-tldr: "Über 99 Prozent unserer Testzeit steckten in UI-Tests, und eine kleine Änderung kostete 77 Minuten Testlauf. Jetzt wählen wir Tests nach fachlichen **Risikobereichen** statt nach Dateien, prüfen jedes Kriterium auf der tiefsten möglichen Teststufe und schreiben den Test vor dem Code. Der vollständige Regressionstest bleibt, und zwar vor jedem Upload: **Der Upload ist das Tor.** Ziel sind 15 Minuten Testlauf pro Story statt über einer Stunde."
+tldr: "Über 99 Prozent meiner Testzeit steckten in UI-Tests, und eine kleine Änderung kostete 77 Minuten Testlauf. Jetzt wähle ich Tests nach fachlichen **Risikobereichen** statt nach Dateien, prüfe jedes Kriterium auf der tiefsten möglichen Teststufe und schreibe den Test vor dem Code. Der vollständige Regressionstest bleibt, und zwar vor jedem Upload: **Der Upload ist das Tor.** Ziel sind 15 Minuten Testlauf pro Story statt über einer Stunde."
 date: "2026-11-05"
 author: "German Rauhut"
 cover:
@@ -46,48 +46,48 @@ further:
 draft: false
 ---
 
-Bei neckarshore.ai entwickeln wir zwei iOS-Apps: Kaze, eine App für digitale Selbstbeschränkung, und MuscleCat, ein Trainingstagebuch fürs Fitnessstudio. Gebaut werden beide überwiegend von KI-Agenten. Tests sind für uns deshalb kein Nebenthema. Sie sind das Sicherheitsnetz, das zwischen einem Agenten und dem Kunden steht.
+Unter der Marke neckarshore.ai entwickle ich zwei iOS-Apps: Kaze, eine App für digitale Selbstbeschränkung, und MuscleCat, ein Trainingstagebuch fürs Fitnessstudio. Gebaut werden beide überwiegend von KI-Agenten. Tests sind für mich deshalb kein Nebenthema. Sie sind das Sicherheitsnetz, das zwischen einem Agenten und dem Kunden steht.
 
-Vor ein paar Tagen haben wir gemessen, wie gut dieses Netz arbeitet. Das Ergebnis war unbequem.
+Vor ein paar Tagen habe ich gemessen, wie gut dieses Netz arbeitet. Das Ergebnis war unbequem.
 
-## Was wir gemessen haben
+## Was ich gemessen habe
 
-Über 99 Prozent unserer Testzeit steckten in UI-Tests. Die rund 1.700 Komponententests beider Apps laufen zusammen in unter einer Minute. Die UI-Tests dagegen brauchen 53 bzw. 85 Minuten für einen vollständigen Lauf, und die Suiten hatten sich in vier Wochen verdoppelt bis vervierfacht.
+Über 99 Prozent meiner Testzeit steckten in UI-Tests. Die rund 1.700 Komponententests beider Apps laufen zusammen in unter einer Minute. Die UI-Tests dagegen brauchen 53 bzw. 85 Minuten für einen vollständigen Lauf, und die Suiten hatten sich in vier Wochen verdoppelt bis vervierfacht.
 
-Jede neue Story brachte neue UI-Tests mit. Aus jedem davon wurde ein dauerhafter Regressionstest, und jeder Pull Request bezahlte die ganze Suite. Unser sogenannter Teillauf, der eigentlich nur die betroffenen Tests ausführen sollte, dauerte bei einer kleinen Änderung 77 Minuten. Für einen Refactor von 0,3 Prozent des Codes wählte er 55 von 56 UI-Klassen aus.
+Jede neue Story brachte neue UI-Tests mit. Aus jedem davon wurde ein dauerhafter Regressionstest, und jeder Pull Request bezahlte die ganze Suite. Mein sogenannter Teillauf, der eigentlich nur die betroffenen Tests ausführen sollte, dauerte bei einer kleinen Änderung 77 Minuten. Für einen Refactor von 0,3 Prozent des Codes wählte er 55 von 56 UI-Klassen aus.
 
 Der Grund war die Körnung. Die Auswahl ordnete Dateien den Tests zu. Zusammen regrediert aber selten eine Datei, sondern ein fachlicher Bereich. Dateien wie das Theme oder die Hauptansicht berühren jeden Bildschirm, also lief am Ende fast immer alles.
 
-Eine zweite Zahl hat uns noch mehr beschäftigt. Von 39 Fehlern, die in MuscleCat durchgerutscht waren, fand kein einziger ein UI-Test. 19 davon fand der Founder selbst, am Gerät. Fairerweise zeigt diese Zahl nur, was durchgerutscht ist; was ein Test im Pull Request abgefangen hat, wird nie ein Ticket. Die Richtung war trotzdem klar.
+Eine zweite Zahl hat mich noch mehr beschäftigt. Von 39 Fehlern, die in MuscleCat durchgerutscht waren, fand kein einziger ein UI-Test. 19 davon fand ich selbst, am Gerät. Fairerweise zeigt diese Zahl nur, was durchgerutscht ist; was ein Test im Pull Request abgefangen hat, wird nie ein Ticket. Die Richtung war trotzdem klar.
 
-## Was wir geändert haben
+## Was ich geändert habe
 
 Erstens: Risikobereiche statt Dateien. Jede App hat jetzt ein Register mit rund acht fachlichen Bereichen, etwa Datenintegrität, Training erfassen, Kauf oder Sperre. Jeder Bereich trägt eine Risikostufe und zwei Gruppen von Tests: wenige kritische Abläufe und den Rest im Detail. Ändert sich das Dashboard, laufen die Abläufe des Dashboards. Die Stammdatenerfassung bleibt draußen.
 
-Zweitens: jedes Kriterium so tief wie möglich. Rechnungen, Regeln, Sortierungen und Texte prüfen wir im Komponententest, in Millisekunden. Für Layout, Dark Mode und große Schriftgrößen führen wir Snapshot-Tests ein. UI-Tests bleiben für echte Abläufe und für das, was nur das Betriebssystem zeigen kann.
+Zweitens: jedes Kriterium so tief wie möglich. Rechnungen, Regeln, Sortierungen und Texte prüfe ich im Komponententest, in Millisekunden. Für Layout, Dark Mode und große Schriftgrößen führe ich Snapshot-Tests ein. UI-Tests bleiben für echte Abläufe und für das, was nur das Betriebssystem zeigen kann.
 
 Drittens: Test zuerst. Für jedes Abnahmekriterium entsteht der Test vor dem Code, und er muss auf dem alten Code rot sein. Ein Build-Fehler zählt dabei nicht, denn ein Test, der nicht kompiliert, sagt nichts über Verhalten.
 
-Viertens: Der Mensch erkundet. Am Gerät prüft der Founder nur noch, was wirklich ein Gerät braucht: Haptik, echtes Verhalten im Hintergrund, Käufe. Den Rest seiner Zeit nutzt er für explorative Tests mit einem klaren Auftrag, denn dort findet er die meisten Fehler.
+Viertens: Der Mensch erkundet. Am Gerät prüfe ich nur noch, was wirklich ein Gerät braucht: Haptik, echtes Verhalten im Hintergrund, Käufe. Den Rest meiner Zeit nutze ich für explorative Tests mit einem klaren Auftrag, denn dort finde ich die meisten Fehler.
 
 <!-- figur: teststrategie-risikoregister -->
 
 ## Der Upload ist das Tor
 
-Die wichtigste Entscheidung war eine Risikoentscheidung. Eine Regression darf auf den Hauptzweig gelangen, solange sie vor dem nächsten Upload gefunden wird. Den vollständigen Regressionstest gibt es weiterhin, nur läuft er dort, wo ein Fehler den Kunden erreichen würde. Der Testlauf pro Story schrumpft dafür von über einer Stunde auf unser Ziel von 15 Minuten.
+Die wichtigste Entscheidung war eine Risikoentscheidung. Eine Regression darf auf den Hauptzweig gelangen, solange sie vor dem nächsten Upload gefunden wird. Den vollständigen Regressionstest gibt es weiterhin, nur läuft er dort, wo ein Fehler den Kunden erreichen würde. Der Testlauf pro Story schrumpft dafür von über einer Stunde auf mein Ziel von 15 Minuten.
 
-Die Restrisiken haben wir ausdrücklich aufgeschrieben, statt sie wegzulassen. Bis die Snapshot-Tests stehen, prüfen wir Layout-Änderungen erst vor dem Upload. Die Messung ist gleich mit eingebaut: Jeder Fehler, den eine spätere Stufe findet, bekommt die Stufe zugeordnet, die ihn hätte finden müssen.
+Die Restrisiken habe ich ausdrücklich aufgeschrieben, statt sie wegzulassen. Bis die Snapshot-Tests stehen, prüfe ich Layout-Änderungen erst vor dem Upload. Die Messung ist gleich mit eingebaut: Jeder Fehler, den eine spätere Stufe findet, bekommt die Stufe zugeordnet, die ihn hätte finden müssen.
 
 <!-- figur: teststrategie-testlaeufe -->
 
 ## Eine gemeinsame Sprache
 
-Bei uns arbeiten Menschen und mehrere KI-Agenten an denselben Tickets. Hausbegriffe wie „Rule B“ oder „Progressionstest“ mussten jedes Mal erklärt werden. Deshalb haben wir unser Vokabular gegen das offizielle ISTQB-Glossar geprüft und angeglichen. Aus „Rule B“ wird der Story-Testlauf, aus der Geräteabnahme ein Benutzerabnahmetest mit Test-Charta. „Progressionstest“ steht im Glossar übrigens gar nicht.
+Ich arbeite mit mehreren KI-Agenten an denselben Tickets. Hausbegriffe wie „Rule B“ oder „Progressionstest“ mussten jedes Mal erklärt werden. Deshalb habe ich mein Vokabular gegen das offizielle ISTQB-Glossar geprüft und angeglichen. Aus „Rule B“ wird der Story-Testlauf, aus der Geräteabnahme ein Benutzerabnahmetest mit Test-Charta. „Progressionstest“ steht im Glossar übrigens gar nicht.
 
 <!-- figur: teststrategie-vokabular -->
 
-## Was wir mitnehmen
+## Was ich mitnehme
 
-Die Zahl der Tests sagt wenig über die Qualität einer Teststrategie. Unsere Pyramide sah nach Anzahl gesund aus und stand nach Laufzeit auf dem Kopf. Erst die Messung hat das gezeigt.
+Die Zahl der Tests sagt wenig über die Qualität einer Teststrategie. Meine Pyramide sah nach Anzahl gesund aus und stand nach Laufzeit auf dem Kopf. Erst die Messung hat das gezeigt.
 
 Wie handhabt ihr Regressionstests bei mobilen Apps? Läuft bei euch jeder Pull Request gegen die ganze Suite, oder wählt ihr aus?
