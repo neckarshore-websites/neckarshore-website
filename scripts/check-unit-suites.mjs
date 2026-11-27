@@ -82,8 +82,10 @@ const globs = words.filter((w) => /[*?]/.test(w)).map(globToRegExp);
 
 // ---- Reading the workflows -------------------------------------------------------------------
 // The workflows are read by indentation, not by a YAML library (no dependency in six repos). What
-// is understood: comments, the `on:` trigger in its three spellings, `run:` values (single line,
-// literal `|` and folded `>` blocks), and `continue-on-error` on the step or on the job.
+// is understood: comments, the `on:` trigger (block mapping, block list, flow list, flow mapping
+// by its keys, single name), `run:` values (single line, plain scalars continued on deeper lines,
+// literal `|` and folded `>` blocks; `run:` text inside another key's block is not a key), and
+// `continue-on-error` on the step or on the job, also with step dashes level with `steps:`.
 
 const indentOf = (line) => line.match(/^ */)[0].length;
 
@@ -100,12 +102,46 @@ function stripComment(line) {
   return line.trimEnd();
 }
 
+const unquote = (t) => t.trim().replace(/^(["'])(.*)\1$/, "$2");
+
+// The entries of a one-line `on:` value: a flow list `[push, pull_request]`, a flow mapping
+// `{push: {branches: [pull_request]}, pull_request: {}}` (its KEYS are the events; words inside a
+// filter value are not) or a single event name.
+function flowEvents(text) {
+  const s = text.trim();
+  if (!/^[[{]/.test(s)) return [unquote(s)];
+  const isMap = s[0] === "{";
+  const entries = [];
+  let depth = 0;
+  let token = "";
+  let quote = null;
+  for (const c of s) {
+    if (quote) {
+      token += c;
+      if (c === quote) quote = null;
+    } else if (c === '"' || c === "'") {
+      quote = c;
+      token += c;
+    } else if (c === "[" || c === "{") {
+      if (++depth > 1) token += c;
+    } else if (c === "]" || c === "}") {
+      if (--depth === 0) break;
+      token += c;
+    } else if (c === "," && depth === 1) {
+      entries.push(token);
+      token = "";
+    } else token += c;
+  }
+  entries.push(token);
+  return entries.map((e) => unquote(isMap ? e.split(":")[0] : e)).filter(Boolean);
+}
+
 // True when the top-level `on:` names pull_request (not pull_request_target).
 function triggersOnPullRequest(lines) {
   const at = lines.findIndex((l) => /^["']?on["']?\s*:/.test(l));
   if (at < 0) return false;
   const rest = lines[at].replace(/^["']?on["']?\s*:\s*/, "");
-  if (rest) return /\bpull_request\b(?!_)/.test(rest);
+  if (rest) return flowEvents(rest).includes("pull_request");
   let child = -1;
   for (const line of lines.slice(at + 1)) {
     if (!line.trim()) continue;
@@ -122,8 +158,17 @@ const tolerant = (value) => value.trim() !== "" && value.trim() !== "false";
 // Every shell command a `run:` executes, with whether a failure of it can be swallowed by
 // `continue-on-error` on its step or its job.
 function runCommands(lines) {
+  // Lines inside any key's `|` or `>` block are scalar text: a `run:` there is not a key.
+  const inBlock = new Set();
+  lines.forEach((line, i) => {
+    const b = line.match(/^(\s*)(-\s+)?[^\s#][^:]*:\s*[|>][-+0-9]*$/);
+    if (!b) return;
+    const ind = b[1].length + (b[2] ? b[2].length : 0);
+    for (let j = i + 1; j < lines.length && (!lines[j].trim() || indentOf(lines[j]) > ind); j++) inBlock.add(j);
+  });
   const out = [];
   lines.forEach((line, i) => {
+    if (inBlock.has(i)) return;
     const m = line.match(/^(\s*)(-\s+)?run:\s*(.*)$/);
     if (!m) return;
     const keyIndent = m[1].length + (m[2] ? m[2].length : 0);
@@ -143,7 +188,15 @@ function runCommands(lines) {
         if (prev >= 0 && (/\\$/.test(cmds[prev]) || /^(?:\|\||&&|\|)/.test(l))) cmds[prev] = `${cmds[prev]} ${l}`;
         else cmds.push(l);
       }
-    } else cmds = [rest.replace(/^(["'])(.*)\1$/, "$2")];
+    } else {
+      // A plain scalar may continue on deeper-indented lines; YAML folds them into one command.
+      const parts = [rest];
+      for (const l of lines.slice(i + 1)) {
+        if (l.trim() && indentOf(l) <= keyIndent) break;
+        if (l.trim()) parts.push(l.trim());
+      }
+      cmds = [unquote(parts.join(" "))];
+    }
 
     // The step: its `- ` line sits two columns left of the keys.
     const dashIndent = keyIndent - 2;
@@ -165,12 +218,13 @@ function runCommands(lines) {
       }
       // The job: the `steps:` key above the step, and its siblings.
       let steps = -1;
+      // Sibling steps sit at the dash column; `steps:` may sit there too (dashes level with it).
       for (let j = stepStart - 1; j >= 0; j--) {
         const l = lines[j];
-        if (l.trim() && indentOf(l) < dashIndent) {
-          if (/^\s*steps\s*:/.test(l)) steps = j;
-          break;
-        }
+        if (!l.trim() || indentOf(l) > dashIndent) continue;
+        if (indentOf(l) === dashIndent && /^\s*-\s/.test(l)) continue;
+        if (/^\s*steps\s*:/.test(l)) steps = j;
+        break;
       }
       if (steps >= 0) {
         const jobIndent = indentOf(lines[steps]);

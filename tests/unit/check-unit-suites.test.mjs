@@ -244,3 +244,50 @@ test("continue-on-error: false and a tolerant sibling step leave the run counted
   );
   assert.equal(r.status, 0, r.stderr);
 });
+
+// CodeRabbit on #403: four YAML shapes the indentation reader got wrong, each a false pass.
+const NIGHTLY = (on) => ({ "other.yml": `on: ${on}\njobs:\n  unit:\n    steps:\n      - run: npm run test:a:unit\n` });
+
+test("pull_request as a branch filter inside a flow on: mapping does not count", () => {
+  const r = run(fixture({ scripts, files, unitYml: "  npm run lint\n", workflows: NIGHTLY("{push: {branches: [pull_request]}}") }));
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /no pull_request workflow runs test:a:unit/);
+});
+
+test("pull_request as an event key of a flow on: mapping or list counts", () => {
+  for (const on of ["{push: {branches: [main]}, pull_request: {}}", "[push, pull_request]", "{pull_request: null}"]) {
+    const r = run(fixture({ scripts, files, unitYml: "  npm run lint\n", workflows: NIGHTLY(on) }));
+    assert.equal(r.status, 0, `${on}: ${r.stderr}`);
+  }
+});
+
+test("run: text inside another key's block scalar does not count", () => {
+  const r = run(
+    fixture({ scripts, files, unitYml: `${JOB}      - name: |\n          run: npm run test:a:unit\n        run: npm run lint\n` }),
+  );
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /no pull_request workflow runs test:a:unit/);
+});
+
+test("a plain run: scalar continued on the next line by || true does not count", () => {
+  const r = run(fixture({ scripts, files, unitYml: `${JOB}      - run: npm run test:a:unit\n          || true\n` }));
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /no pull_request workflow runs test:a:unit/);
+});
+
+test("a job with continue-on-error and step dashes level with steps: does not count", () => {
+  const r = run(
+    fixture({
+      scripts,
+      files,
+      unitYml: "  unit:\n    runs-on: ubuntu-latest\n    continue-on-error: true\n    steps:\n    - name: lint\n      run: npm run lint\n    - run: npm run test:a:unit\n",
+    }),
+  );
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /no pull_request workflow runs test:a:unit/);
+});
+
+test("step dashes level with steps: still count when nothing swallows the failure", () => {
+  const r = run(fixture({ scripts, files, unitYml: "  unit:\n    runs-on: ubuntu-latest\n    steps:\n    - run: npm run test:a:unit\n" }));
+  assert.equal(r.status, 0, r.stderr);
+});
