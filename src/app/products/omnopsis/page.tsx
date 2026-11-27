@@ -17,12 +17,12 @@ import { BRAND } from "@/lib/brand";
 const showOssLaunch = OSS_LAUNCH_SICHTBAR;
 
 const DEFINITION =
-  "Omnopsis ist unsere KI-first Documentation Engine: Sie zieht automatisch aus Git, Jira und Confluence und generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten — fail-closed, also lieber schweigend als falsch.";
+  "Omnopsis ist meine KI-first Documentation Engine: Sie zieht automatisch aus Git, Jira und Confluence und generiert Compliance-Doku, technische Doku und rollenbasierte Chatbot-Antworten — fail-closed, also lieber schweigend als falsch.";
 
 // Short SERP pitch (≤155, audit P2-2 — Google truncates at ~155). DEFINITION stays long for the
 // on-page first passage + the SoftwareApplication schema description (GEO). AI-draft → Rauhut-edit.
 const META_DESCRIPTION =
-  "Omnopsis ist unsere KI-first Documentation Engine: zieht aus Git, Jira und Confluence und generiert Compliance- und Technik-Doku — fail-closed by Design.";
+  "Omnopsis ist meine KI-first Documentation Engine: zieht aus Git, Jira und Confluence und generiert Compliance- und Technik-Doku — fail-closed by Design.";
 
 export const metadata: Metadata = pageMetadata({
   title: `${BRAND.PRODUCT_NAME} — KI-first Documentation Engine | neckarshore.ai`,
@@ -60,7 +60,7 @@ export default function OmnopsisPage() {
         <article>
           <header className="mb-6">
             <p className="text-sm font-semibold uppercase tracking-widest text-accent dark:text-accent-bright">
-              Unser Flaggschiff
+              Mein Flaggschiff
             </p>
             <h1 className="mt-3 font-heading text-4xl font-bold text-accent md:text-5xl">
               {BRAND.PRODUCT_NAME}
