@@ -56,6 +56,14 @@ test("Do Not Track sends nothing (navigator, window and legacy forms)", () => {
   assert.notEqual(load({ doNotTrack: "0" })("event", { ...base }), null);
 });
 
+test("each Do Not Track signal counts on its own: one '1' beside a '0' still sends nothing", () => {
+  // window.doNotTrack "0" used to win over navigator.doNotTrack "1" (CodeRabbit on #390).
+  assert.equal(load({ doNotTrack: "1" }, { doNotTrack: "0" })("event", { ...base }), null);
+  assert.equal(load({ doNotTrack: "0", msDoNotTrack: "1" })("event", { ...base }), null);
+  assert.equal(load({ doNotTrack: "unspecified" }, { doNotTrack: "yes" })("event", { ...base }), null);
+  assert.notEqual(load({ doNotTrack: "0", msDoNotTrack: "0" }, { doNotTrack: "0" })("event", { ...base }), null);
+});
+
 test("url keeps exactly the five utm keys, in order", () => {
   const out = load()("event", {
     ...base,
