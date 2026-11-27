@@ -76,7 +76,7 @@ const NON_SCOPE = [
   },
   {
     head: "Kein Vendor-Vergleichs-Marathon",
-    body: "Wir bewerten Ihre Prozesse, nicht 40 Tool-Anbieter.",
+    body: "Ich bewerte Ihre Prozesse, nicht 40 Tool-Anbieter.",
   },
   {
     head: "Keine Workshop-Serie",
@@ -147,11 +147,11 @@ const CONCERNS = [
   },
   {
     q: "Das kann unsere IT doch selbst beurteilen.",
-    a: "Wahrscheinlich kann sie das — für die Systeme, die sie täglich betreibt. Was sie nicht hat, ist der Vergleich: Wir betreiben unser eigenes Unternehmen mit einer Flotte spezialisierter KI-Agenten und sehen täglich, was trägt und was nicht. Die Analyse ersetzt Ihre IT nicht, sie gibt ihr eine zweite, strukturierte Sicht zum Festpreis.",
+    a: "Wahrscheinlich kann sie das — für die Systeme, die sie täglich betreibt. Was sie nicht hat, ist der Vergleich: Ich setze in meiner eigenen Arbeit unter der Marke neckarshore.ai eine Flotte spezialisierter KI-Agenten ein und sehe täglich, was trägt und was nicht. Die Analyse ersetzt Ihre IT nicht, sie gibt ihr eine zweite, strukturierte Sicht zum Festpreis.",
   },
   {
     q: "Und wenn am Ende nichts Verwertbares herauskommt?",
-    a: "Dann sagen wir Ihnen das im kostenlosen Erstgespräch, bevor Sie etwas buchen. Kommt es zur Analyse, ist der Preis vorher bekannt und fest — keine Tagessatz-Abrechnung, keine Nachträge. Und buchen Sie nach der Kompakt-Analyse den Workshop-Tag, wird die erste Stufe vollständig angerechnet.",
+    a: "Dann sage ich Ihnen das im kostenlosen Erstgespräch, bevor Sie etwas buchen. Kommt es zur Analyse, ist der Preis vorher bekannt und fest — keine Tagessatz-Abrechnung, keine Nachträge. Und buchen Sie nach der Kompakt-Analyse den Workshop-Tag, wird die erste Stufe vollständig angerechnet.",
   },
 ];
 
@@ -355,12 +355,12 @@ export default function KiBeratungPage() {
           </p>
           <p className="mt-3 max-w-[680px] text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
             <strong>Und es geht weiter:</strong> Beauftragen Sie innerhalb von sechs
-            Monaten nach dem Workshop-Tag die Umsetzung, rechnen wir den Workshop-Tag
+            Monaten nach dem Workshop-Tag die Umsetzung, rechne ich den Workshop-Tag
             vollständig auf das Projekt an — auf die Umsetzung, nicht auf weitere Beratung.
           </p>
           <p className="mt-3 max-w-[680px] text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
             <strong>Oder direkt in die Umsetzung:</strong> Beauftragen Sie ohne Workshop-Tag
-            innerhalb von sechs Monaten nach der Kompakt-Analyse die Umsetzung, rechnen wir die
+            innerhalb von sechs Monaten nach der Kompakt-Analyse die Umsetzung, rechne ich die
             Kompakt-Analyse vollständig auf das Projekt an.
           </p>
           <p className="mt-3 max-w-[680px] text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
@@ -417,15 +417,15 @@ export default function KiBeratungPage() {
               wholesale, and the replacement is the better sentence — it drops the negative
               framing ("keine Folien-Berater", which spends the reader's attention on what we
               are not) for the buyer-facing form: what you get, and what the analysis answers.
-              If you are editing here, you are editing the Founder's own words. */}
+              If you are editing here, you are editing the Founder's own words. 2026-11-27: moved to the first person on the
+              Founder's approval of agent-bridge #41 (rows 11 and 12 of the Operations proposal). */}
           <p className="mt-5 max-w-[720px] text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-            Wir — das sind German Rauhut und eine Flotte spezialisierter KI-Agenten, die
-            unser eigenes Unternehmen täglich betreiben. Im Gespräch und in der Analyse
-            sitzen Sie mir gegenüber: Der, mit dem Sie sprechen, macht auch die Arbeit.
+            Das mache ich, German Rauhut, mit einer Flotte spezialisierter KI-Agenten. Im
+            Gespräch und in der Analyse sitzen Sie mir gegenüber: Der, mit dem Sie sprechen, macht auch die Arbeit.
           </p>
           <p className="mt-4 max-w-[720px] text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-            Sie bekommen keine Empfehlung, die wir nicht selbst benutzen. Unsere Agenten
-            entwickeln, dokumentieren und testen unseren eigenen Betrieb — was davon in Ihre
+            Sie bekommen keine Empfehlung, die ich nicht selbst benutze. Die Agenten
+            entwickeln, dokumentieren und testen meinen eigenen Betrieb — was davon in Ihre
             Prozesse passt, zeigt die Analyse.
           </p>
           <p className="mt-4 max-w-[720px] text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
@@ -444,7 +444,7 @@ export default function KiBeratungPage() {
               data-track="kiberatung_products"
               className="text-accent underline-offset-4 hover:underline dark:text-accent-bright"
             >
-              die Produkte, an denen wir es selbst lernen
+              die Produkte, an denen ich es selbst lerne
             </Link>
             .
           </p>
@@ -462,7 +462,7 @@ export default function KiBeratungPage() {
           </h2>
           <p className="mt-4 max-w-[640px] text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
             Ein kostenloses Erstgespräch, 30 Minuten, remote: Sie schildern Ihre
-            Situation, wir sagen ehrlich, ob eine Potenzialanalyse sich für Sie lohnt.
+            Situation, ich sage ehrlich, ob eine Potenzialanalyse sich für Sie lohnt.
           </p>
           <a
             href={CALENDLY}

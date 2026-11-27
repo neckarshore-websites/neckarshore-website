@@ -6,11 +6,11 @@ import Image from "next/image";
 const PHOTOS = [
   {
     src: "/images/german-rauhut-founder-bw.png",
-    alt: "German Rauhut — Gründer von neckarshore.ai, Software-Entwickler und KI-Berater aus Stuttgart",
+    alt: "German Rauhut — Software-Entwickler und KI-Berater aus Stuttgart, hinter der Marke neckarshore.ai",
   },
   {
     src: "/images/german-rauhut-founder-bw2.png",
-    alt: "German Rauhut — Gründer von neckarshore.ai (Schwarz-Weiß Portrait, Variante)",
+    alt: "German Rauhut — hinter der Marke neckarshore.ai (Schwarz-Weiß Portrait, Variante)",
   },
 ];
 

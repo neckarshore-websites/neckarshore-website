@@ -336,7 +336,7 @@ export const PORTFOLIO: PortfolioCategory[] = [
     metaTitle: "Claude Code & Obsidian Skills | neckarshore.ai",
     subtitle: "Fokussierte Open-Source-Werkzeuge",
     intro:
-      "Kleine, scharf geschnittene Open-Source-Werkzeuge — die Tools, die wir selbst täglich benutzen. Jetzt auch für euch.",
+      "Kleine, scharf geschnittene Open-Source-Werkzeuge — die Tools, die ich selbst täglich benutze. Jetzt auch für euch.",
     navLabel: "Skills",
     href: "/products/skills",
     track: "nav_products_skills",

@@ -225,7 +225,7 @@ export default function ProductsIndex() {
             Produkte
           </p>
           <h1 className="mt-3 font-heading text-4xl font-bold text-primary dark:text-text-primary md:text-5xl">
-            Was wir bauen
+            Was ich baue
           </h1>
           <p className="mt-5 text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
             Heute ein Flagship, dazu eine Handvoll Minimum Marketable Products,
@@ -247,7 +247,7 @@ export default function ProductsIndex() {
             {CLUSTER_UMBRELLA}
           </h2>
           <p className="mt-3 max-w-[560px] text-[15px] leading-relaxed text-neutral-dark/70 dark:text-text-secondary/80">
-            Drei Werkzeuge, die wir selbst täglich benutzen — eines liest, eines
+            Drei Werkzeuge, die ich selbst täglich benutze — eines liest, eines
             räumt auf, eines prüft, worauf du dich verlässt.
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-3">

@@ -398,7 +398,7 @@ export default function StyleGuidePage() {
                   Eyebrow · text-sm · uppercase · tracking-widest · text-accent (Hell) / text-secondary (Dunkel)
                 </p>
                 <p className="text-sm font-semibold uppercase tracking-widest text-accent dark:text-secondary">
-                  Unser Portfolio
+                  Portfolio
                 </p>
               </div>
               <div>
@@ -449,7 +449,7 @@ export default function StyleGuidePage() {
                 type="button"
                 className="inline-flex items-center justify-center rounded-lg border-2 border-primary px-8 py-3.5 text-base font-medium text-primary transition-all duration-150 hover:bg-primary hover:text-white dark:border-text-primary dark:text-text-primary dark:hover:bg-text-primary dark:hover:text-deep-space"
               >
-                Secondary — Unsere Services
+                Secondary — Leistungen
               </button>
               <Link
                 href="/products"

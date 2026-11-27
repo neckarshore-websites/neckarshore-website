@@ -112,7 +112,7 @@ export default function Impressum() {
               </a>
             </p>
             <p className="mt-2">
-              Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer
+              Ich bin nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer
               Verbraucherschlichtungsstelle teilzunehmen.
             </p>
           </section>
@@ -122,18 +122,18 @@ export default function Impressum() {
 
             <h3 className="mt-4 font-heading text-lg font-semibold text-primary dark:text-text-primary">Haftung für Inhalte</h3>
             <p>
-              Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit,
-              Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als
-              Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den
-              allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG sind wir als Diensteanbieter jedoch
+              Die Inhalte dieser Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit,
+              Vollständigkeit und Aktualität der Inhalte kann ich jedoch keine Gewähr übernehmen. Als
+              Diensteanbieter bin ich gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den
+              allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG bin ich als Diensteanbieter jedoch
               nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach
               Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
             </p>
 
             <h3 className="mt-4 font-heading text-lg font-semibold text-primary dark:text-text-primary">Haftung für Links</h3>
             <p>
-              Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss
-              haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die
+              Dieses Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte ich keinen Einfluss
+              habe. Deshalb kann ich für diese fremden Inhalte auch keine Gewähr übernehmen. Für die
               Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten
               verantwortlich.
             </p>

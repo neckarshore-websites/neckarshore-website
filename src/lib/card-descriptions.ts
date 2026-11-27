@@ -17,9 +17,9 @@ import { SKILL_CARDS } from "./skill-cards";
 // Websites tier — external client/own projects. Honest ≈3-line framing per site.
 const WEBSITE_DESCRIPTIONS: Record<string, string> = {
   neckarshore:
-    "Diese Seite selbst — die Web-Präsenz von neckarshore.ai. KI-beschleunigt gebaut, statisch ausgeliefert, ohne Tracking-Cookies und mit Lighthouse-Bestwerten. Das Schaufenster und zugleich der Proof of Concept unserer eigenen Arbeitsweise.",
+    "Diese Seite selbst — die Web-Präsenz von neckarshore.ai. KI-beschleunigt gebaut, statisch ausgeliefert, ohne Tracking-Cookies und mit Lighthouse-Bestwerten. Das Schaufenster und zugleich der Proof of Concept dieser Arbeitsweise.",
   "ristorante-goldoni":
-    "Web-Präsenz für ein italienisches Restaurant — Speise- und Weinkarte, Empfehlungen und FAQ, alles per Cmd+K durchsuchbar. Dieselbe Bauweise wie unsere Produkte: schnell, sauber, DSGVO-by-Design, ohne Cookie-Banner-Ballast.",
+    "Web-Präsenz für ein italienisches Restaurant — Speise- und Weinkarte, Empfehlungen und FAQ, alles per Cmd+K durchsuchbar. Dieselbe Bauweise wie die übrigen Produkte unter der Marke neckarshore.ai: schnell, sauber, DSGVO-by-Design, ohne Cookie-Banner-Ballast.",
   "oakwood-golf-club":
     "Web-Präsenz für einen Golfclub — von der Mitglieder-Information über einen redaktionellen Blog bis zur Cmd+K-Suche, ein Mitglieder-Portal ist in Arbeit. KI-beschleunigt gebaut, DSGVO-by-Design.",
   rauhut:
@@ -29,7 +29,7 @@ const WEBSITE_DESCRIPTIONS: Record<string, string> = {
 // Flagship tier — the bespoke Omnopsis page carries the full story; this is the card teaser.
 const FLAGSHIP_DESCRIPTIONS: Record<string, string> = {
   omnopsis:
-    "Omnopsis Documentor+X ist unsere KI-first Documentation Engine für Engineering-Teams: Dokumentation, die sich aus dem Code heraus aktuell hält. Fail-closed, BYOLLM und DSGVO-by-Design — gebaut für den anspruchsvollen Mittelstand.",
+    "Omnopsis Documentor+X ist die KI-first Documentation Engine unter der Marke neckarshore.ai, für Engineering-Teams: Dokumentation, die sich aus dem Code heraus aktuell hält. Fail-closed, BYOLLM und DSGVO-by-Design — gebaut für den anspruchsvollen Mittelstand.",
 };
 
 export function cardDescription(slug: string): string | undefined {

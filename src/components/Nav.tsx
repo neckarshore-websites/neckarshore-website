@@ -30,7 +30,7 @@ const navLinksLead = [
 const navLinksTail = [
   // Blog (2026-11): the first page on the site that grows by content rather than by code.
   { href: "/blog", label: "Blog", track: "nav_blog" },
-  { href: "/#founder", label: "Über uns", track: "nav_founder" },
+  { href: "/#founder", label: "Über mich", track: "nav_founder" },
 ];
 
 // Produkte dropdown — one entry per portfolio category, linking to its sub-portal page.
