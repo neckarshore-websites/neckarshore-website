@@ -139,10 +139,12 @@ test.describe("KI-Beratung offer page", () => {
     // Both assertions sit on Founder-written sentences (round 2, 2026-08-15): the
     // direct-access promise, and the practise-what-we-recommend claim that replaced my
     // earlier draft paragraph. Asserted separately because they carry different work — one
-    // says WHO, the other says on what basis.
+    // says WHO, the other says on what basis. 2026-11-27: both moved to the first person on
+    // the Founder's approval of agent-bridge #41 ("die wir nicht selbst benutzen" became
+    // "die ich nicht selbst benutze").
     const anchor = page.locator('section[aria-labelledby="anchor-heading"]');
     await expect(anchor).toContainText("macht auch die Arbeit");
-    await expect(anchor).toContainText("die wir nicht selbst benutzen");
+    await expect(anchor).toContainText("die ich nicht selbst benutze");
   });
 
   test("TC-CNT-092: three objections — not five, not two", async ({ page }) => {
