@@ -11,7 +11,7 @@ cover:
   src: "/blog/risikobasierte-teststrategie-ios/titelbild.webp"
   width: 1920
   height: 1080
-  alt: "Titelgrafik: Links der Satz „Wir testen nicht mehr alles. Wir testen, was brechen kann.“ Rechts zwei Testpyramiden. Vorher steht sie auf dem Kopf, mit 99 Prozent der Testzeit in UI-Tests. Das Ziel ist eine Pyramide mit breitem Fundament: jedes Kriterium so tief wie möglich."
+  alt: "Titelgrafik: Links der Satz „Ich teste nicht mehr alles. Ich teste, was brechen kann.“ Rechts zwei Testpyramiden. Vorher steht sie auf dem Kopf, mit 99 Prozent der Testzeit in UI-Tests. Das Ziel ist eine Pyramide mit breitem Fundament: jedes Kriterium so tief wie möglich."
   caption: "Vorher: 99 % der Testzeit in UI-Tests. Ziel: jedes Kriterium so tief wie möglich."
   credit: "Grafik: neckarshore.ai, erstellt mit KI-Unterstützung (Claude)"
 ogImage: "/blog/risikobasierte-teststrategie-ios/og.jpg"
