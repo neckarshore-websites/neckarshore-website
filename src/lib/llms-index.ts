@@ -108,7 +108,7 @@ function renderBlog(): string {
   const lines = posts.map(
     (post) => `- [${post.title}](${SITE_URL}${postPath(post.slug)}) — ${post.dek} (${formatDate(post.date)})`,
   );
-  return `## Blog\n\nArticles on building software with AI agents, with measured numbers from our own projects. Each one is inlined in full in llms-full.txt. Index: ${SITE_URL}${BLOG_PATH}\n\n${lines.join("\n")}\n\n`;
+  return `## Blog\n\nArticles on building software with AI agents, with measured numbers from my own projects. Each one is inlined in full in llms-full.txt. Index: ${SITE_URL}${BLOG_PATH}\n\n${lines.join("\n")}\n\n`;
 }
 
 export function buildLlmsIndexText(): string {
@@ -116,18 +116,18 @@ export function buildLlmsIndexText(): string {
 
   return `# Neckarshore AI
 
-> Stuttgart-basiertes KI-Dokumentations- und Nearshore-Softwareentwicklungsunternehmen. Gründer: German Rauhut (Ex-Mercedes-Benz IT). Website: neckarshore.ai.
+> neckarshore.ai ist die Marke, unter der German Rauhut (Ex-Mercedes-Benz IT) aus Stuttgart KI-Dokumentation und Nearshore-Softwareentwicklung anbietet. Website: neckarshore.ai.
 
 Last updated: ${SITE_UPDATED}
 Full content for AI ingestion (all product pages and blog articles inlined in one file): ${SITE_URL}/llms-full.txt
 
 ## About
 
-Neckarshore AI (neckarshore.ai) is a nearshore AI and software development partner based in Stuttgart, Germany. We help mid-sized companies in the DACH region build software faster and more reliably — combining German engineering precision with modern AI acceleration. Same timezone, same language, same data protection standards (DSGVO by default).
+neckarshore.ai (Neckarshore AI) is the brand under which German Rauhut, a self-employed senior engineer in Stuttgart, Germany, works as a nearshore AI and software development partner. He helps mid-sized companies in the DACH region build software faster and more reliably — combining German engineering precision with modern AI acceleration. Same timezone, same language, same data protection standards (DSGVO by default).
 
-## Founder
+## Who is behind it
 
-German Rauhut — former Mercedes-Benz IT, now founder of Neckarshore AI in Stuttgart.
+German Rauhut — former Mercedes-Benz IT, now self-employed under the brand neckarshore.ai in Stuttgart.
 
 ## Flagship Product
 
@@ -155,8 +155,8 @@ ${renderBlog()}## Services
 ## Key Differentiators
 
 - vs. Offshore: same timezone, same language, DSGVO-compliant by default
-- vs. Big-4: significantly more cost-effective at comparable quality; direct access to engineers instead of a junior-heavy bench model. Concrete pricing is discussed in the 30-minute intro call.
-- vs. Freelancers: structured processes, full project ownership, delivery that does not depend on a single person
+- vs. Big-4: significantly more cost-effective at comparable quality; direct access to a senior engineer instead of a junior-heavy bench model. Concrete pricing is discussed in the 30-minute intro call.
+- Clear process instead of ad-hoc work: a structured engineering process, full project ownership and consistent quality standards, without enterprise headcount
 
 ## Contact
 

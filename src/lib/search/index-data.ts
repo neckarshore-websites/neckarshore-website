@@ -37,7 +37,7 @@ const PAGES: { id: string; title: string; text: string; category: string; url: s
   },
   {
     id: "page:/#services",
-    title: "Unsere Services",
+    title: "Leistungen",
     text: "AI-Powered Development, Documentation Automation, AI Consulting & Strategy, DSGVO-by-Design, Quality Engineering und Nearshore Partnership. Production-Stack: NestJS, TypeScript, PostgreSQL. BYOLLM, OWASP LLM Top 10, EU AI Act Compliance. KI-Strategie-Beratung für DACH-Unternehmen.",
     category: "Startseite",
     url: "/#services",
@@ -45,14 +45,14 @@ const PAGES: { id: string; title: string; text: string; category: string; url: s
   {
     id: "page:/#why-nearshore",
     title: "Warum Nearshore?",
-    text: "Was ist Nearshore-Entwicklung? Nearshore vs. Offshore, vs. Big-4-Consultancies, vs. Freelancer. Gleiche Zeitzone, gleiche Sprache, gleiche DSGVO-Standards. Enterprise-Qualität ohne Enterprise-Preise. KI-beschleunigt, kulturelles Alignment, Stuttgart-basiert.",
+    text: "Was ist Nearshore-Entwicklung? Nearshore vs. Offshore, vs. Big-4-Consultancies, klarer Prozess statt Ad-hoc-Arbeit. Gleiche Zeitzone, gleiche Sprache, gleiche DSGVO-Standards. Enterprise-Qualität ohne Enterprise-Preise. KI-beschleunigt, kulturelles Alignment, Stuttgart-basiert.",
     category: "Startseite",
     url: "/#why-nearshore",
   },
   {
     id: "page:/#founder",
-    title: "Über uns — German Rauhut",
-    text: "German Rauhut, Gründer von neckarshore.ai. Ehemaliger Mercedes-Benz IT, jetzt Gründer von Neckarshore AI in Stuttgart. Software mit KI-Beschleunigung. Ein Senior-Architekt mit einem KI-gestützten Expertensystem. Kontext ist das neue Öl.",
+    title: "Über mich — German Rauhut",
+    text: "German Rauhut, hinter der Marke neckarshore.ai. Ehemaliger Mercedes-Benz IT, jetzt selbstständig unter der Marke neckarshore.ai in Stuttgart. Software mit KI-Beschleunigung. Ein Senior-Architekt mit einem KI-gestützten Expertensystem. Kontext ist das neue Öl.",
     category: "Startseite",
     url: "/#founder",
   },
@@ -112,7 +112,7 @@ const PAGES: { id: string; title: string; text: string; category: string; url: s
   {
     id: "page:/blog",
     title: "Blog",
-    text: "Was wir beim Bauen von Software mit KI-Agenten messen, entscheiden und lernen: Teststrategie, Qualität und Werkzeuge, mit echten Zahlen aus unseren Projekten.",
+    text: "Was ich beim Bauen von Software mit KI-Agenten messe, entscheide und lerne: Teststrategie, Qualität und Werkzeuge, mit echten Zahlen aus meinen Projekten.",
     category: "Seite",
     url: "/blog",
   },

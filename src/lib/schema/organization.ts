@@ -90,10 +90,10 @@ export const organizationSchema = {
       name: "German Rauhut",
       givenName: "German",
       familyName: "Rauhut",
-      jobTitle: "Founder",
-      worksFor: { "@id": ORG_ID },
-      // agent-bridge #28: the person's own homepage is rauhut.com, the company
-      // site is worksFor. Before, url pointed back at neckarshore.ai.
+      // agent-bridge #28: the person's own homepage is rauhut.com. Before, url pointed
+      // back at neckarshore.ai. agent-bridge #41 (2026-11-27): no jobTitle "Founder" and
+      // no worksFor, because neckarshore.ai is his brand, not a company that employs him.
+      // The Organization keeps founder -> this Person as the one link between the two.
       url: "https://rauhut.com/",
       sameAs: [
         "https://rauhut.com/",

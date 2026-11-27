@@ -15,8 +15,8 @@ import { pageMetadata } from "@/lib/seo";
 const PAGE_TITLE = "Blog — Testen, Bauen und Entscheiden mit KI-Agenten";
 /** At or under 155 characters — TC-SEO-037 (145; the first version had 158 under an unchecked comment). */
 const PAGE_DESCRIPTION =
-  "Was wir beim Bauen mit KI-Agenten messen, entscheiden und lernen: Teststrategie, " +
-  "Qualität und Werkzeuge, mit echten Zahlen aus unseren Projekten.";
+  "Was ich beim Bauen mit KI-Agenten messe, entscheide und lerne: Teststrategie, " +
+  "Qualität und Werkzeuge, mit echten Zahlen aus meinen Projekten.";
 
 export const metadata = pageMetadata({ title: PAGE_TITLE, description: PAGE_DESCRIPTION, path: BLOG_PATH });
 
@@ -41,8 +41,8 @@ export default function BlogIndexPage() {
                 Messen. Entscheiden. Lernen.
               </h1>
               <p className="mt-5 text-lg leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-                Was wir beim Bauen von Software mit KI-Agenten messen, entscheiden und lernen. Mit echten
-                Zahlen aus unseren Projekten.
+                Was ich beim Bauen von Software mit KI-Agenten messe, entscheide und lerne. Mit echten
+                Zahlen aus meinen Projekten.
               </p>
             </header>
           }

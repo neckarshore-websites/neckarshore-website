@@ -116,8 +116,8 @@ export default function KiFahrplanPage() {
             Der nächste Schritt
           </h2>
           <p className="mt-4 max-w-[640px] text-[15px] leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
-            Sie schildern den einen Prozess — oder die fünf Kandidaten. Wir sagen Ihnen, ob eine
-            Analyse sich lohnt. Wenn nicht, sagen wir das.{" "}
+            Sie schildern den einen Prozess — oder die fünf Kandidaten. Ich sage Ihnen, ob eine
+            Analyse sich lohnt. Wenn nicht, sage ich das.{" "}
             <Link
               href="/ki-beratung"
               data-track="fahrplan_ki_beratung"
