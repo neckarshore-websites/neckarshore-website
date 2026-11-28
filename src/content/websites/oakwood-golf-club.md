@@ -1,7 +1,7 @@
 ---
 name: "oakwoodgolfclub.de"
 headline: "WordPress-Ablösung für einen Fernmitgliedschafts-Golfclub — statisch, DSGVO-sauber, auf Vercel live."
-lead: "Wir haben den 16 Jahre alten WordPress-Auftritt des Oakwood Golf Club durch eine statische Next.js-Site mit Anmeldung, Verlängerung, FAQ und Blog ersetzt."
+lead: "Ich habe den 16 Jahre alten WordPress-Auftritt des Oakwood Golf Club durch eine statische Next.js-Site mit Anmeldung, Verlängerung, FAQ und Blog ersetzt."
 liveUrl: "https://oakwoodgolfclub.de"
 techStack:
   - "Next.js 16 (App Router)"
@@ -20,9 +20,9 @@ status: "Live; Mitglieder-Portal geplant, noch nicht gebaut"
 
 Der Oakwood Golf Club bietet eine Fernmitgliedschaft mit offiziellem Handicap und Mitgliederkarte für Golferinnen und Golfer im DACH-Raum. Der bestehende Auftritt lief 16 Jahre lang auf WordPress und sollte durch eine schnellere, wartungsarme und datenschutzkonforme Lösung ersetzt werden — inklusive der Online-Strecken für Anmeldung, Verlängerung und Karten-Versand.
 
-## Wie sind wir vorgegangen?
+## Wie bin ich vorgegangen?
 
-Wir haben den Auftritt als überwiegend statische Next.js-Site neu gebaut: schnell ausgeliefert, ohne externe Tracker und mit selbst gehosteten Fonts (kein Google-Fonts-CDN zur Laufzeit, DSGVO-by-Design). Die drei Formulare — Anmeldung, Verlängerung und Kontakt — laufen über Server Actions mit Cloudflare Turnstile als cookieless Spam-Schutz; der Versand erfolgt per SMTP, eine Honeypot-Strecke fängt Bots still ab. Eine strikte Content-Security-Policy samt HSTS, X-Frame-Options und Permissions-Policy ist global gesetzt. Die 16 Jahre WordPress-Inhalte werden über generierte Legacy-Redirects sauber auf die neuen URLs überführt.
+Ich habe den Auftritt als überwiegend statische Next.js-Site neu gebaut: schnell ausgeliefert, ohne externe Tracker und mit selbst gehosteten Fonts (kein Google-Fonts-CDN zur Laufzeit, DSGVO-by-Design). Die drei Formulare — Anmeldung, Verlängerung und Kontakt — laufen über Server Actions mit Cloudflare Turnstile als cookieless Spam-Schutz; der Versand erfolgt per SMTP, eine Honeypot-Strecke fängt Bots still ab. Eine strikte Content-Security-Policy samt HSTS, X-Frame-Options und Permissions-Policy ist global gesetzt. Die 16 Jahre WordPress-Inhalte werden über generierte Legacy-Redirects sauber auf die neuen URLs überführt.
 
 ## Wie ist die Website technisch gebaut?
 

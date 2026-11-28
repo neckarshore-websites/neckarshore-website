@@ -34,7 +34,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
     },
     {
       q: "Wann ist Omnopsis verfügbar?",
-      a: "Omnopsis ist in Entwicklung. Einen öffentlichen Launch-Termin nennen wir erst, wenn er belastbar ist — lieber kein Datum als ein gerissenes. Für einen frühen Austausch oder eine Pilot-Anfrage lässt sich ein Kennenlerntermin buchen.",
+      a: "Omnopsis ist in Entwicklung. Einen öffentlichen Launch-Termin nenne ich erst, wenn er belastbar ist — lieber kein Datum als ein gerissenes. Für einen frühen Austausch oder eine Pilot-Anfrage lässt sich ein Kennenlerntermin buchen.",
     },
   ],
 
@@ -115,7 +115,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
     },
     {
       q: "Warum baut eine Softwareschmiede eine solche App?",
-      a: "Kaze hat keinen Firmenkunden und kein Lastenheft — und ist trotzdem kein Nebenprodukt. Es ist der Ort, an dem wir eine Haltung, die wir in Kundenprojekten dauernd vertreten, einmal ohne Kompromiss durchziehen: dass Weglassen eine Entscheidung ist und keine Lücke, dass eine Anwendung nicht sammeln muss, was sie nicht braucht, und dass „das könnten wir auch noch einbauen“ die teuerste Frage in jedem Produkt ist.",
+      a: "Kaze hat keinen Firmenkunden und kein Lastenheft — und ist trotzdem kein Nebenprodukt. Es ist der Ort, an dem ich eine Haltung, die ich in Kundenprojekten dauernd vertrete, einmal ohne Kompromiss durchziehe: dass Weglassen eine Entscheidung ist und keine Lücke, dass eine Anwendung nicht sammeln muss, was sie nicht braucht, und dass „das könnten wir auch noch einbauen“ die teuerste Frage in jedem Produkt ist.",
     },
     {
       q: "Wann ist Kaze verfügbar?",
@@ -258,15 +258,15 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
     },
     {
       q: "Warum braucht die Seite kein Cookie-Banner?",
-      a: "Weil es nichts zuzustimmen gibt: keine Cookies und kein Zugriff auf Ihr Gerät, der eine Einwilligung bräuchte. Die Reichweiten-Messung läuft cookielos über die eigene Route, per navigator.sendBeacon an /api/track. Daneben zählt Umami auf unserem eigenen Server (stats.neckarshore.ai) die Besuche, ebenfalls ohne Cookies. Einen fremden Anbieter lädt die Seite nur für den Spam-Schutz des Kontaktformulars, und erst, wenn Sie es benutzen.",
+      a: "Weil es nichts zuzustimmen gibt: keine Cookies und kein Zugriff auf Ihr Gerät, der eine Einwilligung bräuchte. Die Reichweiten-Messung läuft cookielos über die eigene Route, per navigator.sendBeacon an /api/track. Daneben zählt Umami auf meinem eigenen Server (stats.neckarshore.ai) die Besuche, ebenfalls ohne Cookies. Einen fremden Anbieter lädt die Seite nur für den Spam-Schutz des Kontaktformulars, und erst, wenn Sie es benutzen.",
     },
     {
       q: "Was heißt „DSGVO-by-Design“ hier konkret?",
       a: "Datenschutz ist Architekturentscheidung, nicht Checkliste: selbst gehostete Schriften statt eingebundener Google Fonts (kein Datentransfer in Drittstaaten), kein externer Tracker und SEO-Strukturdaten als native, server-gerenderte Script-Tags.",
     },
     {
-      q: "Könnt ihr so eine Seite auch für uns bauen?",
-      a: "Ja — dieselbe Bauweise (KI-beschleunigt, vom Gründer redigiert, DSGVO-by-Design) liefern wir für Kundenprojekte. Ein kurzer Kennenlerntermin klärt den Rahmen unverbindlich.",
+      q: "Können Sie so eine Seite auch für uns bauen?",
+      a: "Ja — dieselbe Bauweise (KI-beschleunigt, von mir redigiert, DSGVO-by-Design) liefere ich für Kundenprojekte. Ein kurzer Kennenlerntermin klärt den Rahmen unverbindlich.",
     },
   ],
 
@@ -319,7 +319,7 @@ export const PRODUCT_FAQS: Record<string, FaqItem[]> = {
     },
     {
       q: "Wie steht es um Datenschutz?",
-      a: "Voll DSGVO-konform und ohne Cookie-Banner: die Schrift (Inter Variable) ist self-hosted statt über ein CDN, und die Besuche zählt Umami cookielos auf unserem eigenen Server. Daher ist kein Banner nötig.",
+      a: "Voll DSGVO-konform und ohne Cookie-Banner: die Schrift (Inter Variable) ist self-hosted statt über ein CDN, und die Besuche zählt Umami cookielos auf meinem eigenen Server. Daher ist kein Banner nötig.",
     },
     {
       q: "Welche Lighthouse-Werte erreicht die Seite?",

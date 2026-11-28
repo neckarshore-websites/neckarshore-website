@@ -17,7 +17,7 @@ status: "Live"
 
 `rauhut.com` ist die persönliche Web-Präsenz des Gründers — die Person, nicht die Firma (`neckarshore.ai` ist das Unternehmen). Gebraucht wurde ein schlanker, schneller One-Pager als Proof of Work: Profil, Kernkompetenzen, Projekte und Kontakt, zweisprachig in Deutsch und Englisch. Anspruch: kein Cookie-Banner, keine Third-Party-Tracker, voll DSGVO-konform — eine Visitenkarte, die in Sekunden lädt und Besuche nur auf dem eigenen Server zählt.
 
-## Wie sind wir vorgegangen?
+## Wie bin ich vorgegangen?
 
 Die Seite entstand KI-beschleunigt im selben Multi-Agent-Workflow, mit dem Neckarshore arbeitet. Architektonisch konsequent statisch: ein vorab gerenderter One-Pager ohne CMS, Dark Mode als Default mit Light-Toggle. Datenschutz ist by Design eingebaut — Schrift (Inter Variable) self-hosted statt über ein CDN, Besucherzählung cookielos über Umami auf dem eigenen Server, daher kein Banner nötig. Das Impressum (§5 DDG) liegt auf `noindex`.
 

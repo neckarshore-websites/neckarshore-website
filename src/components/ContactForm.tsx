@@ -36,7 +36,7 @@ export default function ContactForm({
     return (
       <div className="rounded-lg border border-accent/30 bg-white p-6 dark:bg-surface">
         <p className="text-base text-primary dark:text-text-primary">
-          Danke für Ihre Nachricht — wir melden uns zeitnah zurück.
+          Danke für Ihre Nachricht — ich melde mich zeitnah zurück.
         </p>
       </div>
     );

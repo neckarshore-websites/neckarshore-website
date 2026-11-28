@@ -34,7 +34,7 @@ async function ldNodes(page: Page): Promise<Record<string, unknown>[]> {
 // AI Overviews). All four case studies share the identical six-axis question set.
 const AXES = [
   "Was war die Ausgangslage?",
-  "Wie sind wir vorgegangen?",
+  "Wie bin ich vorgegangen?",
   "Wie ist die Website technisch gebaut?",
   "Wie läuft die Pflege im Betrieb?",
   "Was ist heute live?",

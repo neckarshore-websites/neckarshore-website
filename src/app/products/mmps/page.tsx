@@ -11,7 +11,7 @@ import { MMP_CARDS } from "@/lib/mmp-cards";
 
 const category = PORTFOLIO.find((c) => c.id === "mmps")!;
 const description =
-  "Unsere Minimum Marketable Products — schlanke, fokussierte Produkte auf dem Weg zur Marktreife. ClearPath und Snakeoil-Check sind am weitesten.";
+  "Meine Minimum Marketable Products — schlanke, fokussierte Produkte auf dem Weg zur Marktreife. ClearPath und Snakeoil-Check sind am weitesten.";
 
 export const metadata: Metadata = pageMetadata({
   title: categoryMetaTitle(category),

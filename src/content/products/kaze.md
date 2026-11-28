@@ -41,11 +41,11 @@ Was übrig bleibt, ist eine Sperre und eine Uhr. Mehr braucht es nicht.
 
 ## Warum eine Softwareschmiede eine solche App baut
 
-Kaze ist unser erstes iOS-Produkt und in einer Hinsicht untypisch für dieses Haus: Es hat keinen Firmenkunden, kein Lastenheft und kein Umsatzziel, das über ihm hängt.
+Kaze ist mein erstes iOS-Produkt und in einer Hinsicht untypisch für meine Arbeit: Es hat keinen Firmenkunden, kein Lastenheft und kein Umsatzziel, das über ihm hängt.
 
-Es ist trotzdem kein Nebenprodukt. Kaze ist der Ort, an dem wir eine Haltung, die wir bei Kundenprojekten dauernd vertreten, einmal ohne Kompromiss durchziehen: dass Weglassen eine Entscheidung ist und keine Lücke, dass eine Anwendung nicht sammeln muss, was sie nicht braucht, und dass „das könnten wir auch noch einbauen“ die teuerste Frage in jedem Produkt ist.
+Es ist trotzdem kein Nebenprodukt. Kaze ist der Ort, an dem ich eine Haltung, die ich bei Kundenprojekten dauernd vertrete, einmal ohne Kompromiss durchziehe: dass Weglassen eine Entscheidung ist und keine Lücke, dass eine Anwendung nicht sammeln muss, was sie nicht braucht, und dass „das könnten wir auch noch einbauen“ die teuerste Frage in jedem Produkt ist.
 
-Wer wissen will, wie wir arbeiten, kann sich Referenzen ansehen. Oder eine App, bei der niemand außer uns entschieden hat, was drinbleibt.
+Wer wissen will, wie ich arbeite, kann sich Referenzen ansehen. Oder eine App, bei der niemand außer mir entschieden hat, was drinbleibt.
 
 ## Stand
 

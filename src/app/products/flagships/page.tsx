@@ -5,7 +5,7 @@ import { PORTFOLIO, categoryMetaTitle } from "@/lib/portfolio";
 
 const category = PORTFOLIO.find((c) => c.id === "flagships")!;
 const description =
-  "Unser Flaggschiff-Produkt: Omnopsis, die KI-first Documentation Engine — fail-closed, BYOLLM, DSGVO-by-Design.";
+  "Mein Flaggschiff-Produkt: Omnopsis, die KI-first Documentation Engine — fail-closed, BYOLLM, DSGVO-by-Design.";
 
 export const metadata: Metadata = pageMetadata({
   title: categoryMetaTitle(category),

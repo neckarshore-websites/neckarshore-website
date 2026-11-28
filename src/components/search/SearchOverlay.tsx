@@ -141,7 +141,7 @@ function SearchPalette({
           )}
           {q && results.length === 0 && mini && (
             <li className="px-5 py-6 text-sm text-muted dark:text-text-tertiary">
-              Nichts gefunden. Schreib uns gern über den Kennenlerntermin oder die Kontaktsektion.
+              Nichts gefunden. Schreib mir gern über den Kennenlerntermin oder die Kontaktsektion.
             </li>
           )}
           {results.map((hit, i) => (

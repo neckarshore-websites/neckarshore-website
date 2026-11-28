@@ -18,7 +18,7 @@ status: "Live"
 
 neckarshore.ai ist die eigene Marketing-Präsenz von Neckarshore AI — die Landing Page für KI-beschleunigte Nearshore-Softwareentwicklung aus Stuttgart, gerichtet an CTOs und Entscheider im DACH-Mittelstand. Die Seite muss selbst beweisen, was sie verspricht: Made in Germany, DSGVO-by-Design, technisch sauber. Sie ist damit das erste Proof of Work — wer hier landet, soll die Arbeitsweise an der Seite selbst ablesen können.
 
-## Wie sind wir vorgegangen?
+## Wie bin ich vorgegangen?
 
 Gebaut wurde die Seite KI-beschleunigt und vom Gründer redigiert — dieselbe Arbeitsweise, mit der Neckarshore Kundenprojekte liefert. Datenschutz ist Architekturentscheidung, nicht Checkliste: keine Tracking-Cookies, selbst gehostete Schriften statt eingebundener Google Fonts, Besucherzählung auf dem eigenen Server; einen fremden Anbieter lädt die Seite nur für den Spam-Schutz des Kontaktformulars. Der Fokus liegt auf einer statischen, schnellen Auslieferung mit minimaler Drittanbieter-Abhängigkeit.
 

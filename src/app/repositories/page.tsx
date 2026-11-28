@@ -56,7 +56,7 @@ function byType(repos: RepoEntry[]): { type: RepoType; repos: RepoEntry[] }[] {
 }
 
 export const metadata: Metadata = pageMetadata({
-  title: "Unsere Repositories | neckarshore.ai",
+  title: "Meine Repositories | neckarshore.ai",
   description:
     "Der Code-Bestand von Neckarshore AI: öffentliche Repositories mit Beschreibung, private nur mit Status — täglich automatisch mit GitHub abgeglichen.",
   path: "/repositories",
@@ -73,17 +73,17 @@ export default function RepositoriesPage() {
   return (
     <>
       <Nav showOssLaunch={showOssLaunch} />
-      <PageSchema path="/repositories" name="Unsere Repositories" />
+      <PageSchema path="/repositories" name="Meine Repositories" />
       <main className="mx-auto max-w-[820px] px-4 pt-40 pb-20 md:px-6">
         <article>
           <header className="mb-8">
             <h1 className="font-heading text-4xl font-bold text-accent md:text-5xl">
-              Unsere Repositories
+              Meine Repositories
             </h1>
             <p className="mt-4 text-lg leading-relaxed text-primary/90 dark:text-text-primary">
-              Der gesamte Code-Bestand hinter unseren Produkten, Skills und Websites —{" "}
-              <strong>{total} Repositories</strong>. Öffentliche listen wir einzeln mit
-              Beschreibung; private zählen wir nur — ohne Namen. Diese Liste wird automatisch
+              Der gesamte Code-Bestand hinter meinen Produkten, Skills und Websites —{" "}
+              <strong>{total} Repositories</strong>. Öffentliche liste ich einzeln mit
+              Beschreibung; private zähle ich nur — ohne Namen. Diese Liste wird automatisch
               mit GitHub abgeglichen, nicht von Hand gepflegt.
             </p>
           </header>

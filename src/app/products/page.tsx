@@ -344,7 +344,7 @@ export default function ProductsIndex() {
                           <Link
                             href={category.href}
                             data-track={`${category.track}_balance`}
-                            aria-label={`Mehr über unsere ${category.title} erfahren`}
+                            aria-label={`Mehr über meine ${category.title} erfahren`}
                             className="group hidden flex-col items-start justify-center rounded-xl border border-dashed border-primary/20 px-6 py-5 transition-colors hover:border-accent hover:bg-accent/5 sm:flex dark:border-text-secondary/20 dark:hover:border-accent-bright dark:hover:bg-accent-bright/5"
                           >
                             <span className="text-sm font-medium text-muted dark:text-text-tertiary">

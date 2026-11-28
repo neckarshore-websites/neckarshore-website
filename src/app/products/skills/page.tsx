@@ -125,7 +125,7 @@ export default function SkillsPage() {
             #337), so the install lines are shown too. */}
         <p className="mt-4 text-sm leading-relaxed text-neutral-dark/80 dark:text-text-secondary">
           Obsidian Vault Autopilot und Mailbox Autopilot installierst du in Claude Code über
-          unseren Plugin-Marketplace (
+          meinen Plugin-Marketplace (
           <a
             href="https://github.com/neckarshore-skills/neckarshore-plugins"
             target="_blank"

@@ -41,7 +41,7 @@ const MAX_MESSAGE_LEN = 4000;
 const MAX_FIELD_LEN = 200;
 
 const TRANSPORT_FAILURE_MESSAGE =
-  "Die Nachricht konnte gerade nicht übermittelt werden. Bitte schreiben Sie uns direkt an info@neckarshore.ai.";
+  "Die Nachricht konnte gerade nicht übermittelt werden. Bitte schreiben Sie mir direkt an info@neckarshore.ai.";
 
 function clean(formData: FormData, key: string, max = MAX_FIELD_LEN): string {
   return String(formData.get(key) ?? "")

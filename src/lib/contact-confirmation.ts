@@ -14,15 +14,15 @@ export const CONFIRMATION_SUBJECT = "Ihre Nachricht an neckarshore.ai";
  * Text der Eingangsbestaetigung. Bewusst schlicht und ohne HTML: sie muss in
  * jedem Postfach lesbar ankommen, auch im Firmen-Client mit abgeschaltetem
  * HTML. Die Nachricht wird im Wortlaut zurueckgegeben, damit der Absender
- * einen Beleg hat, was bei uns angekommen ist.
+ * einen Beleg hat, was bei mir angekommen ist.
  */
 export function buildConfirmationText(name: string, message: string): string {
   return [
     `Hallo ${name},`,
     "",
-    "danke fuer Ihre Nachricht — sie ist bei uns angekommen.",
+    "danke fuer Ihre Nachricht — sie ist bei mir angekommen.",
     "",
-    "Wir melden uns in der Regel innerhalb eines Werktags. Wenn es schneller",
+    "Ich melde mich in der Regel innerhalb eines Werktags. Wenn es schneller",
     "gehen soll, koennen Sie direkt einen Termin waehlen:",
     "https://calendly.com/german-rauhut/30min",
     "",
@@ -38,7 +38,7 @@ export function buildConfirmationText(name: string, message: string): string {
     "Diese E-Mail wurde automatisch versendet, weil das Kontaktformular auf",
     "neckarshore.ai mit dieser Adresse abgeschickt wurde. Haben Sie das nicht",
     "getan, ignorieren Sie diese Nachricht bitte — ohne Ihre Antwort",
-    "verarbeiten wir nichts weiter.",
+    "verarbeite ich nichts weiter.",
   ].join("\n");
 }
 

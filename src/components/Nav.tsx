@@ -143,7 +143,7 @@ export default function Nav({ showOssLaunch = false }: NavProps) {
             </span>
             <span className="truncate">
               <span className="font-medium text-white">Obsidian Vault Autopilot</span>
-              <span className="hidden md:inline"> — unser erstes Open-Source-Projekt ist live.</span>
+              <span className="hidden md:inline"> — mein erstes Open-Source-Projekt ist live.</span>
             </span>
             <Link
               href="/products/obsidian-vault-autopilot"
