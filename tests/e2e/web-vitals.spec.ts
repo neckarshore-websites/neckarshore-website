@@ -1,4 +1,7 @@
 import { test, expect } from "./fixtures";
+// Pure-function units use the base test: no page, so no browser is started
+// (the shared fixture stubs Umami per page and would ask for one).
+import { test as pureTest } from "@playwright/test";
 import {
   WEB_VITAL_NAMES,
   isWebVitalName,
@@ -14,8 +17,8 @@ import { TEST_ANALYTICS_READ_TOKEN } from "./analytics-test-token";
 // (Playwright is just the runner); HTTP + browser specs live further down.
 // ---------------------------------------------------------------------------
 
-test.describe("TC-WV pure lib — rating thresholds (Google CWV)", () => {
-  test("TC-WV-001: ratingFor classifies LCP good/needs-improvement/poor at the boundaries", () => {
+pureTest.describe("TC-WV pure lib — rating thresholds (Google CWV)", () => {
+  pureTest("TC-WV-001: ratingFor classifies LCP good/needs-improvement/poor at the boundaries", () => {
     // LCP: good <= 2500ms, poor > 4000ms
     expect(ratingFor("LCP", 2000)).toBe("good");
     expect(ratingFor("LCP", 2500)).toBe("good"); // boundary inclusive
@@ -24,7 +27,7 @@ test.describe("TC-WV pure lib — rating thresholds (Google CWV)", () => {
     expect(ratingFor("LCP", 5000)).toBe("poor");
   });
 
-  test("TC-WV-002: ratingFor uses metric-specific thresholds (CLS is unitless)", () => {
+  pureTest("TC-WV-002: ratingFor uses metric-specific thresholds (CLS is unitless)", () => {
     // CLS: good <= 0.1, poor > 0.25
     expect(ratingFor("CLS", 0.05)).toBe("good");
     expect(ratingFor("CLS", 0.2)).toBe("needs-improvement");
@@ -35,8 +38,8 @@ test.describe("TC-WV pure lib — rating thresholds (Google CWV)", () => {
   });
 });
 
-test.describe("TC-WV pure lib — percentile (nearest-rank)", () => {
-  test("TC-WV-003: percentile picks the nearest-rank value, deterministic", () => {
+pureTest.describe("TC-WV pure lib — percentile (nearest-rank)", () => {
+  pureTest("TC-WV-003: percentile picks the nearest-rank value, deterministic", () => {
     expect(percentile([1, 2, 3, 4], 75)).toBe(3);
     expect(percentile([10], 75)).toBe(10);
     expect(percentile([], 75)).toBe(0); // empty guard
@@ -45,8 +48,8 @@ test.describe("TC-WV pure lib — percentile (nearest-rank)", () => {
   });
 });
 
-test.describe("TC-WV pure lib — name guard", () => {
-  test("TC-WV-004: isWebVitalName accepts the 5 standard metrics, rejects others", () => {
+pureTest.describe("TC-WV pure lib — name guard", () => {
+  pureTest("TC-WV-004: isWebVitalName accepts the 5 standard metrics, rejects others", () => {
     for (const name of WEB_VITAL_NAMES) {
       expect(isWebVitalName(name)).toBe(true);
     }
@@ -59,8 +62,8 @@ test.describe("TC-WV pure lib — name guard", () => {
   });
 });
 
-test.describe("TC-WV pure lib — summarizeWebVitals (p75 per metric)", () => {
-  test("TC-WV-005: groups by metric and reports p75 + count + rating", () => {
+pureTest.describe("TC-WV pure lib — summarizeWebVitals (p75 per metric)", () => {
+  pureTest("TC-WV-005: groups by metric and reports p75 + count + rating", () => {
     const samples = [
       { metric: "LCP", value: 1000 },
       { metric: "LCP", value: 2000 },
@@ -82,7 +85,7 @@ test.describe("TC-WV pure lib — summarizeWebVitals (p75 per metric)", () => {
     expect(summary.CLS?.rating).toBe("poor");
   });
 
-  test("TC-WV-006: ignores unknown metrics and non-numeric values", () => {
+  pureTest("TC-WV-006: ignores unknown metrics and non-numeric values", () => {
     const summary = summarizeWebVitals([
       { metric: "LCP", value: 1200 },
       { metric: "FID", value: 50 }, // unknown -> ignored
@@ -99,7 +102,7 @@ test.describe("TC-WV pure lib — summarizeWebVitals (p75 per metric)", () => {
     expect(summary.TTFB).toBeUndefined();
   });
 
-  test("TC-WV-007: rounds ms metrics to integers, CLS to 3 decimals", () => {
+  pureTest("TC-WV-007: rounds ms metrics to integers, CLS to 3 decimals", () => {
     const summary = summarizeWebVitals([
       { metric: "LCP", value: 1234.7 },
       { metric: "CLS", value: 0.12345 },

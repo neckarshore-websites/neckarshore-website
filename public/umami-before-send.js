@@ -69,8 +69,14 @@
   function optedOut() {
     var n = w.navigator || {};
     if (n.globalPrivacyControl === true) return true;
-    var dnt = w.doNotTrack || n.doNotTrack || n.msDoNotTrack;
-    return dnt === 1 || dnt === "1" || dnt === "yes";
+    // Each signal counts on its own: a "0" in one place must not hide a "1"
+    // in another (a || chain would stop at the first non-empty value).
+    var signals = [w.doNotTrack, n.doNotTrack, n.msDoNotTrack];
+    for (var i = 0; i < signals.length; i++) {
+      var dnt = signals[i];
+      if (dnt === 1 || dnt === "1" || dnt === "yes") return true;
+    }
+    return false;
   }
 
   w.umamiBeforeSend = function (type, payload) {
